@@ -1,0 +1,7 @@
+__pycache__/
+.mypy_cache/
+.nox/
+.pytest_cache/
+.venv/
+.env/
+.vscode/
