@@ -29,7 +29,7 @@ dynamic = ["description", "version"]
 [project.urls]
 homepage = "https://github.com/nxtlo/sain"
 repository = "https://github.com/nxtlo/sain"
-documentation = "..."
+documentation = "https://nxtlo.github.io/sain/sain.html"
 changelog = "https://github.com/nxtlo/sain/blob/master/CHANGELOG.md"
 
 [tool.black]

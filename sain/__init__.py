@@ -76,6 +76,7 @@ Target OS must be one of the following:
 * `darwin`
 * `unix`, which is assumed to be either linux or darwin.
 """
+from __future__ import annotations
 
 from ._sain import cfg
 from ._sain import cfg_attr
@@ -87,4 +88,8 @@ __about__: str = "A Rust like cfg attribs checking for Python."
 __docs__: str = ""
 __license__: str = "BSD 3-Clause License"
 
-__all__: tuple[str, ...] = ("cfg", "cfg_attr")
+import typing as _typing
+
+__all__: _typing.Tuple[str, ...] = ("cfg", "cfg_attr")
+
+del _typing

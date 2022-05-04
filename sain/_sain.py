@@ -41,17 +41,19 @@ import typing
 # apperantly there're no stubs for this module?
 import pkg_resources  # type: ignore[import]
 
-_T_a = typing.TypeVar("_T_a", bound=typing.Callable[..., typing.Any])
+SigT = typing.Callable[..., object]
+Signature = typing.TypeVar("Signature", bound=SigT)
+"""A type var hint for the decorated object signature."""
 
-_TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix"]
+TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix"]
 
 
 def cfg_attr(
     *,
     requires_modules: typing.Optional[typing.Union[str, typing.Tuple[str, ...]]] = None,
-    target_os: typing.Optional[_TARGET_OS] = None,
+    target_os: typing.Optional[TARGET_OS] = None,
     python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
-) -> typing.Callable[[_T_a], _T_a]:
+) -> typing.Callable[[Signature], Signature]:
     """Configure a class, method or function to be checked for the given attributes.
 
     If one of the attributes returns False, An exception will be raised.
@@ -105,10 +107,10 @@ def cfg_attr(
         If the module check fails.
     """
 
-    def decorator(callback: _T_a) -> _T_a:
+    def decorator(callback: Signature) -> Signature:
         @functools.wraps(callback)
-        def wrapper(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
-            checker = _AttrCheck(
+        def wrapper(*args: typing.Any, **kwargs: typing.Any) -> Signature:
+            checker = _AttrCheck[Signature](
                 callback,
                 requires_modules=requires_modules,
                 target_os=target_os,
@@ -116,13 +118,13 @@ def cfg_attr(
             )
             return checker(*args, **kwargs)
 
-        return typing.cast(_T_a, wrapper)
+        return typing.cast(Signature, wrapper)
 
     return decorator
 
 
 def cfg(
-    target_os: typing.Optional[_TARGET_OS] = None,
+    target_os: typing.Optional[TARGET_OS] = None,
     requires_modules: typing.Optional[typing.Union[str, typing.Tuple[str, ...]]] = None,
     python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
 ) -> bool:
@@ -173,24 +175,20 @@ def cfg(
     """
     checker = _AttrCheck(
         lambda: None,
-        requires_modules=requires_modules,
-        target_os=target_os,
-        python_version=python_version,
         no_raise=True,
     )
     return checker.cfg_check(requires_modules=requires_modules, target_os=target_os, python_version=python_version)
 
 
-class _AttrCheck(typing.Generic[_T_a]):
+class _AttrCheck(typing.Generic[Signature]):
     __slots__ = ("_requires_modules", "_target_os", "_callback", "_py_version", "_no_raise")
 
     def __init__(
         self,
-        callback: _T_a,
+        callback: Signature,
         requires_modules: typing.Optional[typing.Union[str, typing.Tuple[str, ...]]] = None,
-        target_os: typing.Optional[_TARGET_OS] = None,
+        target_os: typing.Optional[TARGET_OS] = None,
         python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
-        *,
         no_raise: bool = False,
     ) -> None:
         self._callback = callback
@@ -199,15 +197,15 @@ class _AttrCheck(typing.Generic[_T_a]):
         self._py_version = python_version
         self._no_raise = no_raise
 
-    def __call__(self, *args: typing.Any, **kwds: typing.Any) -> _T_a:
+    def __call__(self, *args: typing.Any, **kwds: typing.Any) -> Signature:
         self._check_once()
-        return typing.cast(_T_a, self._callback(*args, **kwds))
+        return typing.cast(Signature, self._callback(*args, **kwds))
 
     def cfg_check(
         self,
         *,
         requires_modules: typing.Optional[typing.Union[str, typing.Tuple[str, ...]]] = None,
-        target_os: typing.Optional[_TARGET_OS] = None,
+        target_os: typing.Optional[TARGET_OS] = None,
         python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
     ) -> bool:
         self._target_os = target_os
@@ -217,16 +215,21 @@ class _AttrCheck(typing.Generic[_T_a]):
         return self._check_once()
 
     def _check_once(self) -> bool:
+        results: list[bool] = []
         if self._target_os is not None:
-            self._check_platform()
+            results.append(self._check_platform())
 
         if self._py_version is not None:
-            self._check_py_version()
+            results.append(self._check_py_version())
 
         if self._requires_modules is not None:
-            self._check_modules()
+            results.append(self._check_modules())
 
-        return False
+        # No checks are passed to cfg(), so we return True.
+        if not results:
+            return False
+
+        return all(results)
 
     def _check_modules(self) -> bool:
         required_modules: set[str] = set()
@@ -244,11 +247,9 @@ class _AttrCheck(typing.Generic[_T_a]):
                     return False
                 else:
                     needed = (mod for mod in modules if mod not in required_modules)
-                    raise ModuleNotFoundError(
-                        self._output_str(
-                            f"requires modules {', '.join(needed)} to be installed"
-                        )
-                    ) from None
+                    return self._raise_or_else(ModuleNotFoundError(
+                        self._output_str(f"requires modules {', '.join(needed)} to be installed")
+                    ))
         return True
 
     def _check_platform(self) -> bool:
@@ -261,22 +262,16 @@ class _AttrCheck(typing.Generic[_T_a]):
         if sys.platform == self._target_os:
             return True
         else:
-            if self._no_raise:
-                return False
-            else:
-                raise RuntimeError(self._output_str(f"requires {self._target_os} OS")) from None
+            return self._raise_or_else(RuntimeError(self._output_str(f"requires {self._target_os} OS")))
 
     def _check_py_version(self) -> bool:
         if self._py_version and self._py_version <= sys.version_info:
             return True
 
         else:
-            if self._no_raise:
-                return False
-            else:
-                raise RuntimeError(
-                    self._output_str(f"requires Python >={self._py_version}. But found {platform.python_version()}")
-                ) from None
+            return self._raise_or_else(
+                RuntimeError(self._output_str(f"requires Python >={self._py_version}. But found {platform.python_version()}"))
+            )
 
     def _obj_type(self) -> str:
         if inspect.isfunction(self._callback):
@@ -289,3 +284,9 @@ class _AttrCheck(typing.Generic[_T_a]):
     def _output_str(self, message: str, /) -> str:
         fn_name = "" if self._callback.__name__ == "<lambda>" else f"{self._callback.__name__} "
         return f"{self._obj_type()} {fn_name}{message}."
+
+    def _raise_or_else(self, exception: BaseException, /) -> bool:
+        if self._no_raise:
+            return False
+        else:
+            raise exception from None

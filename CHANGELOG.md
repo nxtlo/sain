@@ -16,3 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Removed
 
 ## Fixed
+- Fixed a bug where `cfg` was always returning `True`.
