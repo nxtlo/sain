@@ -16,22 +16,22 @@ $ pip install git+https://github.com/nxtlo/sain
 import sain
 
 # This function will not run unless the target OS either linux or darwin.
-@sain.cfg_attr(target_os = "unix")
+@sain.cfg_attr(target_os="unix")
 def run_when_unix() -> None:
     import uvloop
     uvloop.install()
 
 # If this returns True, run_when_unix will run, otherwise returns.
-if sain.cfg(requires_modules = ("dotenv"), python_version = (3, 10, 0)):
+if sain.cfg(requires_modules=("dotenv", "asyncpg"), python_version=(3, 9, 6)):
     run_when_unix()
 
-@sain.cfg_attr(target_os = 'win32')
+@sain.cfg_attr(target_os='win32')
 class PotFriend:
     
     @staticmethod
-    @sane.cfg_attr(requires_modules = 'hikari')
+    @sane.cfg_attr(requires_modules='hikari')
     def light(x: int, y: int) -> int:
-        result = x * y if sain.cfg(python_version = (3.10.0)) else x + y
+        result = x * y if sain.cfg(python_version=(3.10.0)) else x + y
         return result
 ```
 
