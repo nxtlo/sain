@@ -31,9 +31,8 @@ class PotFriend:
     @staticmethod
     @sane.cfg_attr(requires_modules = 'hikari')
     def light(x: int, y: int) -> int:
-        if sain.cfg(python_version = (3.10.0)):
-            return x + 2
-        return x * y
+        result = x * y if sain.cfg(python_version = (3.10.0)) else x + y
+        return result
 ```
 
 In Rust that'll be something like this.
