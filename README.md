@@ -25,13 +25,14 @@ def run_when_unix() -> None:
 if sain.cfg(requires_modules = ("dotenv"), python_version = (3, 10, 0)):
     run_when_unix()
 
-# This also work for classes.
 @sain.cfg_attr(target_os = 'win32')
 class PotFriend:
     
     @staticmethod
     @sane.cfg_attr(requires_modules = 'hikari')
     def light(x: int, y: int) -> int:
+        if sain.cfg(python_version = (3.10.0)):
+            return x + 2
         return x * y
 ```
 
