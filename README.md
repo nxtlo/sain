@@ -31,7 +31,7 @@ class PotFriend:
     @staticmethod
     @sane.cfg_attr(requires_modules="hikari", target_arch="x64")
     def light(x: int, y: int) -> int:
-        result = x * y if sain.cfg(python_version=(3, 10. 0)) else x + y
+        result = x * y if sain.cfg(python_version=(3, 10, 0)) else x + y
         return result
 ```
 
