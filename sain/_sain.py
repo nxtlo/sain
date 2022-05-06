@@ -46,25 +46,32 @@ Signature = typing.TypeVar("Signature", bound=SigT)
 """A type var hint for the decorated object signature."""
 
 TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix"]
+TARGET_ARCH = typing.Literal["x86", "x64", "arm", "arm64"]
+PY_IMPL = typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
 
+def _machine() -> str:
+    return platform.machine()
+
+def _is_arm() -> bool:
+    return _machine().startswith("arm")
+
+def _is_arm_64() -> bool:
+    return _is_arm() and _is_x64()
+
+def _is_x64() -> bool:
+    return _machine().endswith("64")
 
 def cfg_attr(
     *,
     requires_modules: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
     target_os: typing.Optional[TARGET_OS] = None,
     python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
+    target_arch: typing.Optional[TARGET_ARCH] = None,
+    impl: typing.Optional[PY_IMPL] = None,
 ) -> typing.Callable[[Signature], Signature]:
     """Configure a class, method or function to be checked for the given attributes.
 
     If one of the attributes returns False, An exception will be raised.
-
-    Notes
-    -----
-    Target OS must be one of the following:
-    * `linux`
-    * `win32`
-    * `darwin`
-    * `unix`, which is assumed to be either linux or darwin.
 
     Examples
     --------
@@ -76,7 +83,7 @@ def cfg_attr(
         # Do stuff with Windows's API.
         ...
 
-    @sain.cfg_attr(python_version = "3.10.0")
+    @sain.cfg_attr(python_version = "3.10.0", impl = "PyPy")
     class MyClass:
 
         @staticmethod
@@ -98,11 +105,15 @@ def cfg_attr(
         The targeted Python version thats required for the object to be ran.
 
         Format must be `(3, 9, 5)`.
+    target_arch : `str | None`
+        The CPU targeted architecture thats required for the object to be ran.
+    impl : `str | None`
+        The Python implementation thats required for the object to be ran.
 
     Raises
     ------
     `RuntimeError`
-        If either the target OS or Python version check fails.
+        This fails if any of the attributes returns `False`. `required_modules` is not included.
     `ModuleNotFoundError`
         If the module check fails.
     """
@@ -115,6 +126,8 @@ def cfg_attr(
                 requires_modules=requires_modules,
                 target_os=target_os,
                 python_version=python_version,
+                target_arch=target_arch,
+                impl=impl,
             )
             return checker(*args, **kwargs)
 
@@ -127,19 +140,13 @@ def cfg(
     target_os: typing.Optional[TARGET_OS] = None,
     requires_modules: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
     python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
+    target_arch: typing.Optional[TARGET_ARCH] = None,
+    impl: typing.Optional[PY_IMPL] = None,
 ) -> bool:
     """A function that will run the code only if all predicate attributes returns `True`.
 
     The difference between this function and `cfg_attr` is that this function will not raise an exception.
     Instead it will return `False` if any of the attributes fails.
-
-    Notes
-    -----
-    Target OS must be one of the following:
-    * `linux`
-    * `win32`
-    * `darwin`
-    * `unix`, which is assumed to be either linux or darwin.
 
     Example
     -------
@@ -167,6 +174,10 @@ def cfg(
         The targeted Python version thats required for the object to be ran.
 
         Format must be `(3, 9, 5)`.
+    target_arch : `str | None`
+        The CPU targeted architecture thats required for the object to be ran.
+    impl : `str | None`
+        The Python implementation thats required for the object to be ran.
 
     Returns
     -------
@@ -176,12 +187,25 @@ def cfg(
     checker = _AttrCheck(
         lambda: None,
         no_raise=True,
+        requires_modules=requires_modules,
+        target_os=target_os,
+        python_version=python_version,
+        target_arch=target_arch,
+        impl=impl,
     )
-    return checker.cfg_check(requires_modules=requires_modules, target_os=target_os, python_version=python_version)
+    return checker.cfg_check()
 
 
 class _AttrCheck(typing.Generic[Signature]):
-    __slots__ = ("_requires_modules", "_target_os", "_callback", "_py_version", "_no_raise")
+    __slots__ = (
+        "_requires_modules",
+        "_target_os",
+        "_callback",
+        "_py_version",
+        "_no_raise",
+        "_target_arch",
+        "_py_impl",
+    )
 
     def __init__(
         self,
@@ -189,13 +213,18 @@ class _AttrCheck(typing.Generic[Signature]):
         requires_modules: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         target_os: typing.Optional[TARGET_OS] = None,
         python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
+        target_arch: typing.Optional[TARGET_ARCH] = None,
+        impl: typing.Optional[PY_IMPL] = None,
+        *,
         no_raise: bool = False,
     ) -> None:
         self._callback = callback
         self._requires_modules = requires_modules
         self._target_os = target_os
         self._py_version = python_version
+        self._target_arch = target_arch
         self._no_raise = no_raise
+        self._py_impl = impl
 
     def __call__(self, *args: typing.Any, **kwds: typing.Any) -> Signature:
         self._check_once()
@@ -225,7 +254,13 @@ class _AttrCheck(typing.Generic[Signature]):
         if self._requires_modules is not None:
             results.append(self._check_modules())
 
-        # No checks are passed to cfg(), so we return True.
+        if self._target_arch is not None:
+            results.append(self._check_target_arch())
+        
+        if self._py_impl is not None:
+            results.append(self._check_py_impl())
+
+        # No checks are passed to cfg(), We return False.
         if not results:
             return False
 
@@ -261,18 +296,40 @@ class _AttrCheck(typing.Generic[Signature]):
 
         if sys.platform == self._target_os:
             return True
-        else:
-            return self._raise_or_else(RuntimeError(self._output_str(f"requires {self._target_os} OS")))
+
+        return self._raise_or_else(RuntimeError(self._output_str(f"requires {self._target_os} OS")))
 
     def _check_py_version(self) -> bool:
         if self._py_version and self._py_version <= sys.version_info:
             return True
 
-        else:
-            return self._raise_or_else(
-                RuntimeError(self._output_str(f"requires Python >={self._py_version}. But found {platform.python_version()}"))
-            )
+        return self._raise_or_else(
+            RuntimeError(self._output_str(f"requires Python >={self._py_version}. But found {platform.python_version()}"))
+        )
 
+    def _check_target_arch(self) -> bool:
+        if self._target_arch:
+            if self._target_arch == "arm":
+                return _is_arm()
+            elif self._target_arch == "arm64":
+                return _is_arm_64()
+            elif self._target_arch == "x86":
+                return not _is_x64()
+            elif self._target_arch == "x64":
+                return _is_x64()
+            else:
+                raise ValueError(f"Unknown target arch: {self._target_arch}")
+
+        return False
+
+    def _check_py_impl(self) -> bool:
+        if platform.python_implementation() == self._py_impl:
+            return True
+
+        return self._raise_or_else(RuntimeError(self._output_str(f"requires Python implementation {self._py_impl}")))
+
+
+    @property
     def _obj_type(self) -> str:
         if inspect.isfunction(self._callback):
             return "function"
@@ -282,8 +339,8 @@ class _AttrCheck(typing.Generic[Signature]):
         return "object"
 
     def _output_str(self, message: str, /) -> str:
-        fn_name = "" if self._callback.__name__ == "<lambda>" else f"{self._callback.__name__} "
-        return f"{self._obj_type()} {fn_name}{message}."
+        fn_name = "" if self._callback.__name__ == "<lambda>" else self._callback.__name__
+        return f"{self._obj_type} {fn_name} {message}."
 
     def _raise_or_else(self, exception: BaseException, /) -> bool:
         if self._no_raise:

@@ -6,12 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 0.0.1a0 / 2022-5-2
-
 ## Added
 * First push
+* Added target arch + python impl options.
 
 ## Changed
+* requires_modules option now accepts a sequence instead of tuple.
 
 ## Removed
 

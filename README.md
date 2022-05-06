@@ -25,13 +25,13 @@ def run_when_unix() -> None:
 if sain.cfg(requires_modules=("dotenv", "asyncpg"), python_version=(3, 9, 6)):
     run_when_unix()
 
-@sain.cfg_attr(target_os="win32")
+@sain.cfg_attr(target_os="win32", impl="CPython")
 class PotFriend:
-    
+
     @staticmethod
-    @sane.cfg_attr(requires_modules="hikari")
+    @sane.cfg_attr(requires_modules="hikari", target_arch="x64")
     def light(x: int, y: int) -> int:
-        result = x * y if sain.cfg(python_version=(3.10.0)) else x + y
+        result = x * y if sain.cfg(python_version=(3, 10. 0)) else x + y
         return result
 ```
 

@@ -71,10 +71,22 @@ class HasAsyncio:
 Notes
 -----
 Target OS must be one of the following:
-* `linux`
-* `win32`
-* `darwin`
-* `unix`, which is assumed to be either linux or darwin.
+    * `linux`
+    * `win32`
+    * `darwin`
+    * `unix`, which is assumed to be either linux or darwin.
+
+Target architecture must be one of the following:
+    * `x86`
+    * `x64`
+    * `arm`
+    * `arm64`
+
+Target Python implementation must be one of the following:
+    * `CPython`
+    * `PyPy`
+    * `IronPython`
+    * `Jython`
 """
 from __future__ import annotations
 
