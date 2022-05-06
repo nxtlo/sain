@@ -116,6 +116,8 @@ def cfg_attr(
         This fails if any of the attributes returns `False`. `required_modules` is not included.
     `ModuleNotFoundError`
         If the module check fails.
+    `ValueError`
+        If the passed Python implementation is unknown.
     """
 
     def decorator(callback: Signature) -> Signature:
