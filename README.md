@@ -25,11 +25,11 @@ def run_when_unix() -> None:
 if sain.cfg(requires_modules=("dotenv", "asyncpg"), python_version=(3, 9, 6)):
     run_when_unix()
 
-@sain.cfg_attr(target_os='win32')
+@sain.cfg_attr(target_os="win32")
 class PotFriend:
     
     @staticmethod
-    @sane.cfg_attr(requires_modules='hikari')
+    @sane.cfg_attr(requires_modules="hikari")
     def light(x: int, y: int) -> int:
         result = x * y if sain.cfg(python_version=(3.10.0)) else x + y
         return result
@@ -39,8 +39,12 @@ In Rust that'll be something like this.
 
 ```rs
 #[cfg_attr(target_os = "windows")]
-fn main() -> ! {
-    loop {}
+fn main() -> std::io::Result<()> {
+    if cfg!(not(unix)) {
+        println!("Unix")
+    }
+
+    Ok(())
 }
 ```
 

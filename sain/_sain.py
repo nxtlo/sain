@@ -50,7 +50,7 @@ TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix"]
 
 def cfg_attr(
     *,
-    requires_modules: typing.Optional[typing.Union[str, typing.Tuple[str, ...]]] = None,
+    requires_modules: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
     target_os: typing.Optional[TARGET_OS] = None,
     python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
 ) -> typing.Callable[[Signature], Signature]:
@@ -90,8 +90,8 @@ def cfg_attr(
 
     Parameters
     ----------
-    requires_modules : `str | tuple[str] | None`
-        A string or tuple of strings of the required modules for the object to be ran.
+    requires_modules : `str | Sequence[str] | None`
+        A string or sequence of the required modules for the object to be ran.
     target_os : `str | None`
         The targeted operating system thats required for the object to be ran.
     python_version : `tuple[int, int, int] | None`
@@ -125,7 +125,7 @@ def cfg_attr(
 
 def cfg(
     target_os: typing.Optional[TARGET_OS] = None,
-    requires_modules: typing.Optional[typing.Union[str, typing.Tuple[str, ...]]] = None,
+    requires_modules: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
     python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
 ) -> bool:
     """A function that will run the code only if all predicate attributes returns `True`.
@@ -159,8 +159,8 @@ def cfg(
 
     Parameters
     ----------
-    requires_modules : `str | tuple[str] | None`
-        A string or tuple of strings of the required modules for the object to be ran.
+    requires_modules : `str | Sequence[str] | None`
+        A string or sequence of the required module names for the object to be ran.
     target_os : `str | None`
         The targeted operating system thats required for the object to be ran.
     python_version : `tuple[int, int, int] | None`
@@ -186,7 +186,7 @@ class _AttrCheck(typing.Generic[Signature]):
     def __init__(
         self,
         callback: Signature,
-        requires_modules: typing.Optional[typing.Union[str, typing.Tuple[str, ...]]] = None,
+        requires_modules: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         target_os: typing.Optional[TARGET_OS] = None,
         python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
         no_raise: bool = False,
@@ -204,7 +204,7 @@ class _AttrCheck(typing.Generic[Signature]):
     def cfg_check(
         self,
         *,
-        requires_modules: typing.Optional[typing.Union[str, typing.Tuple[str, ...]]] = None,
+        requires_modules: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         target_os: typing.Optional[TARGET_OS] = None,
         python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
     ) -> bool:
