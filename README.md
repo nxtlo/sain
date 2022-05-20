@@ -50,4 +50,4 @@ fn main() -> std::io::Result<()> {
 
 And since Rust is a compiled language, The main function will only be compiled if the target was windows.
 
-But there's no such thing as this in Python, So only an error will be raised and whatever was predicated will not run.
+But there's no such thing as this in Python, So an exception wil be raised at runtime and the code that returns False will not run.
