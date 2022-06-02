@@ -10,7 +10,6 @@ class TokenGetter:
     """A token getter strategy."""
     token: sain.Option[str] = sain.Some(None)
 
-    # NOTE: classmethod cannot be decorated with @sain.cfg_attr
     @classmethod
     @sain.cfg_attr(requires_modules="python-dotenv")
     def from_env(cls, key: str, /) -> TokenGetter:
