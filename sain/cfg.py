@@ -238,17 +238,7 @@ class _AttrCheck(typing.Generic[Signature]):
         self._check_once()
         return typing.cast(Signature, self._callback(*args, **kwds))
 
-    def cfg_check(
-        self,
-        *,
-        requires_modules: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
-        target_os: typing.Optional[TARGET_OS] = None,
-        python_version: typing.Optional[typing.Tuple[int, int, int]] = None,
-    ) -> bool:
-        self._target_os = target_os
-        self._py_version = python_version
-        self._requires_modules = requires_modules
-
+    def cfg_check(self) -> bool:
         return self._check_once()
 
     def _check_once(self) -> bool:

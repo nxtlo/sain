@@ -374,7 +374,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         return self._value is None and predicate(self._value)
 
     def __str__(self) -> str:
-        return f"{self._value!r}"
+        return f"Some({self._value!r})"
 
     def __repr__(self) -> str:
         return f"Some({self._value!r})"

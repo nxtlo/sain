@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## Added
+- Examples
+
+## Changed
+- The `Some` type `__str__` now returns `Some(repr(value))` instead of just `repr(value)`.
+
+## Fixed
+- `sain.cfg()` wasn't working correctly.
+
 ## 0.0.2
 ## Addeed
 * A type alias `Option[T]` for `Some[T]`.
