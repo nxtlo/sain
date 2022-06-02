@@ -27,6 +27,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""Runtime attr confuguration."""
 
 from __future__ import annotations
 
@@ -49,17 +50,22 @@ TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix"]
 TARGET_ARCH = typing.Literal["x86", "x64", "arm", "arm64"]
 PY_IMPL = typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
 
+
 def _machine() -> str:
     return platform.machine()
+
 
 def _is_arm() -> bool:
     return _machine().startswith("arm")
 
+
 def _is_arm_64() -> bool:
     return _is_arm() and _is_x64()
 
+
 def _is_x64() -> bool:
     return _machine().endswith("64")
+
 
 def cfg_attr(
     *,
@@ -258,7 +264,7 @@ class _AttrCheck(typing.Generic[Signature]):
 
         if self._target_arch is not None:
             results.append(self._check_target_arch())
-        
+
         if self._py_impl is not None:
             results.append(self._check_py_impl())
 
@@ -284,9 +290,9 @@ class _AttrCheck(typing.Generic[Signature]):
                     return False
                 else:
                     needed = (mod for mod in modules if mod not in required_modules)
-                    return self._raise_or_else(ModuleNotFoundError(
-                        self._output_str(f"requires modules {', '.join(needed)} to be installed")
-                    ))
+                    return self._raise_or_else(
+                        ModuleNotFoundError(self._output_str(f"requires modules {', '.join(needed)} to be installed"))
+                    )
         return True
 
     def _check_platform(self) -> bool:
@@ -306,7 +312,9 @@ class _AttrCheck(typing.Generic[Signature]):
             return True
 
         return self._raise_or_else(
-            RuntimeError(self._output_str(f"requires Python >={self._py_version}. But found {platform.python_version()}"))
+            RuntimeError(
+                self._output_str(f"requires Python >={self._py_version}. But found {platform.python_version()}")
+            )
         )
 
     def _check_target_arch(self) -> bool:
@@ -329,7 +337,6 @@ class _AttrCheck(typing.Generic[Signature]):
             return True
 
         return self._raise_or_else(RuntimeError(self._output_str(f"requires Python implementation {self._py_impl}")))
-
 
     @property
     def _obj_type(self) -> str:

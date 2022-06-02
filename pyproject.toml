@@ -1,18 +1,20 @@
-[build-system]
-requires = ["flit_core >=3.3,<4,!=3.7"]
-build-backend = "flit_core.buildapi"
-
-[project]
+[tool.poetry]
 name = "sain"
+version = "0.0.1"
+description = "Standard Rust core types implementations for Python."
+authors = ["nxtlo <dhmony-99@hotmail.com>"]
+license = "BSD-3-Clause license"
+keywords = ["Rust", "config"]
 readme = "README.md"
-requires-python = ">=3.8.0,<3.12"
-license = {file = "LICENSE"}
-authors = [ {name = "nxtlo", email="dhmony-99@hotmail.com"} ]
-keywords = ["config", "configuration"]
+repository = "https://github.com/nxtlo/sain"
+packages = [
+    {include = "sain"},
+    {include = "sain/**/*.py"}
+]
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: BSD License",
+    'Development Status :: 5 - Production/Stable',
     "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.8",
@@ -21,16 +23,11 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Utilities",
-    "Typing :: Typed"
+    "Typing :: Typed",
 ]
-dynamic = ["description", "version"]
 
-[project.urls]
-homepage = "https://github.com/nxtlo/sain"
-repository = "https://github.com/nxtlo/sain"
-documentation = "https://nxtlo.github.io/sain/sain.html"
-changelog = "https://github.com/nxtlo/sain/blob/master/CHANGELOG.md"
+[tool.poetry.dependencies]
+python = "^3.8"
 
 [tool.black]
 line-length     = 120
