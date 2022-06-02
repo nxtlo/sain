@@ -20,12 +20,12 @@ def run_when_unix() -> None:
     import uvloop
     uvloop.install()
 
-# If this returns True, run_when_unix will run, otherwise returns.
+# If this returns True, get_token will run, otherwise returns.
 if sain.cfg(requires_modules=("dotenv", ...), python_version=(3, 9, 6)):
     # Stright up replace typing.Optional[str]
     def get_token() -> sain.Option[str]:
         import dotenv
-        return sain.Some(dotenv.get_key(".env". "SECRET_TOKEN"))
+        return sain.Some(dotenv.get_key(".env", "SECRET_TOKEN"))
 
 # Raises RuntimeError("No token found.") if T is None.
 token: int = get_token().expect("No token found.")
