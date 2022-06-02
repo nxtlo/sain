@@ -32,8 +32,8 @@
 
 Equavilant types
 ----------------
-- `Option<T>` -> `sain.Some[T]`
-- `Result<T, E>` -> `sain.Result[T, E`. Not implemented yet.
+- `Option<T>` -> `sain.Option[T]` | `sain.Some[T]`
+- `Result<T, E>` -> `sain.Result[T, E]`. Not implemented yet.
 - Default<T> -> `sain.Default[T]`
 - AsRef<T> -> `sain.Ref[T]`. kinda...
 - Iter<Item> -> `sain.
@@ -50,7 +50,7 @@ import sain
 
 # If a non windows machine runs this function, it will raise an error.
 @sain.cfg_attr(target_os = "win32")
-def windows_only() -> sain.Some[int]:
+def windows_only() -> sain.Option[int]:
     return sain.Some(1)
 
 @sain.cfg_attr(requires_modules="uvloop", target_os = "unix")
@@ -91,15 +91,36 @@ Target Python implementation must be one of the following:
 """
 from __future__ import annotations
 
-__all__ = ("cfg", "cfg_attr", "Default", "Ref", "Some", "into_iter", "Iter")
+__all__ = (
+    "cfg",
+    "cfg_attr",
+    "Default",
+    "Ref",
+    "Some",
+    "Option",
+    "into_iter",
+    "Iter",
+    "option",
+    "default",
+    "ref",
+    "iter",
+
+)
 
 from .cfg import cfg
 from .cfg import cfg_attr
-from .deafult import Default
+from .default import Default
 from .iter import Iter
 from .iter import into_iter
 from .option import Some
+from .option import Option
 from .ref import Ref
+
+# Module top level. Required for pdoc.
+from . import option
+from . import default
+from . import ref
+from . import iter
 
 __version__: str = "0.0.1"
 __url__: str = "https://github.com/nxtlo/sain"

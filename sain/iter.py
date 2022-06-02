@@ -36,7 +36,7 @@ __all__: typing.Tuple[str, str, str] = ("Iter", "into_iter", "Item")
 import itertools
 import typing
 
-from . import deafult as _default
+from . import default as _default
 
 Item = typing.TypeVar("Item")
 """A type hint for the item type of the iterator."""

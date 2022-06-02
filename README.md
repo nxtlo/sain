@@ -22,14 +22,19 @@ def run_when_unix() -> None:
 
 # If this returns True, run_when_unix will run, otherwise returns.
 if sain.cfg(requires_modules=("dotenv", ...), python_version=(3, 9, 6)):
-    # Stright up replace typing.Optional[int]
-    def inner() -> sain.Some[int]:
-        return sain.Some(1)
+    # Stright up replace typing.Optional[str]
+    def get_token() -> sain.Option[str]:
+        import dotenv
+        return sain.Some(dotenv.get_key(".env". "SECRET_TOKEN"))
 
-# If the Some[T] contained value is `None`, This raises RuntimeError.
-value: int = inner().expect("Still None")
+# Raises RuntimeError("No token found.") if T is None.
+token: int = get_token().expect("No token found.")
 
-as_none: sain.Some[str] = sain.Some(None)  # type hint is fine.
+# Unwrap the value, Returning DEFAULT_TOKEN if it was None.
+env_or_default: str = get_token().unwrap_or("DEFAULT_TOKEN")
+
+# type hint is fine.
+as_none: sain.Option[str] = sain.Some(None)
 assert as_none.is_none()
 ```
 
@@ -43,7 +48,7 @@ class DefaultCache(sain.Default[dict[str, int]]):
     # One staticmethod must be implemented and must return the same type.
     @staticmethod
     def default() -> dict[str, int]:
-        return {'yo': 999}
+        return {}
 ```
 
 

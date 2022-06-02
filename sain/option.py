@@ -31,11 +31,19 @@
 
 from __future__ import annotations
 
-__all__: tuple[str, ...] = ("Some", "Fn", "FnOnce", "ValueT", "OkT", "ErrT")
+__all__: tuple[str, ...] = (
+    "Some",
+    "Fn",
+    "FnOnce",
+    "ValueT",
+    "OkT",
+    "ErrT",
+    "Option"
+)
 
 import typing
 
-from . import deafult as _default
+from . import default as _default
 from . import ref as _ref
 
 ValueT = typing.TypeVar("ValueT")
@@ -385,3 +393,16 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
     def __hash__(self) -> int:
         return hash(self._value)
+
+# TODO: Make a .pyi file.
+Option = Some[ValueT]
+"""A type hint for a value that can be `Some[T]`.
+
+Example
+-------
+```py
+import sain
+
+foo: sain.Option[str] = sain.Some("foo")
+```
+"""

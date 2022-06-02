@@ -33,7 +33,7 @@ import nox
 @nox.session(reuse_venv=True)
 def pdoc(session: nox.Session) -> None:
     session.install('-r', 'dev-requirements.txt')
-    session.run('pdoc', 'sain', '-d', 'numpy', '-o', './docs')
+    session.run('pdoc', 'sain', '-d', 'numpy', '-o', './docs', '-t', "./templates")
 
 @nox.session(reuse_venv=True)
 def lint(session: nox.Session) -> None:
