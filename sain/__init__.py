@@ -122,7 +122,7 @@ from . import default
 from . import ref
 from . import iter
 
-__version__: str = "0.0.1"
+__version__: str = "0.0.2"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
 __about__: str = "A Rust like cfg attribs checking for Python."

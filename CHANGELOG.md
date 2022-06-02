@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.0.2
 ## Addeed
 * A type alias `Option[T]` for `Some[T]`.
 
+## Changed
+* Export modules to top level.
 
 ## 0.0.1
 ## Added
