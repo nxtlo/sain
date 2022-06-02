@@ -52,10 +52,9 @@ class Default(typing.Protocol[_T_co]):
         def default() -> Dict[str, Any]:
             return {}
 
-    cache = Some(Cache())
-    default = cache.default()
-    print(default)
-    assert isinstance(default, Default)
+    cache = Cache.default()
+    print(cache)
+    assert isinstance(cache, Default)
     # {}
     ```
     """

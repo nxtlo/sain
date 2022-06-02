@@ -31,15 +31,7 @@
 
 from __future__ import annotations
 
-__all__: tuple[str, ...] = (
-    "Some",
-    "Fn",
-    "FnOnce",
-    "ValueT",
-    "OkT",
-    "ErrT",
-    "Option"
-)
+__all__: tuple[str, ...] = ("Some", "Fn", "FnOnce", "ValueT", "OkT", "ErrT", "Option")
 
 import typing
 
@@ -76,7 +68,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
     print(value)
     # Some("Hello")
 
-    # This will unwrap the contained value as long as it is not `None` otherwise this will raise an error.
+    # This will unwrap the contained value as long as
+    # it is not `None` otherwise this will raise an error.
     print(value.unwrap())
     # "Hello"
 
@@ -92,7 +85,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
     __slots__ = ("_value",)
 
-    def __init__(self, value: ValueT | None) -> None:
+    def __init__(self, value: ValueT | None, /) -> None:
         self._value = value
 
     @staticmethod
@@ -117,7 +110,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         value = Some(None)
         print(value.unwrap())
-        # RuntimeError: ...
+        # RuntimeError
         ```
 
         Raises
@@ -126,7 +119,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
             If the inner value is `None`.
         """
         if self._value is None:
-            raise RuntimeError("Value is None") from None
+            raise RuntimeError(f"Can't unwrap {type(self).__name__} value.") from None
 
         return self._value
 
@@ -152,7 +145,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return self._value
 
-    def unwrap_or_else(self, f: FnOnce[ValueT]) -> ValueT:
+    def unwrap_or_else(self, f: FnOnce[ValueT], /) -> ValueT:
         """Unwrap the inner value either returning if its not `None` or calling `f` to get a default value.
 
         Example
@@ -173,8 +166,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         return self._value
 
     # Functional.
-    def map(self, f: Fn[ValueT, T]) -> Some[T | None]:
-        """Map the inner value to a new value.
+    def map(self, f: Fn[ValueT, T], /) -> Some[T | None]:
+        """Map the inner value to a new value. Returning `Some[None]` if `ValueT` is `None`.
 
         Example
         -------
@@ -183,6 +176,10 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         print(value.map(lambda x: x * 2.0))
         # Some(10.0)
+
+        value: Some[bool] = Some(None)
+        print(value)
+        # Some(None)
         ```
         """
         if self._value is None:
@@ -190,7 +187,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return Some(f(self._value))
 
-    def map_or(self, default: T, f: Fn[ValueT, T]) -> T:
+    def map_or(self, default: T, f: Fn[ValueT, T], /) -> T:
         """Map the inner value to a new value or return `default` if its `None`.
 
         Example
@@ -213,7 +210,24 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return f(self._value)
 
-    def map_or_else(self, default: FnOnce[T], f: typing.Callable[[ValueT], T]) -> T:
+    def map_or_else(self, default: FnOnce[T], f: typing.Callable[[ValueT], T], /) -> T:
+        """Map the inner value to a new value, Or return default which maps to `default()` if its `None`.
+
+        Example
+        -------
+        ```py
+        value = Some(5.0)
+
+        # Since the value is not `None` this will get mapped.
+        print(value.map_or_else(lambda: 10.0, lambda x: x + 1.0))
+        # 6.0
+
+        # This is `None`, so the default func will be returned.
+        value: Option[str] = Some(None)
+        print(value.map_or_else(lambda: "5", lambda x: str(x)))
+        # "5"
+        ```
+        """
         if self._value is None:
             return default()
 
@@ -289,7 +303,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         value: Some[str] = Some(None)
         print(value.expect("Value is None"))
-        # RuntimeError: ...
+        # RuntimeError("Value is None")
         ```
         """
         if self._value is None:
@@ -300,7 +314,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
     def and_ok(self, optb: Some[T | None]) -> Some[T | None]:
         """Returns `Some[None]` if the contained value is `None`,
 
-        otherwise calls the optb and returns `Some[T]` if the predicate returns `True`.
+        Otherwise return optb as `Some[T | None]` if optb is `Some[T]`.
 
         Example
         -------
@@ -310,9 +324,9 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.and_ok(Some(10)))
         # Some(10)
 
-        value: Some[int] = Some(None)
-        print(value.and_ok(Some(10)))
-        # None
+        value: Some[int] = Some(10)
+        print(value.and_ok(Some(None)))  # optb is `None`.
+        # Some(None)
         ```
         """
         if self._value is None:
@@ -321,7 +335,9 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         return optb
 
     def and_then(self, f: Fn[ValueT, Some[T | None]]) -> Some[T | None]:
-        """Returns `Some[None]` if the contained value is `None`, otherwise call `f` on `ValueT` and return the result.
+        """Returns `Some[None]` if the contained value is `None`,
+
+        otherwise call `f` on `ValueT` and return `Some[T]` if it's value not `None`.
 
         Example
         -------
@@ -330,8 +346,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.and_then(lambda x: Some(x * 2)))
         # Some(10)
 
-        value: Some[int] = Some(None)
-        print(value.and_then(lambda x: Some(x * 2)))
+        value: Some[int] = Some(10)
+        print(value.and_then(lambda x: Some(None)))
         # Some(None)
         ```
         """
@@ -346,14 +362,18 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         Example
         -------
         ```py
-        value = Some(5)
+        value = Some(5).as_ref().unwrap()
+        owned = value.object
+        print(owned) # 5
 
-        print(value.as_ref())
-        # Some(Ref(5))
+        # Create a copy of object.
+        clone = value.clone()
+        clone = 0
+        print(clone == owned) # False
 
         value: Some[int] = Some(None)
         print(value.as_ref())
-        # None
+        # Some(Ref(None))
         ```
         """
         if self._value is not None:
@@ -362,16 +382,56 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         return Some(None)
 
     def is_some(self) -> bool:
+        """Returns `True` if the contained value is not `None`, otherwise returns `False`.
+
+        Example
+        -------
+        ```py
+        value = Some(5)
+        print(value.is_some())
+        # True
+
+        value: Some[int] = Some(None)
+        print(value.is_some())
+        # False
+        ```
+        """
         return self._value is not None
 
     def is_some_and(self, predicate: Fn[ValueT, bool]) -> bool:
+        """Returns `True` if the contained value is not `None` and
+        the predicate returns `True`, otherwise returns `False`.
+
+        Example
+        -------
+        ```py
+        value = Some(5)
+        print(value.is_some_and(lambda x: x > 3))
+        # True
+
+        value: Some[int] = Some(None)
+        print(value.is_some_and(lambda x: x > 3))
+        # False
+        ```
+        """
         return self._value is not None and predicate(self._value)
 
     def is_none(self) -> bool:
-        return not self.is_some()
+        """Returns `True` if the contained value is `None`, otherwise returns `False`.
 
-    def is_none_and(self, predicate: Fn[None, bool]) -> bool:
-        return self._value is None and predicate(self._value)
+        Example
+        -------
+        ```py
+        value = Some(5)
+        print(value.is_none())
+        # False
+
+        value: Some[int] = Some(None)
+        print(value.is_none())
+        # True
+        ```
+        """
+        return not self.is_some()
 
     def __str__(self) -> str:
         return f"Some({self._value!r})"
@@ -393,6 +453,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
     def __hash__(self) -> int:
         return hash(self._value)
+
 
 # TODO: Make a .pyi file.
 Option = Some[ValueT]

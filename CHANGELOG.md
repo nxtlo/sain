@@ -8,9 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 - Examples
+- Proper documentation.
 
 ## Changed
 - The `Some` type `__str__` now returns `Some(repr(value))` instead of just `repr(value)`.
+
+## Removed
+- `Some.is_none_and` method since it made no sense.
 
 ## Fixed
 - `sain.cfg()` wasn't working correctly.

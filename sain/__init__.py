@@ -104,23 +104,21 @@ __all__ = (
     "default",
     "ref",
     "iter",
-
 )
 
+# Module top level. Required for pdoc.
+from . import default
+from . import iter
+from . import option
+from . import ref
 from .cfg import cfg
 from .cfg import cfg_attr
 from .default import Default
 from .iter import Iter
 from .iter import into_iter
-from .option import Some
 from .option import Option
+from .option import Some
 from .ref import Ref
-
-# Module top level. Required for pdoc.
-from . import option
-from . import default
-from . import ref
-from . import iter
 
 __version__: str = "0.0.2"
 __url__: str = "https://github.com/nxtlo/sain"

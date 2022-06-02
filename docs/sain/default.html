@@ -117,18 +117,17 @@
 </span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        def default() -&gt; Dict[str, Any]:</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">            return {}</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">    cache = Some(Cache())</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    default = cache.default()</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    print(default)</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    assert isinstance(default, Default)</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">    # {}</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">    ```</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">    cache = Cache.default()</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    print(cache)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    assert isinstance(cache, Default)</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    # {}</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">    ```</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
         </details>
@@ -161,18 +160,17 @@
 </span><span id="Default-52"><a href="#Default-52"><span class="linenos">52</span></a><span class="sd">        def default() -&gt; Dict[str, Any]:</span>
 </span><span id="Default-53"><a href="#Default-53"><span class="linenos">53</span></a><span class="sd">            return {}</span>
 </span><span id="Default-54"><a href="#Default-54"><span class="linenos">54</span></a>
-</span><span id="Default-55"><a href="#Default-55"><span class="linenos">55</span></a><span class="sd">    cache = Some(Cache())</span>
-</span><span id="Default-56"><a href="#Default-56"><span class="linenos">56</span></a><span class="sd">    default = cache.default()</span>
-</span><span id="Default-57"><a href="#Default-57"><span class="linenos">57</span></a><span class="sd">    print(default)</span>
-</span><span id="Default-58"><a href="#Default-58"><span class="linenos">58</span></a><span class="sd">    assert isinstance(default, Default)</span>
-</span><span id="Default-59"><a href="#Default-59"><span class="linenos">59</span></a><span class="sd">    # {}</span>
-</span><span id="Default-60"><a href="#Default-60"><span class="linenos">60</span></a><span class="sd">    ```</span>
-</span><span id="Default-61"><a href="#Default-61"><span class="linenos">61</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Default-62"><a href="#Default-62"><span class="linenos">62</span></a>
-</span><span id="Default-63"><a href="#Default-63"><span class="linenos">63</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Default-64"><a href="#Default-64"><span class="linenos">64</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="Default-65"><a href="#Default-65"><span class="linenos">65</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
-</span><span id="Default-66"><a href="#Default-66"><span class="linenos">66</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="Default-55"><a href="#Default-55"><span class="linenos">55</span></a><span class="sd">    cache = Cache.default()</span>
+</span><span id="Default-56"><a href="#Default-56"><span class="linenos">56</span></a><span class="sd">    print(cache)</span>
+</span><span id="Default-57"><a href="#Default-57"><span class="linenos">57</span></a><span class="sd">    assert isinstance(cache, Default)</span>
+</span><span id="Default-58"><a href="#Default-58"><span class="linenos">58</span></a><span class="sd">    # {}</span>
+</span><span id="Default-59"><a href="#Default-59"><span class="linenos">59</span></a><span class="sd">    ```</span>
+</span><span id="Default-60"><a href="#Default-60"><span class="linenos">60</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Default-61"><a href="#Default-61"><span class="linenos">61</span></a>
+</span><span id="Default-62"><a href="#Default-62"><span class="linenos">62</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="Default-63"><a href="#Default-63"><span class="linenos">63</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
+</span><span id="Default-64"><a href="#Default-64"><span class="linenos">64</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="Default-65"><a href="#Default-65"><span class="linenos">65</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
         </details>
@@ -189,10 +187,9 @@
     <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">{}</span>
 
-<span class="n">cache</span> <span class="o">=</span> <span class="n">Some</span><span class="p">(</span><span class="n">Cache</span><span class="p">())</span>
-<span class="n">default</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">default</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
-<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Default</span><span class="p">)</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="n">Cache</span><span class="o">.</span><span class="n">default</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cache</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">Default</span><span class="p">)</span>
 <span class="c1"># {}</span>
 </code></pre></div>
 </div>
@@ -252,10 +249,10 @@
 
             <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Default.default-63"><a href="#Default.default-63"><span class="linenos">63</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Default.default-64"><a href="#Default.default-64"><span class="linenos">64</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="Default.default-65"><a href="#Default.default-65"><span class="linenos">65</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
-</span><span id="Default.default-66"><a href="#Default.default-66"><span class="linenos">66</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Default.default-62"><a href="#Default.default-62"><span class="linenos">62</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="Default.default-63"><a href="#Default.default-63"><span class="linenos">63</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
+</span><span id="Default.default-64"><a href="#Default.default-64"><span class="linenos">64</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="Default.default-65"><a href="#Default.default-65"><span class="linenos">65</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
         </details>
