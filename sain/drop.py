@@ -27,42 +27,65 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Referenced objects to a value. This can be used to store an object in the same place multiple times."""
-
+"""Protocol for types that can be dropped(deleted)."""
 from __future__ import annotations
 
-__all__: tuple[str, str] = ("Ref", "RefMut")
+__all__: tuple[str, str] = ("Drop", "drop")
 
-import copy
-import dataclasses
 import typing
 
-_T_co = typing.TypeVar("_T_co", covariant=True)
+
+@typing.runtime_checkable
+class Drop(typing.Protocol):
+    """Protocol that types can implement to provide more functionality when
+    they get garbage collected.
+
+    Example
+    -------
+    ```py
+    import sain
+    import requests
+    import dataclasses
+
+    @dataclasses.dataclass
+    class Connector(sain.Drop):
+        session = requests.Session()
+
+        # Called internally.
+        def drop(self) -> None:
+            self.session.close()
+
+        def on_drop(self) -> None:
+            print("Session is closed...")
+
+        def get(self, url: str) -> requests.Response:
+            return self.session.get(url)
+
+    cxn = Connector()
+    response = cxn.get("https://example.com")
+    print(response.status_code)
+    # 200
+    # Session is closed...
+    ```
+    """
+
+    __dropped: bool = False
+
+    def drop(self) -> None:
+        """Manually drop an object."""
+        raise NotImplementedError("Method `drop` must be implemented.")
+
+    def on_drop(self) -> None:
+        """Register a callback to be called when the object is dropped."""
+        if not self.__dropped:
+            raise RuntimeError("Object not dropped yet.")
+
+    def __del__(self) -> None:
+        self.drop()
+        self.__dropped = True
+        self.on_drop()
 
 
-@dataclasses.dataclass(frozen=True, unsafe_hash=True)
-class Ref(typing.Generic[_T_co]):
-    """Represents an immutable reference to an object."""
-
-    __slots__ = ("object",)
-
-    object: _T_co
-    """The object that is being referenced."""
-
-    def copy(self) -> _T_co:
-        """Copy of the referenced object."""
-        return copy.copy(self.object)
-
-
-@dataclasses.dataclass(frozen=False, unsafe_hash=True)
-class RefMut(typing.Generic[_T_co]):
-    """Represents a mutable reference to an object."""
-
-    __slots__ = ("object",)
-
-    object: _T_co
-    """The object that is being referenced."""
-
-    def copy(self) -> _T_co:
-        """Copy of the referenced object."""
-        return copy.copy(self.object)
+def drop(obj: Drop) -> None:
+    """Drop objects that implements `Drop`."""
+    obj.drop()

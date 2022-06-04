@@ -34,12 +34,15 @@ Equavilant types
 ----------------
 - `Option<T>` -> `sain.Option[T]` | `sain.Some[T]`
 - `Result<T, E>` -> `sain.Result[T, E]`. Not implemented yet.
-- Default<T> -> `sain.Default[T]`
-- AsRef<T> -> `sain.Ref[T]`. kinda...
-- Iter<Item> -> `sain.
+- `Default<T>` -> `sain.Default[T]`
+- `AsRef<T>` -> `sain.Ref[T]`.
+- `AsMut<T>` -> `sain.RefMut[T]`.
+- `Iter<Item>` -> `sain.Iter[Item]`
 
 Equavilant macros
 -----------------
+As decorators.
+
 - `cfg!()` -> `sain.cfg`.
 - `#[cfg_attr]` -> `sain.cfg_attr`.
 
@@ -55,18 +58,16 @@ def windows_only() -> sain.Option[int]:
 
 @sain.cfg_attr(requires_modules="uvloop", target_os = "unix")
 def run_uvloop() -> None:
-    windows_only().expect("Never.)  # RuntimeError("Never")
-
     import uvloop
     uvloop.install()
 
 @sain.cfg_attr(python_version = (3, 5, 0))
 class Foo:
+
     @staticmethod
     @sain.cfg_attr(requires_modules = ("numpy", "pandas"))
     async def bar() -> None:
-        import numpy
-        print(numpy.random.rand(10))
+        ...
 ```
 
 Notes
@@ -92,18 +93,27 @@ Target Python implementation must be one of the following:
 from __future__ import annotations
 
 __all__ = (
+    # cfg.py
     "cfg",
     "cfg_attr",
+    # default.py
     "Default",
+    "default",
+    # ref.py
     "Ref",
+    "RefMut",
+    "ref",
+    # option.py
     "Some",
     "Option",
+    "option",
+    # iter.py
     "into_iter",
     "Iter",
-    "option",
-    "default",
-    "ref",
     "iter",
+    # drop.py
+    "drop",
+    "Drop",
 )
 
 # Module top level. Required for pdoc.
@@ -114,11 +124,14 @@ from . import ref
 from .cfg import cfg
 from .cfg import cfg_attr
 from .default import Default
+from .drop import Drop
+from .drop import drop
 from .iter import Iter
 from .iter import into_iter
 from .option import Option
 from .option import Some
 from .ref import Ref
+from .ref import RefMut
 
 __version__: str = "0.0.2"
 __url__: str = "https://github.com/nxtlo/sain"

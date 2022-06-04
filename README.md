@@ -43,12 +43,15 @@ A protocol that types can implement which have a default value.
 
 ```py
 import sain
+import requests
 
-class DefaultCache(sain.Default[dict[str, int]]):
+class Session(sain.Default[requests.Session]):
     # One staticmethod must be implemented and must return the same type.
     @staticmethod
-    def default() -> dict[str, int]:
-        return {}
+    def default() -> requests.Session:
+        return requests.Session()
+
+session = Session.default()
 ```
 
 

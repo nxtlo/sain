@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
-import sain
 import dataclasses
+
+import sain
+
 
 @dataclasses.dataclass
 class TokenGetter:
     """A token getter strategy."""
+
     token: sain.Option[str] = sain.Some(None)
 
     @classmethod
@@ -15,13 +18,16 @@ class TokenGetter:
     def from_env(cls, key: str, /) -> TokenGetter:
         """Gets the token from the .env file. This requires the module `python-dotenv`."""
         import dotenv
+
         return cls(sain.Some(dotenv.get_key(".env", key)))
 
     @classmethod
     def from_raw_env(cls, key: str, /) -> TokenGetter:
         """Gets the token from the raw OS enviorment."""
         import os
+
         return cls(sain.Some(os.getenv(key)))
+
 
 # CPython implementation only function.
 @sain.cfg_attr(impl="CPython")
@@ -51,6 +57,7 @@ def main() -> None:
     # Map the token to a function making it upper case.
     to_map = TokenGetter(sain.Some("bAah"))
     print(to_map.token.map(lambda x: x.upper()))  # Some("BAAH")
+
 
 if __name__ == "__main__":
     main()

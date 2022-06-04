@@ -357,27 +357,62 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         return f(self._value)
 
     def as_ref(self) -> Some[_ref.Ref[ValueT]]:
-        """Returns `Some[Ref[ValueT]]` if the contained value is not `None`, otherwise returns `None`.
+        """Returns immutable `Some[Ref[ValueT]]` if the contained value is not `None`,
+
+        Otherwise returns `Some[None]`.
 
         Example
         -------
         ```py
         value = Some(5).as_ref().unwrap()
+        value.object = 0 # FrozenError!
+
         owned = value.object
         print(owned) # 5
 
         # Create a copy of object.
-        clone = value.clone()
-        clone = 0
-        print(clone == owned) # False
+        clone = value.copy()
+        clone = 0  # Thats fine.
+        print(clone == owned) # False, 0 != 5
 
+        # None object.
         value: Some[int] = Some(None)
         print(value.as_ref())
         # Some(Ref(None))
         ```
+
+        Raises
+        ------
+        `dataclasses.FrozenInstanceError`
+            When attempting to modify the contained value. Use `sain.Ref.copy()` method to create a copy.
+
+            Or just use `Some.as_ref_mut()` if you're dealing with mutable objects.
         """
         if self._value is not None:
             return Some(_ref.Ref(self._value))
+
+        return Some(None)
+
+    def as_mut(self) -> Some[_ref.RefMut[ValueT]]:
+        """Returns mutable `Some[RefMut[ValueT]]` if the contained value is not `None`,
+
+        Otherwise returns `Some[None]`.
+
+        Example
+        -------
+        ```py
+        value = Some(5).as_ref_mut().unwrap()
+        value.object = 0
+        print(value.object) # 0
+
+        # None object.
+        value: Some[int] = Some(None)
+        print(value.as_ref_mut())
+        # Some(RefMut(None))
+        ```
+        """
+        if self._value is not None:
+            return Some(_ref.RefMut(self._value))
 
         return Some(None)
 
