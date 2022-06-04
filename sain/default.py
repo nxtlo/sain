@@ -59,6 +59,8 @@ class Default(typing.Protocol[_T_co]):
     ```
     """
 
+    __slots__ = ()
+
     @staticmethod
     def default() -> _T_co:
         """Return the default value of the object."""

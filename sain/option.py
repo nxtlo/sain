@@ -46,7 +46,6 @@ ErrT = typing.TypeVar("ErrT")
 """The `Err` result of a `Result`."""
 
 T = typing.TypeVar("T")
-U = typing.TypeVar("U")
 T_co = typing.TypeVar("T_co", covariant=True)
 
 Fn = typing.Callable[[ValueT], T]

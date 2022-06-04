@@ -69,6 +69,7 @@ class Drop(typing.Protocol):
     ```
     """
 
+    __slots__ = ()
     __dropped: bool = False
 
     def drop(self) -> None:
