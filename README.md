@@ -5,9 +5,9 @@ A pure Python package that implements standard Rust core types for Python.
 ## Install
 You'll need Python 3.8 or higher.
 
-Still not on PyPI
+PyPI
 ```rs
-$ pip install git+https://github.com/nxtlo/sain
+$ pip install sain
 ```
 
 ## Example
