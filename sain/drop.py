@@ -27,7 +27,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Protocol for types that can be dropped(deleted)."""
+"""Protocol to provide more functionality when objects get Dropped(garbage collected)."""
 from __future__ import annotations
 
 __all__: tuple[str, str] = ("Drop", "drop")
@@ -69,7 +69,7 @@ class Drop(typing.Protocol):
     ```
     """
 
-    __slots__ = ()
+    # Not slotted by default.
     __dropped: bool = False
 
     def drop(self) -> None:
