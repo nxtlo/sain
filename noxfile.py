@@ -30,15 +30,18 @@
 
 import nox
 
+
 @nox.session(reuse_venv=True)
 def pdoc(session: nox.Session) -> None:
     session.install('-r', 'dev-requirements.txt')
     session.run('pdoc', 'sain', '-d', 'numpy', '-o', './docs', '-t', "./templates")
 
+
 @nox.session(reuse_venv=True)
 def lint(session: nox.Session) -> None:
     session.install('-r', 'dev-requirements.txt')
     session.run('flake8', 'sain')
+
 
 @nox.session(reuse_venv=True)
 def type_check(session: nox.Session) -> None:
@@ -50,6 +53,7 @@ def type_check(session: nox.Session) -> None:
 # def verify_types(session: nox.Session) -> None:
 #     session.install('-r', 'dev-requirements.txt')
 #     session.run('pyright', 'sain', "--verifytypes", "--ignoreexternal")
+
 
 @nox.session(reuse_venv=True)
 def reformat(session: nox.Session) -> None:

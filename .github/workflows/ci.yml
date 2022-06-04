@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  release:
+    types: [published]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, macos-10.15, windows-2019]
+        python-version: [3.8, 3.9, "3.10"]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Checkout Repo
+      uses: actions/setup-python@v3.1.2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Test
+      run: |
+        pip install .
+        pip uninstall -y sain
+
+  format:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v3.1.2
+        with:
+          python-version: 3.9
+
+      - name: Format
+        run: |
+          pip install nox
+          nox -s reformat
+
+  lint:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v3.1.2
+        with:
+          python-version: 3.9
+
+      - name: Linting
+        run: |
+          pip install nox
+          nox -s lint
+
+  type_check:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v3.1.2
+        with:
+          python-version: 3.9
+
+      - name: Type Check
+        run: |
+          pip install nox
+          nox -s type_check
+
+  docs:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup python 3.9
+        uses: actions/setup-python@v3.1.2
+        with:
+          python-version: 3.9
+
+      - name: Build
+        run: |
+          pip install nox
+          nox -s pdoc
+
+      - name: Upload docs
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs
+          path: ./docs
+          if-no-files-found: error
+
+  deploy:
+    if: github.event_name == 'release'
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3.1.2
+        with:
+          python-version: 3.9
+
+      - name: Setup Poetry 
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.1.7
+
+      - name: Publish
+        run: poetry publish --build -p ${{ secrets.PYPY_TOKEN }} -u ${{ secrets.PYPY_USER }}
