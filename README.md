@@ -21,6 +21,8 @@ import sain
 
 #[cfg_attr(target_os = unix)]
 @sain.cfg_attr(target_os="unix")
+# Calling this on a non-unix system will raise a RuntimeError
+# and the function will not run.
 def run_when_unix() -> None:
     import uvloop
     uvloop.install()
