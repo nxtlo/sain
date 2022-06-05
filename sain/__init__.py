@@ -52,7 +52,7 @@ Examples
 import sain
 
 # If a non windows machine runs this function, it will raise an error.
-@sain.cfg_attr(target_os = "win32")
+@sain.cfg_attr(target_os = "windows")
 def windows_only() -> sain.Option[int]:
     return sain.Some(1)
 
@@ -74,7 +74,7 @@ Notes
 -----
 Target OS must be one of the following:
 * `linux`
-* `win32`
+* `win32` | `windows`
 * `darwin`
 * `unix`, which is assumed to be either linux or darwin.
 

@@ -46,10 +46,10 @@ class Default(typing.Protocol[_T_co]):
     ```py
     from sain import Default
 
-    class Cache(Default[Dict[str, Any]]):
+    class Cache(Default[dict[str, Any]]):
 
         @staticmethod
-        def default() -> Dict[str, Any]:
+        def default() -> dict[str, Any]:
             return {}
 
     cache = Cache.default()

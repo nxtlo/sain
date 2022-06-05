@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - The `Some` type `__str__` now returns `Some(repr(value))` instead of just `repr(value)`.
 - `Ref` now supports `__hash__`.
+- `target_os` no accepts `windows` as an alias to `win32`.
 
 ## Removed
 - `Some.is_none_and` method since it made no sense.

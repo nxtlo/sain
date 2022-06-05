@@ -46,7 +46,7 @@ SigT = typing.Callable[..., object]
 Signature = typing.TypeVar("Signature", bound=SigT)
 """A type var hint for the decorated object signature."""
 
-TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix"]
+TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix", "windows"]
 TARGET_ARCH = typing.Literal["x86", "x64", "arm", "arm64"]
 PY_IMPL = typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
 
@@ -75,30 +75,34 @@ def cfg_attr(
     target_arch: typing.Optional[TARGET_ARCH] = None,
     impl: typing.Optional[PY_IMPL] = None,
 ) -> typing.Callable[[Signature], Signature]:
-    """Configure a class, method or function to be checked for the given attributes.
+    """Conditional runtime object configuration based on passed arguments.
 
-    If one of the attributes returns False, An exception will be raised.
+    If the decorated object gets called and one of the attributes returns `False`,
+    `RuntimeError` will be raised and the object will not run.
 
-    Examples
-    --------
+    Example
+    -------
     ```py
     import sain
 
-    @sain.cfg_attr(target_os = "win32")
+    @sain.cfg_attr(target_os = "windows")
     def windows_only():
         # Do stuff with Windows's API.
         ...
 
-    @sain.cfg_attr(python_version = "3.10.0", impl = "PyPy")
-    class MyClass:
+    # Mut be PyPy Python implementation or `RuntimeError` will be raised
+    # when creating the instance.
+    @sain.cfg_attr(impl="PyPy")
+    class Zoo:
+        @sain.cfg_attr(target_os = "linux")
+        def bark(self) -> None:
+            windows_only()  # RuntimeError("Windows OS only!)
 
-        @staticmethod
-        @sain.cfg_attr(requires_modules = ("numpy", "pandas"))
-        async def with_match() -> None:
-            import numpy
-            match numpy.random.rand(10):
-                case ...:
-                    ...
+    # An instance will not be created if raised.
+    zoo = Zoo()
+    # RuntimError("class Zoo requires PyPy implementation")
+    zoo.bark()
+    # Whats zoo??
     ```
 
     Parameters
@@ -121,7 +125,7 @@ def cfg_attr(
     `RuntimeError`
         This fails if any of the attributes returns `False`. `required_modules` is not included.
     `ModuleNotFoundError`
-        If the module check fails.
+        If the module check fails. i.e., if `required_modules` was provided and it returns `False`.
     `ValueError`
         If the passed Python implementation is unknown.
     """
@@ -161,15 +165,12 @@ def cfg(
     ```py
     import sain
 
-    if sain.cfg(target_os = "win32"):
+    if sain.cfg(target_os = "windows"):
         print("Windows")
-    elif sain.cfg(target_os = "linux", python_verion = (3, 8, 5)):
+    elif sain.cfg(target_os = "linux"):
         print("Linux")
     else:
-        print("MacOS")
-
-    while sain.cfg(requires_modules=("hikari", "hikari-tanjun"), python_version = (3, 9, 0)):
-        ...
+        print("Something else")
     ```
 
     Parameters
@@ -290,6 +291,10 @@ class _AttrCheck(typing.Generic[Signature]):
 
         # If the target os is unix, then we assume that it's either linux or darwin.
         if self._target_os == "unix" and is_unix:
+            return True
+
+        # Alias to win32
+        if self._target_os == "windows" and sys.platform == "win32":
             return True
 
         if sys.platform == self._target_os:

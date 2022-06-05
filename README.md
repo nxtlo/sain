@@ -10,7 +10,12 @@ PyPI
 $ pip install sain
 ```
 
-## Example
+## Examples
+More stuff in [examples](https://github.com/nxtlo/sain/tree/master/examples)
+
+### `cfg`, `cfg_attr` and `Some`
+Conditionally include code and returning nullable values.
+
 ```py
 import sain
 
@@ -20,12 +25,17 @@ def run_when_unix() -> None:
     import uvloop
     uvloop.install()
 
-# If this returns True, get_token will run, otherwise returns.
-if sain.cfg(requires_modules="python-dotenv", python_version=(3, 9, 6)):
+# If this returns True, get_token will be in scope.
+if sain.cfg(requires_modules="python-dotenv"):
     # Stright up replace typing.Optional[str]
     def get_token() -> sain.Option[str]:
         import dotenv
         return sain.Some(dotenv.get_key(".env", "SECRET_TOKEN"))
+
+# Assuming dotenv is not installed.
+# Calling the function will raise `NameError`
+# since its not in scope.
+get_token()
 
 # Raises RuntimeError("No token found.") if T is None.
 token: str = get_token().expect("No token found.")
@@ -54,7 +64,6 @@ class Session(sain.Default[requests.Session]):
 session = Session.default()
 ```
 
-
 ### Iter
 Turns normal iterables into `Iter` type.
 
@@ -70,9 +79,9 @@ for item in f.take_while(lambda i: i > 1):
 ```
 
 ### Why
-i like Rust coding style :p
+This is whats Python missing.
 
 ### Notes
-Since Rust is a compiled language, Whatever predict returns False will not compile.
+Since Rust is a compiled language, Whatever predict in `cfg` and `cfg_attr` returns False will not compile.
 
 But there's no such thing as this in Python, So `RuntimeError` will be raised and whatever was predicated will not run.
