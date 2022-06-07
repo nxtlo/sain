@@ -628,18 +628,24 @@
 </span><span id="L-489"><a href="#L-489"><span class="linenos">489</span></a>        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="L-490"><a href="#L-490"><span class="linenos">490</span></a>
 </span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>
-</span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a><span class="c1"># TODO: Make a .pyi file.</span>
+</span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a><span class="c1"># This is declared as a typealias in .pyi</span>
 </span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a><span class="n">Option</span> <span class="o">=</span> <span class="n">Some</span><span class="p">[</span><span class="n">ValueT</span><span class="p">]</span>
 </span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a><span class="sd">&quot;&quot;&quot;A type hint for a value that can be `Some[T]`.</span>
 </span><span id="L-495"><a href="#L-495"><span class="linenos">495</span></a>
-</span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a><span class="sd">Example</span>
-</span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a><span class="sd">-------</span>
-</span><span id="L-498"><a href="#L-498"><span class="linenos">498</span></a><span class="sd">```py</span>
-</span><span id="L-499"><a href="#L-499"><span class="linenos">499</span></a><span class="sd">import sain</span>
-</span><span id="L-500"><a href="#L-500"><span class="linenos">500</span></a>
-</span><span id="L-501"><a href="#L-501"><span class="linenos">501</span></a><span class="sd">foo: sain.Option[str] = sain.Some(&quot;foo&quot;)</span>
-</span><span id="L-502"><a href="#L-502"><span class="linenos">502</span></a><span class="sd">```</span>
-</span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a><span class="sd">Note</span>
+</span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a><span class="sd">----</span>
+</span><span id="L-498"><a href="#L-498"><span class="linenos">498</span></a><span class="sd">This must be used as a type hint for a value that can be `Some[T]`</span>
+</span><span id="L-499"><a href="#L-499"><span class="linenos">499</span></a>
+</span><span id="L-500"><a href="#L-500"><span class="linenos">500</span></a><span class="sd">and not for instance creation for `Some`.</span>
+</span><span id="L-501"><a href="#L-501"><span class="linenos">501</span></a>
+</span><span id="L-502"><a href="#L-502"><span class="linenos">502</span></a><span class="sd">Example</span>
+</span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a><span class="sd">-------</span>
+</span><span id="L-504"><a href="#L-504"><span class="linenos">504</span></a><span class="sd">```py</span>
+</span><span id="L-505"><a href="#L-505"><span class="linenos">505</span></a><span class="sd">import sain</span>
+</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a>
+</span><span id="L-507"><a href="#L-507"><span class="linenos">507</span></a><span class="sd">foo: sain.Option[str] = sain.Some(None)</span>
+</span><span id="L-508"><a href="#L-508"><span class="linenos">508</span></a><span class="sd">```</span>
+</span><span id="L-509"><a href="#L-509"><span class="linenos">509</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1122,7 +1128,7 @@
                                         <input id="Some.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">Some</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span>)</span>
+        <span class="name">Some</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">]</span></span>)</span>
 
                 <label class="view-source-button" for="Some.__init__-view-source"><span>View Source</span></label>
 
@@ -1178,7 +1184,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">unwrap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">ValueT</span>:</span></span>
+        <span class="name">unwrap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">,</span> <span class="n">NoReturn</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.unwrap-view-source"><span>View Source</span></label>
 
@@ -1238,7 +1244,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">unwrap_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="o">~</span><span class="n">ValueT</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">ValueT</span>:</span></span>
+        <span class="name">unwrap_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="o">~</span><span class="n">ValueT</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">ValueT</span>:</span></span>
 
                 <label class="view-source-button" for="Some.unwrap_or-view-source"><span>View Source</span></label>
 
@@ -1291,7 +1297,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">unwrap_or_else</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">ValueT</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">ValueT</span>:</span></span>
+        <span class="name">unwrap_or_else</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">ValueT</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">ValueT</span>:</span></span>
 
                 <label class="view-source-button" for="Some.unwrap_or_else-view-source"><span>View Source</span></label>
 
@@ -1340,7 +1346,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>,</span><span class="param">	<span class="o">/</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">sain.option.Some</a></span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span>:</span></span>
+        <span class="name">map</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">sain.option.Some</a></span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.map-view-source"><span>View Source</span></label>
 
@@ -1391,7 +1397,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
+        <span class="name">map_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
 
                 <label class="view-source-button" for="Some.map_or-view-source"><span>View Source</span></label>
 
@@ -1446,7 +1452,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map_or_else</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
+        <span class="name">map_or_else</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">ValueT</span><span class="p">],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
 
                 <label class="view-source-button" for="Some.map_or_else-view-source"><span>View Source</span></label>
 
@@ -1642,7 +1648,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">expect</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">message</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">ValueT</span>:</span></span>
+        <span class="name">expect</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">message</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">ValueT</span>:</span></span>
 
                 <label class="view-source-button" for="Some.expect-view-source"><span>View Source</span></label>
 
@@ -2143,7 +2149,7 @@ the predicate returns <code>True</code>, otherwise returns <code>False</code>.</
                 </section>
                 <section id="Option">
                     <div class="attr variable">
-            <span class="name">Option</span><span class="default_value"> = <a href="#Some">sain.option.Some</a>[~ValueT]</span>
+            <span class="name">Option</span><span class="annotation">: TypeAlias</span><span class="default_value"> = <a href="#Some">sain.option.Some</a>[~ValueT]</span>
 
         
     </div>
@@ -2151,11 +2157,17 @@ the predicate returns <code>True</code>, otherwise returns <code>False</code>.</
     
             <div class="docstring"><p>A type hint for a value that can be <code>Some[T]</code>.</p>
 
+<h6 id="note">Note</h6>
+
+<p>This must be used as a type hint for a value that can be <code>Some[T]</code></p>
+
+<p>and not for instance creation for <code><a href="#Some">Some</a></code>.</p>
+
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">sain</span>
 
-<span class="n">foo</span><span class="p">:</span> <span class="n"><a href="../sain.html#Option">sain</span><span class="o">.</span><span class="n">Option</a></span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n"><a href="../sain.html#Some">sain</span><span class="o">.</span><span class="n">Some</a></span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="n">foo</span><span class="p">:</span> <span class="n"><a href="../sain.html#Option">sain</span><span class="o">.</span><span class="n">Option</a></span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n"><a href="../sain.html#Some">sain</span><span class="o">.</span><span class="n">Some</a></span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 </div>
 

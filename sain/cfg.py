@@ -39,8 +39,7 @@ import platform
 import sys
 import typing
 
-# apperantly there're no stubs for this module?
-import pkg_resources  # type: ignore[import]
+import pkg_resources
 
 SigT = typing.Callable[..., object]
 Signature = typing.TypeVar("Signature", bound=SigT)
@@ -202,7 +201,7 @@ def cfg(
         target_arch=target_arch,
         impl=impl,
     )
-    return checker.cfg_check()
+    return checker.internal_check()
 
 
 class _AttrCheck(typing.Generic[Signature]):
@@ -239,7 +238,7 @@ class _AttrCheck(typing.Generic[Signature]):
         self._check_once()
         return typing.cast(Signature, self._callback(*args, **kwds))
 
-    def cfg_check(self) -> bool:
+    def internal_check(self) -> bool:
         return self._check_once()
 
     def _check_once(self) -> bool:

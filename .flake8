@@ -17,6 +17,12 @@ ignore =
     E203,      # whitespace before ':'
     E231,      # missing whitespace after ','
 
+per-file-ignores =
+    # This is only for __init__.py stubs when importing * from and never used.
+    sain/__init__.pyi: F401,F403,F405,E302,E704
+    sain/cfg.pyi: F401,F403,F405,E302,E704
+    sain/option.pyi: F401,F403,F405,E302,E704
+
 max-complexity =        20
 max-function-length =   100
 # Technically this is 120, but black has a policy of "1 or 2 over is fine if it is tidier", so we have to raise this.

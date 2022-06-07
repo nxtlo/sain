@@ -13,38 +13,61 @@ $ pip install sain
 ## Examples
 More stuff in [examples](https://github.com/nxtlo/sain/tree/master/examples)
 
-### `cfg`, `cfg_attr` and `Some`
-Conditionally include code and returning nullable values.
+### `cfg`, `cfg_attr`
+Conditionally include code.
 
 ```py
-import sain
+from sain import cfg, cfg_attr
 
-#[cfg_attr(target_os = unix)]
-@sain.cfg_attr(target_os="unix")
+@cfg_attr(target_os="unix")
+# Calling this on a non-unix system will raise a RuntimeError
+# and the function will not run.
 def run_when_unix() -> None:
     import uvloop
     uvloop.install()
 
-# If this returns True, get_token will be in scope.
-if sain.cfg(requires_modules="python-dotenv"):
-    # Stright up replace typing.Optional[str]
-    def get_token() -> sain.Option[str]:
-        import dotenv
-        return sain.Some(dotenv.get_key(".env", "SECRET_TOKEN"))
+if cfg(target_arch="arm64")
+    run_when_unix()
 
-# Assuming dotenv is not installed.
+# If this returns True, Function will be in scope.
+if cfg(requires_modules="hikari-tanjun"):
+    def create_client() -> tanjun.Client:
+        return tanjun.Client(...)
+
+# Assuming tanjun is not installed.
 # Calling the function will raise `NameError`
 # since its not in scope.
-get_token()
+create_client()
+```
 
-# Raises RuntimeError("No token found.") if T is None.
-token: str = get_token().expect("No token found.")
+### `Option<T>` and `Some<T>`
+Implements the standard `Option` and `Some` types. An object the may be `None` or `T`.
 
-# Unwrap the value, Returning DEFAULT_TOKEN if it was None.
-env_or_default: str = get_token().unwrap_or("DEFAULT_TOKEN")
+```py
+import sain
+import os
 
-# type hint is fine.
+# Stright up replace typing.Optional[str]
+def get_token(key: str) -> sain.Option[str]:
+    # What os.getenv may be str or None
+    return sain.Some(os.getenv(key))
+
+# Raises RuntimeError("No token found.") if os.getenv return None.
+token = get_token().expect("No token found.")
+
+# The classic way to handle this in Python would be.
+if token is None:
+    token = "..."
+else:
+    ...
+
+# Replace this with `unwrap_or`.
+# Returning DEFAULT_TOKEN if it was None.
+env_or_default = get_token().unwrap_or("DEFAULT_TOKEN")
+
+# Safe type hint is fine.
 as_none: sain.Option[str] = sain.Some(None)
+as_none.uwnrap_or(123)  # Error: Must be type `str`!
 assert as_none.is_none()
 ```
 

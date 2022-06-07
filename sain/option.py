@@ -489,15 +489,21 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         return hash(self._value)
 
 
-# TODO: Make a .pyi file.
+# This is declared as a typealias in .pyi
 Option = Some[ValueT]
 """A type hint for a value that can be `Some[T]`.
+
+Note
+----
+This must be used as a type hint for a value that can be `Some[T]`
+
+and not for instance creation for `Some`.
 
 Example
 -------
 ```py
 import sain
 
-foo: sain.Option[str] = sain.Some("foo")
+foo: sain.Option[str] = sain.Some(None)
 ```
 """
