@@ -26,7 +26,7 @@ def run_when_unix() -> None:
     import uvloop
     uvloop.install()
 
-if cfg(target_arch="arm64")
+if cfg(target_arch="arm64"):
     run_when_unix()
 
 # If this returns True, Function will be in scope.
@@ -41,7 +41,7 @@ create_client()
 ```
 
 ### `Option<T>` and `Some<T>`
-Implements the standard `Option` and `Some` types. An object the may be `None` or `T`.
+Implements the standard `Option` and `Some` types. An object that may be `None` or `T`.
 
 ```py
 import sain
@@ -49,7 +49,7 @@ import os
 
 # Stright up replace typing.Optional[str]
 def get_token(key: str) -> sain.Option[str]:
-    # What os.getenv may be str or None
+    # What os.getenv returns may be str or None.
     return sain.Some(os.getenv(key))
 
 # Raises RuntimeError("No token found.") if os.getenv return None.

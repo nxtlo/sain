@@ -133,7 +133,7 @@ from .option import Some
 from .ref import Ref
 from .ref import RefMut
 
-__version__: str = "0.0.2"
+__version__: str = "0.0.3"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
 __about__: str = "A Rust like cfg attribs checking for Python."
