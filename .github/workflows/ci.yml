@@ -15,15 +15,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04, macos-10.15, windows-2019]
-        python-version: [3.8, 3.9, "3.10"]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.8, 3.9, "3.10", 3.11]
 
     runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
     - name: Checkout Repo
-      uses: actions/setup-python@v4.2.0
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -33,14 +33,14 @@ jobs:
         pip uninstall -y sain
 
   format:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup python
-        uses: actions/setup-python@v4.2.0
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
@@ -50,14 +50,14 @@ jobs:
           nox -s reformat
 
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup python
-        uses: actions/setup-python@v4.2.0
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
@@ -67,14 +67,14 @@ jobs:
           nox -s lint
 
   type_check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup python
-        uses: actions/setup-python@v4.2.0
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
@@ -84,14 +84,14 @@ jobs:
           nox -s type_check
 
   docs:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup python 3.9
-        uses: actions/setup-python@v4.2.0
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
@@ -110,16 +110,16 @@ jobs:
   deploy:
     if: github.event_name == 'release'
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4.2.0
+      - uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
       - name: Setup Poetry 
-        uses: abatilo/actions-poetry@v2.1.6
+        uses: abatilo/actions-poetry@v2
         with:
           poetry-version: 1.1.7
 
