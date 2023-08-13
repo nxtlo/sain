@@ -19,9 +19,9 @@ Conditionally include code at runtime and mark objects.
 ```py
 from sain import cfg, cfg_attr
 
-@cfg_attr(target_os="unix")
 # Calling this on a non-unix system will raise a RuntimeError
 # and the function will not run.
+@cfg_attr(target_os="unix")
 def run_when_unix() -> None:
     import uvloop
     uvloop.install()
@@ -31,6 +31,7 @@ if cfg(target_arch="arm64"):
 
 # If `cfg` returns True, Function will be in scope.
 if cfg(requires_modules="aiohttp"):
+    import aiohttp
     def create_app() -> aiohttp.web.Application:
         # Calling this will raise a runtime error. its marked as `TODO`.
         sain.todo("Finish me!")

@@ -1,25 +1,22 @@
 [tool.poetry]
 name = "sain"
-version = "0.0.3"
+version = "0.0.4"
 description = "Standard Rust core types implementations for Python."
 authors = ["nxtlo <dhmony-99@hotmail.com>"]
 license = "BSD-3-Clause license"
 keywords = ["Rust", "config"]
 readme = "README.md"
 repository = "https://github.com/nxtlo/sain"
-packages = [
-    {include = "sain"},
-    {include = "sain/**/*.py"}
-]
+packages = [{ include = "sain" }, { include = "sain/**/*.py" }]
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -27,16 +24,16 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 
 [tool.pytest.ini_options]
 xfail_strict = true
 norecursedirs = "docs *.egg-info .git .nox .pytest_cache .venv"
 
 [tool.black]
-line-length     = 120
-target-version  = ["py310"]
-include         = ".*pyi?$"
+line-length = 120
+target-version = ["py310"]
+include = ".*pyi?$"
 
 [tool.isort]
 profile = "black"
@@ -72,9 +69,9 @@ allow_redefinition = true
 include = ["sain", "tests", "examples"]
 venvPath = "."
 venv = ".venv"
-pythonVersion = "3.9"
+pythonVersion = "3.10"
 typeCheckingMode = "strict"
-reportUnboundVariable =  "none"
+reportUnboundVariable = "none"
 reportUnknownParameterType = "error"
 reportUnknownLambdaType = "warning"
 reportUnknownMemberType = "warning"
@@ -90,7 +87,6 @@ reportIncompatibleMethodOverride = "none"
 # This will always cause warnings above license.
 reportImportCycles = "warning"
 reportUnusedImport = "warning"
-
 
 
 [build-system]
