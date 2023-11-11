@@ -27,10 +27,25 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""The default protocol for types that can have a default implementation."""
+"""The default trait for types that can have a default implementation.
+
+Example
+-------
+```py
+
+from sain import Default
+
+class Generator(Default[str]):
+    @staticmethod
+    def default() -> str:
+        return generator.random_str()
+
+DEFAULT_GENERATOR = Generator.default()
+```
+"""
 from __future__ import annotations
 
-__all__: tuple[str] = ("Default",)
+__all__ = ("Default",)
 
 import typing
 
@@ -39,7 +54,7 @@ _T_co = typing.TypeVar("_T_co", covariant=True)
 
 @typing.runtime_checkable
 class Default(typing.Protocol[_T_co]):
-    """An object that has a default value.
+    """An interface for an object that has a default value.
 
     Example
     -------
