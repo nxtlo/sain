@@ -31,12 +31,11 @@
 
 from __future__ import annotations
 
-__all__: typing.Tuple[str, str, str] = ("Iter", "into_iter", "Item")
+__all__ = ("Iter", "into_iter", "Item")
 
 import itertools
 import typing
-
-from . import default as _default
+import collections.abc as collections
 
 Item = typing.TypeVar("Item")
 """A type hint for the item type of the iterator."""
@@ -45,10 +44,10 @@ if typing.TYPE_CHECKING:
     import _typeshed as typeshed
 
     OtherItem = typing.TypeVar("OtherItem")
-    _B = typing.TypeVar("_B", bound=typing.Callable[..., typing.Any])
+    _B = typing.TypeVar("_B", bound=collections.Callable[..., typing.Any])
 
 
-class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.Iterable[Item]]):
+class Iter(collections.Iterator[Item]):
     """Lazy, In-Memory iterator for sequence types with some functional methods.
 
     Example
@@ -76,29 +75,24 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
     Parameters
     ----------
-    items: `typing.Iterable[Item]`
+    items: `Iterable[Item]`
         The items to iterate over. This must be an iterable.
     """
 
     __slots__ = ("_items",)
 
-    def __init__(self, items: typing.Iterable[Item]) -> None:
+    def __init__(self, items: collections.Iterable[Item]) -> None:
         self._items = iter(items)
 
-    @staticmethod
-    def default() -> typing.Iterable[Item]:
-        """Returns the default value for the iterator. An empty list is returned."""
-        return []
-
     @typing.overload
-    def collect(self, /) -> typing.List[Item]:
+    def collect(self) -> collections.Sequence[Item]:
         ...
 
     @typing.overload
-    def collect(self, casting: _B, /) -> typing.List[_B]:
+    def collect(self, *, casting: _B) -> collections.Sequence[_B]:
         ...
 
-    def collect(self, casting: typing.Optional[_B] = None, /) -> typing.Union[typing.List[Item], list[_B]]:
+    def collect(self, *, casting: _B | None = None) -> collections.Sequence[Item] | collections.Sequence[_B]:
         """Collects all items in the iterator into a list.
 
         Example
@@ -121,7 +115,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
             If no elements are left in the iterator.
         """
         if casting is not None:
-            return typing.cast("list[_B]", list(map(casting, self._items)))
+            return typing.cast("collections.Sequence[_B]", list(map(casting, self._items)))
 
         return list(self._items)
 
@@ -146,7 +140,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
         except StopIteration:
             self._ok()
 
-    def map(self, predicate: typing.Callable[[Item], OtherItem]) -> Iter[OtherItem]:
+    def map(self, predicate: collections.Callable[[Item], OtherItem]) -> Iter[OtherItem]:
         """Maps each item in the iterator to its predicated value.
 
         Example
@@ -158,7 +152,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
         Parameters
         ----------
-        predicate: `typing.Callable[[Item], Item]`
+        predicate: `collections.Callable[[Item], Item]`
             The function to map each item in the iterator to its predicated value.
 
         Raises
@@ -191,7 +185,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
         """
         return Iter(itertools.islice(self._items, n))
 
-    def take_while(self, predicate: typing.Callable[[Item], bool]) -> Iter[Item]:
+    def take_while(self, predicate: collections.Callable[[Item], bool]) -> Iter[Item]:
         """Yields items from the iterator while predicate returns `True`.
 
         Example
@@ -206,7 +200,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
         Parameters
         ----------
-        predicate: `typing.Callable[[Item], bool]`
+        predicate: `collections.Callable[[Item], bool]`
             The function to predicate each item in the iterator.
 
         Raises
@@ -216,7 +210,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
         """
         return Iter(itertools.takewhile(predicate, self._items))
 
-    def drop_while(self, predicate: typing.Callable[[Item], bool]) -> Iter[Item]:
+    def drop_while(self, predicate: collections.Callable[[Item], bool]) -> Iter[Item]:
         """Yields items from the iterator while predicate returns `False`.
 
         Example
@@ -232,7 +226,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
         Parameters
         ----------
-        predicate: `typing.Callable[[Item], bool]`
+        predicate: `collections.Callable[[Item], bool]`
             The function to predicate each item in the iterator.
 
         Raises
@@ -242,7 +236,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
         """
         return Iter(itertools.dropwhile(predicate, self._items))
 
-    def filter(self, predicate: typing.Callable[[Item], bool]) -> Iter[Item]:
+    def filter(self, predicate: collections.Callable[[Item], bool]) -> Iter[Item]:
         """Filters the iterator to only yield items that match the predicate.
 
         Example
@@ -272,7 +266,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
         """
         return Iter(itertools.islice(self._items, n, None))
 
-    def discard(self, predicate: typing.Callable[[Item], bool]) -> Iter[Item]:
+    def discard(self, predicate: collections.Callable[[Item], bool]) -> Iter[Item]:
         """Discards all elements in the iterator for which the predicate function returns true.
 
         Example
@@ -285,7 +279,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
         Parameters
         ----------
-        predicate: `typing.Callable[[Item], bool]`
+        predicate: `collections.Callable[[Item], bool]`
             The function to test each item in the iterator.
 
         Raises
@@ -323,7 +317,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
         """
         return Iter(zip(self._items, other))
 
-    def all(self, predicate: typing.Callable[[Item], bool]) -> bool:
+    def all(self, predicate: collections.Callable[[Item], bool]) -> bool:
         """Return `True` if all items in the iterator match the predicate.
 
         Example
@@ -336,7 +330,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
         Parameters
         ----------
-        predicate: `typing.Callable[[Item], bool]`
+        predicate: `collections.Callable[[Item], bool]`
             The function to test each item in the iterator.
 
         Raises
@@ -346,7 +340,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
         """
         return all(predicate(item) for item in self)
 
-    def any(self, predicate: typing.Callable[[Item], bool]) -> bool:
+    def any(self, predicate: collections.Callable[[Item], bool]) -> bool:
         """`True` if any items in the iterator match the predicate.
 
         Example
@@ -358,7 +352,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
         Parameters
         ----------
-        predicate: `typing.Callable[[Item], bool]`
+        predicate: `collections.Callable[[Item], bool]`
             The function to test each item in the iterator.
 
         Raises
@@ -371,7 +365,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
     def sort(
         self,
         *,
-        key: typing.Callable[[Item], typeshed.SupportsRichComparison],
+        key: collections.Callable[[Item], typeshed.SupportsRichComparison],
         reverse: bool = False,
     ) -> Iter[Item]:
         """Sorts the iterator.
@@ -388,7 +382,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
         Parameters
         ----------
-        key: `typing.Callable[[Item], Any]`
+        key: `collections.Callable[[Item], Any]`
             The function to sort by.
         reverse: `bool`
             Whether to reverse the sort.
@@ -471,7 +465,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
         """
         return Iter(itertools.chain(self._items, other))
 
-    def for_each(self, func: typing.Callable[[Item], typing.Any]) -> None:
+    def for_each(self, func: collections.Callable[[Item], typing.Any]) -> None:
         """Calls `func` on each item in the iterator.
 
         Example
@@ -484,7 +478,7 @@ class Iter(typing.Iterator[Item], typing.Generic[Item], _default.Default[typing.
 
         Parameters
         ----------
-        func: `typing.Callable[[Item], typing.Any]`
+        func: `collections.Callable[[Item], typing.Any]`
             The function to call on each item in the iterator.
         """
         for item in self:

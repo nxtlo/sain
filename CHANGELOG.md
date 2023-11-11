@@ -6,6 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.0.4
+## Added
+- New decorators defined in module `macros.py`
+    * `todo`
+    * `unimplemented`
+    * `deprecated`
+- `futures` module which exports usefull functions for `async` programming.
+- `Some.unwrap_unchecked` method.
+
+## Changed
+- Python `3.10+` is now required to install sain.
+- Use the `collections.abc` and `builtins` for the standard types.
+- You need to import `__futures__ annotations` to use `Option<T>` type hint, You also need to import it under `TYPE_CHECKING`.
+- Project tree restructure.
+- The `Drop` check is now deprecated and no longer can be used.
+- The standard types not do not inherit from `Default<T>`
+- Drop `pkg_resources` module for `__import__` during `requires_modules` attrs check..
+
+## Removed
+- The `Drop` protocol from top-level.
+
 ## 0.0.3
 ## Added
 - Examples

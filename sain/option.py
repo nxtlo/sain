@@ -27,11 +27,11 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Rust's `Option<T> error handling implementation for Python`."""
+"""Rust's `Option<T>` type. A value that can either be `T` or `None`"""
 
 from __future__ import annotations
 
-__all__: tuple[str, ...] = ("Some", "Fn", "FnOnce", "ValueT", "OkT", "ErrT", "Option")
+__all__ = ("Some", "Fn", "FnOnce", "ValueT")
 
 import typing
 
@@ -40,23 +40,24 @@ from . import ref as _ref
 
 ValueT = typing.TypeVar("ValueT")
 """A type hint that represents the generic value of the `Some` type."""
-OkT = typing.TypeVar("OkT")
-"""The `Ok` result of a `Result`."""
-ErrT = typing.TypeVar("ErrT")
-"""The `Err` result of a `Result`."""
 
 T = typing.TypeVar("T")
 T_co = typing.TypeVar("T_co", covariant=True)
 
-Fn = typing.Callable[[ValueT], T]
-"""A type hint for a function that can take a `ValueT` and return a `T`."""
-FnOnce = typing.Callable[[], T]
-"""A type hint for a function that takes no arguments and return `T`"""
+if typing.TYPE_CHECKING:
+    import collections.abc as collections
+
+    from typing_extensions import Self
+
+    Fn = collections.Callable[[ValueT], T]
+    """A type hint for a function that can take a `ValueT` and return a `T`."""
+    FnOnce = collections.Callable[[], T]
+    """A type hint for a function that takes no arguments and return `T`"""
 
 
 @typing.final
 class Some(typing.Generic[ValueT], _default.Default[None]):
-    """The `Some` object. A typesafe object is used for values that might be `T` or `None`.
+    """The `Option` type. An object that might be `T` or `None`.
 
     It is similar to `typing.Optional[T]`, But has proper methods to handle the contined value.
 
@@ -89,7 +90,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
     @staticmethod
     def default() -> None:
-        """Return the default value for `Some`. This always returns `None`."""
+        """Default value for `Some`. Returns `None`."""
         return None
 
     @property
@@ -133,7 +134,6 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # 5
 
         # Type hint is required here.
-
         value: Some[int] = Some(None)
         print(value.unwrap_or(10))
         # 10
@@ -164,8 +164,23 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return self._value
 
+    def unwrap_unchecked(self) -> ValueT:
+        """Unwrap the inner value immdiently returning it, passing if its `None`.
+
+        Example
+        -------
+        ```py
+        v: Option[float] = Some(None)
+        print(v.unwrap_unchecked())
+        # ...
+        ```
+        """
+        if self._value is None:
+            pass
+        return self._value
+
     # Functional.
-    def map(self, f: Fn[ValueT, T], /) -> Some[T | None]:
+    def map(self, f: Fn[ValueT, T], /) -> Some[T]:
         """Map the inner value to a new value. Returning `Some[None]` if `ValueT` is `None`.
 
         Example
@@ -209,7 +224,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return f(self._value)
 
-    def map_or_else(self, default: FnOnce[T], f: typing.Callable[[ValueT], T], /) -> T:
+    def map_or_else(self, default: FnOnce[T], f: Fn[ValueT, T], /) -> T:
         """Map the inner value to a new value, Or return default which maps to `default()` if its `None`.
 
         Example
@@ -232,7 +247,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return f(self._value)
 
-    def filter(self, predicate: Fn[ValueT, bool]) -> Some[ValueT]:
+    def filter(self, predicate: Fn[ValueT, bool]) -> Self:
         """Returns `Some[None]` if the contained value is `None`,
 
         otherwise calls the predicate and returns `Some[ValueT]` if the predicate returns `True`.
@@ -269,10 +284,9 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # None
         ```
         """
-        v = self._value = None
-        return v
+        self._value = None
 
-    def replace(self, value: ValueT) -> Some[ValueT]:
+    def replace(self, value: ValueT) -> Self:
         """Replace the contained value with another value.
 
         Example
@@ -285,8 +299,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # Some("Hello")
         ```
         """
-        v = self._value = value
-        return Some(v)
+        self._value = value
+        return Some(self._value)
 
     # Boolean checkings.
     def expect(self, message: str, /) -> ValueT:
@@ -310,7 +324,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return self._value
 
-    def and_ok(self, optb: Some[T | None]) -> Some[T | None]:
+    def and_ok(self, optb: Some[T]) -> Some[T]:
         """Returns `Some[None]` if the contained value is `None`,
 
         Otherwise return optb as `Some[T | None]` if optb is `Some[T]`.
@@ -333,7 +347,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return optb
 
-    def and_then(self, f: Fn[ValueT, Some[T | None]]) -> Some[T | None]:
+    def and_then(self, f: Fn[ValueT, Some[T]]) -> Some[T]:
         """Returns `Some[None]` if the contained value is `None`,
 
         otherwise call `f` on `ValueT` and return `Some[T]` if it's value not `None`.
@@ -487,23 +501,3 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
     def __hash__(self) -> int:
         return hash(self._value)
-
-
-# This is declared as a typealias in .pyi
-Option = Some[ValueT]
-"""A type hint for a value that can be `Some[T]`.
-
-Note
-----
-This must be used as a type hint for a value that can be `Some[T]`
-
-and not for instance creation for `Some`.
-
-Example
--------
-```py
-import sain
-
-foo: sain.Option[str] = sain.Some(None)
-```
-"""

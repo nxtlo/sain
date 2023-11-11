@@ -1,10 +1,16 @@
 """Objects with default values example."""
 
+from __future__ import annotations
+
 import asyncio
 import dataclasses
 import typing
 
 import sain
+
+# Is is optional to type hint values with `Option` and Some can be used instead.
+if typing.TYPE_CHECKING:
+    from sain import Option
 
 
 @dataclasses.dataclass
@@ -12,12 +18,13 @@ class Loop(sain.Default[asyncio.AbstractEventLoop]):
     """A default event loop."""
 
     # Initialize a default loop with value None.
-    loop: sain.Option[asyncio.AbstractEventLoop] = sain.Some(None)
+    loop: Option[asyncio.AbstractEventLoop] = sain.Some(None)
 
+    # This method must be implemented which returns a default value.
     @staticmethod
     def default() -> asyncio.AbstractEventLoop:
         """The default event loop."""
-        return asyncio.get_event_loop()
+        return sain.futures.loop()
 
     def run(self, func: typing.Coroutine[None, None, None]) -> None:
         # Get the event loop either from the provided value or from the default.
