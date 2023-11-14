@@ -44,51 +44,10 @@ Equavilant macros
 As decorators.
 
 - `cfg!()` -> `sain.cfg`.
+- `todo!()` -> `sain.todo`. This is not a decorator.
+- `deprecated!()` -> `sain.deprecated`.
+- `unimplemented!()` -> `sain.unimplemented`.
 - `#[cfg_attr]` -> `sain.cfg_attr`.
-
-Examples
---------
-```py
-import sain
-
-# If a non windows machine runs this function, it will raise an error.
-@sain.cfg_attr(target_os = "windows")
-def windows_only() -> sain.Option[int]:
-    return sain.Some(1)
-
-@sain.cfg_attr(requires_modules="uvloop", target_os = "unix")
-def run_uvloop() -> None:
-    import uvloop
-    uvloop.install()
-
-@sain.cfg_attr(python_version = (3, 5, 0))
-class Foo:
-
-    @staticmethod
-    @sain.cfg_attr(requires_modules = ("numpy", "pandas"))
-    async def bar() -> None:
-        ...
-```
-
-Notes
------
-Target OS must be one of the following:
-* `linux`
-* `win32` | `windows`
-* `darwin`
-* `unix`, which is assumed to be either linux or darwin.
-
-Target architecture must be one of the following:
-* `x86`
-* `x64`
-* `arm`
-* `arm64`
-
-Target Python implementation must be one of the following:
-* `CPython`
-* `PyPy`
-* `IronPython`
-* `Jython`
 """
 from __future__ import annotations
 
@@ -105,15 +64,17 @@ __all__ = (
     "ref",
     # option.py
     "Some",
-    "Option",
     "option",
     # iter.py
     "into_iter",
     "Iter",
     "iter",
-    # drop.py
-    "drop",
-    "Drop",
+    # macros.py
+    "todo",
+    "deprecated",
+    "unimplemented",
+    # futures.py
+    "futures",
 )
 
 # Module top level. Required for pdoc.
@@ -121,21 +82,23 @@ from . import default
 from . import iter
 from . import option
 from . import ref
+from . import futures
 from .cfg import cfg
 from .cfg import cfg_attr
 from .default import Default
-from .drop import Drop
-from .drop import drop
 from .iter import Iter
 from .iter import into_iter
-from .option import Option
+from .macros import deprecated
+from .macros import todo
+from .macros import unimplemented
 from .option import Some
 from .ref import Ref
 from .ref import RefMut
 
-__version__: str = "0.0.3"
+__version__: str = "0.0.4"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
-__about__: str = "A Rust like cfg attribs checking for Python."
-__docs__: str = ""
+__about__: str = (
+    "Sain is a dependency-free library that implements some of the Rust core types. Which provides more abstraction."
+)
 __license__: str = "BSD 3-Clause License"
