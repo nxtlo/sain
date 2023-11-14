@@ -2,17 +2,23 @@
 
 from __future__ import annotations
 
+import typing
 import dataclasses
 
 import sain
+
+if typing.TYPE_CHECKING:
+    from sain import Option
 
 
 @dataclasses.dataclass
 class TokenGetter:
     """A token getter strategy."""
 
-    token: sain.Option[str] = sain.Some(None)
+    token: Option[str] = sain.Some(None)
 
+    # ! Warning: the `required_modules` attribute is currently buggy
+    # ! and will warn you if you run that code.
     @classmethod
     @sain.cfg_attr(requires_modules="python-dotenv")
     def from_env(cls, key: str, /) -> TokenGetter:
@@ -32,8 +38,7 @@ class TokenGetter:
 # CPython implementation only function.
 @sain.cfg_attr(impl="CPython")
 def main() -> None:
-
-    if sain.cfg(target_os="win32"):
+    if sain.cfg(target_os="windows"):
         print("Running on Windows...")
         getter = TokenGetter.from_env("API_TOKEN")
     else:

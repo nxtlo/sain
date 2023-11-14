@@ -27,11 +27,38 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Referenced objects to a value. This can be used to store an object in the same place multiple times."""
+"""Referenced objects to a value. This can be used to store an object in the same place multiple times.
+
+Example
+-------
+```py
+from sain import Ref
+from dataclasses import dataclass
+
+@dataclass
+class User:
+    id: int
+    name: str
+
+cache: dict[int, Ref[User]] = {}
+
+# Point the user ID to multiple references for this user.
+# This is usefull when you want to store the object multiple times in the map.
+user_once = User(0, "some_name")
+cache[user_once.id] = Ref(user_once)
+
+ref = cache[user_once.id]
+ref.object.id = 1
+
+# Clone the referenced object.
+cloned = ref.copy()
+cloned.id != 1
+```
+"""
 
 from __future__ import annotations
 
-__all__: tuple[str, str] = ("Ref", "RefMut")
+__all__ = ("Ref", "RefMut")
 
 import copy
 import dataclasses
