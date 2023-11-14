@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).All notable changes to this project will be documented in this file.
 
 ## Unreleased
+- `Once` type.
+- `Iter.next` now returns `sain.Option[T]` instead of `typing.Optional[T]`.
+- `.copied`, `.async_for_each` methods to the `Iter`.
+- `empty` function in `sain.iter` module.
+- Removed method `Iter.discard` in favor of `Iter.filter` method.
 
 ## 0.0.4
 ## Added

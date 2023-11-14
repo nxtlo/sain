@@ -30,7 +30,7 @@
 
 """Standard Rust core types implementations for Python.
 
-Equavilant types
+Equivalent types
 ----------------
 - `Option<T>` -> `sain.Option[T]` | `sain.Some[T]`
 - `Result<T, E>` -> `sain.Result[T, E]`. Not implemented yet.
@@ -38,8 +38,9 @@ Equavilant types
 - `AsRef<T>` -> `sain.Ref[T]`.
 - `AsMut<T>` -> `sain.RefMut[T]`.
 - `Iter<Item>` -> `sain.Iter[Item]`
+- `OnceLock<T>` -> `Once[T]`
 
-Equavilant macros
+Equivalent macros
 -----------------
 As decorators.
 
@@ -48,6 +49,7 @@ As decorators.
 - `deprecated!()` -> `sain.deprecated`.
 - `unimplemented!()` -> `sain.unimplemented`.
 - `#[cfg_attr]` -> `sain.cfg_attr`.
+- `#[doc(...)]` -> `sain.doc(...)`.
 """
 from __future__ import annotations
 
@@ -75,14 +77,17 @@ __all__ = (
     "unimplemented",
     # futures.py
     "futures",
+    "once",
+    "Once",
 )
 
 # Module top level. Required for pdoc.
 from . import default
+from . import futures
 from . import iter
+from . import once
 from . import option
 from . import ref
-from . import futures
 from .cfg import cfg
 from .cfg import cfg_attr
 from .default import Default
@@ -91,6 +96,7 @@ from .iter import into_iter
 from .macros import deprecated
 from .macros import todo
 from .macros import unimplemented
+from .once import Once
 from .option import Some
 from .ref import Ref
 from .ref import RefMut

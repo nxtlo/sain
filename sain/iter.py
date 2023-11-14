@@ -31,23 +31,31 @@
 
 from __future__ import annotations
 
-__all__ = ("Iter", "into_iter", "Item")
+__all__ = ("Iter", "into_iter", "empty")
 
+import collections.abc as collections
+import copy
 import itertools
 import typing
-import collections.abc as collections
+
+from . import default as _default
+from . import futures
+from .option import Some
 
 Item = typing.TypeVar("Item")
 """A type hint for the item type of the iterator."""
 
 if typing.TYPE_CHECKING:
     import _typeshed as typeshed
+    import typing_extensions as ty_ext
+
+    from .option import Option
 
     OtherItem = typing.TypeVar("OtherItem")
     _B = typing.TypeVar("_B", bound=collections.Callable[..., typing.Any])
 
 
-class Iter(collections.Iterator[Item]):
+class Iter(collections.Iterator[Item], _default.Default["Iter[ty_ext.Never]"]):
     """Lazy, In-Memory iterator for sequence types with some functional methods.
 
     Example
@@ -84,6 +92,19 @@ class Iter(collections.Iterator[Item]):
     def __init__(self, items: collections.Iterable[Item]) -> None:
         self._items = iter(items)
 
+    @staticmethod
+    def default() -> Iter[ty_ext.Never]:
+        """Return the default iterator for this type. It returns an empty iterator.
+
+        Example
+        -------
+        ```py
+        it = Iter.default()
+        assert not it.next().is_some()
+        ```
+        """
+        return empty()
+
     @typing.overload
     def collect(self) -> collections.Sequence[Item]:
         ...
@@ -97,11 +118,13 @@ class Iter(collections.Iterator[Item]):
 
         Example
         -------
-        >>> iterator = Iter([1, 2, 3])
-        >>> iterator.collect()
-        [1, 2, 3]
-        >>> iterator.collect(str)
-        ['1', '2', '3']
+        ```py
+        iterator = Iter([1, 2, 3])
+        iterator.collect()
+        # [1, 2, 3]
+        iterator.collect(casting=str) # Map each element and collect it.
+        # ['1', '2', '3']
+        ```
 
         Parameters
         ----------
@@ -119,36 +142,49 @@ class Iter(collections.Iterator[Item]):
 
         return list(self._items)
 
-    def next(self) -> Item:
-        """Returns the next item in the iterator.
+    def copied(self) -> Iter[Item]:
+        """Creates an iterator which deeply copies all of its elements.
 
         Example
         -------
-        >>> iterator = Iter[str](["1", "2", "3"])
-        item = iterator.next()
-        assert item == "1"
-        item = iterator.next()
-        assert item == "2"
+        ```py
+        it = Iter([None, None, None])
+        copied_iter = it.copied()
+        assert it.collect() == copied.collect()
+        ```
+        """
+        return self.__class__(copy.deepcopy(self._items))
 
-        Raises
-        ------
-        `StopIteration`
-            If no elements are left in the iterator.
+    def next(self) -> Option[Item]:
+        """Returns the next item in the iterator, `Option[None]` if not elements found.
+
+        Example
+        -------
+        ```py
+        iterator = Iter[str](["1", "2"])
+        assert iterator.next() == Some("1")
+        assert iterator.next() == Some("2")
+        assert iterator.next().is_none()
+        ```
         """
         try:
-            return self.__next__()
+            return Some(self.__next__())
         except StopIteration:
-            self._ok()
+            return Some(None)
 
     def map(self, predicate: collections.Callable[[Item], OtherItem]) -> Iter[OtherItem]:
         """Maps each item in the iterator to its predicated value.
 
         Example
         -------
-        >>> iterator = Iter[str](["1", "2", "3"]).map(lambda value: int(value))
-        <Iter([1, 2, 3])>
-        >>> for item in iterator:
-                assert isinstance(item, int)
+        ```py
+        iterator = Iter(["1", "2", "3"])
+            .map(lambda value: int(value))
+
+        # <Iter([1, 2, 3])>
+        for item in iterator:
+            assert isinstance(item, int)
+        ```
 
         Parameters
         ----------
@@ -168,10 +204,12 @@ class Iter(collections.Iterator[Item]):
 
         Example
         -------
-        >>> iterator = Iter([RAID, STRIKE, GAMBIT])
-        >>> for mode in iterator.take(2):
-                assert mode in [RAID, STRIKE]
-        <Iter([RAID, STRIKE])>
+        ```py
+        iterator = Iter(['c', 'x', 'y'])
+        for mode in iterator.take(2):
+            assert mode in ['c', 'x']
+        # <Iter(['c', 'x'])>
+        ```
 
         Parameters
         ----------
@@ -260,45 +298,25 @@ class Iter(collections.Iterator[Item]):
         ```py
         iterator = Iter([MembershipType.STEAM, MembershipType.XBOX, MembershipType.STADIA])
         for platform in iterator.skip(1):
-                print(platform)
+            print(platform)
         # Skip the first item in the iterator.
         # <Iter([MembershipType.XBOX, MembershipType.STADIA])>
+        ```
         """
         return Iter(itertools.islice(self._items, n, None))
 
-    def discard(self, predicate: collections.Callable[[Item], bool]) -> Iter[Item]:
-        """Discards all elements in the iterator for which the predicate function returns true.
-
-        Example
-        -------
-        >>> iterator = Iter([MembershipType.STEAM, MembershipType.XBOX, MembershipType.STADIA])
-        >>> for _ in iterator.discard(lambda platform: platform is not MembershipType.STEAM):
-                # Drops all memberships that are not steam.
-                print(iterator)
-        <Iter([MembershipType.XBOX, MembershipType.STADIA])>
-
-        Parameters
-        ----------
-        predicate: `collections.Callable[[Item], bool]`
-            The function to test each item in the iterator.
-
-        Raises
-        ------
-        `StopIteration`
-            If no elements are left in the iterator.
-        """
-        return Iter(filter(lambda x: not predicate(x), self._items))
-
-    def zip(self, other: Iter[OtherItem]) -> Iter[typing.Tuple[Item, OtherItem]]:
+    def zip(self, other: Iter[OtherItem]) -> Iter[tuple[Item, OtherItem]]:
         """Zips the iterator with another iterable.
 
         Example
         -------
-        >>> iterator = Iter([1, 2, 3])
-        >>> other = Iter([4, 5, 6])
-        >>> for item, other_item in iterator.zip(other):
-                assert item == other_item
+        ```py
+        iterator = Iter([1, 2, 3])
+        other = Iter([4, 5, 6])
+        for item, other_item in iterator.zip(other):
+            assert item == other_item
         <Iter([(1, 4), (2, 5), (3, 6)])>
+        ```
 
         Parameters
         ----------
@@ -322,11 +340,13 @@ class Iter(collections.Iterator[Item]):
 
         Example
         -------
-        >>> iterator = Iter([1, 2, 3])
-        >>> while iterator.all(lambda item: isinstance(item, int)):
-                print("Still all integers")
-                continue
+        ```py
+        iterator = Iter([1, 2, 3])
+        while iterator.all(lambda item: isinstance(item, int)):
+            print("Still all integers")
+            continue
             # Still all integers
+        ```
 
         Parameters
         ----------
@@ -345,10 +365,12 @@ class Iter(collections.Iterator[Item]):
 
         Example
         -------
-        >>> iterator = Iter([1, 2, 3])
-        >>> if iterator.any(lambda item: isinstance(item, int)):
-                print("At least one item is an int.")
+        ```py
+        iterator = Iter([1, 2, 3])
+        if iterator.any(lambda item: isinstance(item, int)):
+            print("At least one item is an int.")
         # At least one item is an int.
+        ```
 
         Parameters
         ----------
@@ -372,15 +394,16 @@ class Iter(collections.Iterator[Item]):
 
         Example
         -------
-        >>> iterator = Iter([3, 1, 6, 7])
-        >>> for item in iterator.sort(key=lambda item: item < 3):
-                print(item)
+        ```py
+        iterator = Iter([3, 1, 6, 7])
+        for item in iterator.sort(key=lambda item: item < 3):
+            print(item)
         # 1
         # 3
         # 6
         # 7
+        ```
 
-        Parameters
         ----------
         key: `collections.Callable[[Item], Any]`
             The function to sort by.
@@ -394,14 +417,15 @@ class Iter(collections.Iterator[Item]):
         """
         return Iter(sorted(self._items, key=key, reverse=reverse))
 
-    def first(self) -> Item:
+    def first(self) -> Option[Item]:
         """Returns the first item in the iterator.
 
         Example
         -------
-        >>> iterator = Iter([3, 1, 6, 7])
-        >>> iterator.first()
-        3
+        ```py
+        iterator = Iter([3, 1, 6, 7])
+        iterator.first().is_some_and(lambda x: x == 3)
+        ```
 
         Raises
         ------
@@ -415,13 +439,15 @@ class Iter(collections.Iterator[Item]):
 
         Example
         -------
-        >>> iterator = Iter([3, 1, 6, 7])
-        >>> for item in iterator.reversed():
-                print(item)
+        ```py
+        iterator = Iter([3, 1, 6, 7])
+        for item in iterator.reversed():
+            print(item)
         # 7
         # 6
         # 1
         # 3
+        ```
 
         Raises
         ------
@@ -442,16 +468,18 @@ class Iter(collections.Iterator[Item]):
 
         Example
         -------
-        >>> iterator = Iter([1, 2, 3])
-        >>> other = Iter([4, 5, 6])
-        >>> for item in iterator.union(other):
-                print(item)
+        ```py
+        iterator = Iter([1, 2, 3])
+        other = Iter([4, 5, 6])
+        for item in iterator.union(other):
+            print(item)
         # 1
         # 2
         # 3
         # 4
         # 5
         # 6
+        ```
 
         Parameters
         ----------
@@ -470,11 +498,13 @@ class Iter(collections.Iterator[Item]):
 
         Example
         -------
-        >>> iterator = Iter([1, 2, 3])
-        >>> iterator.for_each(lambda item: print(item))
+        ```py
+        iterator = Iter([1, 2, 3])
+        iterator.for_each(lambda item: print(item))
         # 1
         # 2
         # 3
+        ```
 
         Parameters
         ----------
@@ -484,16 +514,46 @@ class Iter(collections.Iterator[Item]):
         for item in self:
             func(item)
 
-    def enumerate(self, *, start: int = 0) -> Iter[typing.Tuple[int, Item]]:
-        """Returns a new iterator that yields tuples of the index and item.
+    async def async_for_each(
+        self,
+        func: collections.Callable[[Item], collections.Coroutine[None, typing.Any, OtherItem]],
+    ) -> collections.Sequence[OtherItem]:
+        """Calls the async function on each item in the iterator concurrently.
+
         Example
         -------
-        >>> iterator = Iter([1, 2, 3])
-        >>> for index, item in iterator.enumerate():
-                print(index, item)
+        ```py
+        async def fetch(username: str) -> dict[str, Any]:
+            async with aiohttp.request('GET', '...') as r:
+                return await r.json()
+
+        async def main():
+            users = sain.into_iter(["danny", "legalia"])
+            results = await users.async_for_each(lambda username: fetch(username))
+            for k, v in results.items():
+                ...
+        ```
+
+        Parameters
+        ----------
+        func: `collections.Callable[[Item], collections.Coroutine[None, None, None]]`
+            The async function to call on each item in the iterator.
+        """
+        return await futures.spawn(*(func(item) for item in self))
+
+    def enumerate(self, *, start: int = 0) -> Iter[tuple[int, Item]]:
+        """Returns a new iterator that yields tuples of the index and item.
+
+        Example
+        -------
+        ```py
+        iterator = Iter([1, 2, 3])
+        for index, item in iterator.enumerate():
+            print(index, item)
         # 0, 1
         # 1, 2
         # 2, 3
+        ```
 
         Raises
         ------
@@ -505,7 +565,7 @@ class Iter(collections.Iterator[Item]):
     def _ok(self) -> typing.NoReturn:
         raise StopIteration("No more items in the iterator.") from None
 
-    def __getitem__(self, index: int) -> Item:
+    def __getitem__(self, index: int) -> Option[Item]:
         try:
             return self.skip(index).first()
         except IndexError:
@@ -518,8 +578,21 @@ class Iter(collections.Iterator[Item]):
     def __contains__(self, item: Item) -> bool:
         return item in self._items
 
+    # TODO: Find a way to log the elements inside the iterator without
+    # consuming it.
     def __repr__(self) -> str:
-        return f'<{self.__class__.__name__}({", ".join([str(item) for item in self._items])})>'
+        # Logging the iterator elements consumes it.
+        # So we need to make a copy of it first.
+        # This is not performant but this is the only trade-off.
+        # clone, c = itertools.tee(self._items)
+        # self._items = iter(c)
+        return f"<Iter>"
+
+    def __copy__(self) -> typing.NoReturn:
+        raise RuntimeError("Can't shallow copy this object. Use `.copied` method or deeply copy it.")
+
+    def __deepcopy__(self) -> Iter[Item]:
+        return self.copied()
 
     def __len__(self) -> int:
         return self.count()
@@ -536,6 +609,19 @@ class Iter(collections.Iterator[Item]):
         return item
 
 
+def empty() -> Iter[ty_ext.Never]:
+    """Create an iterator that yields nothing.
+
+    Example
+    -------
+    ```py
+    nope = sain.iter.empty()
+    assert nope.next().is_none()
+    ```
+    """
+    return Iter(_ for _ in ())
+
+
 def into_iter(
     iterable: typing.Iterable[Item],
 ) -> Iter[Item]:
@@ -545,7 +631,7 @@ def into_iter(
     ```py
     sequence = [1,2,3]
     for item in sain.into_iter(sequence).reversed():
-            print(item)
+        print(item)
     # 3
     # 2
     # 1

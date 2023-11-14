@@ -38,7 +38,7 @@ if cfg(requires_modules="aiohttp"):
 
 # Assuming aiohttp is not installed.
 # Calling the function will raise `NameError` since its not in scope.
-create_app()
+app = create_app()
 
 # Those will only warn at runtime and will not raise anything. They're just markers.
 @sain.unimplemented(message="User is not fully implemented.")
@@ -51,14 +51,14 @@ class User:
 ```
 
 ### `Option<T>` and `Some<T>`
-Implements the standard `Option` and `Some` types. An object that may be `None` or `T`.
+Implements the `Option` type and The `Some` variant. An object that may be `None` or `T`.
 
 ```py
 import sain
 import os
 
 if typing.TYPE_CHECKING:
-    # Avaliable only during type checking.
+    # Available only during type checking.
     from sain import Option
 
 # Stright up replace typing.Optional[str]
@@ -85,7 +85,9 @@ as_none.uwnrap_or(123)  # Error: Must be type `str`!
 assert as_none.is_none() # True
 ```
 
-### Defaults
+### Other Features.
+
+#### Default
 An interface that types can implement which have a default value.
 
 ```py
@@ -101,18 +103,40 @@ class Session(sain.Default[requests.Session]):
 DEFAULT_SESSION = Session.default()
 ```
 
-### Iter
+#### Once, A value that can be initialized once.
+```py
+from sain import Once
+from requests import Session
+
+# Not initialized yet.
+DEFAULT_SESSION: Once[Session] = Once()
+
+# Other file.
+def run():
+    # Get the session if it was initialized from other thread.
+    # Otherwise initialize it.
+    session = DEFAULT_SESSION.get_or_init(Session())
+    session.post("...")
+    # You can optionally clear the session after.
+    session.clear()
+```
+
+#### Iter
 Turns normal iterables into `Iter` type.
 
 ```py
-import sain
+import sain.iter as iter
 
-f = sain.Iter([1,2,3])
-# or f = sain.into_iter([1,2,3])
+f = iter.Iter([1,2,3])
+# or iter.into_iter([1,2,3])
 assert 1 in f
 
 for item in f.map(lambda i: str(i)):
     print(item)
+
+# An iterator that yields nothing.
+it = iter.empty()
+assert len(it) == 0
 ```
 
 ### Notes

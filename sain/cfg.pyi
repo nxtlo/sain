@@ -7,6 +7,9 @@ Signature = _typing.TypeVar("Signature", bound=_collections.Callable[..., object
 TARGET_OS: _typing_extensions.TypeAlias = _typing.Literal["linux", "win32", "darwin", "unix", "windows"]
 TARGET_ARCH: _typing_extensions.TypeAlias = _typing.Literal["x86", "x64", "arm", "arm64"]
 PY_IMPL: _typing_extensions.TypeAlias = _typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
+CfgGuard = _typing.TypeGuard[
+    TARGET_ARCH | TARGET_OS | PY_IMPL | tuple[int, int, int] | str | _collections.Sequence[str]
+]
 
 def cfg_attr(
     *,
@@ -23,7 +26,7 @@ def cfg(
     python_version: tuple[int, int, int] | None = ...,
     target_arch: TARGET_ARCH | None = ...,
     impl: PY_IMPL | None = ...,
-) -> bool: ...
+) -> _typing.TypeGuard[CfgGuard | None]: ...
 
 class _AttrCheck(_typing.Generic[Signature]):
     def __init__(

@@ -46,7 +46,7 @@ if typing.TYPE_CHECKING:
 async def spawn(
     *aws: collections.Awaitable[T_co],
     timeout: float | None = None,
-    with_exception: bool = True,
+    with_exception: bool = False,
 ) -> collections.Sequence[T_co]:
     """Spawn all given awaitables concurrently.
 
@@ -87,7 +87,7 @@ async def spawn(
         tasks.append(asyncio.ensure_future(future))  # type: ignore
     try:
         gatherer = asyncio.gather(*tasks, return_exceptions=with_exception)
-        return await asyncio.wait_for(gatherer, timeout=timeout)
+        return await asyncio.wait_for(gatherer, timeout=timeout)  # type: ignore
 
     except asyncio.CancelledError:
         raise asyncio.CancelledError("Gathered Futures were cancelled.") from None

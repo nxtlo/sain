@@ -1,8 +1,9 @@
 from . import default as default
+from . import futures as futures
 from . import iter as iter
+from . import once as once
 from . import option as option
 from . import ref as ref
-from . import futures as futures
 from .cfg import cfg as cfg
 from .cfg import cfg_attr as cfg_attr
 from .default import Default as Default
@@ -11,6 +12,7 @@ from .iter import into_iter as into_iter
 from .macros import deprecated as deprecated
 from .macros import todo as todo
 from .macros import unimplemented as unimplemented
+from .once import Once as Once
 from .option import Option as Option
 from .option import Some as Some
 from .ref import Ref as Ref

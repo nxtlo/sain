@@ -46,12 +46,11 @@ if typing.TYPE_CHECKING:
 
 
 class Error(RuntimeWarning):
-    """A runtime error that is raised when the decorated object fails a check."""
+    """A runtime warning that is raised when the decorated object fails a check."""
 
     __slots__ = ("message",)
 
     def __init__(self, message: str | None = None, *args: typing.Any) -> None:
-        super().__init__(message, *args)
         self.message = message
 
 
@@ -89,7 +88,7 @@ def deprecated(
 ) -> collections.Callable[[T], T]:
     """A decorator that marks a function as deprecated.
 
-    An attemp to call the object that's marked will raise an `sain.macros.Error` exception.
+    An attempt to call the object that's marked will cause a runtime warn.
 
     Example
     -------
@@ -110,7 +109,7 @@ def deprecated(
     removed_int : `str | None`
         If provided, It will log when will the object will be removed in.
     use_instead : `str | None`
-        If provided, This should be the alternaviate object name that should be used instead.
+        If provided, This should be the alternative object name that should be used instead.
     """
 
     def decorator(func: T) -> T:
@@ -164,7 +163,7 @@ def todo(message: str | None = None) -> typing.NoReturn:
 def unimplemented(*, message: str | None = None, available_in: str | None = None) -> collections.Callable[[T], T]:
     """A decorator that marks an object as unimplemented.
 
-    An attemp to call the object that's marked will cause a warn.
+    An attempt to call the object that's marked will cause a runtime warn.
 
     Example
     -------
@@ -191,7 +190,7 @@ def unimplemented(*, message: str | None = None, available_in: str | None = None
             msg = message or f"{obj_type} {obj.__module__}.{obj.__name__} is not yet implemented."  # noqa: W503
 
             if available_in:
-                msg += f" Avaliable in {available_in}."
+                msg += f" Available in {available_in}."
 
             _warn(msg)
             return obj(*args, **kwargs)

@@ -27,7 +27,11 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Runtime attr confuguration.
+"""Runtime attr configuration.
+
+### Warning
+* The `cfg_attr` currently is buggy, Specifically when passing multiple modules into the
+`required_modules` parameter.
 
 Examples
 --------
@@ -37,7 +41,7 @@ import typing
 
 from sain import cfg_attr, cfg, Some
 
-# Required for typehints.
+# Required for type-hints.
 if typing.TYPE_CHECKING:
     from sain import Option
 
@@ -85,12 +89,11 @@ __all__ = ("cfg_attr", "cfg")
 
 import collections.abc as collections
 import functools
+import importlib.util as importlib
 import inspect
 import platform
 import sys
 import typing
-
-from sain import macros
 
 SigT = collections.Callable[..., object]
 Signature = typing.TypeVar("Signature", bound=SigT)
@@ -100,13 +103,24 @@ TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix", "windows"]
 TARGET_ARCH = typing.Literal["x86", "x64", "arm", "arm64"]
 PY_IMPL = typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
 
+if typing.TYPE_CHECKING:
+    from typing_extensions import Self
+
+    CfgGuard = typing.TypeGuard[
+        TARGET_ARCH | TARGET_OS | PY_IMPL | tuple[int, int, int] | str | collections.Sequence[str]
+    ]
+
+
+def _separate(seq: collections.Iterable[str]) -> str:
+    return ", ".join([f"{name}" for name in seq])
+
 
 def _machine() -> str:
     return platform.machine()
 
 
 def _is_arm() -> bool:
-    return _machine().startswith("arm")
+    return "ARM" in _machine()
 
 
 def _is_arm_64() -> bool:
@@ -115,6 +129,14 @@ def _is_arm_64() -> bool:
 
 def _is_x64() -> bool:
     return _machine().endswith("64")
+
+
+def _py_version() -> str:
+    return platform.python_version()
+
+
+def _check_module(mod_name: str) -> bool:
+    return importlib.find_spec(mod_name) is not None
 
 
 def cfg_attr(
@@ -203,7 +225,7 @@ def cfg(
     python_version: tuple[int, int, int] | None = None,
     target_arch: TARGET_ARCH | None = None,
     impl: PY_IMPL | None = None,
-) -> bool:
+) -> typing.TypeGuard[CfgGuard | None]:
     """A function that will run the code only if all predicate attributes returns `True`.
 
     The difference between this function and `cfg_attr` is that this function will not raise an exception.
@@ -254,6 +276,7 @@ def cfg(
     return checker.internal_check()
 
 
+@typing.final
 class _AttrCheck(typing.Generic[Signature]):
     __slots__ = (
         "_modules",
@@ -293,7 +316,7 @@ class _AttrCheck(typing.Generic[Signature]):
     def internal_check(self) -> bool:
         return self._check_once()
 
-    # FIXME: fix this mess.
+    # FIXME: Can we impl this differently?
     def _check_once(self) -> bool:
         results: list[bool] = []
         if self._target_os is not None:
@@ -317,46 +340,52 @@ class _AttrCheck(typing.Generic[Signature]):
 
         return all(results)
 
-    @macros.unstable(reason="The `requires_modules` attribute is buggy.")
+    # FIXME: This function impl is currently wack.
     def _check_modules(self) -> bool:
         """__intrinsics__"""
         required_modules: set[str] = set()
+        found_modules: list[str] = []
 
-        assert self._modules
-        if isinstance(modules := self._modules, str):
-            modules = (modules,)
+        assert self._modules, "Modules cannot be empty."
 
-        for module in modules:
-            try:
-                # __import__  won't add expose of the modules to namespace.
-                mod = str(__import__(module)).split("'")[1]
-                # If the module gets added here, it means it raised the error below.
-                required_modules.add(mod)
-            except ModuleNotFoundError:
-                # We need to check the no raise flag to True
-                # to return a bool instead. This is usually for cfg() `if` checks.
-                if self._no_raise:
-                    self._debugger.flag(True)
+        # We check if a single module has been passed.
+        if isinstance(self._modules, str):
+            if self._modules:
+                if _check_module(self._modules):
+                    return True
+            # Passed empty str.
+            return False
 
-                needed = filter(lambda mod: mod not in required_modules, modules)
-                return (
-                    self._debugger.exception(ModuleNotFoundError)
-                    .message(f"requires modules {', '.join(needed)} to be installed")
-                    .finish()
-                )
-        return True
+        for module in self._modules:
+            # Check if the module exists or not.
+            if (mod_spec := importlib.find_spec(module)) is None:
+                # If not we add it to the required modules.
+                required_modules.add(module)
+            else:
+                found_modules.append(mod_spec.name)
+
+            if self._no_raise:
+                self._debugger.flag(True)
+
+        return (
+            self._debugger.exception(ModuleNotFoundError)
+            .message(f"requires modules ({_separate(required_modules)}) to be installed")
+            .and_then(f"But only found: ({_separate(found_modules)})")
+            .finish()
+        )
 
     def _check_target_arch(self) -> bool:
-        if self._target_arch == "arm":
-            return _is_arm()
-        elif self._target_arch == "arm64":
-            return _is_arm_64()
-        elif self._target_arch == "x86":
-            return not _is_x64()
-        elif self._target_arch == "x64":
-            return _is_x64()
-        else:
-            raise ValueError(f"Unknown target arch: `{self._target_arch}`")
+        match self._target_arch:
+            case "arm":
+                return _is_arm()
+            case "arm64":
+                return _is_arm_64()
+            case "x86":
+                return not _is_x64()
+            case "x64":
+                return _is_x64()
+            case _:
+                raise ValueError(f"Unknown target arch: {self._target_arch}")
 
     def _check_platform(self) -> bool:
         is_unix = sys.platform in {"linux", "darwin"}
@@ -376,7 +405,7 @@ class _AttrCheck(typing.Generic[Signature]):
         return (
             self._debugger
             .exception(RuntimeError)
-            .message(f"requires `{self._target_os}` OS").finish()
+            .message(f"requires {self._target_os} OS").finish()
         )
         # fmt: on
 
@@ -386,7 +415,8 @@ class _AttrCheck(typing.Generic[Signature]):
 
         return (
             self._debugger.exception(RuntimeError)
-            .message(f"requires Python >=`{self._py_version}`. But found {platform.python_version()}")
+            .message(f"requires Python >={self._py_version}")
+            .and_then(f"But found {_py_version()}")
             .finish()
         )
 
@@ -397,7 +427,7 @@ class _AttrCheck(typing.Generic[Signature]):
         # fmt: off
         return (
             self._debugger.exception(RuntimeError)
-            .message(f"requires Python implementation `{self._py_impl}`")
+            .message(f"requires Python implementation {self._py_impl}")
             .finish()
         )
         # fmt: on
@@ -416,7 +446,7 @@ class _Debug(typing.Generic[Signature]):
         self._no_raise = no_raise
         self._message = message
 
-    def exception(self, exc: type[BaseException]) -> _Debug[Signature]:
+    def exception(self, exc: type[BaseException]) -> Self:
         self._exception = exc
         return self
 
@@ -429,14 +459,20 @@ class _Debug(typing.Generic[Signature]):
 
         return "object"
 
-    def flag(self, cond: bool) -> _Debug[Signature]:
+    def flag(self, cond: bool) -> Self:
         self._no_raise = cond
         return self
 
     def message(self, message: str) -> _Debug[Signature]:
         """Set a message to be included in the exception that is getting raised."""
         fn_name = "" if self._callback.__name__ == "<lambda>" else self._callback.__name__
-        self._message = f"{self._obj_type} {fn_name} {message}."
+        self._message = f"{self._obj_type} {fn_name} {message}"
+        return self
+
+    def and_then(self, message: str) -> Self:
+        """Append an extra str to the end of this debugger's message."""
+        assert self._message is not None
+        self._message += ", " + message
         return self
 
     def finish(self) -> bool:

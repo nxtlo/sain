@@ -47,8 +47,6 @@ T_co = typing.TypeVar("T_co", covariant=True)
 if typing.TYPE_CHECKING:
     import collections.abc as collections
 
-    from typing_extensions import Self
-
     Fn = collections.Callable[[ValueT], T]
     """A type hint for a function that can take a `ValueT` and return a `T`."""
     FnOnce = collections.Callable[[], T]
@@ -119,7 +117,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
             If the inner value is `None`.
         """
         if self._value is None:
-            raise RuntimeError(f"Can't unwrap {type(self).__name__} value.") from None
+            raise RuntimeError(f"Called `Option::unwrap()` on {type(self._value).__name__}.") from None
 
         return self._value
 
@@ -165,21 +163,28 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         return self._value
 
     def unwrap_unchecked(self) -> ValueT:
-        """Unwrap the inner value immdiently returning it, passing if its `None`.
+        """Unwrap the inner value immediately returning it, passing if its `None`.
+
+        ## Warning
+        * Unwrapping the value knowing its `None` is considered Undefined Behavior.
 
         Example
         -------
         ```py
+        v: Option[float] = Some(1.2)
+        v.unwrap_unchecked() # 1.2
+
         v: Option[float] = Some(None)
-        print(v.unwrap_unchecked())
-        # ...
+        print(v.unwrap_unchecked()) # Undefined Behavior
         ```
         """
         if self._value is None:
             pass
-        return self._value
 
-    # Functional.
+        # SAFETY: We just checked that the value is None and passed.
+        return self._value  # type: ignore
+
+    # *- Functional operations -*
     def map(self, f: Fn[ValueT, T], /) -> Some[T]:
         """Map the inner value to a new value. Returning `Some[None]` if `ValueT` is `None`.
 
@@ -247,7 +252,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return f(self._value)
 
-    def filter(self, predicate: Fn[ValueT, bool]) -> Self:
+    def filter(self, predicate: Fn[ValueT, bool]) -> Some[ValueT]:
         """Returns `Some[None]` if the contained value is `None`,
 
         otherwise calls the predicate and returns `Some[ValueT]` if the predicate returns `True`.
@@ -269,7 +274,6 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
             if predicate(value):
                 return Some(value)
 
-        # We could return `None` here, but we want to return `Some[None]` instead.
         return Some(None)
 
     def take(self) -> None:
@@ -286,7 +290,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         """
         self._value = None
 
-    def replace(self, value: ValueT) -> Self:
+    def replace(self, value: ValueT) -> Some[ValueT]:
         """Replace the contained value with another value.
 
         Example
@@ -302,7 +306,6 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         self._value = value
         return Some(self._value)
 
-    # Boolean checkings.
     def expect(self, message: str, /) -> ValueT:
         """Returns `ValueT` if the contained value is not `None` otherwise raises a `RuntimeError`.
 
