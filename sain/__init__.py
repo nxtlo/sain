@@ -32,12 +32,12 @@
 
 Equivalent types
 ----------------
-- `Option<T>` -> `sain.Option[T]` | `sain.Some[T]`
-- `Result<T, E>` -> `sain.Result[T, E]`. Not implemented yet.
-- `Default<T>` -> `sain.Default[T]`
-- `AsRef<T>` -> `sain.Ref[T]`.
-- `AsMut<T>` -> `sain.RefMut[T]`.
-- `Iter<Item>` -> `sain.Iter[Item]`
+- `Option<T>` -> `Option[T]` | `Some[T]`
+- `Result<T, E>` -> `Result[T, E]`. Not implemented yet.
+- `Default<T>` -> `Default[T]`
+- `AsRef<T>` -> `AsRef[T]`.
+- `AsMut<T>` -> `AsMut[T]`.
+- `Iter<Item>` -> `Iter[Item]`
 - `OnceLock<T>` -> `Once[T]`
 
 Equivalent macros
@@ -59,16 +59,12 @@ __all__ = (
     "cfg_attr",
     # default.py
     "Default",
-    "default",
     # ref.py
-    "Ref",
-    "RefMut",
-    "ref",
+    "AsRef",
+    "AsMut",
     # option.py
     "Some",
-    "option",
     # iter.py
-    "into_iter",
     "Iter",
     "iter",
     # macros.py
@@ -77,34 +73,29 @@ __all__ = (
     "unimplemented",
     # futures.py
     "futures",
-    "once",
+    # once.py
     "Once",
 )
 
-# Module top level. Required for pdoc.
-from . import default
 from . import futures
 from . import iter
-from . import once
-from . import option
-from . import ref
 from .cfg import cfg
 from .cfg import cfg_attr
 from .default import Default
 from .iter import Iter
-from .iter import into_iter
 from .macros import deprecated
 from .macros import todo
 from .macros import unimplemented
 from .once import Once
 from .option import Some
-from .ref import Ref
-from .ref import RefMut
+from .ref import AsMut
+from .ref import AsRef
 
 __version__: str = "0.0.4"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
 __about__: str = (
-    "Sain is a dependency-free library that implements some of the Rust core types. Which provides more abstraction."
+    "Sain is a dependency-free library that implements some of the Rust core"
+    "types which abstracts over common patterns in Rust for Python."
 )
 __license__: str = "BSD 3-Clause License"

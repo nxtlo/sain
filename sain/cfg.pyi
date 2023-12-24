@@ -1,44 +1,38 @@
-import collections.abc as _collections
 import typing as _typing
+from collections.abc import Callable
 
-import typing_extensions as _typing_extensions
+type System = _typing.Literal["linux", "win32", "darwin", "unix", "windows"]
+type Arch = _typing.Literal["x86", "x64", "arm", "arm64"]
+type Python = _typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
 
-Signature = _typing.TypeVar("Signature", bound=_collections.Callable[..., object])
-TARGET_OS: _typing_extensions.TypeAlias = _typing.Literal["linux", "win32", "darwin", "unix", "windows"]
-TARGET_ARCH: _typing_extensions.TypeAlias = _typing.Literal["x86", "x64", "arm", "arm64"]
-PY_IMPL: _typing_extensions.TypeAlias = _typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
-CfgGuard = _typing.TypeGuard[
-    TARGET_ARCH | TARGET_OS | PY_IMPL | tuple[int, int, int] | str | _collections.Sequence[str]
-]
-
-def cfg_attr(
+def cfg_attr[F: Callable[..., object]](
     *,
-    requires_modules: str | _collections.Sequence[str] | None = ...,
-    target_os: TARGET_OS | None = ...,
+    requires: str | None = ...,
+    target_os: System | None = ...,
     python_version: tuple[int, int, int] | None = ...,
-    target_arch: TARGET_ARCH | None = ...,
-    impl: PY_IMPL | None = ...,
-) -> _collections.Callable[[Signature], Signature]: ...
+    target_arch: Arch | None = ...,
+    impl: Python | None = ...,
+) -> Callable[[F], F]: ...
 def cfg(
     *,
-    target_os: TARGET_OS | None = ...,
-    requires_modules: str | _collections.Sequence[str] | None = ...,
+    target_os: System | None = ...,
+    requires: str | None = ...,
     python_version: tuple[int, int, int] | None = ...,
-    target_arch: TARGET_ARCH | None = ...,
-    impl: PY_IMPL | None = ...,
-) -> _typing.TypeGuard[CfgGuard | None]: ...
+    target_arch: Arch | None = ...,
+    impl: Python | None = ...,
+) -> bool: ...
 
-class _AttrCheck(_typing.Generic[Signature]):
+class _AttrCheck[F: Callable[..., object]]:
     def __init__(
         self,
-        callback: Signature,
-        target_os: TARGET_OS | None = ...,
-        requires_modules: str | _collections.Sequence[str] | None = ...,
+        callback: F,
+        target_os: System | None = ...,
+        requires: str | None = ...,
         python_version: tuple[int, int, int] | None = ...,
-        target_arch: TARGET_ARCH | None = ...,
-        impl: PY_IMPL | None = ...,
+        target_arch: Arch | None = ...,
+        impl: Python | None = ...,
         *,
         no_raise: bool = ...,
     ) -> None: ...
-    def __call__(self, *args: _typing.Any, **kwds: _typing.Any) -> Signature: ...
+    def __call__(self, *args: _typing.Any, **kwds: _typing.Any) -> F: ...
     def internal_check(self) -> bool: ...

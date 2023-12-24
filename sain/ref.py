@@ -27,38 +27,11 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Referenced objects to a value. This can be used to store an object in the same place multiple times.
-
-Example
--------
-```py
-from sain import Ref
-from dataclasses import dataclass
-
-@dataclass
-class User:
-    id: int
-    name: str
-
-cache: dict[int, Ref[User]] = {}
-
-# Point the user ID to multiple references for this user.
-# This is usefull when you want to store the object multiple times in the map.
-user_once = User(0, "some_name")
-cache[user_once.id] = Ref(user_once)
-
-ref = cache[user_once.id]
-ref.object.id = 1
-
-# Clone the referenced object.
-cloned = ref.copy()
-cloned.id != 1
-```
-"""
+"""Referenced objects to a value. This can be used to store an object in the same place multiple times."""
 
 from __future__ import annotations
 
-__all__ = ("Ref", "RefMut")
+__all__ = ("AsRef", "AsMut")
 
 import copy
 import dataclasses
@@ -67,9 +40,37 @@ import typing
 _T_co = typing.TypeVar("_T_co", covariant=True)
 
 
+@typing.final
 @dataclasses.dataclass(frozen=True, unsafe_hash=True)
-class Ref(typing.Generic[_T_co]):
-    """Represents an immutable reference to an object."""
+class AsRef(typing.Generic[_T_co]):
+    """Represents an immutable reference to an object.
+
+    Example
+    -------
+    ```py
+    from sain import AsRef
+    from dataclasses import dataclass
+
+    @dataclass
+    class User:
+        id: int
+        name: str
+
+    cache: dict[int, AsRef[User]] = {}
+
+    # Point the user ID to multiple references for this user.
+    # This is useful when you want to store the object multiple times in the map.
+    user_once = User(0, "some_name")
+    cache[user_once.id] = AsRef(user_once)
+
+    ref = cache[user_once.id]
+    ref.object.id = 1
+
+    # Clone the referenced object.
+    cloned = ref.copy()
+    cloned.id != 1
+    ```
+    """
 
     __slots__ = ("object",)
 
@@ -81,8 +82,9 @@ class Ref(typing.Generic[_T_co]):
         return copy.copy(self.object)
 
 
+@typing.final
 @dataclasses.dataclass(frozen=False, unsafe_hash=True)
-class RefMut(typing.Generic[_T_co]):
+class AsMut(typing.Generic[_T_co]):
     """Represents a mutable reference to an object."""
 
     __slots__ = ("object",)

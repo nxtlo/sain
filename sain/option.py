@@ -31,7 +31,7 @@
 
 from __future__ import annotations
 
-__all__ = ("Some", "Fn", "FnOnce", "ValueT")
+__all__ = ("Some", "ValueT")
 
 import typing
 
@@ -48,16 +48,14 @@ if typing.TYPE_CHECKING:
     import collections.abc as collections
 
     Fn = collections.Callable[[ValueT], T]
-    """A type hint for a function that can take a `ValueT` and return a `T`."""
     FnOnce = collections.Callable[[], T]
-    """A type hint for a function that takes no arguments and return `T`"""
 
 
 @typing.final
 class Some(typing.Generic[ValueT], _default.Default[None]):
     """The `Option` type. An object that might be `T` or `None`.
 
-    It is similar to `typing.Optional[T]`, But has proper methods to handle the contined value.
+    It is similar to `typing.Optional[T]`, But has proper methods to handle the contained value.
 
     Example
     -------
@@ -117,7 +115,9 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
             If the inner value is `None`.
         """
         if self._value is None:
-            raise RuntimeError(f"Called `Option::unwrap()` on {type(self._value).__name__}.") from None
+            raise RuntimeError(
+                f"Called `Option::unwrap()` on {type(self._value).__name__}."
+            ) from None
 
         return self._value
 
@@ -163,10 +163,10 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         return self._value
 
     def unwrap_unchecked(self) -> ValueT:
-        """Unwrap the inner value immediately returning it, passing if its `None`.
+        """Unwrap the inner value immediately returning it.
 
         ## Warning
-        * Unwrapping the value knowing its `None` is considered Undefined Behavior.
+        Unwrapping the value knowing its `None` is considered Undefined Behavior.
 
         Example
         -------
@@ -178,10 +178,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(v.unwrap_unchecked()) # Undefined Behavior
         ```
         """
-        if self._value is None:
-            pass
-
-        # SAFETY: We just checked that the value is None and passed.
+        # SAFETY: The caller guarantees that the value is not None.
         return self._value  # type: ignore
 
     # *- Functional operations -*
@@ -372,8 +369,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return f(self._value)
 
-    def as_ref(self) -> Some[_ref.Ref[ValueT]]:
-        """Returns immutable `Some[Ref[ValueT]]` if the contained value is not `None`,
+    def as_ref(self) -> Some[_ref.AsRef[ValueT]]:
+        """Returns immutable `Some[AsRef[ValueT]]` if the contained value is not `None`,
 
         Otherwise returns `Some[None]`.
 
@@ -394,23 +391,23 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # None object.
         value: Some[int] = Some(None)
         print(value.as_ref())
-        # Some(Ref(None))
+        # Some(AsRef(None))
         ```
 
         Raises
         ------
         `dataclasses.FrozenInstanceError`
-            When attempting to modify the contained value. Use `sain.Ref.copy()` method to create a copy.
+            When attempting to modify the contained value. Use `sain.AsRef.copy()` method to create a copy.
 
-            Or just use `Some.as_ref_mut()` if you're dealing with mutable objects.
+            Or just use `.as_mut()` if you're dealing with mutable objects.
         """
         if self._value is not None:
-            return Some(_ref.Ref(self._value))
+            return Some(_ref.AsRef(self._value))
 
         return Some(None)
 
-    def as_mut(self) -> Some[_ref.RefMut[ValueT]]:
-        """Returns mutable `Some[RefMut[ValueT]]` if the contained value is not `None`,
+    def as_mut(self) -> Some[_ref.AsMut[ValueT]]:
+        """Returns mutable `Some[AsMut[ValueT]]` if the contained value is not `None`,
 
         Otherwise returns `Some[None]`.
 
@@ -424,11 +421,11 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # None object.
         value: Some[int] = Some(None)
         print(value.as_ref_mut())
-        # Some(RefMut(None))
+        # Some(AsMut(None))
         ```
         """
         if self._value is not None:
-            return Some(_ref.RefMut(self._value))
+            return Some(_ref.AsMut(self._value))
 
         return Some(None)
 
@@ -482,10 +479,10 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # True
         ```
         """
-        return not self.is_some()
+        return self._value is None
 
     def __str__(self) -> str:
-        return f"Some({self._value!r})"
+        return f"{self._value!r}"
 
     def __repr__(self) -> str:
         return f"Some({self._value!r})"
@@ -493,7 +490,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
     def __bool__(self) -> bool:
         return self.is_some()
 
-    def __eq__(self, other: object) -> bool:
+    def __eq__(self, other: typing.Any) -> bool:
         if not isinstance(other, Some):
             return NotImplemented
 

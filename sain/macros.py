@@ -45,12 +45,13 @@ if typing.TYPE_CHECKING:
     T = typing.TypeVar("T", bound=collections.Callable[..., typing.Any])
 
 
+@typing.final
 class Error(RuntimeWarning):
     """A runtime warning that is raised when the decorated object fails a check."""
 
     __slots__ = ("message",)
 
-    def __init__(self, message: str | None = None, *args: typing.Any) -> None:
+    def __init__(self, message: typing.LiteralString | None = None) -> None:
         self.message = message
 
 
@@ -58,7 +59,7 @@ def _warn(msg: str, stacklevel: int = 2) -> None:
     warnings.warn(message=msg, stacklevel=stacklevel, category=Error)
 
 
-def unstable(*, reason: str) -> collections.Callable[[T], T]:
+def unstable(*, reason: typing.LiteralString) -> collections.Callable[[T], T]:
     """A decorator that marks an internal object explicitly unstable."""
 
     def decorator(obj: T) -> T:
@@ -67,7 +68,9 @@ def unstable(*, reason: str) -> collections.Callable[[T], T]:
             obj_type = "class" if inspect.isclass(obj) else "function"
             if not obj.__doc__ == "__intrinsics__":
                 # This has been used outside of the lib.
-                raise Error("Stability attributes may not be used outside of the core library")
+                raise Error(
+                    "Stability attributes may not be used outside of the core library"
+                )
 
             name = obj.__name__
             if name.startswith("_"):
@@ -83,8 +86,10 @@ def unstable(*, reason: str) -> collections.Callable[[T], T]:
 
 def deprecated(
     *,
-    since: str | None = None,
-    use_instead: str | None = None,
+    since: typing.LiteralString | None = None,
+    use_instead: typing.LiteralString | None = None,
+    removed_in: typing.LiteralString | None = None,
+    hint: typing.LiteralString | None = None,
 ) -> collections.Callable[[T], T]:
     """A decorator that marks a function as deprecated.
 
@@ -95,7 +100,12 @@ def deprecated(
     ```py
     from sain import deprecated
 
-    @deprecated(since = "1.0.0", use_instead = "UserImpl()")
+    @deprecated(
+        since = "1.0.0",
+        removed_in ="3.0.0",
+        use_instead = "UserImpl()",
+        hint = "..."
+    )
     class User:
         ...
 
@@ -106,10 +116,12 @@ def deprecated(
     ----------
     since : `str`
         The version that the function was deprecated.
-    removed_int : `str | None`
+    removed_in : `str | None`
         If provided, It will log when will the object will be removed in.
     use_instead : `str | None`
         If provided, This should be the alternative object name that should be used instead.
+    hint: `str`
+        An optional hint for the user.
     """
 
     def decorator(func: T) -> T:
@@ -124,6 +136,12 @@ def deprecated(
             if use_instead is not None:
                 msg += f" Use {use_instead} instead."
 
+            if removed_in:
+                msg += f" Removed in {removed_in}."
+
+            if hint:
+                msg += f" Hint: {hint}"
+
             _warn(msg)
             return func(*args, **kwargs)
 
@@ -132,7 +150,7 @@ def deprecated(
     return decorator
 
 
-def todo(message: str | None = None) -> typing.NoReturn:
+def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     """A place holder that indicates unfinished code.
 
     This is not a decorator. See example.
@@ -160,7 +178,11 @@ def todo(message: str | None = None) -> typing.NoReturn:
     raise Error(f"not yet implemented: {message}" if message else "not yet implemented")
 
 
-def unimplemented(*, message: str | None = None, available_in: str | None = None) -> collections.Callable[[T], T]:
+def unimplemented(
+    *,
+    message: typing.LiteralString | None = None,
+    available_in: typing.LiteralString | None = None,
+) -> collections.Callable[[T], T]:
     """A decorator that marks an object as unimplemented.
 
     An attempt to call the object that's marked will cause a runtime warn.
@@ -187,7 +209,10 @@ def unimplemented(*, message: str | None = None, available_in: str | None = None
         @functools.wraps(obj)
         def wrapper(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
             obj_type = "class" if inspect.isclass(obj) else "function"
-            msg = message or f"{obj_type} {obj.__module__}.{obj.__name__} is not yet implemented."  # noqa: W503
+            msg = (
+                message
+                or f"{obj_type} {obj.__module__}.{obj.__name__} is not yet implemented."
+            )  # noqa: W503
 
             if available_in:
                 msg += f" Available in {available_in}."

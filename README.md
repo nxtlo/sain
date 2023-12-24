@@ -1,19 +1,23 @@
 # sain
+
 Sain is a dependency-free library that implements some of the Rust core standard types.
 
-
 ## Install
+
 You'll need Python 3.10 or higher.
 
 PyPI
+
 ```sh
-$ pip install sain
+pip install sain
 ```
 
 ## Overview
+
 More examples in [examples](https://github.com/nxtlo/sain/tree/master/examples)
 
-### `cfg`, `cfg_attr` and Marking objects.
+### `cfg`, `cfg_attr` and Marking objects
+
 Conditionally include code at runtime and mark objects.
 
 ```py
@@ -51,6 +55,7 @@ class User:
 ```
 
 ### `Option<T>` and `Some<T>`
+
 Implements the `Option` type and The `Some` variant. An object that may be `None` or `T`.
 
 ```py
@@ -61,12 +66,11 @@ if typing.TYPE_CHECKING:
     # Available only during type checking.
     from sain import Option
 
-# Stright up replace typing.Optional[str]
+# Replace typing.Optional[str]
 def get_token(key: str) -> Option[str]:
-    # What os.getenv returns may be str or None.
     return sain.Some(os.environ.get(key))
 
-# Raises RuntimeError("No token found.") if os.getenv return None.
+# Raises RuntimeError("No token found.") if `os.environ.get` return None.
 token = get_token().expect("No token found.")
 
 # The classic way to handle this in Python would be.
@@ -75,19 +79,19 @@ if token is None:
 else:
     ...
 
-# Replace this with `unwrap_or`.
-# Returning DEFAULT_TOKEN if it was None.
+# Replace this with inlined `unwrap_or`. Returning DEFAULT_TOKEN if it was None.
 env_or_default = get_token().unwrap_or("DEFAULT_TOKEN")
 
 # Type hint is fine.
 as_none: Option[str] = sain.Some(None)
-as_none.uwnrap_or(123)  # Error: Must be type `str`!
+as_none.unwrap_or(123)  # Type Error: Must be type `str`!
 assert as_none.is_none() # True
 ```
 
-### Other Features.
+### Other Features
 
 #### Default
+
 An interface that types can implement which have a default value.
 
 ```py
@@ -103,7 +107,8 @@ class Session(sain.Default[requests.Session]):
 DEFAULT_SESSION = Session.default()
 ```
 
-#### Once, A value that can be initialized once.
+#### Once, A value that can be initialized once
+
 ```py
 from sain import Once
 from requests import Session
@@ -122,6 +127,7 @@ def run():
 ```
 
 #### Iter
+
 Turns normal iterables into `Iter` type.
 
 ```py
@@ -140,6 +146,7 @@ assert len(it) == 0
 ```
 
 ### Notes
+
 Since Rust is a compiled language, Whatever predict in `cfg` and `cfg_attr` returns False will not compile.
 
 But there's no such thing as this in Python, So `RuntimeError` will be raised and whatever was predicated will not run.

@@ -41,16 +41,16 @@ import typing
 
 from sain import cfg_attr, cfg, Some
 
-# Required for type-hints.
+# Required for type-hints only. Not affected by runtime.
 if typing.TYPE_CHECKING:
     from sain import Option
 
-# If a non windows machine runs this function, it will raise an error.
+# If a non windows machine runs this function, A RuntimeError will be raised.
 @cfg_attr(target_os = "windows")
 def windows_only() -> Option[int]:
-    return sain.Some(1)
+    return Some(1)
 
-@cfg_attr(requires_modules="uvloop", target_os = "unix")
+@cfg_attr(requires="uvloop")
 def run_uvloop() -> None:
     import uvloop
     uvloop.install()
@@ -95,24 +95,16 @@ import platform
 import sys
 import typing
 
-SigT = collections.Callable[..., object]
-Signature = typing.TypeVar("Signature", bound=SigT)
-"""A type var hint for the decorated object signature."""
+from . import macros
 
-TARGET_OS = typing.Literal["linux", "win32", "darwin", "unix", "windows"]
-TARGET_ARCH = typing.Literal["x86", "x64", "arm", "arm64"]
-PY_IMPL = typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
+F = typing.TypeVar("F", bound=collections.Callable[..., object])
+
+System = typing.Literal["linux", "win32", "darwin", "unix", "windows"]
+Arch = typing.Literal["x86", "x64", "arm", "arm64"]
+Python = typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
 
 if typing.TYPE_CHECKING:
     from typing_extensions import Self
-
-    CfgGuard = typing.TypeGuard[
-        TARGET_ARCH | TARGET_OS | PY_IMPL | tuple[int, int, int] | str | collections.Sequence[str]
-    ]
-
-
-def _separate(seq: collections.Iterable[str]) -> str:
-    return ", ".join([f"{name}" for name in seq])
 
 
 def _machine() -> str:
@@ -135,22 +127,23 @@ def _py_version() -> str:
     return platform.python_version()
 
 
-def _check_module(mod_name: str) -> bool:
-    return importlib.find_spec(mod_name) is not None
-
-
 def cfg_attr(
     *,
-    requires_modules: str | collections.Sequence[str] | None = None,
-    target_os: TARGET_OS | None = None,
+    requires: str | None = None,
+    target_os: System | None = None,
     python_version: tuple[int, int, int] | None = None,
-    target_arch: TARGET_ARCH | None = None,
-    impl: PY_IMPL | None = None,
-) -> collections.Callable[[Signature], Signature]:
+    target_arch: Arch | None = None,
+    impl: Python | None = None,
+) -> collections.Callable[[F], F]:
     """Conditional runtime object configuration based on passed arguments.
 
     If the decorated object gets called and one of the attributes returns `False`,
     `RuntimeError` will be raised and the object will not run.
+
+    .. warning::
+        The `require_modules` parameter is bugged and scheduled for deprecation
+        and will be removed in a future release.
+        Instead, directly import modules at the top of the file or function.
 
     Example
     -------
@@ -172,15 +165,15 @@ def cfg_attr(
 
     # An instance will not be created if raised.
     zoo = Zoo()
-    # RuntimError("class Zoo requires PyPy implementation")
+    # RuntimeError("class Zoo requires PyPy implementation")
     zoo.bark()
     # Whats zoo??
     ```
 
     Parameters
     ----------
-    requires_modules : `str | Sequence[str] | None`
-        A string or sequence of strings of the required modules for the object.
+    requires : `str | None`
+        A required module to run the object.
     target_os : `str | None`
         The targeted operating system thats required for the object.
     python_version : `tuple[int, int, int] | None`
@@ -201,12 +194,12 @@ def cfg_attr(
         If the passed Python implementation is unknown.
     """
 
-    def decorator(callback: Signature) -> Signature:
+    def decorator(callback: F) -> F:
         @functools.wraps(callback)
-        def wrapper(*args: typing.Any, **kwargs: typing.Any) -> Signature:
+        def wrapper(*args: typing.Any, **kwargs: typing.Any) -> F:
             checker = _AttrCheck(
                 callback,
-                requires_modules=requires_modules,
+                requires=requires,
                 target_os=target_os,
                 python_version=python_version,
                 target_arch=target_arch,
@@ -214,19 +207,23 @@ def cfg_attr(
             )
             return checker(*args, **kwargs)
 
-        return typing.cast(Signature, wrapper)
+        return typing.cast(F, wrapper)
 
     return decorator
 
 
 def cfg(
-    target_os: TARGET_OS | None = None,
-    requires_modules: str | collections.Sequence[str] | None = None,
+    target_os: System | None = None,
+    requires: str | None = None,
     python_version: tuple[int, int, int] | None = None,
-    target_arch: TARGET_ARCH | None = None,
-    impl: PY_IMPL | None = None,
-) -> typing.TypeGuard[CfgGuard | None]:
+    target_arch: Arch | None = None,
+    impl: Python | None = None,
+) -> bool:
     """A function that will run the code only if all predicate attributes returns `True`.
+
+    .. warning::
+        The `require_modules` parameter is bugged and scheduled for deprecation and will be removed in a future release.
+        Instead, directly import modules at the top of the file or function.
 
     The difference between this function and `cfg_attr` is that this function will not raise an exception.
     Instead it will return `False` if any of the attributes fails.
@@ -246,8 +243,8 @@ def cfg(
 
     Parameters
     ----------
-    requires_modules : `str | Sequence[str] | None`
-        A string or sequence of the required module names for the object to be ran.
+    requires : `str | None`
+        A required module to run the object.
     target_os : `str | None`
         The targeted operating system thats required for the object to be ran.
     python_version : `tuple[int, int, int] | None`
@@ -267,7 +264,7 @@ def cfg(
     checker = _AttrCheck(
         lambda: None,
         no_raise=True,
-        requires_modules=requires_modules,
+        requires=requires,
         target_os=target_os,
         python_version=python_version,
         target_arch=target_arch,
@@ -277,9 +274,9 @@ def cfg(
 
 
 @typing.final
-class _AttrCheck(typing.Generic[Signature]):
+class _AttrCheck(typing.Generic[F]):
     __slots__ = (
-        "_modules",
+        "_requires",
         "_target_os",
         "_callback",
         "_py_version",
@@ -291,17 +288,17 @@ class _AttrCheck(typing.Generic[Signature]):
 
     def __init__(
         self,
-        callback: Signature,
-        requires_modules: str | collections.Iterable[str] | None = None,
-        target_os: TARGET_OS | None = None,
+        callback: F,
+        requires: str | None = None,
+        target_os: System | None = None,
         python_version: tuple[int, int, int] | None = None,
-        target_arch: TARGET_ARCH | None = None,
-        impl: PY_IMPL | None = None,
+        target_arch: Arch | None = None,
+        impl: Python | None = None,
         *,
         no_raise: bool = False,
     ) -> None:
         self._callback = callback
-        self._modules = requires_modules
+        self._requires = requires
         self._target_os = target_os
         self._py_version = python_version
         self._target_arch = target_arch
@@ -309,9 +306,9 @@ class _AttrCheck(typing.Generic[Signature]):
         self._py_impl = impl
         self._debugger = _Debug(callback, no_raise)
 
-    def __call__(self, *args: typing.Any, **kwds: typing.Any) -> Signature:
+    def __call__(self, *args: typing.Any, **kwds: typing.Any) -> F:
         self._check_once()
-        return typing.cast(Signature, self._callback(*args, **kwds))
+        return typing.cast(F, self._callback(*args, **kwds))
 
     def internal_check(self) -> bool:
         return self._check_once()
@@ -325,7 +322,7 @@ class _AttrCheck(typing.Generic[Signature]):
         if self._py_version is not None:
             results.append(self._check_py_version())
 
-        if self._modules is not None:
+        if self._requires is not None:
             results.append(self._check_modules())
 
         if self._target_arch is not None:
@@ -340,37 +337,21 @@ class _AttrCheck(typing.Generic[Signature]):
 
         return all(results)
 
-    # FIXME: This function impl is currently wack.
+    @macros.deprecated(
+        since="0.0.4", use_instead="Self-Check the module locally", removed_in="0.0.6"
+    )
+    @macros.unstable(reason="The function is buggy.")
     def _check_modules(self) -> bool:
         """__intrinsics__"""
-        required_modules: set[str] = set()
-        found_modules: list[str] = []
+        assert self._requires
 
-        assert self._modules, "Modules cannot be empty."
-
-        # We check if a single module has been passed.
-        if isinstance(self._modules, str):
-            if self._modules:
-                if _check_module(self._modules):
-                    return True
-            # Passed empty str.
-            return False
-
-        for module in self._modules:
-            # Check if the module exists or not.
-            if (mod_spec := importlib.find_spec(module)) is None:
-                # If not we add it to the required modules.
-                required_modules.add(module)
-            else:
-                found_modules.append(mod_spec.name)
-
+        if importlib.find_spec(self._requires) is None:
             if self._no_raise:
                 self._debugger.flag(True)
 
         return (
             self._debugger.exception(ModuleNotFoundError)
-            .message(f"requires modules ({_separate(required_modules)}) to be installed")
-            .and_then(f"But only found: ({_separate(found_modules)})")
+            .message(f"Requires modules ({self._requires}) to be installed")
             .finish()
         )
 
@@ -433,10 +414,10 @@ class _AttrCheck(typing.Generic[Signature]):
         # fmt: on
 
 
-class _Debug(typing.Generic[Signature]):
+class _Debug(typing.Generic[F]):
     def __init__(
         self,
-        callback: Signature,
+        callback: F,
         no_raise: bool,
         message: str | None = None,
         exception: type[BaseException] | None = None,
@@ -459,13 +440,14 @@ class _Debug(typing.Generic[Signature]):
 
         return "object"
 
-    def flag(self, cond: bool) -> Self:
+    def flag(self, cond: bool) -> None:
         self._no_raise = cond
-        return self
 
-    def message(self, message: str) -> _Debug[Signature]:
+    def message(self, message: str) -> _Debug[F]:
         """Set a message to be included in the exception that is getting raised."""
-        fn_name = "" if self._callback.__name__ == "<lambda>" else self._callback.__name__
+        fn_name = (
+            "" if self._callback.__name__ == "<lambda>" else self._callback.__name__
+        )
         self._message = f"{self._obj_type} {fn_name} {message}"
         return self
 
@@ -479,6 +461,6 @@ class _Debug(typing.Generic[Signature]):
         """Finish the result, Either returning a bool or raising an exception."""
         if self._no_raise:
             return False
-        else:
-            assert self._exception is not None
-            raise self._exception(self._message) from None
+
+        assert self._exception is not None
+        raise self._exception(self._message) from None

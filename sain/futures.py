@@ -46,7 +46,6 @@ if typing.TYPE_CHECKING:
 async def spawn(
     *aws: collections.Awaitable[T_co],
     timeout: float | None = None,
-    with_exception: bool = False,
 ) -> collections.Sequence[T_co]:
     """Spawn all given awaitables concurrently.
 
@@ -69,8 +68,6 @@ async def spawn(
         The awaitables to gather.
     timeout : `float | None`
         An optional timeout.
-    with_exceptions : `bool`
-        If `True` then exceptions will be returned. Default to `True`.
 
     Returns
     -------
@@ -81,13 +78,13 @@ async def spawn(
     if not aws:
         raise RuntimeError("No awaitables passed.", aws)
 
-    tasks: list[asyncio.Task[T_co]] = []
+    tasks: collections.MutableSequence[asyncio.Task[T_co]] = []
 
     for future in aws:
-        tasks.append(asyncio.ensure_future(future))  # type: ignore
+        tasks.append(asyncio.ensure_future(future))
+    gatherer = asyncio.gather(*tasks)
     try:
-        gatherer = asyncio.gather(*tasks, return_exceptions=with_exception)
-        return await asyncio.wait_for(gatherer, timeout=timeout)  # type: ignore
+        return await asyncio.wait_for(gatherer, timeout=timeout)
 
     except asyncio.CancelledError:
         raise asyncio.CancelledError("Gathered Futures were cancelled.") from None
@@ -96,6 +93,7 @@ async def spawn(
         for task in tasks:
             if not task.done() and not task.cancelled():
                 task.cancel()
+        gatherer.cancel()
 
 
 # source: hikari-py/aio.py

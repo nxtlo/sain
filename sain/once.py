@@ -32,7 +32,7 @@ from __future__ import annotations
 
 __all__ = ("Once",)
 
-import threading as _threading
+import _thread
 import typing
 
 from . import option as _option
@@ -43,6 +43,7 @@ if typing.TYPE_CHECKING:
 T = typing.TypeVar("T")
 
 
+@typing.final
 class Once(typing.Generic[T]):
     """A synchronization primitive which can be written to only once.
 
@@ -64,11 +65,11 @@ class Once(typing.Generic[T]):
     ```
     """
 
-    __slots__ = ("_callback", "_inner", "_lock", "_blocking")
+    __slots__ = ("_inner", "_lock", "_blocking")
 
     def __init__(self, *, blocking: bool = True) -> None:
         self._blocking = blocking
-        self._lock: _threading.Lock | None = None
+        self._lock: _thread.LockType | None = None
         self._inner: T | None = None
 
     @property
@@ -93,7 +94,7 @@ class Once(typing.Generic[T]):
             If the value is already set. This will get raised.
         """
         if self._inner is not None:
-            raise RuntimeError("Value is already set.")
+            raise ValueError("Value is already set.")
 
         self._inner = origin = self.get_or_init(v)
         self._lock = None
@@ -111,7 +112,7 @@ class Once(typing.Generic[T]):
             return self._inner
 
         if self._lock is None:
-            self._lock = _threading.Lock()
+            self._lock = _thread.allocate_lock()
 
         try:
             self._lock.acquire(blocking=self._blocking)
@@ -120,11 +121,20 @@ class Once(typing.Generic[T]):
         finally:
             self._lock.release()
 
+    def __repr__(self) -> str:
+        return f"Once(value: {self._inner})"
+
     def __str__(self) -> str:
         return str(self._inner)
 
-    def __repr__(self) -> str:
-        return f"Once(value: {self._inner})"
+    def __eq__(self, __value: object) -> bool:
+        if not isinstance(__value, Once):
+            return NotImplemented
+
+        return self._inner == __value._inner
+
+    def __ne__(self, __value: object) -> bool:
+        return not self.__eq__(__value)
 
     def __bool__(self) -> bool:
         return self.is_set
