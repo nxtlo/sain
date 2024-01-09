@@ -7,5 +7,5 @@ pdoc~=14.2.0
 # Format - Type checking.
 ruff~=0.1.8
 isort~=5.13.2
-pyright~=1.1.342
+pyright~=1.1.345
 codespell~=2.2.6
