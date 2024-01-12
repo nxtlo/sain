@@ -36,6 +36,7 @@ __all__ = ("Some", "ValueT")
 import typing
 
 from . import default as _default
+from . import iter
 from . import ref as _ref
 
 ValueT = typing.TypeVar("ValueT")
@@ -55,7 +56,7 @@ if typing.TYPE_CHECKING:
 class Some(typing.Generic[ValueT], _default.Default[None]):
     """The `Option` type. An object that might be `T` or `None`.
 
-    It is similar to `typing.Optional[T]`, But has proper methods to handle the contained value.
+    It is a drop-in replacement for `typing.Optional[T]`, But has proper methods to handle the contained value.
 
     Example
     -------
@@ -88,6 +89,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
     def default() -> None:
         """Default value for `Some`. Returns `None`."""
         return None
+
+    # *- Reading the value -*
 
     @property
     def read(self) -> ValueT | None:
@@ -181,6 +184,27 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # SAFETY: The caller guarantees that the value is not None.
         return self._value  # type: ignore
 
+    def expect(self, message: str, /) -> ValueT:
+        """Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.
+
+        Example
+        -------
+        ```py
+        value = Some("Hello")
+
+        print(value.expect("Value is None"))
+        # "Hello"
+
+        value: Some[str] = Some(None)
+        print(value.expect("Value is None"))
+        # RuntimeError("Value is None")
+        ```
+        """
+        if self._value is None:
+            raise RuntimeError(message)
+
+        return self._value
+
     # *- Functional operations -*
     def map(self, f: Fn[ValueT, T], /) -> Some[T]:
         """Map the inner value to a new value. Returning `Some[None]` if `ValueT` is `None`.
@@ -273,6 +297,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return Some(None)
 
+    # *- Inner operations *-
+
     def take(self) -> None:
         """Take the value from the `Some` object setting it to `None`.
 
@@ -285,6 +311,9 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # None
         ```
         """
+        if self._value is None:
+            return
+
         self._value = None
 
     def replace(self, value: ValueT) -> Some[ValueT]:
@@ -302,27 +331,6 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         """
         self._value = value
         return Some(self._value)
-
-    def expect(self, message: str, /) -> ValueT:
-        """Returns `ValueT` if the contained value is not `None` otherwise raises a `RuntimeError`.
-
-        Example
-        -------
-        ```py
-        value = Some("Hello")
-
-        print(value.expect("Value is None"))
-        # "Hello"
-
-        value: Some[str] = Some(None)
-        print(value.expect("Value is None"))
-        # RuntimeError("Value is None")
-        ```
-        """
-        if self._value is None:
-            raise RuntimeError(message)
-
-        return self._value
 
     def and_ok(self, optb: Some[T]) -> Some[T]:
         """Returns `Some[None]` if the contained value is `None`,
@@ -368,6 +376,27 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
             return Some(None)
 
         return f(self._value)
+
+    # *- Builder methods *-
+
+    def iter(self) -> iter.Iter[ValueT]:
+        """Returns an iterator over the contained value.
+
+        Example
+        -------
+        ```py
+        from sain import Some
+        value = Some("gg")
+        value.next() == Some("gg")
+
+        value: Option[int] = Some(None)
+        value.next().is_none()
+        ```
+        """
+        if self._value is None:
+            return iter.iter(())
+
+        return iter.once(self._value)
 
     def as_ref(self) -> Some[_ref.AsRef[ValueT]]:
         """Returns immutable `Some[AsRef[ValueT]]` if the contained value is not `None`,
@@ -429,6 +458,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return Some(None)
 
+    # *- Boolean checks *-
+
     def is_some(self) -> bool:
         """Returns `True` if the contained value is not `None`, otherwise returns `False`.
 
@@ -481,16 +512,18 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         """
         return self._value is None
 
-    def __str__(self) -> str:
-        return f"{self._value!r}"
-
     def __repr__(self) -> str:
         return f"Some({self._value!r})"
+
+    __str__ = __repr__
+
+    def __invert__(self) -> ValueT:
+        return self.unwrap()
 
     def __bool__(self) -> bool:
         return self.is_some()
 
-    def __eq__(self, other: typing.Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Some):
             return NotImplemented
 
@@ -501,3 +534,17 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
     def __hash__(self) -> int:
         return hash(self._value)
+
+
+NOTHING: typing.Final[Some[None]] = Some(None)
+"""A constant that is always `Option<None>`.
+
+Example
+-------
+```py
+from sain import NOTHING, Some
+
+place_holder = NOTHING
+assert NOTHING == Some(None) # True
+```
+"""

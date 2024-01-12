@@ -11,6 +11,7 @@ import sain
 # Is is optional to type hint values with `Option` and Some can be used instead.
 if typing.TYPE_CHECKING:
     from sain import Option
+    from collections.abc import Awaitable
 
 
 @dataclasses.dataclass
@@ -26,7 +27,7 @@ class Loop(sain.Default[asyncio.AbstractEventLoop]):
         """The default event loop."""
         return sain.futures.loop()
 
-    def run(self, func: typing.Coroutine[None, None, None]) -> None:
+    def run(self, func: Awaitable[None]) -> None:
         # Get the event loop either from the provided value or from the default.
         self.loop.unwrap_or(self.default()).run_until_complete(func)
 

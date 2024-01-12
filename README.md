@@ -58,9 +58,14 @@ class User:
 
 Implements the `Option` type and The `Some` variant. An object that may be `None` or `T`.
 
+This frees you from unexpected runtime exceptions and converts them to as values.
+
+Keep in mind that there're unrecoverable errors such as when calling `.unwrap`, Which you need to personally handle it.
+
 ```py
-import sain
 import os
+
+from sain import Some
 
 if typing.TYPE_CHECKING:
     # Available only during type checking.
@@ -68,10 +73,13 @@ if typing.TYPE_CHECKING:
 
 # Replace typing.Optional[str]
 def get_token(key: str) -> Option[str]:
-    return sain.Some(os.environ.get(key))
+    return Some(os.environ.get(key))
 
 # Raises RuntimeError("No token found.") if `os.environ.get` return None.
-token = get_token().expect("No token found.")
+token = get_token("SOME_KEY").expect("No token found.")
+
+# This operator will internally call `token.unwrap()`.
+print(~get_token('SOME_KEY'))
 
 # The classic way to handle this in Python would be.
 if token is None:
@@ -80,19 +88,21 @@ else:
     ...
 
 # Replace this with inlined `unwrap_or`. Returning DEFAULT_TOKEN if it was None.
-env_or_default = get_token().unwrap_or("DEFAULT_TOKEN")
+env_or_default = get_token("SOME_KEY").unwrap_or("DEFAULT_TOKEN")
 
 # Type hint is fine.
 as_none: Option[str] = sain.Some(None)
-as_none.unwrap_or(123)  # Type Error: Must be type `str`!
+
+# If you're 100% sure that the value will never be None during runtime.
+as_none.unwrap() or as_none.unwrap_unchecked()
 assert as_none.is_none() # True
 ```
 
-### Other Features
+### Other Types
 
 #### Default
 
-An interface that types can implement which have a default value.
+An interface that objects can implement which have a default value.
 
 ```py
 import sain
@@ -122,26 +132,26 @@ def run():
     # Otherwise initialize it.
     session = DEFAULT_SESSION.get_or_init(Session())
     session.post("...")
-    # You can optionally clear the session after.
-    session.clear()
+    assert session.get().is_some()  # .get return Option<Session>
 ```
 
 #### Iter
 
-Turns normal iterables into `Iter` type.
+Turns normal iterables into lazy `Iter` type.
+
+It holds all elements in memory ready to get flushed.
 
 ```py
-import sain.iter as iter
+import sain.iter import Iter, empty
 
-f = iter.Iter([1,2,3])
-# or iter.into_iter([1,2,3])
+f = Iter([1,2,3]) # or iter.iter([1,2,3])
 assert 1 in f
 
-for item in f.map(lambda i: str(i)):
+for item in f.map(str):
     print(item)
 
 # An iterator that yields nothing.
-it = iter.empty()
+it = empty()
 assert len(it) == 0
 ```
 

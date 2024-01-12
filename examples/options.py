@@ -9,6 +9,7 @@ import sain
 
 if typing.TYPE_CHECKING:
     from sain import Option
+    from typing_extensions import Self
 
 
 @dataclasses.dataclass
@@ -20,19 +21,19 @@ class TokenGetter:
     # ! Warning: the `required_modules` attribute is currently buggy
     # ! and will warn you if you run that code.
     @classmethod
-    @sain.cfg_attr(requires_modules="python-dotenv")
-    def from_env(cls, key: str, /) -> TokenGetter:
+    @sain.cfg_attr(requires="python-dotenv")
+    def from_dotenv(cls, key: str, /) -> Self:
         """Gets the token from the .env file. This requires the module `python-dotenv`."""
-        import dotenv
+        import dotenv  # pyright: ignore[reportMissingImports]
 
         return cls(sain.Some(dotenv.get_key(".env", key)))
 
     @classmethod
-    def from_raw_env(cls, key: str, /) -> TokenGetter:
-        """Gets the token from the raw OS enviorment."""
+    def from_raw_env(cls, key: str, /) -> Self:
+        """Gets the token from the raw OS environment."""
         import os
 
-        return cls(sain.Some(os.getenv(key)))
+        return cls(sain.Some(os.environ.get(key)))
 
 
 # CPython implementation only function.
@@ -40,7 +41,7 @@ class TokenGetter:
 def main() -> None:
     if sain.cfg(target_os="windows"):
         print("Running on Windows...")
-        getter = TokenGetter.from_env("API_TOKEN")
+        getter = TokenGetter.from_dotenv("API_TOKEN")
     else:
         print("Running on Unix...")
         getter = TokenGetter.from_raw_env("API_TOKEN")
@@ -53,15 +54,17 @@ def main() -> None:
     # NOTE: This raises a runtime error.
     try:
         print(getter.token.unwrap())
+        # Or you can, This does exactly what `unwrap` does.
+        print(~getter.token)
     except RuntimeError:
         pass
 
     # If you're not sure, you can safely use a default value.
-    print(getter.token.unwrap_or("zzxxcc"))  # zzxxcc
+    print(getter.token.unwrap_or("DEFAULT_TOKEN"))  # DEFAULT_TOKEN
 
     # Map the token to a function making it upper case.
-    to_map = TokenGetter(sain.Some("bAah"))
-    print(to_map.token.map(lambda x: x.upper()))  # Some("BAAH")
+    to_map = TokenGetter(sain.Some("blah"))
+    print(to_map.token.map(lambda x: x.upper()))  # Some("BLAH")
 
 
 if __name__ == "__main__":

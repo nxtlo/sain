@@ -8,6 +8,7 @@ from .macros import deprecated as deprecated
 from .macros import todo as todo
 from .macros import unimplemented as unimplemented
 from .once import Once as Once
+from .option import NOTHING as NOTHING
 from .option import Option as Option
 from .option import Some as Some
 from .ref import AsMut as AsMut

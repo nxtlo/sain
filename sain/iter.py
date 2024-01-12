@@ -105,7 +105,7 @@ class Iter(
         -------
         ```py
         it = Iter.default()
-        assert not it.next().is_some()
+        assert t.next().is_none()
         ```
         """
         return empty()
@@ -115,11 +115,11 @@ class Iter(
         ...
 
     @typing.overload
-    def collect(self, *, casting: _B) -> collections.Sequence[_B]:
+    def collect(self, *, cast: _B) -> collections.Sequence[_B]:
         ...
 
     def collect(
-        self, *, casting: _B | None = None
+        self, *, cast: _B | None = None
     ) -> collections.Sequence[Item] | collections.Sequence[_B]:
         """Collects all items in the iterator into a list.
 
@@ -129,25 +129,28 @@ class Iter(
         iterator = Iter([1, 2, 3])
         iterator.collect()
         # [1, 2, 3]
-        iterator.collect(casting=str) # Map each element and collect it.
+        iterator.collect(cast=str) # Map each element and collect it.
         # ['1', '2', '3']
         ```
 
         Parameters
         ----------
-        casting: `T | None`
+        cast: `T | None`
             An optional type to cast the items into.
-            If not provided the items will be returned as a normal list.
+            If not provided the items will be returned as it's original type.
         """
-        if casting is not None:
+        if cast is not None:
             return typing.cast(
-                collections.Sequence[_B], tuple(map(casting, self._items))
+                "collections.Sequence[_B]", tuple(map(cast, self._items))
             )
 
         return tuple(self._items)
 
     def copied(self) -> Iter[Item]:
         """Creates an iterator which `*deeply*` copies all of its elements.
+
+        .. note::
+            If you only need a copy of the item reference, Use `by_ref` instead.
 
         Example
         -------
@@ -188,10 +191,9 @@ class Iter(
         ```
         """
         try:
-            i = self.__next__()
+            return self.__next__()
         except StopIteration:
-            i = None
-        return Some(i)
+            return Some(None)
 
     def map(
         self, predicate: collections.Callable[[Item], OtherItem]
@@ -214,7 +216,7 @@ class Iter(
         predicate: `collections.Callable[[Item], Item]`
             The function to map each item in the iterator to its predicated value.
         """
-        return Iter(predicate(item) for item in self)
+        return Iter(predicate(item) for item in self._items)
 
     def take(self, n: int) -> Iter[Item]:
         """Take the first number of items until the number of items are yielded or
@@ -302,7 +304,7 @@ class Iter(
         ```
         """
         items: collections.MutableSequence[Item] = []
-        for item in self:
+        for item in self._items:
             if predicate(item):
                 items.append(item)
 
@@ -555,7 +557,7 @@ class Iter(
         func: `collections.Callable[[Item], typing.Any]`
             The function to call on each item in the iterator.
         """
-        for item in self:
+        for item in self._items:
             func(item)
 
     async def async_for_each(
@@ -618,18 +620,16 @@ class Iter(
             self._ok()
 
     # This is a never.
-    def __setitem__(self) -> typing.NoReturn:
-        raise TypeError(
+    def __setitem__(self, _: None, __: None) -> typing.NoReturn:
+        raise NotImplementedError(
             f"{type(self).__name__} doesn't support item assignment."
         ) from None
 
     def __contains__(self, item: Item) -> bool:
         return item in self._items
 
-    # TODO: Find a way to log the elements inside the iterator without
-    # consuming it.
     def __repr__(self) -> str:
-        return f"<Iter(ptr: {hex(id(self._items))})>"
+        return f"<Iter: {type(self._items).__name__}>"
 
     def __copy__(self) -> Iter[Item]:
         return self.by_ref()
@@ -643,13 +643,14 @@ class Iter(
     def __iter__(self) -> Iter[Item]:
         return self
 
-    def __next__(self) -> Item:
+    def __next__(self) -> Option[Item]:
         try:
             item = next(self._items)
         except StopIteration:
+            item = None
             self._ok()
 
-        return item
+        return Some(item)
 
 
 def empty() -> Iter[ty_ext.Never]:

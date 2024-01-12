@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "sain"
-version = "0.0.4"
+version = "0.0.5"
 description = "Standard Rust core types implementations for Python."
 authors = ["nxtlo <dhmony-99@hotmail.com>"]
 license = "BSD-3-Clause license"
-keywords = ["Rust", "config"]
+keywords = ["Rust", "config", "typing", "utilities"]
 readme = "README.md"
 repository = "https://github.com/nxtlo/sain"
 packages = [{ include = "sain" }, { include = "sain/**/*.py" }]

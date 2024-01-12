@@ -12,13 +12,13 @@ class Person:
 
 
 def create_people() -> sain.Iter[Person]:
-    # Turn list into Iter[Person]
-    return sain.into_iter(
-        [
+    # Create an iterator object that yields people.
+    return sain.Iter(
+        (
             Person("Alice", 21),
             Person("Bob", 25),
             Person("Charlie", 30),
-        ]
+        )
     )
 
 
@@ -29,8 +29,9 @@ def normal_iter() -> None:
     for person in people:
         print(person.name, person.age)
 
-    # Elements go out of scope since they're generated lazily.
-    print(people)  # <Iter()>
+    # Elements are free'd after iterating over them
+    # since they're generated lazily.
+    print(people.first().is_none())  # True
 
 
 def filtered() -> None:
@@ -52,8 +53,8 @@ def limited() -> None:
 def discarded() -> None:
     people = create_people()
 
-    # Discard people older than 25
-    for person in people.discard(lambda p: p.age < 25):
+    # Get only people younger than 25
+    for person in people.filter(lambda p: p.age < 25):
         print("-25 Only", person)
 
 

@@ -64,6 +64,7 @@ __all__ = (
     "AsMut",
     # option.py
     "Some",
+    "NOTHING",
     # iter.py
     "Iter",
     "iter",
@@ -87,11 +88,12 @@ from .macros import deprecated
 from .macros import todo
 from .macros import unimplemented
 from .once import Once
+from .option import NOTHING
 from .option import Some
 from .ref import AsMut
 from .ref import AsRef
 
-__version__: str = "0.0.4"
+__version__: str = "0.0.5"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
 __about__: str = (
