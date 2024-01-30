@@ -57,7 +57,7 @@ match response:
     case Ok(resp):
         print(resp.resource)
     case Err(why):
-        raise Exception(why)
+        print("An error has occurred", why.reason, why.url)
 ```
 
 ## Equivalent types
