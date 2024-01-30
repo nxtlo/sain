@@ -1,4 +1,10 @@
-"""A simple example of using the `cfg` and `Option` APIs."""
+"""
+`Option<T>` and `Some<T>`
+
+Implements the `Option` type and The `Some` variant, A value that's either `T` or `None`,
+this frees you from unexpected runtime exceptions and converts them to as values,
+keep in mind that there're unrecoverable errors such as when calling `.unwrap`, Which you need to personally handle it.
+"""
 
 from __future__ import annotations
 
@@ -64,7 +70,7 @@ def main() -> None:
 
     # Map the token to a function making it upper case.
     to_map = TokenGetter(sain.Some("blah"))
-    print(to_map.token.map(lambda x: x.upper()))  # Some("BLAH")
+    print(to_map.token.map(str.upper))  # Some("BLAH")
 
 
 if __name__ == "__main__":

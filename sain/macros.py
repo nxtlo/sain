@@ -32,17 +32,28 @@
 
 from __future__ import annotations
 
-__all__ = ("deprecated", "unimplemented", "todo", "unstable")
+__all__ = ("deprecated", "unimplemented", "todo", "unstable", "doc")
 
 import functools
 import inspect
+import logging
 import typing
 import warnings
+
+import urllib3
 
 if typing.TYPE_CHECKING:
     import collections.abc as collections
 
+    import _typeshed
+
+    P = typing.ParamSpec("P")
     T = typing.TypeVar("T", bound=collections.Callable[..., typing.Any])
+    U = typing.TypeVar("U")
+    Fn = collections.Callable[..., U]
+    Read = _typeshed.FileDescriptorOrPath
+
+_LOGGER = logging.getLogger("sain.macros")
 
 
 @typing.final
@@ -221,5 +232,54 @@ def unimplemented(
             return obj(*args, **kwargs)
 
         return typing.cast("T", wrapper)
+
+    return decorator
+
+
+def doc(path: Read) -> Fn[Fn[Fn[T]]]:
+    """Set `path` to be the object's documentation.
+
+    Example
+    -------
+    ```py
+    from sain import doc
+    from pathlib import Path
+
+    @doc(Path("../README.md"))
+    class User:
+
+        # Raw HTTP text documentation.
+        @doc("https://raw.githubusercontent.com/nxtlo/sain/master/README.md")
+        def insane(x: float) -> float:
+            ...
+    ```
+
+    path: `type[int] | type[str] | type[bytes] | type[PathLike[str]] | type[PathLike[bytes]]`
+        The path to read the content from.
+    """
+
+    def decorator(f: Fn[T]) -> Fn[T]:
+        if isinstance(path, str) and path.startswith("https://"):
+            try:
+                response = urllib3.request("GET", path)
+                f.__doc__ = response.data.decode("UTF-8")
+
+            except urllib3.exceptions.HTTPError as e:
+                _LOGGER.exception(
+                    "An error occurred while trying to fetch the docs form %s, cause %s",
+                    path,
+                    e,
+                )
+                pass
+
+        else:
+            with open(path, "r") as file:
+                f.__doc__ = file.read()
+
+        @functools.wraps(f)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+            return f(*args, **kwargs)
+
+        return wrapper
 
     return decorator

@@ -72,6 +72,7 @@ __all__ = (
     "todo",
     "deprecated",
     "unimplemented",
+    "doc",
     # futures.py
     "futures",
     # once.py
@@ -85,6 +86,7 @@ from .cfg import cfg_attr
 from .default import Default
 from .iter import Iter
 from .macros import deprecated
+from .macros import doc
 from .macros import todo
 from .macros import unimplemented
 from .once import Once

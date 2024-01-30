@@ -191,9 +191,11 @@ class Iter(
         ```
         """
         try:
-            return self.__next__()
+            item = self.__next__()
         except StopIteration:
             return Some(None)
+
+        return Some(item)
 
     def map(
         self, predicate: collections.Callable[[Item], OtherItem]
@@ -643,14 +645,13 @@ class Iter(
     def __iter__(self) -> Iter[Item]:
         return self
 
-    def __next__(self) -> Option[Item]:
+    def __next__(self) -> Item:
         try:
             item = next(self._items)
         except StopIteration:
-            item = None
             self._ok()
 
-        return Some(item)
+        return item
 
 
 def empty() -> Iter[ty_ext.Never]:

@@ -53,15 +53,14 @@ class Once(typing.Generic[T]):
     from sain.once import Once
     from uuid import uuid4, UUID
 
-    # Not initialized yet
-    GLOBAL_UUID: Once[UUID] = Once()
+    class Application:
+        # Not initialized yet
+        uuid: Once[UUID] = Once()
 
     def run_application():
         # This will init the uuid if its not set or return it if it already is.
-        uuid = GLOBAL_UUID.get_or_init(uuid4())
-        app = Application(token=uuid)
-        # Attempting to write to the initialized uuid will raise runtime error.
-        GLOBAL_UUID.set(uuid4())  # Value is already set. Can't reset it.
+        app = Application()
+        app.uuid.set(uuid4())
     ```
     """
 

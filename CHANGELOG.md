@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+- `doc` decorator.
+
+### Changed
+- Iterating over `Iter` object with `for` doesn't return `Option[T]` anymore.
+
 ## 0.0.5
 
 ### Added
@@ -16,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `.copied`, `by_ref`, `.async_for_each` methods to the `Iter`.
 - `empty` function in `sain.iter` module.
 - `once` function in `sain.iter` module.
-- `Some.__iter__` and `Some.iter` methods to the `Some` object.
+- `Some.iter` method to the `Some` object.
 - `option.NOTHING` default constant.
 
 ### Removed

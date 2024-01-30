@@ -28,3 +28,32 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """Error handling with the `Result` type."""
+
+from __future__ import annotations
+
+__all__ = ("Ok", "Err", "Result")
+
+import typing
+
+T = typing.TypeVar("T")
+E = typing.TypeVar("E")
+
+if typing.TYPE_CHECKING:
+    from typing_extensions import TypeAlias
+
+
+class Ok(typing.Generic[T]):
+    __slots__ = ("_value",)
+
+    def __init__(self, value: T, /) -> None:
+        self._value = value
+
+
+class Err(typing.Generic[E]):
+    __slots__ = ("_value",)
+
+    def __init__(self, value: E, /) -> None:
+        self._value = value
+
+
+Result: TypeAlias = Ok[T] | Err[E]

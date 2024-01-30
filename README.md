@@ -1,6 +1,12 @@
 # sain
 
-Sain is a dependency-free library that implements some of the Rust core standard types.
+a dependency-free library that implements some of the Rust core standard types.
+
+This library provides a type-safe mechanism for writing Python code, such as the `Result` and `Option` types,
+which provides zero exception handling and errors as values.
+
+This doesn't change the fact that you're still using `Python`, the core point is to provide more idiomatic Rust code
+into the Python world with Zero-cost.
 
 ## Install
 
@@ -14,146 +20,64 @@ pip install sain
 
 ## Overview
 
-More examples in [examples](https://github.com/nxtlo/sain/tree/master/examples)
+Advanced examples in [examples](https://github.com/nxtlo/sain/tree/master/examples)
 
-### `cfg`, `cfg_attr` and Marking objects
+### Escape the `try/except` mistake
 
-Conditionally include code at runtime and mark objects.
-
-```py
-from sain import cfg, cfg_attr
-
-# Calling this on a non-unix system will raise a RuntimeError
-# and the function will not run.
-@cfg_attr(target_os="unix")
-def run_when_unix() -> None:
-    import uvloop
-    uvloop.install()
-
-if cfg(target_arch="arm64"):
-    run_when_unix()
-
-# If `cfg` returns True, Function will be in scope.
-if cfg(requires_modules="aiohttp"):
-    import aiohttp
-    def create_app() -> aiohttp.web.Application:
-        # Calling this will raise a runtime error. its marked as `TODO`.
-        sain.todo("Finish me!")
-
-# Assuming aiohttp is not installed.
-# Calling the function will raise `NameError` since its not in scope.
-app = create_app()
-
-# Those will only warn at runtime and will not raise anything. They're just markers.
-@sain.unimplemented(message="User is not fully implemented.")
-class User:
-
-    @property
-    @sain.deprecated(since = "1.0.4", use_instead="use `get_id` instead.")
-    def id(self) -> int:
-        ...
-```
-
-### `Option<T>` and `Some<T>`
-
-Implements the `Option` type and The `Some` variant. An object that may be `None` or `T`.
-
-This frees you from unexpected runtime exceptions and converts them to as values.
-
-Keep in mind that there're unrecoverable errors such as when calling `.unwrap`, Which you need to personally handle it.
+Exceptions sucks, `Result` is simply a better way to avoid runtime exceptions.
 
 ```py
-import os
+from sain import Ok, Err, Result
+from dataclasses import dataclass
 
-from sain import Some
+@dataclass
+class Resource[T]:
+    object: T
 
-if typing.TYPE_CHECKING:
-    # Available only during type checking.
-    from sain import Option
 
-# Replace typing.Optional[str]
-def get_token(key: str) -> Option[str]:
-    return Some(os.environ.get(key))
+@dataclass
+class Error:
+    reason: str
+    kind: str # Could be an enum.
+    url: str
 
-# Raises RuntimeError("No token found.") if `os.environ.get` return None.
-token = get_token("SOME_KEY").expect("No token found.")
+async def fetch(url: str) -> Result[Resource[bytes], Error]:
+    async with client.get(url) as response:
+        if response.ok:
+            # Ok result.
+            return Ok(response.as_bytes())
 
-# This operator will internally call `token.unwrap()`.
-print(~get_token('SOME_KEY'))
+    # An err occurred. we provide an error with some reasonable values.
+    return Err(Error(reason="some error reason.", kind="InternalError", url=url))
 
-# The classic way to handle this in Python would be.
-if token is None:
-    token = "..."
-else:
-    ...
-
-# Replace this with inlined `unwrap_or`. Returning DEFAULT_TOKEN if it was None.
-env_or_default = get_token("SOME_KEY").unwrap_or("DEFAULT_TOKEN")
-
-# Type hint is fine.
-as_none: Option[str] = sain.Some(None)
-
-# If you're 100% sure that the value will never be None during runtime.
-as_none.unwrap() or as_none.unwrap_unchecked()
-assert as_none.is_none() # True
+# no try/except.
+response = await fetch("some_url.com")
+# You can use `isinstance`, but match basically has a nicer syntax.
+match response:
+    case Ok(resp):
+        print(resp.resource)
+    case Err(why):
+        raise Exception(why)
 ```
 
-### Other Types
+## Equivalent types
 
-#### Default
+- `Option<T>` -> `Option[T]` | `Some(T)`
+- `Result<T, E>` -> `Result[T, E]`. _WIP_
+- `Default<T>` -> `Default[T]`
+- `AsRef<T>` -> `AsRef[T]`.
+- `AsMut<T>` -> `AsMut[T]`.
+- `Iterator<Item>` -> `Iter[Item]`
+- `OnceLock<T>` -> `Once[T]`
 
-An interface that objects can implement which have a default value.
+## Equivalent functions / macros
 
-```py
-import sain
-import requests
-
-class Session(sain.Default[requests.Session]):
-    # One staticmethod must be implemented and must return the same type.
-    @staticmethod
-    def default() -> requests.Session:
-        return requests.Session()
-
-DEFAULT_SESSION = Session.default()
-```
-
-#### Once, A value that can be initialized once
-
-```py
-from sain import Once
-from requests import Session
-
-# Not initialized yet.
-DEFAULT_SESSION: Once[Session] = Once()
-
-# Other file.
-def run():
-    # Get the session if it was initialized from other thread.
-    # Otherwise initialize it.
-    session = DEFAULT_SESSION.get_or_init(Session())
-    session.post("...")
-    assert session.get().is_some()  # .get return Option<Session>
-```
-
-#### Iter
-
-Turns normal iterables into lazy `Iter` type.
-
-It holds all elements in memory ready to get flushed.
-
-```py
-import sain.iter import Iter, empty
-
-f = Iter([1,2,3]) # or iter.iter([1,2,3])
-assert 1 in f
-
-for item in f.map(str):
-    print(item)
-
-# An iterator that yields nothing.
-it = empty()
-assert len(it) == 0
-```
+- `cfg!()` -> `sain.cfg`.
+- `todo!()` -> `sain.todo`. This is not a decorator.
+- `deprecated!()` -> `sain.deprecated`.
+- `unimplemented!()` -> `sain.unimplemented`.
+- `#[cfg_attr]` -> `sain.cfg_attr`.
+- `#[doc(...)]` -> `sain.doc(...)`.
 
 ### Notes
 

@@ -5,6 +5,7 @@ from .cfg import cfg_attr as cfg_attr
 from .default import Default as Default
 from .iter import Iter as Iter
 from .macros import deprecated as deprecated
+from .macros import doc as doc
 from .macros import todo as todo
 from .macros import unimplemented as unimplemented
 from .once import Once as Once

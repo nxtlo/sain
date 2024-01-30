@@ -38,8 +38,11 @@ def filtered() -> None:
     people = create_people()
 
     # Filter by age and enumerate.
+    table: dict[int, Person] = {}
     for index, person in people.filter(lambda p: p.age >= 25).enumerate():
-        print("+25", index, person.name, person.age)
+        table[index] = person
+
+    print(table)
 
 
 def limited() -> None:
@@ -50,19 +53,10 @@ def limited() -> None:
         print("Limited to the first 2", name)
 
 
-def discarded() -> None:
-    people = create_people()
-
-    # Get only people younger than 25
-    for person in people.filter(lambda p: p.age < 25):
-        print("-25 Only", person)
-
-
 def main() -> None:
     normal_iter()
     filtered()
     limited()
-    discarded()
 
 
 if __name__ == "__main__":
