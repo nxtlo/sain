@@ -40,7 +40,9 @@ import logging
 import typing
 import warnings
 
-import urllib3
+import urllib.request
+import http.client
+import urllib.error
 
 if typing.TYPE_CHECKING:
     import collections.abc as collections
@@ -261,10 +263,10 @@ def doc(path: Read) -> Fn[Fn[Fn[T]]]:
     def decorator(f: Fn[T]) -> Fn[T]:
         if isinstance(path, str) and path.startswith("https://"):
             try:
-                response = urllib3.request("GET", path)
-                f.__doc__ = response.data.decode("UTF-8")
+                response: http.client.HTTPResponse = urllib.request.urlopen(path)
+                f.__doc__ = response.read().decode("UTF-8")
 
-            except urllib3.exceptions.HTTPError as e:
+            except urllib.error.HTTPError as e:
                 _LOGGER.exception(
                     "An error occurred while trying to fetch the docs form %s, cause %s",
                     path,
