@@ -76,6 +76,8 @@ match response:
 - `todo!()` -> `sain.todo`. This is not a decorator.
 - `deprecated!()` -> `sain.deprecated`.
 - `unimplemented!()` -> `sain.unimplemented`.
+- `std::iter::once()` -> `sain.iter.once`.
+- `std::iter::empty()` -> `sain.iter.empty`.
 - `#[cfg_attr]` -> `sain.cfg_attr`.
 - `#[doc(...)]` -> `sain.doc(...)`.
 
