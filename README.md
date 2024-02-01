@@ -55,7 +55,7 @@ response = await fetch("some_url.com")
 # You can use `isinstance`, but match basically has a nicer syntax.
 match response:
     case Ok(resp):
-        print(resp.resource)
+        print(resp.object.decode('utf-8'))
     case Err(why):
         print("An error has occurred", why.reason, why.url)
 ```
