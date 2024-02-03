@@ -55,9 +55,9 @@ response = await fetch("some_url.com")
 # You can use `isinstance`, but match basically has a nicer syntax.
 match response:
     case Ok(resp):
-        print(resp.resource)
+        print(resp.object.decode('utf-8'))
     case Err(why):
-        raise Exception(why)
+        print("An error has occurred", why.reason, why.url)
 ```
 
 ## Equivalent types
@@ -76,6 +76,8 @@ match response:
 - `todo!()` -> `sain.todo`. This is not a decorator.
 - `deprecated!()` -> `sain.deprecated`.
 - `unimplemented!()` -> `sain.unimplemented`.
+- `std::iter::once()` -> `sain.iter.once`.
+- `std::iter::empty()` -> `sain.iter.empty`.
 - `#[cfg_attr]` -> `sain.cfg_attr`.
 - `#[doc(...)]` -> `sain.doc(...)`.
 
