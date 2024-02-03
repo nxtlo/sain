@@ -527,7 +527,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         if not isinstance(other, Some):
             return NotImplemented
 
-        return self._value == other.read
+        return self._value == other.read  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
 
     def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)

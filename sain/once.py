@@ -130,7 +130,7 @@ class Once(typing.Generic[T]):
         if not isinstance(__value, Once):
             return NotImplemented
 
-        return self._inner == __value._inner
+        return self._inner == __value._inner  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
 
     def __ne__(self, __value: object) -> bool:
         return not self.__eq__(__value)

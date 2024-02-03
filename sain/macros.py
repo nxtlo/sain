@@ -35,14 +35,13 @@ from __future__ import annotations
 __all__ = ("deprecated", "unimplemented", "todo", "unstable", "doc")
 
 import functools
+import http.client
 import inspect
 import logging
 import typing
-import warnings
-
-import urllib.request
-import http.client
 import urllib.error
+import urllib.request
+import warnings
 
 if typing.TYPE_CHECKING:
     import collections.abc as collections
