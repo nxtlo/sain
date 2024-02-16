@@ -31,13 +31,29 @@
 
 from __future__ import annotations
 
-__all__ = ("AsRef", "AsMut")
+__all__ = ("AsRef", "AsMut", "ref", "ref_mut")
 
 import copy
 import dataclasses
 import typing
 
 _T_co = typing.TypeVar("_T_co", covariant=True)
+
+
+def ref(value: _T_co) -> AsRef[_T_co]:
+    """Construct an `AsRef` from a value.
+
+    Equivalent to `x = sain.AsRef(value)`
+    """
+    return AsRef(value)
+
+
+def ref_mut(value: _T_co) -> AsMut[_T_co]:
+    """Construct an `AsMut` from a value.
+
+    Equivalent to `x = sain.AsMut(value)`
+    """
+    return AsMut(value)
 
 
 @typing.final
@@ -48,27 +64,29 @@ class AsRef(typing.Generic[_T_co]):
     Example
     -------
     ```py
-    from sain import AsRef
     from dataclasses import dataclass
+    from sain import ref
 
     @dataclass
     class User:
         id: int
         name: str
 
-    cache: dict[int, AsRef[User]] = {}
+    same_user = User(0, "sukuna")
+    # Both keys point to the same user object.
+    cache = {
+        0: ref.ref(same_user),
+        1: ref.ref(same_user)
+    }
 
-    # Point the user ID to multiple references for this user.
-    # This is useful when you want to store the object multiple times in the map.
-    user_once = User(0, "some_name")
-    cache[user_once.id] = AsRef(user_once)
+    cache[0].object.id = 1
+    assert cache[1].object.id == 1  # True
 
-    ref = cache[user_once.id]
-    ref.object.id = 1
-
-    # Clone the referenced object.
-    cloned = ref.copy()
-    cloned.id != 1
+    # Copying the object no longer points to it.
+    # Unless the object is a collection.
+    copy = cache[0].copy()
+    copy.id = 2
+    assert copy.id != cache[0].object.id  # True
     ```
     """
 
@@ -78,7 +96,12 @@ class AsRef(typing.Generic[_T_co]):
     """The object that is being referenced."""
 
     def copy(self) -> _T_co:
-        """Copy of the referenced object."""
+        """Copy the referenced object.
+
+        .. note::
+            If the referenced object is a collection or contains a collection,
+            Then this will copy its reference.
+        """
         return copy.copy(self.object)
 
 
@@ -93,5 +116,10 @@ class AsMut(typing.Generic[_T_co]):
     """The object that is being referenced."""
 
     def copy(self) -> _T_co:
-        """Copy of the referenced object."""
+        """Copy the referenced object.
+
+        .. note::
+            If the referenced object is a collection or contains a collection,
+            Then this will copy its reference.
+        """
         return copy.copy(self.object)

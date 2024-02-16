@@ -49,13 +49,15 @@ def ready_lines(path: str) -> Result[list[str], FileError]:
             if not lines:
                 # File is readable but doesn't contain any lines.
                 return Err(FileError.EMPTY)
+
             # File is not readable.
             return Err(FileError.READ)
+
         # Success.
         return Ok(file.readlines())
 ```
 
-simple pattern matching in `Result` is a straightforward way to handle the returned value.
+simple pattern matching in `Result` is a straight-forward way to handle the returned value.
 
 ```py
 match read_lines('quotes.txt'):
@@ -77,25 +79,25 @@ match read_lines('quotes.txt'):
 In addition to working with pattern matching, `Result` provides a
 wide variety of different methods.
 
-### Boolean checkers.
-* `is_ok`: The contained value is derived from `Ok[T]`
-* `is_err`: The contained value is derived from `Err[E]`
+```py
+# This will either return the `Ok` value or default if it was `Err
+# which's equivalent to `unwrap_or` method.
 
-### Extracting contained values
-These methods can be used to extract contained values if it was `Ok[T]`, raising `RuntimeError` if it was `Err[E]`.
+# On Ok
+username: Result[str, bool] = Ok("Name")
+print(username | "default_name")  # name
 
-- `expect`: Raises with a given message to the user.
-- `unwrap`: Raises with an internal message provided by the library.
-- `unwrap_or`: Returns with a default value.
-- `unwrap_or_else`: Returns with a default function which returns a value.
+# On Err
+username: Result[str, bool] = Err(False)
+print(username | "default_name")  # default_name
+```
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 __all__ = ("Ok", "Err", "Result")
 
+import dataclasses
 import typing
 
 from sain import iter as _iter
@@ -118,11 +120,11 @@ if typing.TYPE_CHECKING:
 
 
 # Due to the nature of Python, Some methods here are repetitive to satisfy
-# language and type checker, for an example `map` is only available for `Ok` but `Err` also needs to implement it
+# ux and type checker, for an example `map` is only available for `Ok` but `Err` also needs to implement it
 # which simply just returns self, same way goes around for `map_err`.
 # Also for unwrapping values, `Err` guarantees an exception to be thrown but `Ok` doesn't.
 @typing.final
-@dataclass(weakref_slot=False, slots=True, frozen=True, repr=False)
+@dataclasses.dataclass(slots=True, frozen=True, repr=False)
 class Ok(typing.Generic[T]):
     """Contains the success value of `Result[T, ...]`."""
 
@@ -133,39 +135,138 @@ class Ok(typing.Generic[T]):
     ###############################
 
     def is_ok(self) -> typing.Literal[True]:
+        """Returns `True` if the contained value is `Ok` and `False` if it an `Err`.
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Ok("value")
+        assert value.is_ok() == True
+        ```
+        """
         return True
 
     def is_ok_and(self, f: F[T, bool]) -> bool:
+        """Returns `True` if the contained value is `Ok` and `f()` returns True..
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Ok("value")
+
+        assert value.is_ok_and(lambda inner: inner == "value")
+        # True
+        ```
+        """
         return self.is_ok() and f(self._inner)
 
     # These are never truthy in an `Ok` instance.
     def is_err(self) -> typing.Literal[False]:
+        """Returns `True` if the contained value is `Err`.
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Ok("value")
+
+        assert value.is_err() == False
+        ```
+        """
         return False
 
     def is_err_and(self, f: F[T, bool]) -> typing.Literal[False]:
+        """Returns `True` if the contained value is `Ok` and `f()` returns True..
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Ok("value")
+
+        assert value.is_err_and(lambda inner: inner == "value")
+        # False
+        ```
+        """
         return False
 
     ###################
     # * Extractors. * #
     ###################
 
-    @property
-    def read(self) -> T:
-        return self._inner
-
     def expect(self, message: str, /) -> T:
+        """Return the underlying value if it was `Ok`, Raising `RuntimeError`
+        if it was `Err` with `message` passed to it.
+
+        Example
+        -------
+        ```py
+        ok: Result[str, None] = Ok("owo")
+        ok.expect("err") # owo
+
+        err: Result[str, None] = Err(None)
+        err.expect("err") # RuntimeError("err")
+        ```
+        """
         return self._inner
 
     def unwrap(self) -> T:
+        """Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.
+
+        Example
+        -------
+        ```py
+        ok: Result[str, None] = Ok("owo")
+        ok.unwrap() # owo
+
+        err: Result[str, None] = Err(None)
+        err.unwrap() # RuntimeError
+        ```
+        """
         return self._inner
 
     def unwrap_or(self, default: T, /) -> T:
+        """Return the underlying value if it was `Ok`, returning `default` if it was `Err`.
+
+        Example
+        -------
+        ```py
+        ok: Result[str, None] = Ok("OwO")
+        ok.unwrap_or("uwu") # OwO
+
+        err: Result[str, None] = Err(None)
+        err.unwrap_or("uwu") # uwu
+        ```
+        """
         return self._inner
 
     def unwrap_or_else(self, f: F[E, T]) -> T:
+        """Return the contained `Ok` value or computes it from `f()` if it was `Err`.
+
+        Example
+        -------
+        ```py
+        ok: Result[int, str] = Ok(4)
+        ok.unwrap_or_else(lambda e: 0) # 4
+
+        err: Result[int, str] = Err("word")
+        err.unwrap_or_else(lambda e: len(e)) # 4
+        ```
+        """
         return self._inner
 
     def unwrap_err(self) -> typing.NoReturn:
+        """Return the contained `Err` value, Raising if it was `Ok`.
+
+        Example
+        -------
+        ```py
+        ok: Result[str, None] = Ok("buh")
+        ok.unwrap_err()  # RuntimeError
+
+        err: Result[str, None] = Err(None)
+        err.unwrap_err() == None
+        # True
+        ```
+        """
         raise RuntimeError(f"Called `unwrap_err` on an `Ok` variant: {self._inner!r}")
 
     ############################
@@ -173,21 +274,140 @@ class Ok(typing.Generic[T]):
     ############################
 
     def ok(self) -> Option[T]:
+        """Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Ok("buh")
+        value.ok().is_some() # True
+
+        value: Result[str, int] = Err(0)
+        value.ok().is_none() # True
+        ```
+        """
         return _option.Some(self._inner)
 
     def err(self) -> Option[None]:
+        """Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Ok("buh")
+        value.err().is_none() # True
+
+        value: Result[str, int] = Err(0)
+        value.err().is_some() # True
+        ```
+        """
         return _option.NOTHING
 
+    def inspect(self, f: F[T, typing.Any]) -> None:
+        """Call a function to the contained value if it was `Ok` and do nothing if it was `Err`
+
+        Example
+        -------
+        ```py
+        def sink(value: str) -> None:
+            # do something with value
+            print("Called " + value)
+
+        x: Result[str, None] = Ok("ok")
+        x.inspect(sink) # "Called ok"
+
+        x: Result[str, str] = Err("err")
+        x.inspect(sink) # None
+        ```
+        """
+        f(self._inner)
+
+    def inspect_err(self, f: F[E, typing.Any]) -> None:
+        """Call a function to the contained value if it was `Err` and do nothing if it was `Ok`
+
+        Example
+        -------
+        ```py
+        def sink(value: str) -> None:
+            # do something with value
+            print("Called " + value)
+
+        x: Result[str, None] = Ok("ok")
+        x.inspect_err(sink) # None
+
+        x: Result[str, str] = Err("err")
+        x.inspect_err(sink) # Called err
+        ```
+        """
+
     def map(self, f: F[T, U], /) -> Ok[U]:
+        """Map `Ok[T]` to `Ok[U]` by applying a function to `T`, Leaving `Err` untouched.
+
+        Example
+        -------
+        ```py
+        ok: Result[str, int] = Ok("1")
+        ok.map(lambda c: int(c) + 1) # Ok(2)
+
+        err: Result[str, int] = Err(0)
+        err.map(str.upper) # Err(0)
+        ```
+        """
         return Ok(f(self._inner))
 
     def map_or(self, f: F[T, U], default: U, /) -> U:
+        """Returns the provided default value if `Err`,
+
+        Otherwise extracts the `Ok` value and maps it to `f()`
+
+        Example
+        -------
+        ```py
+        x: Result[str, str] = Ok("foo")
+        assert x.map_or(lambda c: len(c), 42) == 3
+
+        x: Result[str, str] = Err("bar")
+        assert x.map_or(lambda c: len(c), 42) == 42
+        ```
+        """
         return f(self._inner)
 
     def map_or_else(self, f: F[T, U], default: F[E, U], /) -> U:
+        """Returns the provided default value from a function if `Err`,
+
+        Otherwise extracts the `Ok` value and maps it to `f()`
+
+        Example
+        -------
+        ```py
+        x: Result[str, str] = Ok("four")
+        assert x.map_or_else(
+            lambda c: 2 * len(c),
+            lambda err: len(err)
+        ) == 8
+
+        x: Result[str, str] = Err("bar")
+        assert x.map_or_else(
+            lambda c: 2 * len(c),
+            lambda err: len(err)
+        ) == 3
+        ```
+        """
         return f(self._inner)
 
     def map_err(self, f: F[E, U], /) -> Self:
+        """Maps a `Result[T, E]` to `Result[T, U]`, leaving `OK[T]` untouched.
+
+        Example
+        -------
+        ```py
+        x: Result[str, int] = Ok("blue")
+        x.map_err(lambda err: err + 1) # Ok("blue")
+
+        x: Result[str, int] = Err(5)
+        x.map_err(float) # Err(5.0)
+        ```
+        """
         return self
 
     ##############################
@@ -195,17 +415,41 @@ class Ok(typing.Generic[T]):
     ##############################
 
     def iter(self) -> _iter.Iter[T]:
+        """Return an iterator over the contained value.
+
+        If it was `Ok[T]` then it will return `Iter[T]`, otherwise it will return `Iter[Never]`.
+
+        Example
+        -------
+        ```py
+        c: Result[str, int] = Ok("blue")
+        c.iter().next() == Some("blue")
+
+        c: Result[str, int] = Err(0)
+        c.iter().next() == Some(None)
+        ```
+        """
         return self.__iter__()
 
     def __iter__(self) -> _iter.Iter[T]:
         return _iter.once(self._inner)
 
+    #################
+    # * Overloads * #
+    #################
+
     def __repr__(self) -> str:
         return f"Ok({self._inner})"
 
+    def __or__(self, other: T) -> T:
+        return self._inner
+
+    def __invert__(self) -> T:
+        return self._inner
+
 
 @typing.final
-@dataclass(weakref_slot=False, slots=True, frozen=True, repr=False)
+@dataclasses.dataclass(slots=True, frozen=True, repr=False)
 class Err(typing.Generic[E]):
     """Contains the error value of `Result[..., E]`."""
 
@@ -216,25 +460,63 @@ class Err(typing.Generic[E]):
     ################################
 
     def is_ok(self) -> typing.Literal[False]:
+        """Returns `True` if the contained value is `Ok` and `False` if it an `Err`.
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Err(None)
+
+        assert value.is_ok() == False
+        ```
+        """
         return False
 
     def is_ok_and(self, f: F[E, bool]) -> typing.Literal[False]:
+        """Returns `True` if the contained value is `Ok` and `f()` returns True.
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Err(None)
+
+        assert value.is_ok_and(lambda inner: inner == "value")
+        # False
+        ```
+        """
         return False
 
     # These are never truthy in an `Ok` instance.
     def is_err(self) -> typing.Literal[True]:
+        """Returns `True` if the contained value is `Err`.
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Err(None)
+
+        assert value.is_err() == True
+        ```
+        """
         return True
 
     def is_err_and(self, f: F[E, bool]) -> bool:
+        """Returns `True` if the contained value is `Ok` and `f()` returns True..
+
+        Example
+        -------
+        ```py
+        value: Result[str, None] = Err(None)
+
+        assert value.is_err_and(lambda err: err is None)
+        # True
+        ```
+        """
         return self.is_err() and f(self._inner)
 
     ###################
     # * Extractors. * #
     ###################
-
-    @property
-    def read(self) -> E:
-        return self._inner
 
     def expect(self, msg: str) -> typing.NoReturn:
         raise RuntimeError(msg) from None
@@ -259,6 +541,12 @@ class Err(typing.Generic[E]):
     ############################
     # * Conversion adapters. * #
     ############################
+
+    def inspect(self, f: F[T, typing.Any]) -> None:
+        return None
+
+    def inspect_err(self, f: F[E, typing.Any]) -> None:
+        f(self._inner)
 
     def ok(self) -> Option[None]:
         return _option.NOTHING
@@ -288,8 +576,18 @@ class Err(typing.Generic[E]):
     def __iter__(self) -> _iter.Iter[Never]:
         return _iter.empty()
 
+    #################
+    # * Overloads * #
+    #################
+
     def __repr__(self) -> str:
         return f"Err({self._inner})"
+
+    def __or__(self, other: T) -> T:
+        return other
+
+    def __invert__(self) -> typing.NoReturn:
+        self.unwrap()
 
 
 Result: TypeAlias = Ok[T] | Err[E]

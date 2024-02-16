@@ -36,6 +36,8 @@ __all__ = ("spawn", "loop")
 import asyncio
 import typing
 
+from . import result as _result
+
 if typing.TYPE_CHECKING:
     import collections.abc as collections
 
@@ -46,7 +48,7 @@ if typing.TYPE_CHECKING:
 async def spawn(
     *aws: collections.Awaitable[T_co],
     timeout: float | None = None,
-) -> collections.Sequence[T_co]:
+) -> _result.Result[collections.Sequence[T_co], str]:
     """Spawn all given awaitables concurrently.
 
     Example
@@ -68,15 +70,10 @@ async def spawn(
         The awaitables to gather.
     timeout : `float | None`
         An optional timeout.
-
-    Returns
-    -------
-    `Sequence[T]`
-        A sequence of the results of the awaited coros.
     """
 
     if not aws:
-        raise RuntimeError("No awaitables passed.", aws)
+        return _result.Err("No awaitables passed.")
 
     tasks: collections.MutableSequence[asyncio.Task[T_co]] = []
 
@@ -84,10 +81,10 @@ async def spawn(
         tasks.append(asyncio.ensure_future(future))
     gatherer = asyncio.gather(*tasks)
     try:
-        return await asyncio.wait_for(gatherer, timeout=timeout)
+        return _result.Ok(await asyncio.wait_for(gatherer, timeout=timeout))
 
     except asyncio.CancelledError:
-        raise asyncio.CancelledError("Gathered Futures were cancelled.") from None
+        return _result.Err("Gathered Futures were cancelled.")
 
     finally:
         for task in tasks:

@@ -8,10 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
+
 - `doc` decorator.
+- The `Result` type including `OK` and `Err`.
+- `ref.ref` function which constructs an `AsRef` object.
+- `ref.ref_mut` function which constructs an `AsMut` object.
 
 ### Changed
+
 - Iterating over `Iter` object with `for` doesn't return `Option[T]` anymore.
+- Type hint `Option` isn't required to be under `TYPE_CHECKING` anymore.
 
 ## 0.0.5
 

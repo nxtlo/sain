@@ -41,6 +41,7 @@ import typing
 
 from . import default as _default
 from . import futures
+from . import result as _result
 from .option import Some
 
 Item = typing.TypeVar("Item")
@@ -98,6 +99,7 @@ class Iter(
         self._items = builtins.iter(items)
 
     @staticmethod
+    @typing.final
     def default() -> Iter[ty_ext.Never]:
         """Return the default iterator for this type. It returns an empty iterator.
 
@@ -111,26 +113,29 @@ class Iter(
         return empty()
 
     @typing.overload
+    @typing.final
     def collect(self) -> collections.Sequence[Item]:
         ...
 
     @typing.overload
+    @typing.final
     def collect(self, *, cast: _B) -> collections.Sequence[_B]:
         ...
 
+    @typing.final
     def collect(
         self, *, cast: _B | None = None
     ) -> collections.Sequence[Item] | collections.Sequence[_B]:
-        """Collects all items in the iterator into a list.
+        """Collects all items in the iterator into an immutable sequence.
 
         Example
         -------
         ```py
-        iterator = Iter([1, 2, 3])
+        iterator = Iter(range(3))
         iterator.collect()
-        # [1, 2, 3]
+        # (0, 1, 2, 3)
         iterator.collect(cast=str) # Map each element and collect it.
-        # ['1', '2', '3']
+        # ('0', '1', '2', '3')
         ```
 
         Parameters
@@ -140,14 +145,13 @@ class Iter(
             If not provided the items will be returned as it's original type.
         """
         if cast is not None:
-            return typing.cast(
-                "collections.Sequence[_B]", tuple(map(cast, self._items))
-            )
+            return tuple(map(cast, self._items))
 
         return tuple(self._items)
 
+    @typing.final
     def copied(self) -> Iter[Item]:
-        """Creates an iterator which `*deeply*` copies all of its elements.
+        """Creates an iterator which copies all of its elements by value.
 
         .. note::
             If you only need a copy of the item reference, Use `by_ref` instead.
@@ -162,8 +166,9 @@ class Iter(
         """
         return self.__class__(copy.deepcopy(self._items))
 
+    @typing.final
     def by_ref(self) -> Iter[Item]:
-        """Creates an iterator which doesn't consume its elements. but instead shallow copies it.
+        """Creates an iterator which shallow copies its elements by reference.
 
         Example
         -------
@@ -567,7 +572,7 @@ class Iter(
         func: collections.Callable[
             [Item], collections.Coroutine[None, typing.Any, OtherItem]
         ],
-    ) -> collections.Sequence[OtherItem]:
+    ) -> _result.Result[collections.Sequence[OtherItem], str]:
         """Calls the async function on each item in the iterator concurrently.
 
         Example
@@ -580,7 +585,7 @@ class Iter(
         async def main():
             users = sain.into_iter(["danny", "legalia"])
             results = await users.async_for_each(lambda username: fetch(username))
-            for k, v in results.items():
+            for k, v in results.unwrap().items():
                 ...
         ```
 
@@ -682,7 +687,7 @@ def once(item: Item) -> Iter[Item]:
 
 
 def iter(
-    iterable: typing.Iterable[Item],
+    iterable: collections.Iterable[Item],
 ) -> Iter[Item]:
     """Convert an iterable into `Iter`.
     Example
@@ -698,7 +703,7 @@ def iter(
 
     Parameters
     ----------
-    iterable: `typing.Iterable[Item]`
+    iterable: `Iterable[Item]`
         The iterable to convert.
     """
     return Iter(iterable)

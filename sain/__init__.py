@@ -33,10 +33,10 @@
 Equivalent types
 ----------------
 - `Option<T>` -> `Option[T]` | `Some[T]`
-- `Result<T, E>` -> `Result[T, E]`. Not implemented yet.
+- `Result<T, E>` -> `Result[T, E]`
 - `Default<T>` -> `Default[T]`
-- `AsRef<T>` -> `AsRef[T]`.
-- `AsMut<T>` -> `AsMut[T]`.
+- `AsRef<T>` -> `AsRef[T]`
+- `AsMut<T>` -> `AsMut[T]`
 - `Iter<Item>` -> `Iter[Item]`
 - `OnceLock<T>` -> `Once[T]`
 
@@ -44,12 +44,12 @@ Equivalent macros
 -----------------
 As decorators.
 
-- `cfg!()` -> `sain.cfg`.
+- `cfg!()` -> `sain.cfg`
 - `todo!()` -> `sain.todo`. This is not a decorator.
-- `deprecated!()` -> `sain.deprecated`.
-- `unimplemented!()` -> `sain.unimplemented`.
-- `#[cfg_attr]` -> `sain.cfg_attr`.
-- `#[doc(...)]` -> `sain.doc(...)`.
+- `deprecated!()` -> `sain.deprecated`
+- `unimplemented!()` -> `sain.unimplemented`
+- `#[cfg_attr]` -> `sain.cfg_attr`
+- `#[doc(...)]` -> `sain.doc(...)`
 """
 from __future__ import annotations
 
@@ -64,6 +64,7 @@ __all__ = (
     "AsMut",
     # option.py
     "Some",
+    "Option",
     "NOTHING",
     # iter.py
     "Iter",
@@ -77,6 +78,10 @@ __all__ = (
     "futures",
     # once.py
     "Once",
+    # result.py
+    "Ok",
+    "Err",
+    "Result",
 )
 
 from . import futures
@@ -91,9 +96,13 @@ from .macros import todo
 from .macros import unimplemented
 from .once import Once
 from .option import NOTHING
+from .option import Option
 from .option import Some
 from .ref import AsMut
 from .ref import AsRef
+from .result import Err
+from .result import Ok
+from .result import Result
 
 __version__: str = "0.0.5"
 __url__: str = "https://github.com/nxtlo/sain"

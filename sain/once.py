@@ -57,10 +57,21 @@ class Once(typing.Generic[T]):
         # Not initialized yet
         uuid: Once[UUID] = Once()
 
+        def send(self, id: UUID) -> None:
+            ...
+
+    def spawn(app: Application) -> None:
+        app.uuid.get().is_none() # True
+        uid = app.uuid.get_or_init(uuid4())
+        app.send(uid)
+
     def run_application():
         # This will init the uuid if its not set or return it if it already is.
         app = Application()
-        app.uuid.set(uuid4())
+        thread = threading.Thread(target=spawn, args=(app,))
+        thread.start()
+
+        app.uuid.get().is_some()  # True
     ```
     """
 
@@ -127,10 +138,13 @@ class Once(typing.Generic[T]):
         return str(self._inner)
 
     def __eq__(self, __value: object) -> bool:
-        if not isinstance(__value, Once):
-            return NotImplemented
+        if isinstance(__value, Once):
+            return self._inner == __value._inner  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
 
-        return self._inner == __value._inner  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+        if isinstance(self._inner, type(__value)):
+            return __value == self._inner
+
+        return NotImplemented
 
     def __ne__(self, __value: object) -> bool:
         return not self.__eq__(__value)

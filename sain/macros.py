@@ -32,15 +32,12 @@
 
 from __future__ import annotations
 
-__all__ = ("deprecated", "unimplemented", "todo", "unstable", "doc")
+__all__ = ("deprecated", "unimplemented", "todo", "doc")
 
 import functools
-import http.client
 import inspect
 import logging
 import typing
-import urllib.error
-import urllib.request
 import warnings
 
 if typing.TYPE_CHECKING:
@@ -49,9 +46,7 @@ if typing.TYPE_CHECKING:
     import _typeshed
 
     P = typing.ParamSpec("P")
-    T = typing.TypeVar("T", bound=collections.Callable[..., typing.Any])
     U = typing.TypeVar("U")
-    Fn = collections.Callable[..., U]
     Read = _typeshed.FileDescriptorOrPath
 
 _LOGGER = logging.getLogger("sain.macros")
@@ -63,7 +58,7 @@ class Error(RuntimeWarning):
 
     __slots__ = ("message",)
 
-    def __init__(self, message: typing.LiteralString | None = None) -> None:
+    def __init__(self, message: str | None = None) -> None:
         self.message = message
 
 
@@ -71,27 +66,55 @@ def _warn(msg: str, stacklevel: int = 2) -> None:
     warnings.warn(message=msg, stacklevel=stacklevel, category=Error)
 
 
-def unstable(*, reason: typing.LiteralString) -> collections.Callable[[T], T]:
-    """A decorator that marks an internal object explicitly unstable."""
+def unstable(
+    *, reason: typing.LiteralString
+) -> collections.Callable[
+    [collections.Callable[P, typing.Any]],
+    collections.Callable[P, typing.NoReturn],
+]:
+    """A decorator that marks an internal object explicitly unstable.
 
-    def decorator(obj: T) -> T:
+    Unstable objects never run, even inside the standard library.
+
+    Calling any object that is unstable will raise an `Error` exception.
+    Also using this outside the library isn't allowed.
+
+    Example
+    -------
+    ```py
+
+    from sain.macros import unstable
+
+    @unstable(reason = "none")
+    def unstable_function() -> int:
+        return -1
+
+    if unstable_function():
+        # never reachable
+
+    ```
+    """
+
+    def decorator(
+        obj: collections.Callable[P, U],
+    ) -> collections.Callable[P, typing.NoReturn]:
         @functools.wraps(obj)
-        def wrapper(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
+        def wrapper(*_args: P.args, **_kwargs: P.kwargs) -> typing.NoReturn:
             obj_type = "class" if inspect.isclass(obj) else "function"
-            if not obj.__doc__ == "__intrinsics__":
+            if obj.__doc__ != "__intrinsics__":
                 # This has been used outside of the lib.
                 raise Error(
-                    "Stability attributes may not be used outside of the core library"
+                    "Stability attributes may not be used outside of the core library",
                 )
 
             name = obj.__name__
             if name.startswith("_"):
-                name = obj.__name__.lstrip("_")
+                name = name.lstrip("_")
 
-            _warn(f"{obj_type} {name} is not stable: {reason}")
-            return obj(*args, **kwargs)
+            raise Error(f"{obj_type} `{name}` is not stable: {reason}")
 
-        return typing.cast("T", wrapper)
+        # idk why pyright doesn't know the type of wrapper.
+        return wrapper  # pyright: ignore
 
     return decorator
 
@@ -99,10 +122,13 @@ def unstable(*, reason: typing.LiteralString) -> collections.Callable[[T], T]:
 def deprecated(
     *,
     since: typing.LiteralString | None = None,
-    use_instead: typing.LiteralString | None = None,
     removed_in: typing.LiteralString | None = None,
+    use_instead: typing.LiteralString | None = None,
     hint: typing.LiteralString | None = None,
-) -> collections.Callable[[T], T]:
+) -> collections.Callable[
+    [collections.Callable[P, U]],
+    collections.Callable[P, U],
+]:
     """A decorator that marks a function as deprecated.
 
     An attempt to call the object that's marked will cause a runtime warn.
@@ -116,12 +142,12 @@ def deprecated(
         since = "1.0.0",
         removed_in ="3.0.0",
         use_instead = "UserImpl()",
-        hint = "..."
+        hint = "Hint for ux."
     )
     class User:
         ...
 
-    user = User() # This will raise an error at runtime.
+    user = User() # This will cause a warning at runtime.
     ```
 
     Parameters
@@ -136,9 +162,9 @@ def deprecated(
         An optional hint for the user.
     """
 
-    def decorator(func: T) -> T:
+    def decorator(func: collections.Callable[P, U]) -> collections.Callable[P, U]:
         @functools.wraps(func)
-        def wrapper(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
             obj_type = "class" if inspect.isclass(func) else "function"
             msg = f"{obj_type} {func.__module__}.{func.__name__} is deprecated."
 
@@ -157,7 +183,7 @@ def deprecated(
             _warn(msg)
             return func(*args, **kwargs)
 
-        return typing.cast("T", wrapper)
+        return wrapper
 
     return decorator
 
@@ -165,26 +191,19 @@ def deprecated(
 def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     """A place holder that indicates unfinished code.
 
-    This is not a decorator. See example.
-
     Example
     -------
     ```py
+    from sain import todo
 
-    @dataclass
-    class User:
-        name: str
-        id: int
-
-        @classmethod
-        def from_json(cls, payload: dict[str, Any]) -> Self:
-            # Calling this method will raise `Error`.
-            todo()
+    def from_json(payload: dict[str, int]) -> int:
+        # Calling this function will raise `Error`.
+        todo()
     ```
 
     Parameters
     ----------
-    *args : object | None
+    message : `str | None`
         Multiple optional arguments to pass if the error was raised.
     """
     raise Error(f"not yet implemented: {message}" if message else "not yet implemented")
@@ -194,7 +213,10 @@ def unimplemented(
     *,
     message: typing.LiteralString | None = None,
     available_in: typing.LiteralString | None = None,
-) -> collections.Callable[[T], T]:
+) -> collections.Callable[
+    [collections.Callable[P, U]],
+    collections.Callable[P, U],
+]:
     """A decorator that marks an object as unimplemented.
 
     An attempt to call the object that's marked will cause a runtime warn.
@@ -217,9 +239,9 @@ def unimplemented(
         If provided, This will be shown as what release this object be implemented.
     """
 
-    def decorator(obj: T) -> T:
+    def decorator(obj: collections.Callable[P, U]) -> collections.Callable[P, U]:
         @functools.wraps(obj)
-        def wrapper(*args: typing.Any, **kwargs: typing.Any) -> typing.Any:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
             obj_type = "class" if inspect.isclass(obj) else "function"
             msg = (
                 message
@@ -232,12 +254,17 @@ def unimplemented(
             _warn(msg)
             return obj(*args, **kwargs)
 
-        return typing.cast("T", wrapper)
+        return wrapper
 
     return decorator
 
 
-def doc(path: Read) -> Fn[Fn[Fn[T]]]:
+def doc(
+    path: Read,
+) -> collections.Callable[
+    [collections.Callable[P, U]],
+    collections.Callable[P, U],
+]:
     """Set `path` to be the object's documentation.
 
     Example
@@ -249,9 +276,8 @@ def doc(path: Read) -> Fn[Fn[Fn[T]]]:
     @doc(Path("../README.md"))
     class User:
 
-        # Raw HTTP text documentation.
-        @doc("https://raw.githubusercontent.com/nxtlo/sain/master/README.md")
-        def insane(x: float) -> float:
+        @doc("bool.html")
+        def bool_docs() -> None:
             ...
     ```
 
@@ -259,26 +285,12 @@ def doc(path: Read) -> Fn[Fn[Fn[T]]]:
         The path to read the content from.
     """
 
-    def decorator(f: Fn[T]) -> Fn[T]:
-        if isinstance(path, str) and path.startswith("https://"):
-            try:
-                response: http.client.HTTPResponse = urllib.request.urlopen(path)
-                f.__doc__ = response.read().decode("UTF-8")
-
-            except urllib.error.HTTPError as e:
-                _LOGGER.exception(
-                    "An error occurred while trying to fetch the docs form %s, cause %s",
-                    path,
-                    e,
-                )
-                pass
-
-        else:
-            with open(path, "r") as file:
-                f.__doc__ = file.read()
+    def decorator(f: collections.Callable[P, U]) -> collections.Callable[P, U]:
+        with open(path, "r") as file:
+            f.__doc__ = file.read()
 
         @functools.wraps(f)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
             return f(*args, **kwargs)
 
         return wrapper

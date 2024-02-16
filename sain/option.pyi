@@ -39,30 +39,7 @@ from . import ref as _ref
 type Fn[Value, T] = _collections.Callable[[Value], T]
 type FnOnce[T] = _collections.Callable[[], T]
 NOTHING: Option[None]
-
 type Option[T] = Some[T]
-"""A type hint that's only available during type checking for a value that can be `Some<T>`.
-
-Warning
--------
-* This must be used as a type hint for a value that can be `Some<T>`
-* You must import `__future__` annotations for this to work. at least for now.
-* You must import this under `typing.TYPE_CHECKING`.
-
-Example
--------
-```py
-from __future__ import annotations
-
-import typing
-from sain import Some
-
-if typing.CHECKING:
-    from sain import Option
-
-foo: Option[str] = Some(None)
-```
-"""
 
 @_typing.final
 class Some[ValueT](_default.Default[None]):
@@ -95,3 +72,4 @@ class Some[ValueT](_default.Default[None]):
     def __ne__(self, other: object) -> bool: ...
     def __hash__(self) -> int: ...
     def __invert__(self) -> ValueT: ...
+    def __or__(self, other: ValueT) -> ValueT: ...

@@ -35,51 +35,57 @@ class Resource[T]:
     object: T
 
 
+# Note that this is just a simple class that contains 
+# info about the error cause and not an actual exception.
 @dataclass
 class Error:
-    reason: str
-    kind: str # Could be an enum.
     url: str
+    # reason, http status code.
+    cause: tuple[str, int]
 
-async def fetch(url: str) -> Result[Resource[bytes], Error]:
-    async with client.get(url) as response:
-        if response.ok:
-            # Ok result.
-            return Ok(response.as_bytes())
+def fetch(url: str) -> Result[Resource[bytes], Error]:
+    response = http.get(url)
+    if response.ok:
+        # Ok result.
+        return Ok(Resource(response.as_bytes()))
 
     # An err occurred. we provide an error with some reasonable values.
-    return Err(Error(reason="some error reason.", kind="InternalError", url=url))
+    return Err(Error(cause=(response.status, response.reason), url=url))
 
 # no try/except.
-response = await fetch("some_url.com")
-# You can use `isinstance`, but match basically has a nicer syntax.
+response = fetch("github.com")
 match response:
-    case Ok(resp):
-        print(resp.object.decode('utf-8'))
+    case Ok(resource):
+        print(resource.object.decode('utf-8'))
     case Err(why):
-        print("An error has occurred", why.reason, why.url)
+        print(f"An error has occurred: {why.cause} - {why.url}")
+
+# You can also just unwrap the value, but will raise an error at runtime if it was an Err.
+resource = response.unwrap()
+# Using `~` operator is equivalent to `?` in Rust.
+resource = ~response
 ```
 
 ## Equivalent types
 
 - `Option<T>` -> `Option[T]` | `Some(T)`
-- `Result<T, E>` -> `Result[T, E]`. _WIP_
+- `Result<T, E>` -> `Result[T, E]`
 - `Default<T>` -> `Default[T]`
-- `AsRef<T>` -> `AsRef[T]`.
-- `AsMut<T>` -> `AsMut[T]`.
+- `AsRef<T>` -> `AsRef[T]`
+- `AsMut<T>` -> `AsMut[T]`
 - `Iterator<Item>` -> `Iter[Item]`
 - `OnceLock<T>` -> `Once[T]`
 
 ## Equivalent functions / macros
 
-- `cfg!()` -> `sain.cfg`.
+- `cfg!()` -> `sain.cfg`
 - `todo!()` -> `sain.todo`. This is not a decorator.
-- `deprecated!()` -> `sain.deprecated`.
-- `unimplemented!()` -> `sain.unimplemented`.
-- `std::iter::once()` -> `sain.iter.once`.
-- `std::iter::empty()` -> `sain.iter.empty`.
-- `#[cfg_attr]` -> `sain.cfg_attr`.
-- `#[doc(...)]` -> `sain.doc(...)`.
+- `deprecated!()` -> `sain.deprecated`
+- `unimplemented!()` -> `sain.unimplemented`
+- `std::iter::once()` -> `sain.iter.once`
+- `std::iter::empty()` -> `sain.iter.empty`
+- `#[cfg_attr]` -> `sain.cfg_attr`
+- `#[doc(...)]` -> `sain.doc(...)`
 
 ### Notes
 

@@ -135,7 +135,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # 5
 
         # Type hint is required here.
-        value: Some[int] = Some(None)
+        value: Option[int] = Some(None)
         print(value.unwrap_or(10))
         # 10
         ```
@@ -155,7 +155,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.unwrap_or_else(lambda: 10))
         # 5
 
-        value: Some[bool] = Some(None)
+        value: Option[bool] = Some(None)
         print(value.unwrap_or_else(lambda: True))
         # True
         ```
@@ -181,7 +181,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(v.unwrap_unchecked()) # Undefined Behavior
         ```
         """
-        # SAFETY: The caller guarantees that the value is not None.
+        #! SAFETY: The caller guarantees that the value is not None.
         return self._value  # type: ignore
 
     def expect(self, message: str, /) -> ValueT:
@@ -195,7 +195,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.expect("Value is None"))
         # "Hello"
 
-        value: Some[str] = Some(None)
+        value: Option[str] = Some(None)
         print(value.expect("Value is None"))
         # RuntimeError("Value is None")
         ```
@@ -217,7 +217,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.map(lambda x: x * 2.0))
         # Some(10.0)
 
-        value: Some[bool] = Some(None)
+        value: Option[bool] = Some(None)
         print(value)
         # Some(None)
         ```
@@ -240,7 +240,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         # 6.0
 
         # This is `None`, so the default value will be returned.
-        value: Some[str] = Some(None)
+        value: Option[str] = Some(None)
         print(value.map_or("5", lambda x: str(x)))
         # "5"
         ```
@@ -286,7 +286,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.filter(lambda x: len(x) >= 2))
         # Some([1, 2, 3])
 
-        value: Some[int] = Some(None)
+        value: Option[int] = Some(None)
         print(value.filter(lambda x: x > 3))
         # None
         ```
@@ -345,7 +345,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.and_ok(Some(10)))
         # Some(10)
 
-        value: Some[int] = Some(10)
+        value: Option[int] = Some(10)
         print(value.and_ok(Some(None)))  # optb is `None`.
         # Some(None)
         ```
@@ -364,11 +364,11 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         -------
         ```py
         value = Some(5)
-        print(value.and_then(lambda x: Some(x * 2)))
+        print(value.and_then(lambda x: Option(x * 2)))
         # Some(10)
 
-        value: Some[int] = Some(10)
-        print(value.and_then(lambda x: Some(None)))
+        value: Option[int] = Some(10)
+        print(value.and_then(lambda x: Option(None)))
         # Some(None)
         ```
         """
@@ -418,7 +418,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(clone == owned) # False, 0 != 5
 
         # None object.
-        value: Some[int] = Some(None)
+        value: Option[int] = Some(None)
         print(value.as_ref())
         # Some(AsRef(None))
         ```
@@ -448,7 +448,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.object) # 0
 
         # None object.
-        value: Some[int] = Some(None)
+        value: Option[int] = Some(None)
         print(value.as_ref_mut())
         # Some(AsMut(None))
         ```
@@ -470,7 +470,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.is_some())
         # True
 
-        value: Some[int] = Some(None)
+        value: Option[int] = Some(None)
         print(value.is_some())
         # False
         ```
@@ -488,7 +488,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.is_some_and(lambda x: x > 3))
         # True
 
-        value: Some[int] = Some(None)
+        value: Option[int] = Some(None)
         print(value.is_some_and(lambda x: x > 3))
         # False
         ```
@@ -505,7 +505,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         print(value.is_none())
         # False
 
-        value: Some[int] = Some(None)
+        value: Option[int] = Some(None)
         print(value.is_none())
         # True
         ```
@@ -519,6 +519,9 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
     def __invert__(self) -> ValueT:
         return self.unwrap()
+
+    def __or__(self, other: ValueT) -> ValueT:
+        return self.unwrap_or(other)
 
     def __bool__(self) -> bool:
         return self.is_some()
@@ -535,6 +538,24 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
     def __hash__(self) -> int:
         return hash(self._value)
 
+
+Option: typing.TypeAlias = Some[T]
+"""A type hint for a value that can be `Some<T>`.
+
+Example
+-------
+```py
+from __future__ import annotations
+
+import typing
+from sain import Some
+
+if typing.CHECKING:
+    from sain import Option
+
+foo: Option[str] = Some(None)
+```
+"""
 
 NOTHING: typing.Final[Some[None]] = Some(None)
 """A constant that is always `Option<None>`.

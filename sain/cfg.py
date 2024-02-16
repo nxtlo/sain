@@ -337,10 +337,10 @@ class _AttrCheck(typing.Generic[F]):
 
         return all(results)
 
+    @macros.unstable(reason="The function is buggy.")
     @macros.deprecated(
         since="0.0.4", use_instead="Self-Check the module locally", removed_in="0.0.6"
     )
-    @macros.unstable(reason="The function is buggy.")
     def _check_modules(self) -> bool:
         """__intrinsics__"""
         assert self._requires

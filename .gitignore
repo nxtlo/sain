@@ -10,3 +10,4 @@ dist/*
 *.gz
 .venv11
 pyrightconfig.json
+t.py

@@ -14,6 +14,9 @@ from .option import Option as Option
 from .option import Some as Some
 from .ref import AsMut as AsMut
 from .ref import AsRef as AsRef
+from .result import Err as Err
+from .result import Ok as Ok
+from .result import Result as Result
 
 __all__: tuple[str, ...]
 __url__: str
