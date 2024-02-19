@@ -13,11 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `Result` type including `OK` and `Err`.
 - `ref.ref` function which constructs an `AsRef` object.
 - `ref.ref_mut` function which constructs an `AsMut` object.
+- `Vec[T]` type.
 
 ### Changed
 
 - Iterating over `Iter` object with `for` doesn't return `Option[T]` anymore.
 - Type hint `Option` isn't required to be under `TYPE_CHECKING` anymore.
+- `futures.spawn` now returns `Result[T, E]` and doesn't raise.
+- `Iter.async_for_each` now returns `Result[T, E]` and doesn't raise.
 
 ## 0.0.5
 

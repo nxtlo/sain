@@ -42,6 +42,7 @@ import typing
 from . import default as _default
 from . import futures
 from . import result as _result
+from .vec import Vec
 from .option import Some
 
 Item = typing.TypeVar("Item")
@@ -148,6 +149,21 @@ class Iter(
             return tuple(map(cast, self._items))
 
         return tuple(self._items)
+
+    @typing.final
+    def to_vec(self) -> Vec[Item]:
+        """Convert this iterator into `Vec[T]`.
+
+        Example
+        -------
+        ```py
+        it = sain.iter.once(0)
+        vc = it.to_vec()
+
+        assert to_vec == [0]
+        ```
+        """
+        return Vec(self)
 
     @typing.final
     def copied(self) -> Iter[Item]:
@@ -634,6 +650,9 @@ class Iter(
 
     def __contains__(self, item: Item) -> bool:
         return item in self._items
+
+    def __reversed__(self) -> Iter[Item]:
+        return self.reversed()
 
     def __repr__(self) -> str:
         return f"<Iter: {type(self._items).__name__}>"

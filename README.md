@@ -70,6 +70,7 @@ resource = ~response
 
 - `Option<T>` -> `Option[T]` | `Some(T)`
 - `Result<T, E>` -> `Result[T, E]`
+- `Vec<T>` -> `Vec[T]`
 - `Default<T>` -> `Default[T]`
 - `AsRef<T>` -> `AsRef[T]`
 - `AsMut<T>` -> `AsMut[T]`

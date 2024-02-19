@@ -17,6 +17,8 @@ from .ref import AsRef as AsRef
 from .result import Err as Err
 from .result import Ok as Ok
 from .result import Result as Result
+from .vec import Vec as Vec
+from .vec import vec as vec
 
 __all__: tuple[str, ...]
 __url__: str

@@ -34,6 +34,7 @@ Equivalent types
 ----------------
 - `Option<T>` -> `Option[T]` | `Some[T]`
 - `Result<T, E>` -> `Result[T, E]`
+- `Vec<T>` -> `Vec[T]`
 - `Default<T>` -> `Default[T]`
 - `AsRef<T>` -> `AsRef[T]`
 - `AsMut<T>` -> `AsMut[T]`
@@ -82,6 +83,9 @@ __all__ = (
     "Ok",
     "Err",
     "Result",
+    # vec.py
+    "vec",
+    "Vec",
 )
 
 from . import futures
@@ -103,6 +107,8 @@ from .ref import AsRef
 from .result import Err
 from .result import Ok
 from .result import Result
+from .vec import Vec
+from .vec import vec
 
 __version__: str = "0.0.5"
 __url__: str = "https://github.com/nxtlo/sain"
