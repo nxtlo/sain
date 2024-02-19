@@ -42,8 +42,8 @@ import typing
 from . import default as _default
 from . import futures
 from . import result as _result
-from .vec import Vec
 from .option import Some
+from .vec import Vec
 
 Item = typing.TypeVar("Item")
 """A type hint for the item type of the iterator."""
