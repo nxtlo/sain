@@ -38,9 +38,10 @@ from . import ref as _ref
 
 type Fn[Value, T] = _collections.Callable[[Value], T]
 type FnOnce[T] = _collections.Callable[[], T]
-NOTHING: Option[None]
 type Option[T] = Some[T]
+NOTHING: Option[None]
 
+def nothing_unchecked[T]() -> Option[T]: ...
 @_typing.final
 class Some[ValueT](_default.Default[None]):
     def __init__(self, value: ValueT | None) -> None: ...

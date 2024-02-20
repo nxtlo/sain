@@ -33,35 +33,6 @@
 * The `cfg_attr` currently is buggy, Specifically when passing multiple modules into the
 `required_modules` parameter.
 
-Examples
---------
-```py
-from __futures__ import annotations
-import typing
-
-from sain import cfg_attr, cfg, Some
-
-# Required for type-hints only. Not affected by runtime.
-if typing.TYPE_CHECKING:
-    from sain import Option
-
-# If a non windows machine runs this function, A RuntimeError will be raised.
-@cfg_attr(target_os = "windows")
-def windows_only() -> Option[int]:
-    return Some(1)
-
-@cfg_attr(requires="uvloop")
-def run_uvloop() -> None:
-    import uvloop
-    uvloop.install()
-
-@cfg_attr(python_version = (3, 11, 0))
-class Tensor:
-    if cfg(target_os = "unix"):
-        def calculate(self, left: float, right: float) -> float:
-            ...
-```
-
 Notes
 -----
 Target OS must be one of the following:
@@ -150,7 +121,7 @@ def cfg_attr(
     ```py
     import sain
 
-    @sain.cfg_attr(target_os = "windows")
+    @sain.cfg_attr(target_os="windows")
     def windows_only():
         # Do stuff with Windows's API.
         ...
@@ -159,7 +130,7 @@ def cfg_attr(
     # when creating the instance.
     @sain.cfg_attr(impl="PyPy")
     class Zoo:
-        @sain.cfg_attr(target_os = "linux")
+        @sain.cfg_attr(target_os="linux")
         def bark(self) -> None:
             windows_only()  # RuntimeError("Windows OS only!)
 
@@ -233,9 +204,9 @@ def cfg(
     ```py
     import sain
 
-    if sain.cfg(target_os = "windows"):
+    if sain.cfg(target_os="windows"):
         print("Windows")
-    elif sain.cfg(target_os = "linux"):
+    elif sain.cfg(target_os="linux"):
         print("Linux")
     else:
         print("Something else")

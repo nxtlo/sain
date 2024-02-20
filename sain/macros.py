@@ -36,7 +36,6 @@ __all__ = ("deprecated", "unimplemented", "todo", "doc")
 
 import functools
 import inspect
-import logging
 import typing
 import warnings
 
@@ -49,9 +48,8 @@ if typing.TYPE_CHECKING:
     U = typing.TypeVar("U")
     Read = _typeshed.FileDescriptorOrPath
 
-_LOGGER = logging.getLogger("sain.macros")
 
-
+# TODO: Expose `Error` as a trait such as `std::error::Error` in Rust.
 @typing.final
 class Error(RuntimeWarning):
     """A runtime warning that is raised when the decorated object fails a check."""

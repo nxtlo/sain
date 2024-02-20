@@ -569,3 +569,34 @@ place_holder = NOTHING
 assert NOTHING == Some(None) # True
 ```
 """
+
+
+@typing.no_type_check
+def nothing_unchecked() -> Option[T]:
+    """A placeholder that always returns `sain.NOTHING` but acts like it returns `Option[T]`.
+
+    This is useful when you don't want to build `Some(None)` and want to return `T` in the future.
+
+    # Warning
+    unwrapping a value that returns this placeholder is undefined behavior.
+
+    Example
+    -------
+    ```py
+    class User:
+        def name(self) -> Option[str]:
+            # Don't build a new `Some(None)`
+            return nothing_unchecked()
+
+    user = User()
+    user.name().unwrap()  # returns str? This is wrong.
+
+    class Member(User):
+        def name(self) -> Option[str]:
+            return Some("username")
+
+    member = Member()
+    member.name().unwrap()  Ok
+    ```
+    """
+    return typing.cast("Option[T]", NOTHING)
