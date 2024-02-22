@@ -3,6 +3,7 @@ from . import iter as iter
 from .cfg import cfg as cfg
 from .cfg import cfg_attr as cfg_attr
 from .default import Default as Default
+from .error import Error as Error
 from .iter import Iter as Iter
 from .macros import deprecated as deprecated
 from .macros import doc as doc

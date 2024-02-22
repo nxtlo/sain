@@ -69,7 +69,8 @@ resource = ~response
 ## Equivalent types
 
 - `Option<T>` -> `Option[T]` | `Some(T)`
-- `Result<T, E>` -> `Result[T, E]`
+- `Result<T, E>` -> `Result[T, E]` | `Ok(T)` | `Err(T)`
+- `Error` -> `Error`
 - `Vec<T>` -> `Vec[T]`
 - `Default<T>` -> `Default[T]`
 - `AsRef<T>` -> `AsRef[T]`

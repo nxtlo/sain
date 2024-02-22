@@ -34,6 +34,7 @@ Equivalent types
 ----------------
 - `Option<T>` -> `Option[T]` | `Some[T]`
 - `Result<T, E>` -> `Result[T, E]`
+- `Error` -> `Error`
 - `Vec<T>` -> `Vec[T]`
 - `Default<T>` -> `Default[T]`
 - `AsRef<T>` -> `AsRef[T]`
@@ -86,6 +87,8 @@ __all__ = (
     # vec.py
     "vec",
     "Vec",
+    # error.py
+    "Error",
 )
 
 from . import futures
@@ -93,6 +96,7 @@ from . import iter
 from .cfg import cfg
 from .cfg import cfg_attr
 from .default import Default
+from .error import Error
 from .iter import Iter
 from .macros import deprecated
 from .macros import doc

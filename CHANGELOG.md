@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ref.ref` function which constructs an `AsRef` object.
 - `ref.ref_mut` function which constructs an `AsMut` object.
 - `Vec[T]` type.
+- `Error` type.
 
 ### Changed
 
