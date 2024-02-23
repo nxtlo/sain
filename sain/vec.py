@@ -150,7 +150,7 @@ class Vec(typing.Generic[T]):
         vec.push(4)
         ```
         """
-        v = Vec()
+        v = Vec[T]()
         v._capacity = capacity
         return v
 
@@ -276,6 +276,16 @@ class Vec(typing.Generic[T]):
         return self.get(0)
 
     def truncate(self, size: int) -> None:
+        """Shortens the vec, keeping the first `size` elements and dropping the rest.
+
+        Example
+        -------
+        ```py
+        vec = vec(1,2,3)
+        vec.truncate(1)
+        assert vec == [1]
+        ```
+        """
         assert self._ptr is not None, "Can't access an empty sequence."
 
         if self.len() == 0:
@@ -502,6 +512,22 @@ class Vec(typing.Generic[T]):
 
     def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)
+
+    def __le__(self, other: collections.Iterable[T]) -> bool:
+        assert self._ptr is not None, "Can't access an empty sequence."
+        return self._ptr <= list(other)
+
+    def __ge__(self, other: collections.Iterable[T]) -> bool:
+        assert self._ptr is not None, "Can't access an empty sequence."
+        return self._ptr >= list(other)
+
+    def __lt__(self, other: collections.Iterable[T]) -> bool:
+        assert self._ptr is not None, "Can't access an empty sequence."
+        return self._ptr < list(other)
+
+    def __gt__(self, other: collections.Iterable[T]) -> bool:
+        assert self._ptr is not None, "Can't access an empty sequence."
+        return self._ptr > list(other)
 
     def __bool__(self) -> bool:
         return bool(self._ptr)

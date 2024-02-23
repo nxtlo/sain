@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ref.ref_mut` function which constructs an `AsMut` object.
 - `Vec[T]` type.
 - `Error` type.
+- `Box[T]` type. This is not the same as rust's `Box`, Check the object documentation.
 
 ### Changed
 

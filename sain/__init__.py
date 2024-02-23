@@ -89,10 +89,13 @@ __all__ = (
     "Vec",
     # error.py
     "Error",
+    # boxed.py
+    "Box",
 )
 
 from . import futures
 from . import iter
+from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr
 from .default import Default

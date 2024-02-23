@@ -1,5 +1,6 @@
 from . import futures as futures
 from . import iter as iter
+from .boxed import Box as Box
 from .cfg import cfg as cfg
 from .cfg import cfg_attr as cfg_attr
 from .default import Default as Default

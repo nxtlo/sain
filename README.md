@@ -1,12 +1,14 @@
 # sain
 
-a dependency-free library that implements some of the Rust core standard types.
+a dependency-free library that implements some of the Rust core functionalities for Python.
 
 This library provides a type-safe mechanism for writing Python code, such as the `Result` and `Option` types,
-which provides zero exception handling and errors as values.
+which provides zero exception handling and and simply return errors as values.
 
 This doesn't change the fact that you're still using `Python`, the core point is to provide more idiomatic Rust code
-into the Python world with Zero-cost.
+as Python code with almost no cost.
+
+multiple `core`/`std` types are implemented in Python. Check the [project documentation](https://nxtlo.github.io/sain/sain.html)
 
 ## Install
 
@@ -22,43 +24,64 @@ pip install sain
 
 Advanced examples in [examples](https://github.com/nxtlo/sain/tree/master/examples)
 
-### Escape the `try/except` mistake
+### no `try/except`
 
-Exceptions sucks, `Result` is simply a better way to avoid runtime exceptions.
+Exceptions suck, `Result` and `Option` is a much better way to avoid runtime exceptions.
 
 ```py
-from sain import Ok, Err, Result
+from sain import Ok, Err
+from sain import vec
+from sain import Some
+from sain import Error
+
+import typing
+
 from dataclasses import dataclass
+
+if typing.TYPE_CHECKING:
+    # These are just type aliases. `Vec` is an actual object.
+    # But since we're using `vec` we just need it as a type hint.
+    from sain import Result, Option, Vec
 
 @dataclass
 class Resource[T]:
-    object: T
+    object: Vec[T]
 
 
-# Note that this is just a simple class that contains 
+# Note that this is just a simple class that contains
 # info about the error cause and not an actual exception.
+# sain provides an `Error` interface that's similar to rusts's `Error` trait.
 @dataclass
-class Error:
-    url: str
-    # reason, http status code.
-    cause: tuple[str, int]
+class HTTPError(Error):
+    body: Option[str]
+    cause: str
+    # This message will be displayed when the error is printed.
+    # A more verbose message can be shown by overriding `description` method.
+    message: str = "HTTP error occurred"
+
 
 def fetch(url: str) -> Result[Resource[bytes], Error]:
-    response = http.get(url)
-    if response.ok:
+    response = client.get(url)
+
+    if response.status == 200:
         # Ok result.
-        return Ok(Resource(response.as_bytes()))
+        return Ok(Resource(vec(response.bytes())))
 
     # An err occurred. we provide an error with some reasonable values.
-    return Err(Error(cause=(response.status, response.reason), url=url))
+    return Err(
+        HTTPError(
+            body=Some(response.text()) if response.content_type == "text/html" else Some(None),
+            cause="expected bytes",
+        )
+    )
 
 # no try/except.
 response = fetch("github.com")
 match response:
     case Ok(resource):
-        print(resource.object.decode('utf-8'))
+        print(resource.object)
     case Err(why):
-        print(f"An error has occurred: {why.cause} - {why.url}")
+        print(f"An error has occurred: {why}")
 
 # You can also just unwrap the value, but will raise an error at runtime if it was an Err.
 resource = response.unwrap()
@@ -89,7 +112,7 @@ resource = ~response
 - `#[cfg_attr]` -> `sain.cfg_attr`
 - `#[doc(...)]` -> `sain.doc(...)`
 
-### Notes
+## Notes
 
 Since Rust is a compiled language, Whatever predict in `cfg` and `cfg_attr` returns False will not compile.
 
