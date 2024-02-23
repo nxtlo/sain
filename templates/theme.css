@@ -1,13 +1,12 @@
-:root { 
-    --pdoc-background: #272935; 
-} 
-.pdoc { 
-    --text: white; 
-    --muted: #9d9d9d; 
-    --link: #bd93f9; 
-    --link-hover: white; 
-    --active: #555; 
-    --code: #232627; 
-    --accent: #232627; 
-    --accent2: #FFF; 
+:root {
+  --pdoc-background: #353535;
+}
+.pdoc {
+  --text: white;
+  --muted: whitesmoke;
+  --link: rgb(210, 153, 29);
+  --link-hover: white;
+  --active: #555;
+  --code: #232627;
+  --accent: #232627;
 }
