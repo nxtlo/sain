@@ -1,5 +1,13 @@
+from . import boxed as boxed
+from . import default as default
+from . import error as error
 from . import futures as futures
 from . import iter as iter
+from . import macros as macros
+from . import once as once
+from . import option as option
+from . import ref as ref
+from . import result as result
 from .boxed import Box as Box
 from .cfg import cfg as cfg
 from .cfg import cfg_attr as cfg_attr

@@ -28,7 +28,9 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""Standard Rust core types implementations for Python.
+"""sain is a set of minimal abstraction that brings Rust's ecosystem to Python.
+It offers a few of the core Rust features like `Vec<T>` and `Result<T, E>` and more.
+See the equivalent type section below.
 
 Equivalent types
 ----------------
@@ -60,11 +62,14 @@ __all__ = (
     "cfg",
     "cfg_attr",
     # default.py
+    "default",
     "Default",
     # ref.py
+    "ref",
     "AsRef",
     "AsMut",
     # option.py
+    "option",
     "Some",
     "Option",
     "NOTHING",
@@ -72,6 +77,7 @@ __all__ = (
     "Iter",
     "iter",
     # macros.py
+    "macros",
     "todo",
     "deprecated",
     "unimplemented",
@@ -79,8 +85,10 @@ __all__ = (
     # futures.py
     "futures",
     # once.py
+    "once",
     "Once",
     # result.py
+    "result",
     "Ok",
     "Err",
     "Result",
@@ -88,13 +96,23 @@ __all__ = (
     "vec",
     "Vec",
     # error.py
+    "error",
     "Error",
     # boxed.py
+    "boxed",
     "Box",
 )
 
+from . import boxed
+from . import default
+from . import error
 from . import futures
 from . import iter
+from . import macros
+from . import once
+from . import option
+from . import ref
+from . import result
 from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr

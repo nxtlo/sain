@@ -133,6 +133,18 @@ class Box(typing.Generic[T]):
         return self
 
     def remaining(self) -> float:
+        """Returns when this box will expire in seconds.
+
+        Example
+        --------
+        ```py
+        jogo = Box("jogo", 3)
+        assert jogo.get().unwrap() == "jogo"
+
+        time.sleep(1)
+        assert jogo.remaining() == 2
+        ```
+        """
         if not self._mono:
             return 0.0
 
@@ -141,6 +153,20 @@ class Box(typing.Generic[T]):
         )
 
     def get(self) -> Option[T]:
+        """Get the contained value if it was not expired, otherwise `Some(None)` is returned.
+
+        Example
+        -------
+        ```py
+        pizza = Box("pizza", timedelta(days=1))
+
+        while not pizza.get().is_none():
+            # Do stuff with the value while its not expired.
+
+        # After 1 day.
+        assert pizza.get().is_none()
+        ```
+        """
         if self.has_expired:
             if self._on_expire is not None:
                 try:

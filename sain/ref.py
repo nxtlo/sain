@@ -27,7 +27,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Referenced objects to a value. This can be used to store an object in the same place multiple times."""
+"""An object that contains a reference to another object. See `AsRef` and `AsMut`."""
 
 from __future__ import annotations
 

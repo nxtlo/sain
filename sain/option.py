@@ -394,7 +394,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         ```
         """
         if self._value is None:
-            return iter.iter(())
+            return iter.into_iter(())
 
         return iter.once(self._value)
 

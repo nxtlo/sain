@@ -27,13 +27,12 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Module contains a Standard functional iterator implementation."""
+"""Composable external iteration. See `Iter` for more details."""
 
 from __future__ import annotations
 
-__all__ = ("Iter", "iter", "empty", "once")
+__all__ = ("Iter", "into_iter", "empty", "once")
 
-import builtins
 import collections.abc as collections
 import copy
 import itertools
@@ -97,7 +96,7 @@ class Iter(
     __slots__ = ("_items",)
 
     def __init__(self, items: collections.Iterable[Item]) -> None:
-        self._items = builtins.iter(items)
+        self._items = iter(items)
 
     @staticmethod
     @typing.final
@@ -705,7 +704,7 @@ def once(item: Item) -> Iter[Item]:
     return Iter((item,))
 
 
-def iter(
+def into_iter(
     iterable: collections.Iterable[Item],
 ) -> Iter[Item]:
     """Convert an iterable into `Iter`.
