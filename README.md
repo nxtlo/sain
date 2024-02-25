@@ -28,63 +28,44 @@ Exceptions suck, `Result` and `Option` is a much better way to avoid runtime exc
 
 ```py
 from sain import Ok, Err
-from sain import vec
 from sain import Some
-from sain import Error
 
 import typing
 
-from dataclasses import dataclass
-
 if typing.TYPE_CHECKING:
-    # These are just type aliases. `Vec` is an actual object.
-    # But since we're using `vec` we just need it as a type hint.
-    from sain import Result, Option, Vec
+    # These are just type aliases that have no cost at runtime.
+    from sain import Result, Option
 
-@dataclass
-class Resource[T]:
-    object: Vec[T]
+# Results. a replacement for try/except.
+def convert(x: str, y: str) -> Result[float, str]:
+    if x.isdigit() and y.isdigit():
+        total = sum(map(float, (x, y)))
+        return Ok(total)
 
+    return Err("either x or y must be integers.")
 
-# Note that this is just a simple class that contains
-# info about the error cause and not an actual exception.
-# sain provides an `Error` interface that's similar to rusts's `Error` trait.
-@dataclass
-class HTTPError(Error):
-    body: Option[str]
-    cause: str
-    # This message will be displayed when the error is printed.
-    # A more verbose message can be shown by overriding `description` method.
-    message: str = "HTTP error occurred"
-
-
-def fetch(url: str) -> Result[Resource[bytes], Error]:
-    response = client.get(url)
-
-    if response.status == 200:
-        # Ok result.
-        return Ok(Resource(vec(response.bytes())))
-
-    # An err occurred. we provide an error with some reasonable values.
-    return Err(
-        HTTPError(
-            body=Some(response.text()) if response.content_type == "text/html" else Some(None),
-            cause="expected bytes",
-        )
-    )
-
-# no try/except.
-response = fetch("github.com")
-match response:
-    case Ok(resource):
-        print(resource.object)
+# matching on a result.
+value = convert("3", "5")
+match value:
+    case Ok(num):
+        print(num)
     case Err(why):
         print(f"An error has occurred: {why}")
 
-# You can also just unwrap the value, but will raise an error at runtime if it was an Err.
-resource = response.unwrap()
-# Using `~` operator is equivalent to `?` in Rust.
-resource = ~response
+# Options, a replacement from typing.Optional
+def best_car(model: int) -> Option[str]:
+    if model >= 2020:
+        return Some("Mazda")
+
+    return Some(None)
+
+# extracting the contained values has drawbacks,
+# it will raise a runtime errors, some with context.
+value = best_car(2024).expect("bad car.")
+# A better way to deal with this is to return a default value.
+value = best_car(2019).unwrap_or("a better car")
+# An inline unwrap looks like this, the tilde operator acts like `?` in rust.
+value = best_car(2015).unwrap() or ~best_car(1999)
 ```
 
 ## Equivalent types
@@ -98,6 +79,7 @@ resource = ~response
 - `AsMut<T>` -> `AsMut[T]`
 - `Iterator<Item>` -> `Iter[Item]`
 - `OnceLock<T>` -> `Once[T]`
+- `N/A` -> `Box[T]`, This is different from a rust box.
 
 ## Equivalent functions / macros
 
