@@ -37,7 +37,7 @@ import typing
 
 from . import default as _default
 from . import iter
-from . import ref as _ref
+from .cell import ref
 
 ValueT = typing.TypeVar("ValueT")
 """A type hint that represents the generic value of the `Some` type."""
@@ -398,8 +398,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return iter.once(self._value)
 
-    def as_ref(self) -> Some[_ref.AsRef[ValueT]]:
-        """Returns immutable `Some[AsRef[ValueT]]` if the contained value is not `None`,
+    def as_ref(self) -> Some[ref.Cell[ValueT]]:
+        """Returns immutable `Some[Cell[ValueT]]` if the contained value is not `None`,
 
         Otherwise returns `Some[None]`.
 
@@ -431,12 +431,12 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
             Or just use `.as_mut()` if you're dealing with mutable objects.
         """
         if self._value is not None:
-            return Some(_ref.AsRef(self._value))
+            return Some(ref.Cell(self._value))
 
         return Some(None)
 
-    def as_mut(self) -> Some[_ref.AsMut[ValueT]]:
-        """Returns mutable `Some[AsMut[ValueT]]` if the contained value is not `None`,
+    def as_mut(self) -> Some[ref.RefCell[ValueT]]:
+        """Returns mutable `Some[RefCell[ValueT]]` if the contained value is not `None`,
 
         Otherwise returns `Some[None]`.
 
@@ -454,7 +454,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         ```
         """
         if self._value is not None:
-            return Some(_ref.AsMut(self._value))
+            return Some(ref.RefCell(self._value))
 
         return Some(None)
 

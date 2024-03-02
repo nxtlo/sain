@@ -27,7 +27,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Abstractions for asynchronous programming."""
+"""Abstractions for threading / asynchronous programming."""
 
 from __future__ import annotations
 
@@ -75,10 +75,9 @@ async def spawn(
     if not aws:
         return _result.Err("No awaitables passed.")
 
-    tasks: collections.MutableSequence[asyncio.Task[T_co]] = []
+    tasks: list[asyncio.Task[T_co]] = []
 
-    for future in aws:
-        tasks.append(asyncio.ensure_future(future))
+    tasks.extend(asyncio.ensure_future(coro) for coro in aws)
     gatherer = asyncio.gather(*tasks)
     try:
         return _result.Ok(await asyncio.wait_for(gatherer, timeout=timeout))

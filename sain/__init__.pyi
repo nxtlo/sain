@@ -1,12 +1,11 @@
 from . import boxed as boxed
+from . import cell as cell
 from . import default as default
 from . import error as error
 from . import futures as futures
 from . import iter as iter
 from . import macros as macros
-from . import once as once
 from . import option as option
-from . import ref as ref
 from . import result as result
 from .boxed import Box as Box
 from .cfg import cfg as cfg
@@ -18,12 +17,9 @@ from .macros import deprecated as deprecated
 from .macros import doc as doc
 from .macros import todo as todo
 from .macros import unimplemented as unimplemented
-from .once import Once as Once
 from .option import NOTHING as NOTHING
 from .option import Option as Option
 from .option import Some as Some
-from .ref import AsMut as AsMut
-from .ref import AsRef as AsRef
 from .result import Err as Err
 from .result import Ok as Ok
 from .result import Result as Result

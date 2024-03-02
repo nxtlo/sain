@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Vec[T]` type.
 - `Error` type.
 - `Box[T]` type. This is not the same as rust's `Box`, Check the object documentation.
+- `Lazy[T]` and `LazyFuture[T]`.
 
 ### Changed
 
@@ -23,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type hint `Option` isn't required to be under `TYPE_CHECKING` anymore.
 - `futures.spawn` now returns `Result[T, E]` and doesn't raise.
 - `Iter.async_for_each` now returns `Result[T, E]` and doesn't raise.
+- `ref.AsRef` is now `Ref`, `ref.AsMut` is now `RefCell`.
+- synchronization primitives are now accessed via `sain.cell` namespace.
 
 ## 0.0.5
 

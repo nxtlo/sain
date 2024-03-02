@@ -27,11 +27,11 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""An object that contains a reference to another object. See `AsRef` and `AsMut`."""
+"""Shareable references to another object. See `Cell` and `RefCell`."""
 
 from __future__ import annotations
 
-__all__ = ("AsRef", "AsMut", "ref", "ref_mut")
+__all__ = ("Cell", "RefCell")
 
 import copy
 import dataclasses
@@ -40,32 +40,16 @@ import typing
 _T_co = typing.TypeVar("_T_co", covariant=True)
 
 
-def ref(value: _T_co) -> AsRef[_T_co]:
-    """Construct an `AsRef` from a value.
-
-    Equivalent to `x = sain.AsRef(value)`
-    """
-    return AsRef(value)
-
-
-def ref_mut(value: _T_co) -> AsMut[_T_co]:
-    """Construct an `AsMut` from a value.
-
-    Equivalent to `x = sain.AsMut(value)`
-    """
-    return AsMut(value)
-
-
 @typing.final
 @dataclasses.dataclass(frozen=True, unsafe_hash=True)
-class AsRef(typing.Generic[_T_co]):
+class Cell(typing.Generic[_T_co]):
     """Represents an immutable reference to an object.
 
     Example
     -------
     ```py
     from dataclasses import dataclass
-    from sain import ref
+    from sain import Cell
 
     @dataclass
     class User:
@@ -75,8 +59,8 @@ class AsRef(typing.Generic[_T_co]):
     same_user = User(0, "sukuna")
     # Both keys point to the same user object.
     cache = {
-        0: ref.ref(same_user),
-        1: ref.ref(same_user)
+        0: Cell(same_user),
+        1: Cell(same_user)
     }
 
     cache[0].object.id = 1
@@ -107,13 +91,18 @@ class AsRef(typing.Generic[_T_co]):
 
 @typing.final
 @dataclasses.dataclass(frozen=False, unsafe_hash=True)
-class AsMut(typing.Generic[_T_co]):
-    """Represents a mutable reference to an object."""
+class RefCell(typing.Generic[_T_co]):
+    """Represents a counted mutable reference to an object.
+
+    Usually the user of this object is responsible for incrementing/decrementing the reference count.
+    """
 
     __slots__ = ("object",)
 
     object: _T_co
     """The object that is being referenced."""
+    ref_count: int = dataclasses.field(default=0, kw_only=True)
+    """The amount time this object has been referenced."""
 
     def copy(self) -> _T_co:
         """Copy the referenced object.
