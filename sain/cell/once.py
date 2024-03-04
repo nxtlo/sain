@@ -96,22 +96,31 @@ class Once(typing.Generic[T]):
         """
         return _option.Some(self._inner)
 
-    def set(self, v: T) -> T:
-        """Set the const value if its not set.
+    def set(self, v: T) -> _result.Result[None, T]:
+        """Set the const value if its not set. returning `T` if its already set.
 
-        This method may block if another thread is trying to access it.
+        Example
+        --------
+        ```py
+        flag = Once[bool]()
+        # flag is empty.
+        assert flag.get_or(True) is True.
 
-        Raises
-        ------
-        `RuntimeError`
-            If the value is already set. This will get raised.
+        # flag is not empty, so it returns the value we set first.
+        assert flag.set(False) == Err(True)
+        ```
+
+        Returns
+        -------
+        `sain.Result[None, T]`
+            This cell returns `Ok(None)` if it was empty. otherwise `Err(T)` if it was full.
         """
         if self._inner is not None:
-            raise ValueError("Value is already set.")
+            return _result.Err(self._inner)
 
-        self._inner = origin = self.get_or(v)
+        self._inner = self.get_or(v)
         self._lock = None
-        return origin
+        return _result.Ok(None)
 
     def clear(self) -> None:
         """Clear the inner value, Setting it to `None`."""
@@ -130,7 +139,7 @@ class Once(typing.Generic[T]):
 
         with self._lock:
             self._inner = f
-            return self._inner
+            return f
 
     def __repr__(self) -> str:
         return f"Once(value: {self._inner})"
@@ -216,7 +225,7 @@ class AsyncOnce(typing.Generic[T]):
         assert await flag.get_or(True) is True.
 
         # flag is not empty, so it returns the value we set first.
-        assert (await flag.set(False)).matches(True)
+        assert (await flag.set(False)) == Err(True)
         ```
 
         Returns
@@ -247,7 +256,7 @@ class AsyncOnce(typing.Generic[T]):
 
         async with self._lock:
             self._inner = f
-            return self._inner
+            return f
 
     def __repr__(self) -> str:
         return f"Once(value: {self._inner})"
