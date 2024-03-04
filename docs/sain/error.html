@@ -140,7 +140,7 @@
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="sd">&quot;&quot;&quot;`Error` is an interface usually used for values that returns `sain.Result[T, E]`</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;`Error` is an interface usually used for values that returns `sain.Result[T, E]`</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">    where `E` is an implementation of this interface.</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
@@ -184,11 +184,11 @@
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Error</span><span class="p">]]:</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="sd">&quot;&quot;&quot;The source of this error, if any.&quot;&quot;&quot;</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;The source of this error, if any.&quot;&quot;&quot;</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="sd">&quot;&quot;&quot;Context for this error.&quot;&quot;&quot;</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Context for this error.&quot;&quot;&quot;</span>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -221,7 +221,7 @@
     <a class="headerlink" href="#Error"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Error-55"><a href="#Error-55"><span class="linenos"> 55</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="Error-56"><a href="#Error-56"><span class="linenos"> 56</span></a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
-</span><span id="Error-57"><a href="#Error-57"><span class="linenos"> 57</span></a>    <span class="sd">&quot;&quot;&quot;`Error` is an interface usually used for values that returns `sain.Result[T, E]`</span>
+</span><span id="Error-57"><a href="#Error-57"><span class="linenos"> 57</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;`Error` is an interface usually used for values that returns `sain.Result[T, E]`</span>
 </span><span id="Error-58"><a href="#Error-58"><span class="linenos"> 58</span></a>
 </span><span id="Error-59"><a href="#Error-59"><span class="linenos"> 59</span></a><span class="sd">    where `E` is an implementation of this interface.</span>
 </span><span id="Error-60"><a href="#Error-60"><span class="linenos"> 60</span></a>
@@ -265,11 +265,11 @@
 </span><span id="Error-98"><a href="#Error-98"><span class="linenos"> 98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
 </span><span id="Error-99"><a href="#Error-99"><span class="linenos"> 99</span></a>
 </span><span id="Error-100"><a href="#Error-100"><span class="linenos">100</span></a>    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Error</span><span class="p">]]:</span>
-</span><span id="Error-101"><a href="#Error-101"><span class="linenos">101</span></a>        <span class="sd">&quot;&quot;&quot;The source of this error, if any.&quot;&quot;&quot;</span>
+</span><span id="Error-101"><a href="#Error-101"><span class="linenos">101</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;The source of this error, if any.&quot;&quot;&quot;</span>
 </span><span id="Error-102"><a href="#Error-102"><span class="linenos">102</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="Error-103"><a href="#Error-103"><span class="linenos">103</span></a>
 </span><span id="Error-104"><a href="#Error-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Error-105"><a href="#Error-105"><span class="linenos">105</span></a>        <span class="sd">&quot;&quot;&quot;Context for this error.&quot;&quot;&quot;</span>
+</span><span id="Error-105"><a href="#Error-105"><span class="linenos">105</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Context for this error.&quot;&quot;&quot;</span>
 </span><span id="Error-106"><a href="#Error-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 </span><span id="Error-107"><a href="#Error-107"><span class="linenos">107</span></a>
 </span><span id="Error-108"><a href="#Error-108"><span class="linenos">108</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -331,39 +331,14 @@
                                         <input id="Error.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">Error</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">*</span><span class="n">args</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span>)</span>
+        <span class="name">Error</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></span>)</span>
 
                 <label class="view-source-button" for="Error.__init__-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Error.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Error.__init__-1430"><a href="#Error.__init__-1430"><span class="linenos">1430</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="Error.__init__-1431"><a href="#Error.__init__-1431"><span class="linenos">1431</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="Error.__init__-1432"><a href="#Error.__init__-1432"><span class="linenos">1432</span></a>
-</span><span id="Error.__init__-1433"><a href="#Error.__init__-1433"><span class="linenos">1433</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="Error.__init__-1434"><a href="#Error.__init__-1434"><span class="linenos">1434</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="Error.__init__-1435"><a href="#Error.__init__-1435"><span class="linenos">1435</span></a>
-</span><span id="Error.__init__-1436"><a href="#Error.__init__-1436"><span class="linenos">1436</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="Error.__init__-1437"><a href="#Error.__init__-1437"><span class="linenos">1437</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="Error.__init__-1438"><a href="#Error.__init__-1438"><span class="linenos">1438</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="Error.__init__-1439"><a href="#Error.__init__-1439"><span class="linenos">1439</span></a>        <span class="k">return</span>
-</span><span id="Error.__init__-1440"><a href="#Error.__init__-1440"><span class="linenos">1440</span></a>
-</span><span id="Error.__init__-1441"><a href="#Error.__init__-1441"><span class="linenos">1441</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="Error.__init__-1442"><a href="#Error.__init__-1442"><span class="linenos">1442</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="Error.__init__-1443"><a href="#Error.__init__-1443"><span class="linenos">1443</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="Error.__init__-1444"><a href="#Error.__init__-1444"><span class="linenos">1444</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="Error.__init__-1445"><a href="#Error.__init__-1445"><span class="linenos">1445</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="Error.__init__-1446"><a href="#Error.__init__-1446"><span class="linenos">1446</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="Error.__init__-1447"><a href="#Error.__init__-1447"><span class="linenos">1447</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="Error.__init__-1448"><a href="#Error.__init__-1448"><span class="linenos">1448</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="Error.__init__-1449"><a href="#Error.__init__-1449"><span class="linenos">1449</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="Error.__init__-1450"><a href="#Error.__init__-1450"><span class="linenos">1450</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="Error.__init__-1451"><a href="#Error.__init__-1451"><span class="linenos">1451</span></a>            <span class="k">break</span>
-</span><span id="Error.__init__-1452"><a href="#Error.__init__-1452"><span class="linenos">1452</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="Error.__init__-1453"><a href="#Error.__init__-1453"><span class="linenos">1453</span></a>        <span class="c1"># should not happen</span>
-</span><span id="Error.__init__-1454"><a href="#Error.__init__-1454"><span class="linenos">1454</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="Error.__init__-1455"><a href="#Error.__init__-1455"><span class="linenos">1455</span></a>
-</span><span id="Error.__init__-1456"><a href="#Error.__init__-1456"><span class="linenos">1456</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Error.__init__-97"><a href="#Error.__init__-97"><span class="linenos">97</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Error.__init__-98"><a href="#Error.__init__-98"><span class="linenos">98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
 </span></pre></div>
 
 
@@ -393,7 +368,7 @@
     </div>
     <a class="headerlink" href="#Error.source"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Error.source-100"><a href="#Error.source-100"><span class="linenos">100</span></a>    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Error</span><span class="p">]]:</span>
-</span><span id="Error.source-101"><a href="#Error.source-101"><span class="linenos">101</span></a>        <span class="sd">&quot;&quot;&quot;The source of this error, if any.&quot;&quot;&quot;</span>
+</span><span id="Error.source-101"><a href="#Error.source-101"><span class="linenos">101</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;The source of this error, if any.&quot;&quot;&quot;</span>
 </span><span id="Error.source-102"><a href="#Error.source-102"><span class="linenos">102</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span></pre></div>
 
@@ -415,7 +390,7 @@
     </div>
     <a class="headerlink" href="#Error.description"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Error.description-104"><a href="#Error.description-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Error.description-105"><a href="#Error.description-105"><span class="linenos">105</span></a>        <span class="sd">&quot;&quot;&quot;Context for this error.&quot;&quot;&quot;</span>
+</span><span id="Error.description-105"><a href="#Error.description-105"><span class="linenos">105</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Context for this error.&quot;&quot;&quot;</span>
 </span><span id="Error.description-106"><a href="#Error.description-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 </span></pre></div>
 

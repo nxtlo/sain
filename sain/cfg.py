@@ -112,7 +112,7 @@ def cfg_attr(
     `RuntimeError` will be raised and the object will not run.
 
     .. warning::
-        The `require_modules` parameter is bugged and scheduled for deprecation
+        The `requires` parameter is bugged and scheduled for deprecation
         and will be removed in a future release.
         Instead, directly import modules at the top of the file or function.
 
@@ -148,8 +148,7 @@ def cfg_attr(
     target_os : `str | None`
         The targeted operating system thats required for the object.
     python_version : `tuple[int, int, int] | None`
-        The targeted Python version thats required for the object.
-        Format must be `(3, 9, 5)`.
+        The targeted Python version thats required for the object. Format must be `(3, 9, 5)`.
     target_arch : `str | None`
         The CPU targeted architecture thats required for the object.
     impl : `str | None`
@@ -193,7 +192,7 @@ def cfg(
     """A function that will run the code only if all predicate attributes returns `True`.
 
     .. warning::
-        The `require_modules` parameter is bugged and scheduled for deprecation and will be removed in a future release.
+        The `requires` parameter is bugged and scheduled for deprecation and will be removed in a future release.
         Instead, directly import modules at the top of the file or function.
 
     The difference between this function and `cfg_attr` is that this function will not raise an exception.
@@ -219,9 +218,7 @@ def cfg(
     target_os : `str | None`
         The targeted operating system thats required for the object to be ran.
     python_version : `tuple[int, int, int] | None`
-        The targeted Python version thats required for the object to be ran.
-
-        Format must be `(3, 9, 5)`.
+        The targeted Python version thats required for the object to be ran. Format must be `(3, 9, 5)``
     target_arch : `str | None`
         The CPU targeted architecture thats required for the object to be ran.
     impl : `str | None`

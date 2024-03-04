@@ -587,7 +587,7 @@ class Iter(
         func: collections.Callable[
             [Item], collections.Coroutine[None, typing.Any, OtherItem]
         ],
-    ) -> _result.Result[collections.Sequence[OtherItem], str]:
+    ) -> _result.Result[collections.Sequence[OtherItem], futures.SpawnErr]:
         """Calls the async function on each item in the iterator concurrently.
 
         Example

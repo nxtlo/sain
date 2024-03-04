@@ -39,6 +39,7 @@ import threading
 import typing
 
 from sain import option as _option
+from sain import result as _result
 
 if typing.TYPE_CHECKING:
     from sain import Option
@@ -204,20 +205,31 @@ class AsyncOnce(typing.Generic[T]):
         """
         return _option.Some(self._inner)
 
-    async def set(self, v: T) -> T:
-        """Set the const value if its not set.
+    async def set(self, v: T) -> _result.Result[None, T]:
+        """Set the const value if its not set. returning `T` if its already set.
 
-        Raises
-        ------
-        `RuntimeError`
-            If the value is already set. This will get raised.
+        Example
+        --------
+        ```py
+        flag = AsyncOnce[bool]()
+        # flag is empty.
+        assert await flag.get_or(True) is True.
+
+        # flag is not empty, so it returns the value we set first.
+        assert (await flag.set(False)).matches(True)
+        ```
+
+        Returns
+        -------
+        `sain.Result[None, T]`
+            This cell returns `Ok(None)` if it was empty. otherwise `Err(T)` if it was full.
         """
         if self._inner is not None:
-            raise ValueError("Value is already set.")
+            return _result.Err(self._inner)
 
-        self._inner = origin = await self.get_or(v)
+        self._inner = await self.get_or(v)
         self._lock = None
-        return origin
+        return _result.Ok(None)
 
     def clear(self) -> None:
         self._lock = None

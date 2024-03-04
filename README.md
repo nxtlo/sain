@@ -72,7 +72,7 @@ value = best_car(2015).unwrap() or ~best_car(1999)
 
 - `Option<T>` -> `Option[T]` | `Some(T)`
 - `Result<T, E>` -> `Result[T, E]` | `Ok(T)` | `Err(T)`
-- `Error` -> `Error`
+- `&dyn Error` -> `Error`
 - `Vec<T>` -> `Vec[T]`
 - `Default<T>` -> `Default[T]`
 - `AsRef<T>` -> `AsRef[T]`

@@ -37,6 +37,7 @@ import asyncio
 import threading
 import typing
 
+from sain import macros
 from sain import option
 
 if typing.TYPE_CHECKING:
@@ -47,10 +48,10 @@ T = typing.TypeVar("T")
 
 @typing.final
 class Lazy(typing.Generic[T]):
-    """A value that gets lazily initialized at runtime.
+    """A thread-safe value that gets lazily initialized at runtime.
 
     This isn't some sort of magic, the inner value is set to `None` when first initialized,
-    Then this `None` gets replaced at runtime when calling `LazyFuture.set` method.
+    Then this `None` gets replaced at runtime when calling `Lazy.set` method.
 
     This is a well-known approach used in Python to lazily initialize expensive objects
     that needs to be `None` until it gets initialized with a function call.
@@ -105,6 +106,24 @@ class Lazy(typing.Generic[T]):
 
         return option.nothing_unchecked()
 
+    @macros.unsafe
+    def get_unchecked(self) -> T:
+        """Get the contained value without checking if it was initialized.
+
+        Example
+        -------
+        ```py
+        sqrt = Lazy[float]()
+        inner = sqrt.get_unchecked() # Undefined Behavior
+
+        # Initialize it first.
+        sqrt.set(math.sqrt(2.0))
+        inner = sqrt.get()
+        ```
+        """
+        # SAFETY: This caller guarantees that the value is initialized.
+        return self.__inner  # type: ignore
+
     def set(self, value: T) -> T:
         """Set the contained value to `value`.
 
@@ -144,7 +163,7 @@ class Lazy(typing.Generic[T]):
 
 @typing.final
 class LazyFuture(typing.Generic[T]):
-    """A value that gets lazily initialized at runtime asynchronously.
+    """A thread-safe value that gets lazily initialized at runtime asynchronously.
 
     This isn't some sort of magic, the inner value is set to `None` when first initialized,
     Then this `None` gets replaced at runtime when calling `LazyFuture.set` method.
@@ -183,6 +202,7 @@ class LazyFuture(typing.Generic[T]):
         """Whether the contained value is initialized or not."""
         return self.__inner is not None
 
+    @macros.unsafe
     async def get(self) -> Option[T]:
         """Hold ownership of the contained value and return it.
 

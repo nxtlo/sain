@@ -37,6 +37,7 @@ import typing
 
 from . import default as _default
 from . import iter
+from . import macros
 from .cell import ref
 
 ValueT = typing.TypeVar("ValueT")
@@ -165,11 +166,9 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return self._value
 
+    @macros.unsafe
     def unwrap_unchecked(self) -> ValueT:
         """Unwrap the inner value immediately returning it.
-
-        ## Warning
-        Unwrapping the value knowing its `None` is considered Undefined Behavior.
 
         Example
         -------
@@ -572,6 +571,7 @@ assert NOTHING == Some(None) # True
 
 
 @typing.no_type_check
+@macros.unsafe
 def nothing_unchecked() -> Option[T]:
     """A placeholder that always returns `sain.NOTHING` but acts like it returns `Option[T]`.
 

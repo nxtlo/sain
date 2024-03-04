@@ -188,6 +188,18 @@ class Ok(typing.Generic[T]):
         """
         return False
 
+    def matches(self, value: T) -> bool:
+        """Returns `True` if the contained value `==` `value`.
+
+        Example
+        -------
+        ```py
+        ok: Result[str, None] = Ok("zzz")
+        assert ok.matches("zzz")
+        ```
+        """
+        return self._inner == value
+
     ###################
     # * Extractors. * #
     ###################
@@ -513,6 +525,18 @@ class Err(typing.Generic[E]):
         ```
         """
         return self.is_err() and f(self._inner)
+
+    def matches(self, value: E) -> bool:
+        """Returns `True` if the contained value `==` `value`.
+
+        Example
+        -------
+        ```py
+        error: Result[str, None] = Err(None)
+        assert error.matches(None)
+        ```
+        """
+        return self._inner == value
 
     ###################
     # * Extractors. * #
