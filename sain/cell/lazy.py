@@ -99,10 +99,10 @@ class Lazy(typing.Generic[T]):
         if not self._lock:
             self._lock = threading.Lock()
 
-            with self._lock:
-                if self.__inner is not None:
-                    # inner here is never none.
-                    return option.Some(self.__inner)
+        with self._lock:
+            if self.__inner is not None:
+                # inner here is never none.
+                return option.Some(self.__inner)
 
         return option.nothing_unchecked()
 
@@ -215,10 +215,10 @@ class LazyFuture(typing.Generic[T]):
         if not self._lock:
             self._lock = asyncio.Lock()
 
-            async with self._lock:
-                if self.__inner is not None:
-                    # inner here is never none.
-                    return option.Some(self.__inner)
+        async with self._lock:
+            if self.__inner is not None:
+                # inner here is never none.
+                return option.Some(self.__inner)
 
         return option.nothing_unchecked()
 

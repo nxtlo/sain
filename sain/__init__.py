@@ -39,10 +39,12 @@ Equivalent types
 - `Error` -> `Error`
 - `Vec<T>` -> `Vec[T]`
 - `Default<T>` -> `Default[T]`
-- `AsRef<T>` -> `AsRef[T]`
-- `AsMut<T>` -> `AsMut[T]`
 - `Iter<Item>` -> `Iter[Item]`
-- `OnceLock<T>` -> `Once[T]`
+- `Box<T>` -> `Box[T]`, not a heap box.
+- `cell::Cell<T>` -> `Cell[T]`, slightly different.
+- `cell::RefCell<T>` -> `RefCell[T]`, slightly different.
+- `sync::LazyLock<T>` -> `Lazy[T]`
+- `sync::OnceLock<T>` -> `Once[T]`
 
 Equivalent macros
 -----------------
@@ -53,7 +55,7 @@ As decorators.
 - `deprecated!()` -> `sain.deprecated`
 - `unimplemented!()` -> `sain.unimplemented`
 - `#[cfg_attr]` -> `sain.cfg_attr`
-- `#[doc(...)]` -> `sain.doc(...)`
+- `#[doc()]` -> `sain.doc()`
 """
 
 from __future__ import annotations

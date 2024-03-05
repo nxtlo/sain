@@ -42,6 +42,7 @@ from . import default as _default
 from . import futures
 from . import result as _result
 from .option import Some
+from .option import nothing_unchecked
 from .vec import Vec
 
 Item = typing.TypeVar("Item")
@@ -213,7 +214,7 @@ class Iter(
         try:
             item = self.__next__()
         except StopIteration:
-            return Some(None)
+            return nothing_unchecked()
 
         return Some(item)
 
