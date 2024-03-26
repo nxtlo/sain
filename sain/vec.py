@@ -130,7 +130,7 @@ class Vec(typing.Generic[T]):
         self._capacity = 0
 
     @classmethod
-    @macros.unstable(reason="not unimplemented yet.")
+    @macros.unstable()
     def with_capacity(cls, capacity: int) -> Vec[T]:
         """Create a new `Vec` with at least the specified capacity.
 

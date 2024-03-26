@@ -27,7 +27,11 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<<<<<<< HEAD:sain/sync/__init__.py
 """Synchronization primitives."""
+=======
+"""Useful synchronization type safe primitives."""
+>>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c:sain/cell/__init__.py
 
 from __future__ import annotations
 

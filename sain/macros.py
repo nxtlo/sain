@@ -28,11 +28,14 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""A module that contains useful decorators"""
+"""A module that contains useful decorators for marking objects.
+
+It appends useful messages to warn at runtime and to the object documentation.
+"""
 
 from __future__ import annotations
 
-__all__ = ("deprecated", "unimplemented", "todo", "doc")
+__all__ = ("deprecated", "unimplemented", "todo", "doc", "unsafe")
 
 import functools
 import inspect
@@ -49,10 +52,9 @@ if typing.TYPE_CHECKING:
     Read = _typeshed.FileDescriptorOrPath
 
 
-# TODO: Expose `Error` as a trait such as `std::error::Error` in Rust.
 @typing.final
 class Error(RuntimeWarning):
-    """A runtime warning that is raised when the decorated object fails a check."""
+    """A runtime warning that is used as the category warning for all the markers."""
 
     __slots__ = ("message",)
 
@@ -64,8 +66,28 @@ def _warn(msg: str, stacklevel: int = 2) -> None:
     warnings.warn(message=msg, stacklevel=stacklevel, category=Error)
 
 
+def unsafe(fn: collections.Callable[..., U]) -> collections.Callable[..., U]:
+    """Mark a function as unsafe.
+
+    The caller of the decorated function is responsible for the undefined behavior if occurred.
+    """
+    m = "\n# Safety ⚠️\nCalling this method on `None` is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior)."
+    if fn.__doc__:
+        # append this message to an existing document.
+        fn.__doc__ = inspect.cleandoc(fn.__doc__) + f"\n{m}"
+    else:
+        fn.__doc__ = m
+
+    return fn
+
+
+@functools.cache
+def _obj_type(obj: type[typing.Any]) -> str:
+    return "class" if inspect.isclass(obj) else "function"
+
+
 def unstable(
-    *, reason: typing.LiteralString
+    *, reason: typing.LiteralString = "none"
 ) -> collections.Callable[
     [collections.Callable[P, typing.Any]],
     collections.Callable[P, typing.NoReturn],
@@ -74,7 +96,7 @@ def unstable(
 
     Unstable objects never run, even inside the standard library.
 
-    Calling any object that is unstable will raise an `Error` exception.
+    Calling any object that is unstable will raise an `RuntimeError` exception.
     Also using this outside the library isn't allowed.
 
     Example
@@ -98,10 +120,9 @@ def unstable(
     ) -> collections.Callable[P, typing.NoReturn]:
         @functools.wraps(obj)
         def wrapper(*_args: P.args, **_kwargs: P.kwargs) -> typing.NoReturn:
-            obj_type = "class" if inspect.isclass(obj) else "function"
             if obj.__doc__ != "__intrinsics__":
                 # This has been used outside of the lib.
-                raise Error(
+                raise RuntimeError(
                     "Stability attributes may not be used outside of the core library",
                 )
 
@@ -109,9 +130,19 @@ def unstable(
             if name.startswith("_"):
                 name = name.lstrip("_")
 
-            raise Error(f"{obj_type} `{name}` is not stable: {reason}")
+            raise RuntimeError(f"{_obj_type(obj)} `{name}` is not stable: {reason}")
 
         # idk why pyright doesn't know the type of wrapper.
+        m = (
+            f"\n# Stability ⚠️\nThis {_obj_type(obj)} is unstable, "
+            "Calling it may result in failure or [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior)."
+        )
+        if wrapper.__doc__:
+            # append this message to an existing document.
+            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + f"{m}"
+        else:
+            wrapper.__doc__ = m
+
         return wrapper  # pyright: ignore
 
     return decorator
@@ -160,27 +191,37 @@ def deprecated(
         An optional hint for the user.
     """
 
+    def _create_message(obj: typing.Any) -> str:
+        msg = f"{_obj_type(obj)} `{obj.__module__}.{obj.__name__}` is deprecated."
+
+        if since is not None:
+            msg += f" since {since}."
+
+        if removed_in:
+            msg += f" Scheduled for removal in `{removed_in}`."
+
+        if use_instead is not None:
+            msg += f" Use `{use_instead}` instead."
+
+        if hint:
+            msg += f" Hint: {hint}"
+        return msg
+
     def decorator(func: collections.Callable[P, U]) -> collections.Callable[P, U]:
+        message = _create_message(func)
+
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            obj_type = "class" if inspect.isclass(func) else "function"
-            msg = f"{obj_type} {func.__module__}.{func.__name__} is deprecated."
-
-            if since is not None:
-                msg += f" since {since}."
-
-            if use_instead is not None:
-                msg += f" Use {use_instead} instead."
-
-            if removed_in:
-                msg += f" Removed in {removed_in}."
-
-            if hint:
-                msg += f" Hint: {hint}"
-
-            _warn(msg)
+            _warn(message)
             return func(*args, **kwargs)
 
+        # idk why pyright doesn't know the type of wrapper.
+        m = f"\n# Warning ⚠️\n{message}."
+        if wrapper.__doc__:
+            # append this message to an existing document.
+            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + f"{m}"
+        else:
+            wrapper.__doc__ = m
         return wrapper
 
     return decorator
@@ -237,21 +278,31 @@ def unimplemented(
         If provided, This will be shown as what release this object be implemented.
     """
 
+    def _create_message(obj: typing.Any) -> str:
+        msg = (
+            message
+            or f"{_obj_type(obj)} `{obj.__module__}.{obj.__name__}` is not yet implemented."
+        )  # noqa: W503
+
+        if available_in:
+            msg += f" Available in `{available_in}`."
+        return msg
+
     def decorator(obj: collections.Callable[P, U]) -> collections.Callable[P, U]:
+        message = _create_message(obj)
+
         @functools.wraps(obj)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            obj_type = "class" if inspect.isclass(obj) else "function"
-            msg = (
-                message
-                or f"{obj_type} {obj.__module__}.{obj.__name__} is not yet implemented."
-            )  # noqa: W503
-
-            if available_in:
-                msg += f" Available in {available_in}."
-
-            _warn(msg)
+            _warn(message)
             return obj(*args, **kwargs)
 
+        # idk why pyright doesn't know the type of wrapper.
+        m = f"\n# Warning ⚠️\n{message}."
+        if wrapper.__doc__:
+            # append this message to an existing document.
+            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + f"{m}"
+        else:
+            wrapper.__doc__ = m
         return wrapper
 
     return decorator
@@ -279,6 +330,8 @@ def doc(
             ...
     ```
 
+    Parameters
+    ----------
     path: `type[int] | type[str] | type[bytes] | type[PathLike[str]] | type[PathLike[bytes]]`
         The path to read the content from.
     """

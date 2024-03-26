@@ -1,11 +1,12 @@
 # Tester.
-nox~=2023.4.22
+nox~=2024.3.2
 
-# Ducumentation.
+# Documentation.
 pdoc~=14.4.0
 
 # Format - Type checking.
-ruff~=0.2.2
+ruff~=0.3.2
 isort~=5.13.2
-pyright~=1.1.350
+pyright~=1.1.353
 codespell~=2.2.6
+typing-extensions~=4.10.0 

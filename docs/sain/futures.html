@@ -95,17 +95,18 @@
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;spawn&quot;</span><span class="p">,</span> <span class="s2">&quot;loop&quot;</span><span class="p">)</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="kn">import</span> <span class="nn">asyncio</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">result</span> <span class="k">as</span> <span class="n">_result</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>    <span class="kn">import</span> <span class="nn">collections.abc</span> <span class="k">as</span> <span class="nn">collections</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>    <span class="n">T_co</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T_co&quot;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="n">T</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="kn">import</span> <span class="nn">enum</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="kn">import</span> <span class="nn">typing</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">result</span> <span class="k">as</span> <span class="n">_result</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>    <span class="kn">import</span> <span class="nn">collections.abc</span> <span class="k">as</span> <span class="nn">collections</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="n">T_co</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T_co&quot;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="n">T</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
+<<<<<<< HEAD
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">spawn</span><span class="p">(</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>    <span class="o">*</span><span class="n">aws</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">[</span><span class="n">T_co</span><span class="p">],</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -173,6 +174,96 @@
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="k">return</span> <span class="n">loop</span>
+=======
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="k">class</span> <span class="nc">SpawnErr</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="n">EMPTY</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;No awaitables were passed.&quot;&quot;&quot;</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>    <span class="n">CANCELED</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The future gatherer were canceled.&quot;&quot;&quot;</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="n">TIMEOUT</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The future gatherer timed-out.&quot;&quot;&quot;</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">spawn</span><span class="p">(</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="o">*</span><span class="n">aws</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">[</span><span class="n">T_co</span><span class="p">],</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T_co</span><span class="p">],</span> <span class="n">SpawnErr</span><span class="p">]:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Spawn all given awaitables concurrently.</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">    Example</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">    -------</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">    ```py</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">    async def get(url: str) -&gt; dict[str, Any]:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        return await http.get(url).json()</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">    async def main() -&gt; None:</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        tasks = await spawn(*(get(&quot;url.com&quot;) for _ in range(10)))</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        match tasks:</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">            case Ok(tasks):</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">                assert len(tasks) &lt;= 10</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">            case Err(why) if why.TIMEOUT:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">                print(&quot;couldn&#39;t make it in time :&lt;&quot;)</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">            case _:</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">                ...</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">    ```</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">    Parameters</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">    ----------</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">    *aws : `collections.Awaitable[T]`</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        The awaitables to gather.</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">    timeout : `float | None`</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        An optional timeout.</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">    Returns</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">    -------</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">    `sain.Result[T, SpawnErr]`:</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        The result of the gathered awaitables.</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">aws</span><span class="p">:</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">SpawnErr</span><span class="o">.</span><span class="n">EMPTY</span><span class="p">)</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="n">tasks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">[</span><span class="n">T_co</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>    <span class="n">tasks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">ensure_future</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span> <span class="k">for</span> <span class="n">coro</span> <span class="ow">in</span> <span class="n">aws</span><span class="p">)</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>    <span class="n">gatherer</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">gatherer</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">))</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">SpawnErr</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">)</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">SpawnErr</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">)</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>    <span class="k">finally</span><span class="p">:</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">done</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>                <span class="n">task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="n">gatherer</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="c1"># source: hikari-py/aio.py</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="k">def</span> <span class="nf">loop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">AbstractEventLoop</span><span class="p">:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the current usable event loop or create a new one.</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">    Returns</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">    -------</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    `asyncio.AbstractEventLoop`</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop_policy</span><span class="p">()</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">loop</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="k">return</span> <span class="n">loop</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>    <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="k">pass</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">return</span> <span class="n">loop</span>
+>>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 </span></pre></div>
 
 
@@ -182,12 +273,13 @@
 <div class="attr function">
             
         <span class="def">async def</span>
-        <span class="name">spawn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span><span class="n">aws</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">[</span><span class="o">+</span><span class="n">T_co</span><span class="p">]</span>,</span><span class="param">	<span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="result.html#Ok">sain.result.Ok</a></span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="o">+</span><span class="n">T_co</span><span class="p">]],</span> <span class="n"><a href="result.html#Err">sain.result.Err</a></span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>:</span></span>
+        <span class="name">spawn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span><span class="n">aws</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">[</span><span class="o">+</span><span class="n">T_co</span><span class="p">]</span>,</span><span class="param">	<span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="result.html#Ok">sain.result.Ok</a></span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="o">+</span><span class="n">T_co</span><span class="p">]],</span> <span class="n"><a href="result.html#Err">sain.result.Err</a></span><span class="p">[</span><span class="n">sain</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">SpawnErr</span><span class="p">]]</span>:</span></span>
 
                 <label class="view-source-button" for="spawn-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#spawn"></a>
+<<<<<<< HEAD
             <div class="pdoc-code codehilite"><pre><span></span><span id="spawn-49"><a href="#spawn-49"><span class="linenos">49</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">spawn</span><span class="p">(</span>
 </span><span id="spawn-50"><a href="#spawn-50"><span class="linenos">50</span></a>    <span class="o">*</span><span class="n">aws</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">[</span><span class="n">T_co</span><span class="p">],</span>
 </span><span id="spawn-51"><a href="#spawn-51"><span class="linenos">51</span></a>    <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -233,6 +325,64 @@
 </span><span id="spawn-91"><a href="#spawn-91"><span class="linenos">91</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">done</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
 </span><span id="spawn-92"><a href="#spawn-92"><span class="linenos">92</span></a>                <span class="n">task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
 </span><span id="spawn-93"><a href="#spawn-93"><span class="linenos">93</span></a>        <span class="n">gatherer</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+=======
+            <div class="pdoc-code codehilite"><pre><span></span><span id="spawn-59"><a href="#spawn-59"><span class="linenos"> 59</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">spawn</span><span class="p">(</span>
+</span><span id="spawn-60"><a href="#spawn-60"><span class="linenos"> 60</span></a>    <span class="o">*</span><span class="n">aws</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">[</span><span class="n">T_co</span><span class="p">],</span>
+</span><span id="spawn-61"><a href="#spawn-61"><span class="linenos"> 61</span></a>    <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="spawn-62"><a href="#spawn-62"><span class="linenos"> 62</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T_co</span><span class="p">],</span> <span class="n">SpawnErr</span><span class="p">]:</span>
+</span><span id="spawn-63"><a href="#spawn-63"><span class="linenos"> 63</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Spawn all given awaitables concurrently.</span>
+</span><span id="spawn-64"><a href="#spawn-64"><span class="linenos"> 64</span></a>
+</span><span id="spawn-65"><a href="#spawn-65"><span class="linenos"> 65</span></a><span class="sd">    Example</span>
+</span><span id="spawn-66"><a href="#spawn-66"><span class="linenos"> 66</span></a><span class="sd">    -------</span>
+</span><span id="spawn-67"><a href="#spawn-67"><span class="linenos"> 67</span></a><span class="sd">    ```py</span>
+</span><span id="spawn-68"><a href="#spawn-68"><span class="linenos"> 68</span></a><span class="sd">    async def get(url: str) -&gt; dict[str, Any]:</span>
+</span><span id="spawn-69"><a href="#spawn-69"><span class="linenos"> 69</span></a><span class="sd">        return await http.get(url).json()</span>
+</span><span id="spawn-70"><a href="#spawn-70"><span class="linenos"> 70</span></a>
+</span><span id="spawn-71"><a href="#spawn-71"><span class="linenos"> 71</span></a><span class="sd">    async def main() -&gt; None:</span>
+</span><span id="spawn-72"><a href="#spawn-72"><span class="linenos"> 72</span></a><span class="sd">        tasks = await spawn(*(get(&quot;url.com&quot;) for _ in range(10)))</span>
+</span><span id="spawn-73"><a href="#spawn-73"><span class="linenos"> 73</span></a><span class="sd">        match tasks:</span>
+</span><span id="spawn-74"><a href="#spawn-74"><span class="linenos"> 74</span></a><span class="sd">            case Ok(tasks):</span>
+</span><span id="spawn-75"><a href="#spawn-75"><span class="linenos"> 75</span></a><span class="sd">                assert len(tasks) &lt;= 10</span>
+</span><span id="spawn-76"><a href="#spawn-76"><span class="linenos"> 76</span></a><span class="sd">            case Err(why) if why.TIMEOUT:</span>
+</span><span id="spawn-77"><a href="#spawn-77"><span class="linenos"> 77</span></a><span class="sd">                print(&quot;couldn&#39;t make it in time :&lt;&quot;)</span>
+</span><span id="spawn-78"><a href="#spawn-78"><span class="linenos"> 78</span></a><span class="sd">            case _:</span>
+</span><span id="spawn-79"><a href="#spawn-79"><span class="linenos"> 79</span></a><span class="sd">                ...</span>
+</span><span id="spawn-80"><a href="#spawn-80"><span class="linenos"> 80</span></a><span class="sd">    ```</span>
+</span><span id="spawn-81"><a href="#spawn-81"><span class="linenos"> 81</span></a>
+</span><span id="spawn-82"><a href="#spawn-82"><span class="linenos"> 82</span></a><span class="sd">    Parameters</span>
+</span><span id="spawn-83"><a href="#spawn-83"><span class="linenos"> 83</span></a><span class="sd">    ----------</span>
+</span><span id="spawn-84"><a href="#spawn-84"><span class="linenos"> 84</span></a><span class="sd">    *aws : `collections.Awaitable[T]`</span>
+</span><span id="spawn-85"><a href="#spawn-85"><span class="linenos"> 85</span></a><span class="sd">        The awaitables to gather.</span>
+</span><span id="spawn-86"><a href="#spawn-86"><span class="linenos"> 86</span></a><span class="sd">    timeout : `float | None`</span>
+</span><span id="spawn-87"><a href="#spawn-87"><span class="linenos"> 87</span></a><span class="sd">        An optional timeout.</span>
+</span><span id="spawn-88"><a href="#spawn-88"><span class="linenos"> 88</span></a>
+</span><span id="spawn-89"><a href="#spawn-89"><span class="linenos"> 89</span></a><span class="sd">    Returns</span>
+</span><span id="spawn-90"><a href="#spawn-90"><span class="linenos"> 90</span></a><span class="sd">    -------</span>
+</span><span id="spawn-91"><a href="#spawn-91"><span class="linenos"> 91</span></a><span class="sd">    `sain.Result[T, SpawnErr]`:</span>
+</span><span id="spawn-92"><a href="#spawn-92"><span class="linenos"> 92</span></a><span class="sd">        The result of the gathered awaitables.</span>
+</span><span id="spawn-93"><a href="#spawn-93"><span class="linenos"> 93</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="spawn-94"><a href="#spawn-94"><span class="linenos"> 94</span></a>
+</span><span id="spawn-95"><a href="#spawn-95"><span class="linenos"> 95</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">aws</span><span class="p">:</span>
+</span><span id="spawn-96"><a href="#spawn-96"><span class="linenos"> 96</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">SpawnErr</span><span class="o">.</span><span class="n">EMPTY</span><span class="p">)</span>
+</span><span id="spawn-97"><a href="#spawn-97"><span class="linenos"> 97</span></a>
+</span><span id="spawn-98"><a href="#spawn-98"><span class="linenos"> 98</span></a>    <span class="n">tasks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">[</span><span class="n">T_co</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="spawn-99"><a href="#spawn-99"><span class="linenos"> 99</span></a>
+</span><span id="spawn-100"><a href="#spawn-100"><span class="linenos">100</span></a>    <span class="n">tasks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">ensure_future</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span> <span class="k">for</span> <span class="n">coro</span> <span class="ow">in</span> <span class="n">aws</span><span class="p">)</span>
+</span><span id="spawn-101"><a href="#spawn-101"><span class="linenos">101</span></a>    <span class="n">gatherer</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span>
+</span><span id="spawn-102"><a href="#spawn-102"><span class="linenos">102</span></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="spawn-103"><a href="#spawn-103"><span class="linenos">103</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">gatherer</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">))</span>
+</span><span id="spawn-104"><a href="#spawn-104"><span class="linenos">104</span></a>
+</span><span id="spawn-105"><a href="#spawn-105"><span class="linenos">105</span></a>    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+</span><span id="spawn-106"><a href="#spawn-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">SpawnErr</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">)</span>
+</span><span id="spawn-107"><a href="#spawn-107"><span class="linenos">107</span></a>    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+</span><span id="spawn-108"><a href="#spawn-108"><span class="linenos">108</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">SpawnErr</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">)</span>
+</span><span id="spawn-109"><a href="#spawn-109"><span class="linenos">109</span></a>
+</span><span id="spawn-110"><a href="#spawn-110"><span class="linenos">110</span></a>    <span class="k">finally</span><span class="p">:</span>
+</span><span id="spawn-111"><a href="#spawn-111"><span class="linenos">111</span></a>        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+</span><span id="spawn-112"><a href="#spawn-112"><span class="linenos">112</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">done</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
+</span><span id="spawn-113"><a href="#spawn-113"><span class="linenos">113</span></a>                <span class="n">task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+</span><span id="spawn-114"><a href="#spawn-114"><span class="linenos">114</span></a>        <span class="n">gatherer</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+>>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 </span></pre></div>
 
 
@@ -241,14 +391,18 @@
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn">sain</span> <span class="kn">import</span> <span class="n">futures</span>
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="k">return</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="k">await</span> <span class="n">futures</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url.com&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="k">await</span> <span class="n">spawn</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url.com&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+    <span class="k">match</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="k">case</span> <span class="n">Ok</span><span class="p">(</span><span class="n">tasks</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span>
+        <span class="k">case</span> <span class="n">Err</span><span class="p">(</span><span class="n">why</span><span class="p">)</span> <span class="k">if</span> <span class="n">why</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;couldn&#39;t make it in time :&lt;&quot;</span><span class="p">)</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="o">...</span>
 </code></pre>
 </div>
 
@@ -259,6 +413,12 @@
 The awaitables to gather.</li>
 <li><strong>timeout</strong> (<code>float | None</code>):
 An optional timeout.</li>
+</ul>
+
+<h6 id="returns">Returns</h6>
+
+<ul>
+<li><strong><code><a href="../sain.html#Result">sain.Result</a>[T, SpawnErr]</code>:</strong>: The result of the gathered awaitables.</li>
 </ul>
 </div>
 
@@ -275,6 +435,7 @@ An optional timeout.</li>
 
     </div>
     <a class="headerlink" href="#loop"></a>
+<<<<<<< HEAD
             <div class="pdoc-code codehilite"><pre><span></span><span id="loop-97"><a href="#loop-97"><span class="linenos"> 97</span></a><span class="k">def</span> <span class="nf">loop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">AbstractEventLoop</span><span class="p">:</span>
 </span><span id="loop-98"><a href="#loop-98"><span class="linenos"> 98</span></a>    <span class="sd">&quot;&quot;&quot;Get the current usable event loop or create a new one.</span>
 </span><span id="loop-99"><a href="#loop-99"><span class="linenos"> 99</span></a>
@@ -294,6 +455,27 @@ An optional timeout.</li>
 </span><span id="loop-113"><a href="#loop-113"><span class="linenos">113</span></a>    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
 </span><span id="loop-114"><a href="#loop-114"><span class="linenos">114</span></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
 </span><span id="loop-115"><a href="#loop-115"><span class="linenos">115</span></a>    <span class="k">return</span> <span class="n">loop</span>
+=======
+            <div class="pdoc-code codehilite"><pre><span></span><span id="loop-118"><a href="#loop-118"><span class="linenos">118</span></a><span class="k">def</span> <span class="nf">loop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">AbstractEventLoop</span><span class="p">:</span>
+</span><span id="loop-119"><a href="#loop-119"><span class="linenos">119</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the current usable event loop or create a new one.</span>
+</span><span id="loop-120"><a href="#loop-120"><span class="linenos">120</span></a>
+</span><span id="loop-121"><a href="#loop-121"><span class="linenos">121</span></a><span class="sd">    Returns</span>
+</span><span id="loop-122"><a href="#loop-122"><span class="linenos">122</span></a><span class="sd">    -------</span>
+</span><span id="loop-123"><a href="#loop-123"><span class="linenos">123</span></a><span class="sd">    `asyncio.AbstractEventLoop`</span>
+</span><span id="loop-124"><a href="#loop-124"><span class="linenos">124</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="loop-125"><a href="#loop-125"><span class="linenos">125</span></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="loop-126"><a href="#loop-126"><span class="linenos">126</span></a>        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop_policy</span><span class="p">()</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+</span><span id="loop-127"><a href="#loop-127"><span class="linenos">127</span></a>
+</span><span id="loop-128"><a href="#loop-128"><span class="linenos">128</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">loop</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+</span><span id="loop-129"><a href="#loop-129"><span class="linenos">129</span></a>            <span class="k">return</span> <span class="n">loop</span>
+</span><span id="loop-130"><a href="#loop-130"><span class="linenos">130</span></a>
+</span><span id="loop-131"><a href="#loop-131"><span class="linenos">131</span></a>    <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+</span><span id="loop-132"><a href="#loop-132"><span class="linenos">132</span></a>        <span class="k">pass</span>
+</span><span id="loop-133"><a href="#loop-133"><span class="linenos">133</span></a>
+</span><span id="loop-134"><a href="#loop-134"><span class="linenos">134</span></a>    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
+</span><span id="loop-135"><a href="#loop-135"><span class="linenos">135</span></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</span><span id="loop-136"><a href="#loop-136"><span class="linenos">136</span></a>    <span class="k">return</span> <span class="n">loop</span>
+>>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 </span></pre></div>
 
 

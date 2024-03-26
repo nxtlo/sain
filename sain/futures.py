@@ -34,6 +34,7 @@ from __future__ import annotations
 __all__ = ("spawn", "loop")
 
 import asyncio
+import enum
 import typing
 
 from . import result as _result
@@ -45,23 +46,36 @@ if typing.TYPE_CHECKING:
     T = typing.TypeVar("T", bound=collections.Callable[..., typing.Any])
 
 
+class SpawnErr(enum.Enum):
+    EMPTY = 0
+    """No awaitables were passed."""
+    CANCELED = 1
+    """The future gatherer were canceled."""
+    TIMEOUT = 2
+    """The future gatherer timed-out."""
+
+
 async def spawn(
     *aws: collections.Awaitable[T_co],
     timeout: float | None = None,
-) -> _result.Result[collections.Sequence[T_co], str]:
+) -> _result.Result[collections.Sequence[T_co], SpawnErr]:
     """Spawn all given awaitables concurrently.
 
     Example
     -------
     ```py
-    from sain import futures
-
     async def get(url: str) -> dict[str, Any]:
         return await http.get(url).json()
 
     async def main() -> None:
-        tasks = await futures.spawn(*(get("url.com") for _ in range(10)))
-        print(tasks)
+        tasks = await spawn(*(get("url.com") for _ in range(10)))
+        match tasks:
+            case Ok(tasks):
+                assert len(tasks) <= 10
+            case Err(why) if why.TIMEOUT:
+                print("couldn't make it in time :<")
+            case _:
+                ...
     ```
 
     Parameters
@@ -70,10 +84,15 @@ async def spawn(
         The awaitables to gather.
     timeout : `float | None`
         An optional timeout.
+
+    Returns
+    -------
+    `sain.Result[T, SpawnErr]`:
+        The result of the gathered awaitables.
     """
 
     if not aws:
-        return _result.Err("No awaitables passed.")
+        return _result.Err(SpawnErr.EMPTY)
 
     tasks: list[asyncio.Task[T_co]] = []
 
@@ -83,7 +102,9 @@ async def spawn(
         return _result.Ok(await asyncio.wait_for(gatherer, timeout=timeout))
 
     except asyncio.CancelledError:
-        return _result.Err("Gathered Futures were cancelled.")
+        return _result.Err(SpawnErr.CANCELED)
+    except asyncio.TimeoutError:
+        return _result.Err(SpawnErr.TIMEOUT)
 
     finally:
         for task in tasks:

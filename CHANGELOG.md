@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Vec[T]` type.
 - `Error` type.
 - `Box[T]` type. This is not the same as rust's `Box`, Check the object documentation.
-- `Lazy[T]` and `LazyFuture[T]`.
+- `cell.Lazy[T]` and `cell.LazyFuture[T]`.
+- `cell.AsyncOnce[T]`.
 
 ### Changed
 
