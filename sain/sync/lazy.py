@@ -50,7 +50,7 @@ class Lazy(typing.Generic[T]):
     """A value that gets lazily initialized at runtime.
 
     This isn't some sort of magic, the inner value is set to `None` when first initialized,
-    Then this `None` gets replaced at runtime when calling `LazyFuture.set` method.
+    Then this `None` gets replaced at runtime when calling `Lazy.set` method.
 
     This is a well-known approach used in Python to lazily initialize expensive objects
     that needs to be `None` until it gets initialized with a function call.

@@ -27,11 +27,12 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""Synchronization primitives."""
 
-__all__ = ("Lazy", "Once", "Cell", "RefCell", "LazyFuture")
+from __future__ import annotations
+
+__all__ = ("Lazy", "Once", "LazyFuture")
 
 from .lazy import Lazy
 from .lazy import LazyFuture
 from .once import Once
-from .ref import Cell
-from .ref import RefCell

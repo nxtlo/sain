@@ -41,7 +41,7 @@ _T_co = typing.TypeVar("_T_co", covariant=True)
 
 
 @typing.final
-@dataclasses.dataclass(frozen=True, unsafe_hash=True)
+@dataclasses.dataclass(frozen=True, unsafe_hash=True, slots=True)
 class Cell(typing.Generic[_T_co]):
     """Represents an immutable reference to an object.
 
@@ -49,7 +49,7 @@ class Cell(typing.Generic[_T_co]):
     -------
     ```py
     from dataclasses import dataclass
-    from sain import Cell
+    from sain.cell import Cell
 
     @dataclass
     class User:
@@ -74,8 +74,6 @@ class Cell(typing.Generic[_T_co]):
     ```
     """
 
-    __slots__ = ("object",)
-
     object: _T_co
     """The object that is being referenced."""
 
@@ -90,14 +88,12 @@ class Cell(typing.Generic[_T_co]):
 
 
 @typing.final
-@dataclasses.dataclass(frozen=False, unsafe_hash=True)
+@dataclasses.dataclass(frozen=False, unsafe_hash=True, slots=True)
 class RefCell(typing.Generic[_T_co]):
     """Represents a counted mutable reference to an object.
 
     Usually the user of this object is responsible for incrementing/decrementing the reference count.
     """
-
-    __slots__ = ("object",)
 
     object: _T_co
     """The object that is being referenced."""
@@ -112,3 +108,13 @@ class RefCell(typing.Generic[_T_co]):
             Then this will copy its reference.
         """
         return copy.copy(self.object)
+
+    def increment(self) -> int:
+        """Increment the reference count of the object. returning the new total count."""
+        self.ref_count += 1
+        return self.ref_count
+
+    def decrementing(self) -> int:
+        """Decrement the reference count of the object. returning the new total count."""
+        self.ref_count -= 1
+        return self.ref_count

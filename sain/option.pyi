@@ -33,8 +33,8 @@ import collections.abc as _collections
 import typing as _typing
 
 from . import Iter
+from . import cell as _ref
 from . import default as _default
-from .cell import ref as _ref
 
 type Fn[Value, T] = _collections.Callable[[Value], T]
 type FnOnce[T] = _collections.Callable[[], T]

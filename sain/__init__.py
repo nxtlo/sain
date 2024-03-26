@@ -95,12 +95,11 @@ __all__ = (
     # boxed.py
     "boxed",
     "Box",
-    # cell
-    "cell",
+    # sync
+    "sync",
 )
 
 from . import boxed
-from . import cell
 from . import default
 from . import error
 from . import futures
@@ -108,6 +107,7 @@ from . import iter
 from . import macros
 from . import option
 from . import result
+from . import sync
 from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr

@@ -40,8 +40,8 @@ import typing
 
 from . import default as _default
 from . import futures
+from . import option as _option
 from . import result as _result
-from .option import Some
 from .vec import Vec
 
 Item = typing.TypeVar("Item")
@@ -213,9 +213,10 @@ class Iter(
         try:
             item = self.__next__()
         except StopIteration:
-            return Some(None)
+            # SAFETY: no items left.
+            return _option.nothing_unchecked()
 
-        return Some(item)
+        return _option.Some(item)
 
     def map(
         self, predicate: collections.Callable[[Item], OtherItem]

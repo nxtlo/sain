@@ -35,9 +35,9 @@ __all__ = ("Some", "ValueT")
 
 import typing
 
+from . import cell
 from . import default as _default
 from . import iter
-from .cell import ref
 
 ValueT = typing.TypeVar("ValueT")
 """A type hint that represents the generic value of the `Some` type."""
@@ -223,7 +223,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         ```
         """
         if self._value is None:
-            return Some(None)
+            # SAFETY: self._value is None
+            return NOTHING  # pyright: ignore
 
         return Some(f(self._value))
 
@@ -295,7 +296,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
             if predicate(value):
                 return Some(value)
 
-        return Some(None)
+        # SAFETY: self._value is None
+        return NOTHING  # pyright: ignore
 
     # *- Inner operations *-
 
@@ -351,7 +353,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         ```
         """
         if self._value is None:
-            return Some(None)
+            # SAFETY: self._value is None
+            return NOTHING  # pyright: ignore
 
         return optb
 
@@ -373,7 +376,8 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         ```
         """
         if self._value is None:
-            return Some(None)
+            # SAFETY: self._value is None
+            return NOTHING  # pyright: ignore
 
         return f(self._value)
 
@@ -398,7 +402,7 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
 
         return iter.once(self._value)
 
-    def as_ref(self) -> Some[ref.Cell[ValueT]]:
+    def as_ref(self) -> Some[cell.Cell[ValueT]]:
         """Returns immutable `Some[Cell[ValueT]]` if the contained value is not `None`,
 
         Otherwise returns `Some[None]`.
@@ -431,11 +435,12 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
             Or just use `.as_mut()` if you're dealing with mutable objects.
         """
         if self._value is not None:
-            return Some(ref.Cell(self._value))
+            return Some(cell.Cell(self._value))
 
-        return Some(None)
+        # SAFETY: self._value is None.
+        return NOTHING  # pyright: ignore
 
-    def as_mut(self) -> Some[ref.RefCell[ValueT]]:
+    def as_mut(self) -> Some[cell.RefCell[ValueT]]:
         """Returns mutable `Some[RefCell[ValueT]]` if the contained value is not `None`,
 
         Otherwise returns `Some[None]`.
@@ -454,9 +459,10 @@ class Some(typing.Generic[ValueT], _default.Default[None]):
         ```
         """
         if self._value is not None:
-            return Some(ref.RefCell(self._value))
+            return Some(cell.RefCell(self._value))
 
-        return Some(None)
+        # SAFETY: self._value is None.
+        return NOTHING  # pyright: ignore
 
     # *- Boolean checks *-
 

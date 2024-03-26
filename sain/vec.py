@@ -51,6 +51,7 @@ vec = Vec((1,2,3))
 vec == [1, 2, 3] and vec # True
 ```
 """
+
 from __future__ import annotations
 
 __all__ = ("Vec", "vec")
@@ -258,7 +259,7 @@ class Vec(typing.Generic[T]):
         assert self._ptr is not None, "Can't access an empty sequence."
         first, *rest = self._ptr
         if not rest:
-            return _option.Some(None)
+            return _option.nothing_unchecked()
 
         return _option.Some((first, tuple(rest)))
 
@@ -352,7 +353,7 @@ class Vec(typing.Generic[T]):
         try:
             return _option.Some(self.__getitem__(index))
         except IndexError:
-            return _option.Some(None)
+            return _option.nothing_unchecked()
 
     def insert(self, index: int, value: T) -> None:
         """Insert an element at the position `index`.
