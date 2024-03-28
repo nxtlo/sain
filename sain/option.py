@@ -38,11 +38,8 @@ import typing
 from . import cell
 from . import default as _default
 from . import iter
-<<<<<<< HEAD
-=======
 from . import macros
 from .cell import ref
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 
 T = typing.TypeVar("T")
 T_co = typing.TypeVar("T_co", covariant=True)
