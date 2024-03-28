@@ -215,13 +215,8 @@ class Iter(
         try:
             item = self.__next__()
         except StopIteration:
-<<<<<<< HEAD
             # SAFETY: no items left.
             return _option.nothing_unchecked()
-=======
-            return nothing_unchecked()
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
-
         return _option.Some(item)
 
     def map(
