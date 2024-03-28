@@ -42,11 +42,8 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-<<<<<<< HEAD
-=======
 from .option import Some
 from .option import nothing_unchecked
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 from .vec import Vec
 
 Item = typing.TypeVar("Item")
