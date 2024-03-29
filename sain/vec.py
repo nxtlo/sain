@@ -97,12 +97,10 @@ class Vec(typing.Generic[T]):
     __slots__ = ("_ptr", "_capacity")
 
     @typing.overload
-    def __init__(self) -> None:
-        ...
+    def __init__(self) -> None: ...
 
     @typing.overload
-    def __init__(self, iterable: collections.Iterable[T]) -> None:
-        ...
+    def __init__(self, iterable: collections.Iterable[T]) -> None: ...
 
     def __init__(self, iterable: collections.Iterable[T] | None = None) -> None:
         """Initializes a new vec, This won't actually create the internal list until an element is appended into it.
@@ -473,12 +471,10 @@ class Vec(typing.Generic[T]):
         self._ptr[index] = value
 
     @typing.overload
-    def __getitem__(self, index: slice) -> Vec[T]:
-        ...
+    def __getitem__(self, index: slice) -> Vec[T]: ...
 
     @typing.overload
-    def __getitem__(self, index: int) -> T:
-        ...
+    def __getitem__(self, index: int) -> T: ...
 
     def __getitem__(self, index: int | slice) -> T | Vec[T]:
         assert self._ptr is not None, "Can't access an empty sequence."

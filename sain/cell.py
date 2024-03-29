@@ -100,6 +100,9 @@ class RefCell(typing.Generic[_T_co]):
     ref_count: int = dataclasses.field(default=0, kw_only=True)
     """The amount time this object has been referenced."""
 
+    def __post_init__(self) -> None:
+        self.ref_count += 1
+
     def copy(self) -> _T_co:
         """Copy the referenced object.
 

@@ -39,7 +39,6 @@ from . import cell
 from . import default as _default
 from . import iter
 from . import macros
-from .cell import ref
 
 T = typing.TypeVar("T")
 T_co = typing.TypeVar("T_co", covariant=True)
@@ -221,12 +220,7 @@ class Some(typing.Generic[T], _default.Default[None]):
         ```
         """
         if self._value is None:
-<<<<<<< HEAD
-            # SAFETY: self._value is None
-            return NOTHING  # pyright: ignore
-=======
             return nothing_unchecked()
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 
         return Some(f(self._value))
 
@@ -299,12 +293,7 @@ class Some(typing.Generic[T], _default.Default[None]):
             if predicate(value):
                 return Some(value)
 
-<<<<<<< HEAD
-        # SAFETY: self._value is None
-        return NOTHING  # pyright: ignore
-=======
         return nothing_unchecked()
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 
     # *- Inner operations *-
 
@@ -356,14 +345,8 @@ class Some(typing.Generic[T], _default.Default[None]):
         assert value.and_ok(y) == Some("bye")
         ```
         """
-<<<<<<< HEAD
-        if self._value is None:
-            # SAFETY: self._value is None
-            return NOTHING  # pyright: ignore
-=======
         if self._value is None or optb.is_none():
             return nothing_unchecked()
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 
         return optb
 
@@ -384,12 +367,7 @@ class Some(typing.Generic[T], _default.Default[None]):
         ```
         """
         if self._value is None:
-<<<<<<< HEAD
-            # SAFETY: self._value is None
-            return NOTHING  # pyright: ignore
-=======
             return nothing_unchecked()
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 
         return f(self._value)
 
@@ -415,13 +393,8 @@ class Some(typing.Generic[T], _default.Default[None]):
 
         return iter.once(self._value)
 
-<<<<<<< HEAD
-    def as_ref(self) -> Some[cell.Cell[ValueT]]:
-        """Returns immutable `Some[Cell[ValueT]]` if the contained value is not `None`,
-=======
-    def as_ref(self) -> Some[ref.Cell[T]]:
-        """Returns an immutable `Option[sain.cell.Cell[T]]` if the contained value is not `None`,
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
+    def as_ref(self) -> Some[cell.Cell[T]]:
+        """Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,
 
         Otherwise returns `Some(None)`.
 
@@ -455,18 +428,11 @@ class Some(typing.Generic[T], _default.Default[None]):
         if self._value is not None:
             return Some(cell.Cell(self._value))
 
-<<<<<<< HEAD
         # SAFETY: self._value is None.
         return NOTHING  # pyright: ignore
 
-    def as_mut(self) -> Some[cell.RefCell[ValueT]]:
-        """Returns mutable `Some[RefCell[ValueT]]` if the contained value is not `None`,
-=======
-        return nothing_unchecked()
-
-    def as_mut(self) -> Some[ref.RefCell[T]]:
-        """Returns a mutable `Option[sain.cell.RefCell[T]]` if the contained value is not `None`,
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
+    def as_mut(self) -> Some[cell.RefCell[T]]:
+        """Returns mutable `Some[sain.cell.RefCell[T]]` if the contained value is not `None`,
 
         Otherwise returns `Some(None)`.
 
@@ -486,12 +452,8 @@ class Some(typing.Generic[T], _default.Default[None]):
         if self._value is not None:
             return Some(cell.RefCell(self._value))
 
-<<<<<<< HEAD
         # SAFETY: self._value is None.
         return NOTHING  # pyright: ignore
-=======
-        return nothing_unchecked()
->>>>>>> 842a94bc10bf630982ae99ec73c8ffdbaa6c969c
 
     # *- Boolean checks *-
 
@@ -565,7 +527,7 @@ class Some(typing.Generic[T], _default.Default[None]):
         if not isinstance(other, Some):
             return NotImplemented
 
-        return self._value == other.read  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+        return self._value == other._value  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
 
     def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)

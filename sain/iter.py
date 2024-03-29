@@ -42,8 +42,6 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-from .option import Some
-from .option import nothing_unchecked
 from .vec import Vec
 
 Item = typing.TypeVar("Item")
@@ -64,7 +62,10 @@ class Iter(
     collections.Iterable[Item],
     _default.Default["Iter[ty_ext.Never]"],
 ):
-    """Builds an in-memory iterator over some Python iterable.
+    """a lazy, in-memory functional iterator.
+
+    This is similar to Rust `Iterator` trait which iterables can build
+    from this via `.iter()` method.
 
     Example
     -------
@@ -116,13 +117,11 @@ class Iter(
 
     @typing.overload
     @typing.final
-    def collect(self) -> collections.Sequence[Item]:
-        ...
+    def collect(self) -> collections.Sequence[Item]: ...
 
     @typing.overload
     @typing.final
-    def collect(self, *, cast: _B) -> collections.Sequence[_B]:
-        ...
+    def collect(self, *, cast: _B) -> collections.Sequence[_B]: ...
 
     @typing.final
     def collect(
@@ -164,7 +163,7 @@ class Iter(
         assert to_vec == [0]
         ```
         """
-        return Vec(self)
+        return Vec(self._items)
 
     @typing.final
     def copied(self) -> Iter[Item]:
@@ -181,7 +180,7 @@ class Iter(
         assert it.collect() == copied.collect()
         ```
         """
-        return self.__class__(copy.deepcopy(self._items))
+        return Iter(copy.deepcopy(self._items))
 
     @typing.final
     def by_ref(self) -> Iter[Item]:
@@ -227,8 +226,7 @@ class Iter(
         Example
         -------
         ```py
-        iterator = Iter(["1", "2", "3"])
-            .map(lambda value: int(value))
+        iterator = Iter(["1", "2", "3"]).map(lambda value: int(value))
 
         # <Iter([1, 2, 3])>
         for item in iterator:
@@ -327,12 +325,7 @@ class Iter(
         # Los Angeles
         ```
         """
-        items: collections.MutableSequence[Item] = []
-        for item in self._items:
-            if predicate(item):
-                items.append(item)
-
-        return Iter(items)
+        return Iter(item for item in self._items if predicate(item))
 
     def skip(self, n: int) -> Iter[Item]:
         """Skips the first number of items in the iterator.
@@ -349,15 +342,16 @@ class Iter(
         """
         return Iter(itertools.islice(self._items, n, None))
 
-    def zip(self, other: Iter[OtherItem]) -> Iter[tuple[Item, OtherItem]]:
+    def zip(
+        self, other: collections.Iterable[OtherItem]
+    ) -> Iter[tuple[Item, OtherItem]]:
         """Zips the iterator with another iterable.
 
         Example
         -------
         ```py
         iterator = Iter([1, 2, 3])
-        other = Iter([4, 5, 6])
-        for item, other_item in iterator.zip(other):
+        for item, other_item in iterator.zip([4, 5, 6]):
             assert item == other_item
         <Iter([(1, 4), (2, 5), (3, 6)])>
         ```

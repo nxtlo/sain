@@ -43,6 +43,7 @@ class Generator(Default[str]):
 DEFAULT_GENERATOR = Generator.default()
 ```
 """
+
 from __future__ import annotations
 
 __all__ = ("Default",)

@@ -42,6 +42,7 @@ For an example
 path: Option[str] = Some(os.environ.get('SOME_PATH')).unwrap()
 ```
 """
+
 from __future__ import annotations
 
 __all__ = ("Error",)
