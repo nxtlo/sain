@@ -3,7 +3,7 @@
 a dependency-free library which implements a set of minimal abstraction that brings Rust's ecosystem to Python.
 It offers a few of the core Rust features like `Vec<T>` and `Result<T, E>` and more. See the equivalent type section below.
 
-This library provides a type-safe mechanism for writing Python code, such as the `Result<T< E>` and `Option<T>` types,
+This library provides a type-safe mechanism for writing Python code, such as the `Result<T, E>` and `Option<T>` types,
 which provides zero exception handling, where you simply return errors as values.
 
 multiple `core`/`std` types are implemented in Python. Check the [project documentation](https://nxtlo.github.io/sain/sain.html)
