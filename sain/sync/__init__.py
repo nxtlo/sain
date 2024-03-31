@@ -31,8 +31,9 @@
 
 from __future__ import annotations
 
-__all__ = ("Lazy", "Once", "LazyFuture")
+__all__ = ("Lazy", "Once", "LazyFuture", "AsyncOnce")
 
 from .lazy import Lazy
 from .lazy import LazyFuture
 from .once import Once
+from .once import AsyncOnce
