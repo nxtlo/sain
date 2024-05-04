@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sain"
-version = "0.0.5"
+version = "0.0.6"
 description = "Standard Rust core types implementations for Python."
 authors = ["nxtlo <dhmony-99@hotmail.com>"]
 license = "BSD-3-Clause license"

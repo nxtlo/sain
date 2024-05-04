@@ -129,7 +129,7 @@ from .result import Result
 from .vec import Vec
 from .vec import vec
 
-__version__: str = "0.0.5"
+__version__: str = "0.0.6"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
 __about__: str = (

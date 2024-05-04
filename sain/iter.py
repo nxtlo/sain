@@ -101,6 +101,10 @@ class Iter(
     def __init__(self, items: collections.Iterable[Item]) -> None:
         self._items = iter(items)
 
+    ###################
+    # const functions #
+    ###################
+
     @staticmethod
     @typing.final
     def default() -> Iter[ty_ext.Never]:
@@ -198,6 +202,25 @@ class Iter(
         ```
         """
         return Iter(copy.copy(self._items))
+
+    @typing.final
+    def sink(self) -> None:
+        """Consume all elements from this iterator, flushing it into the sink.
+
+        Example
+        -------
+        ```py
+        it = Iter((1, 2, 3))
+        it.sink()
+        assert it.next().is_none()
+        ```
+        """
+        for _ in self._items:
+            pass
+
+    ##################
+    # default impl's #
+    ##################
 
     def next(self) -> Option[Item]:
         """Returns the next item in the iterator, `Some(None)` if all items yielded.
@@ -589,20 +612,20 @@ class Iter(
         Example
         -------
         ```py
-        async def fetch(username: str) -> dict[str, Any]:
-            async with aiohttp.request('GET', '...') as r:
+        async def create_user(username: str) -> None:
+            async with aiohttp.request("POST", f'.../{username}') as r:
                 return await r.json()
 
         async def main():
             users = sain.into_iter(["danny", "legalia"])
-            results = await users.async_for_each(lambda username: fetch(username))
+            results = await users.async_for_each(lambda username: create_user(username))
             for k, v in results.unwrap().items():
                 ...
         ```
 
         Parameters
         ----------
-        func: `collections.Callable[[Item], collections.Coroutine[None, None, None]]`
+        func: `Callable[[Item], Coroutine[None, Any, Any]]`
             The async function to call on each item in the iterator.
         """
         return await futures.spawn(*(func(item) for item in self._items))

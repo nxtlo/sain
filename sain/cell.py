@@ -117,7 +117,7 @@ class RefCell(typing.Generic[_T_co]):
         self.ref_count += 1
         return self.ref_count
 
-    def decrementing(self) -> int:
+    def decrement(self) -> int:
         """Decrement the reference count of the object. returning the new total count."""
         self.ref_count -= 1
         return self.ref_count

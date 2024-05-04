@@ -573,10 +573,7 @@ assert NOTHING == Some(None) # True
 def nothing_unchecked() -> Option[T]:
     """A placeholder that always returns `sain.NOTHING` but acts like it returns `Option[T]`.
 
-    This is useful when you don't want to build `Some(None)` and want to return `T` in the future.
-
-    # Warning
-    unwrapping a value that returns this placeholder is undefined behavior.
+    This is useful to avoid constructing new `Some(None)` and want to return `T` in the future.
 
     Example
     -------
@@ -585,7 +582,7 @@ def nothing_unchecked() -> Option[T]:
         username: str
 
         def name(self) -> Option[str]:
-            if '@' in self.username:
+            if '@' not in self.username:
                 # even though the type of `NOTHING` is `Option[None]`.
                 # we trick the type checker into thinking
                 # that its an `Option[str]`.

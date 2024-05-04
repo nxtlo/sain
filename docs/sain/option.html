@@ -706,28 +706,25 @@
 </span><span id="L-573"><a href="#L-573"><span class="linenos">573</span></a><span class="k">def</span> <span class="nf">nothing_unchecked</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="L-574"><a href="#L-574"><span class="linenos">574</span></a>    <span class="sd">&quot;&quot;&quot;A placeholder that always returns `sain.NOTHING` but acts like it returns `Option[T]`.</span>
 </span><span id="L-575"><a href="#L-575"><span class="linenos">575</span></a>
-</span><span id="L-576"><a href="#L-576"><span class="linenos">576</span></a><span class="sd">    This is useful when you don&#39;t want to build `Some(None)` and want to return `T` in the future.</span>
+</span><span id="L-576"><a href="#L-576"><span class="linenos">576</span></a><span class="sd">    This is useful to avoid constructing new `Some(None)` and want to return `T` in the future.</span>
 </span><span id="L-577"><a href="#L-577"><span class="linenos">577</span></a>
-</span><span id="L-578"><a href="#L-578"><span class="linenos">578</span></a><span class="sd">    # Warning</span>
-</span><span id="L-579"><a href="#L-579"><span class="linenos">579</span></a><span class="sd">    unwrapping a value that returns this placeholder is undefined behavior.</span>
-</span><span id="L-580"><a href="#L-580"><span class="linenos">580</span></a>
-</span><span id="L-581"><a href="#L-581"><span class="linenos">581</span></a><span class="sd">    Example</span>
-</span><span id="L-582"><a href="#L-582"><span class="linenos">582</span></a><span class="sd">    -------</span>
-</span><span id="L-583"><a href="#L-583"><span class="linenos">583</span></a><span class="sd">    ```py</span>
-</span><span id="L-584"><a href="#L-584"><span class="linenos">584</span></a><span class="sd">    class User:</span>
-</span><span id="L-585"><a href="#L-585"><span class="linenos">585</span></a><span class="sd">        username: str</span>
-</span><span id="L-586"><a href="#L-586"><span class="linenos">586</span></a>
-</span><span id="L-587"><a href="#L-587"><span class="linenos">587</span></a><span class="sd">        def name(self) -&gt; Option[str]:</span>
-</span><span id="L-588"><a href="#L-588"><span class="linenos">588</span></a><span class="sd">            if &#39;@&#39; in self.username:</span>
-</span><span id="L-589"><a href="#L-589"><span class="linenos">589</span></a><span class="sd">                # even though the type of `NOTHING` is `Option[None]`.</span>
-</span><span id="L-590"><a href="#L-590"><span class="linenos">590</span></a><span class="sd">                # we trick the type checker into thinking</span>
-</span><span id="L-591"><a href="#L-591"><span class="linenos">591</span></a><span class="sd">                # that its an `Option[str]`.</span>
-</span><span id="L-592"><a href="#L-592"><span class="linenos">592</span></a><span class="sd">                return nothing_unchecked()</span>
-</span><span id="L-593"><a href="#L-593"><span class="linenos">593</span></a>
-</span><span id="L-594"><a href="#L-594"><span class="linenos">594</span></a><span class="sd">            return Some(self.username.split(&#39;@&#39;)[0])</span>
-</span><span id="L-595"><a href="#L-595"><span class="linenos">595</span></a><span class="sd">    ```</span>
-</span><span id="L-596"><a href="#L-596"><span class="linenos">596</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-597"><a href="#L-597"><span class="linenos">597</span></a>    <span class="k">return</span> <span class="n">typing</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;Option[T]&quot;</span><span class="p">,</span> <span class="n">NOTHING</span><span class="p">)</span>
+</span><span id="L-578"><a href="#L-578"><span class="linenos">578</span></a><span class="sd">    Example</span>
+</span><span id="L-579"><a href="#L-579"><span class="linenos">579</span></a><span class="sd">    -------</span>
+</span><span id="L-580"><a href="#L-580"><span class="linenos">580</span></a><span class="sd">    ```py</span>
+</span><span id="L-581"><a href="#L-581"><span class="linenos">581</span></a><span class="sd">    class User:</span>
+</span><span id="L-582"><a href="#L-582"><span class="linenos">582</span></a><span class="sd">        username: str</span>
+</span><span id="L-583"><a href="#L-583"><span class="linenos">583</span></a>
+</span><span id="L-584"><a href="#L-584"><span class="linenos">584</span></a><span class="sd">        def name(self) -&gt; Option[str]:</span>
+</span><span id="L-585"><a href="#L-585"><span class="linenos">585</span></a><span class="sd">            if &#39;@&#39; not in self.username:</span>
+</span><span id="L-586"><a href="#L-586"><span class="linenos">586</span></a><span class="sd">                # even though the type of `NOTHING` is `Option[None]`.</span>
+</span><span id="L-587"><a href="#L-587"><span class="linenos">587</span></a><span class="sd">                # we trick the type checker into thinking</span>
+</span><span id="L-588"><a href="#L-588"><span class="linenos">588</span></a><span class="sd">                # that its an `Option[str]`.</span>
+</span><span id="L-589"><a href="#L-589"><span class="linenos">589</span></a><span class="sd">                return nothing_unchecked()</span>
+</span><span id="L-590"><a href="#L-590"><span class="linenos">590</span></a>
+</span><span id="L-591"><a href="#L-591"><span class="linenos">591</span></a><span class="sd">            return Some(self.username.split(&#39;@&#39;)[0])</span>
+</span><span id="L-592"><a href="#L-592"><span class="linenos">592</span></a><span class="sd">    ```</span>
+</span><span id="L-593"><a href="#L-593"><span class="linenos">593</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-594"><a href="#L-594"><span class="linenos">594</span></a>    <span class="k">return</span> <span class="n">typing</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;Option[T]&quot;</span><span class="p">,</span> <span class="n">NOTHING</span><span class="p">)</span>
 </span></pre></div>
 
 

@@ -29,43 +29,51 @@ Exceptions suck, `Result` and `Option` is a much better way to avoid runtime exc
 ```py
 from sain import Ok, Err
 from sain import Some
+from sain import Vec
 
 import typing
+from dataclasses import dataclass
 
 if typing.TYPE_CHECKING:
     # These are just type aliases that have no cost at runtime.
     from sain import Result, Option
 
-# Results. a replacement for try/except.
-def convert(x: str, y: str) -> Result[float, str]:
-    if x.isdigit() and y.isdigit():
-        total = sum(map(float, (x, y)))
-        return Ok(total)
+@dataclass
+class Chunk:
+    name: str
+    description: Option[str] = Some(None)
 
-    return Err("either x or y must be integers.")
+@dataclass
+class BlobStore:
+    buffer: Vec[Chunk] = Vec()
+    size: int = 1024
 
-# matching on a result.
-value = convert("3", "5")
-match value:
-    case Ok(num):
-        print(num)
+    def put(self, tag: str) -> Result[Chunk, str]:
+        if self.buffer.len() >= self.size:
+            # The return type of the error doesn't have to be a str.
+            # its much better to have it an opaque type such as enums
+            # or any data type with more context.
+            return Err("Reached maximum capacity sry :3")
+
+        chunk = Chunk(tag, Some("Evil within."))
+        self.buffer.push(chunk)
+        return Ok(chunk)
+
+    def next_chunk(self, filtered: str = "") -> Option[Chunk]:
+        # this code makes you feel right at home.
+        return self
+            .buffer
+            .iter()
+            .filter(lambda tag: tag in filtered)
+            .next()
+
+storage = BlobStore()
+match storage.put("wiped"):
+    case Ok(chunk):
+        # Success
+        ...
     case Err(why):
-        print(f"An error has occurred: {why}")
-
-# Options, a replacement from typing.Optional
-def best_car(model: int) -> Option[str]:
-    if model >= 2020:
-        return Some("Mazda")
-
-    return Some(None)
-
-# extracting the contained values has drawbacks,
-# it will raise a runtime errors, some with context.
-value = best_car(2024).expect("bad car.")
-# A better way to deal with this is to return a default value.
-value = best_car(2019).unwrap_or("a better car")
-# An inline unwrap looks like this, the tilde operator acts like `?` in rust.
-value = best_car(2015).unwrap() or ~best_car(1999)
+        print(why)
 ```
 
 ## Equivalent types

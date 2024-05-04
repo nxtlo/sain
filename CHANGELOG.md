@@ -7,17 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.0.6 - 05/04/2024
+
 ### Added
 
-- `doc` decorator.
+- `@doc` decorator.
 - The `Result` type including `OK` and `Err`.
-- `ref.ref` function which constructs an `AsRef` object.
-- `ref.ref_mut` function which constructs an `AsMut` object.
 - `Vec[T]` type.
 - `Error` type.
 - `Box[T]` type. This is not the same as rust's `Box`, Check the object documentation.
-- `cell.Lazy[T]` and `cell.LazyFuture[T]`.
-- `cell.AsyncOnce[T]`.
+- `sync` package which contains the following modules. they're object safe.
+  - `lazy.Lazy[T]` and `lazy.LazyFuture[T]`.
+  - `once.AsyncOnce[T]` and `once.Once[T]`.
+- `Iter.sink` method.
+- `RefCell` received two methods, `increment` and `decrement` which increments the ref count of the object its holding.
 
 ### Changed
 
@@ -25,8 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type hint `Option` isn't required to be under `TYPE_CHECKING` anymore.
 - `futures.spawn` now returns `Result[T, E]` and doesn't raise.
 - `Iter.async_for_each` now returns `Result[T, E]` and doesn't raise.
-- `ref.AsRef` is now `Ref`, `ref.AsMut` is now `RefCell`.
-- synchronization primitives are now accessed via `sain.cell` namespace.
+- `ref.AsRef` is now `cell.Cell`, `ref.AsMut` is now `cell.RefCell`.
 
 ## 0.0.5
 

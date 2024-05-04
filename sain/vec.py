@@ -35,7 +35,7 @@ Which saves a little bit of memory.
 Example
 -------
 ```py
-names = Vec()
+names = Vec[str]()
 
 names.push('foo')
 names.push('bar')
@@ -153,15 +153,15 @@ class Vec(typing.Generic[T]):
         v._capacity = capacity
         return v
 
-    def into_inner(self) -> collections.Collection[T]:
-        """Return an immutable collection over this vector elements.
+    def boxed(self) -> collections.Collection[T]:
+        """Return an immutable tuple over this vector elements.
 
         Example
         -------
         ```py
         vec = Vec((1,2,3))
 
-        assert vec.into_inner() == (1,2,3)
+        assert vec.boxed() == (1,2,3)
         ```
         """
         return tuple(self)
@@ -223,15 +223,13 @@ class Vec(typing.Generic[T]):
         print(split, vec)  # [1], [2, 3]
         ```
         """
-
-        assert self._ptr is not None, "Can't access an empty sequence."
         if at > self.len():
             raise RuntimeError(
                 f"Index `at` ({at}) should be <= than len of vector ({self.len()}) "
             ) from None
 
-        # No reason to split at 0.
-        if at == 0:
+        # Either the list is empty or uninit.
+        if not self._ptr:
             return self
 
         split = self[at : self.len()]
@@ -239,27 +237,25 @@ class Vec(typing.Generic[T]):
         return split
 
     def split_first(self) -> _option.Option[tuple[T, collections.Sequence[T]]]:
-        """Split the first and rest elements of the vector,
-        if the rest is empty, `Some[None]` is returned.
+        """Split the first and rest elements of the vector, If empty, `Some[None]` is returned.
 
         Example
         -------
         ```py
-        vec = Vec((1, 2, 3))
+        vec = vec(1, 2, 3)
         split = vec.split_first()
-        assert split == Some((1, (2, 3)))
+        assert split == Some((1, [2, 3]))
 
-        vec = Vec((1))
+        vec: Vec[int] = vec()
         split = vec.split_first()
         assert split == Some(None)
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
-        first, *rest = self._ptr
-        if not rest:
+        if not self._ptr:
             return _option.nothing_unchecked()
 
-        return _option.Some((first, tuple(rest)))
+        first, *rest = self._ptr
+        return _option.Some((first, rest))
 
     def first(self) -> _option.Option[T]:
         """Get the first element in this vec, returning `Some[None]` if there's none.
@@ -285,14 +281,12 @@ class Vec(typing.Generic[T]):
         assert vec == [1]
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
-
-        if self.len() == 0:
+        if not self._ptr:
             return
 
         self._ptr = self._ptr[:size]
 
-    def retain(self, f: collections.Callable[[T], bool]):
+    def retain(self, f: collections.Callable[[T], bool]) -> None:
         """Remove elements from this vec while `f()` returns `True`.
 
         In other words, filter this vector based on `f()`.
@@ -306,9 +300,7 @@ class Vec(typing.Generic[T]):
         assert vec == [2, 3]
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
-
-        if self.len() == 0:
+        if not self._ptr:
             return
 
         self._ptr = [e for e in self._ptr if f(e)]
@@ -377,7 +369,9 @@ class Vec(typing.Generic[T]):
         assert vec == [1, 2]
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return _option.nothing_unchecked()
+
         return _option.Some(self._ptr.pop(index))
 
     def remove(self, item: T) -> None:
@@ -391,23 +385,30 @@ class Vec(typing.Generic[T]):
         assert vec == ['b', 'c']
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return
+
         self._ptr.remove(item)
 
     def swap_remove(self, item: T) -> T:
         """Remove the first appearance of `item` from this vector and return it.
 
-        This will raise a `ValueError` if `item` is not in this vector.
+        Raises
+        ------
+        * `ValueError`: if `item` is not in this vector.
+        * `MemoryError`: if this vector hasn't allocated, Aka nothing has been pushed to it.
 
         Example
         -------
         ```py
         vec = Vector(('a', 'b', 'c'))
-        vec.remove('a')
-        assert vec == ['b', 'c']
+        element = vec.remove('a')
+        assert vec == ['b', 'c'] and element == 'a'
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if self._ptr is None:
+            raise MemoryError("Vec is unallocated.") from None
+
         try:
             i = next(i for i in self._ptr if i == item)
         except StopIteration:
@@ -428,11 +429,15 @@ class Vec(typing.Generic[T]):
         assert vec == [1, 2, 3, 4, 5, 6]
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return
+
         self._ptr.extend(iterable)
 
     def copy(self) -> Vec[T]:
         """Create a vector that copies all of its elements and place it into the new one.
+
+        If the vector hasn't been allocated, `self` is returned.
 
         Example
         -------
@@ -441,11 +446,10 @@ class Vec(typing.Generic[T]):
         copy = original.copy()
         copy.push(4)
 
-        print(original) # []
+        print(original) # [1, 2, 3]
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
-        return Vec(self._ptr[:])
+        return Vec(self._ptr[:]) if self._ptr is not None else self
 
     def clear(self) -> None:
         """Clear all elements of this vector.
@@ -458,7 +462,9 @@ class Vec(typing.Generic[T]):
         assert vec.len() == 0
         ```
         """
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return
+
         self._ptr.clear()
 
     def __len__(self) -> int:
@@ -477,29 +483,36 @@ class Vec(typing.Generic[T]):
     def __getitem__(self, index: int) -> T: ...
 
     def __getitem__(self, index: int | slice) -> T | Vec[T]:
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            raise IndexError("Index out of range")
+
         if isinstance(index, slice):
             return self.__class__(self._ptr[index])
 
         return self._ptr[index]
 
     def __delitem__(self, index: int) -> None:
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return
+
         del self._ptr[index]
 
     def __contains__(self, element: T) -> bool:
-        assert self._ptr is not None, "Can't access an empty sequence."
-        return element in self._ptr
+        return element in self._ptr if self._ptr else False
 
     def __iter__(self) -> collections.Iterator[T]:
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if self._ptr is None:
+            return iter(())
+
         return self._ptr.__iter__()
 
     def __repr__(self) -> str:
         return "[]" if not self._ptr else repr(self._ptr)
 
     def __eq__(self, other: object) -> bool:
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return False
+
         if isinstance(other, Vec):
             return self._ptr == other._ptr
         if isinstance(other, (collections.Iterable, collections.MutableSequence)):
@@ -511,19 +524,26 @@ class Vec(typing.Generic[T]):
         return not self.__eq__(other)
 
     def __le__(self, other: collections.Iterable[T]) -> bool:
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return False
         return self._ptr <= list(other)
 
     def __ge__(self, other: collections.Iterable[T]) -> bool:
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return False
+
         return self._ptr >= list(other)
 
     def __lt__(self, other: collections.Iterable[T]) -> bool:
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return False
+
         return self._ptr < list(other)
 
     def __gt__(self, other: collections.Iterable[T]) -> bool:
-        assert self._ptr is not None, "Can't access an empty sequence."
+        if not self._ptr:
+            return False
+
         return self._ptr > list(other)
 
     def __bool__(self) -> bool:

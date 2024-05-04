@@ -35,5 +35,5 @@ __all__ = ("Lazy", "Once", "LazyFuture", "AsyncOnce")
 
 from .lazy import Lazy
 from .lazy import LazyFuture
-from .once import Once
 from .once import AsyncOnce
+from .once import Once

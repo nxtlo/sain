@@ -84,6 +84,27 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#AsyncOnce">AsyncOnce</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="variable" href="#AsyncOnce.is_set">is_set</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#AsyncOnce.get">get</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#AsyncOnce.set">set</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#AsyncOnce.clear">clear</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#AsyncOnce.get_or">get_or</a>
+                        </li>
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -140,11 +161,12 @@
 </span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Lazy&quot;</span><span class="p">,</span> <span class="s2">&quot;Once&quot;</span><span class="p">,</span> <span class="s2">&quot;LazyFuture&quot;</span><span class="p">)</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Lazy&quot;</span><span class="p">,</span> <span class="s2">&quot;Once&quot;</span><span class="p">,</span> <span class="s2">&quot;LazyFuture&quot;</span><span class="p">,</span> <span class="s2">&quot;AsyncOnce&quot;</span><span class="p">)</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="kn">from</span> <span class="nn">.lazy</span> <span class="kn">import</span> <span class="n">Lazy</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="kn">from</span> <span class="nn">.lazy</span> <span class="kn">import</span> <span class="n">LazyFuture</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="kn">from</span> <span class="nn">.once</span> <span class="kn">import</span> <span class="n">Once</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="kn">from</span> <span class="nn">.once</span> <span class="kn">import</span> <span class="n">AsyncOnce</span>
 </span></pre></div>
 
 
@@ -1038,6 +1060,330 @@ acquired until its set again with <code><a href="#LazyFuture.set">LazyFuture.set
 <span class="nb">print</span><span class="p">(</span><span class="n">lazy</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">))</span>
 </code></pre>
 </div>
+</div>
+
+
+                            </div>
+                </section>
+                <section id="AsyncOnce">
+                            <input id="AsyncOnce-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+                    <div class="decorator">@typing.final</div>
+
+    <span class="def">class</span>
+    <span class="name">AsyncOnce</span><wbr>(<span class="base">typing.Generic[~T]</span>):
+
+                <label class="view-source-button" for="AsyncOnce-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AsyncOnce"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce-167"><a href="#AsyncOnce-167"><span class="linenos">167</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
+</span><span id="AsyncOnce-168"><a href="#AsyncOnce-168"><span class="linenos">168</span></a><span class="k">class</span> <span class="nc">AsyncOnce</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="AsyncOnce-169"><a href="#AsyncOnce-169"><span class="linenos">169</span></a>    <span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
+</span><span id="AsyncOnce-170"><a href="#AsyncOnce-170"><span class="linenos">170</span></a>
+</span><span id="AsyncOnce-171"><a href="#AsyncOnce-171"><span class="linenos">171</span></a><span class="sd">    This is an `async` version of `Once`.</span>
+</span><span id="AsyncOnce-172"><a href="#AsyncOnce-172"><span class="linenos">172</span></a>
+</span><span id="AsyncOnce-173"><a href="#AsyncOnce-173"><span class="linenos">173</span></a><span class="sd">    Example</span>
+</span><span id="AsyncOnce-174"><a href="#AsyncOnce-174"><span class="linenos">174</span></a><span class="sd">    -------</span>
+</span><span id="AsyncOnce-175"><a href="#AsyncOnce-175"><span class="linenos">175</span></a><span class="sd">    ```py</span>
+</span><span id="AsyncOnce-176"><a href="#AsyncOnce-176"><span class="linenos">176</span></a><span class="sd">    from sain.once import Once</span>
+</span><span id="AsyncOnce-177"><a href="#AsyncOnce-177"><span class="linenos">177</span></a><span class="sd">    from uuid import uuid4, UUID</span>
+</span><span id="AsyncOnce-178"><a href="#AsyncOnce-178"><span class="linenos">178</span></a>
+</span><span id="AsyncOnce-179"><a href="#AsyncOnce-179"><span class="linenos">179</span></a><span class="sd">    class Application:</span>
+</span><span id="AsyncOnce-180"><a href="#AsyncOnce-180"><span class="linenos">180</span></a><span class="sd">        # Not initialized yet</span>
+</span><span id="AsyncOnce-181"><a href="#AsyncOnce-181"><span class="linenos">181</span></a><span class="sd">        uuid: Once[UUID] = Once()</span>
+</span><span id="AsyncOnce-182"><a href="#AsyncOnce-182"><span class="linenos">182</span></a>
+</span><span id="AsyncOnce-183"><a href="#AsyncOnce-183"><span class="linenos">183</span></a><span class="sd">        async def send(self, id: UUID) -&gt; None:</span>
+</span><span id="AsyncOnce-184"><a href="#AsyncOnce-184"><span class="linenos">184</span></a><span class="sd">            ...</span>
+</span><span id="AsyncOnce-185"><a href="#AsyncOnce-185"><span class="linenos">185</span></a>
+</span><span id="AsyncOnce-186"><a href="#AsyncOnce-186"><span class="linenos">186</span></a><span class="sd">    async def spawn(app: Application) -&gt; None:</span>
+</span><span id="AsyncOnce-187"><a href="#AsyncOnce-187"><span class="linenos">187</span></a><span class="sd">        app.uuid.get().is_none() # True</span>
+</span><span id="AsyncOnce-188"><a href="#AsyncOnce-188"><span class="linenos">188</span></a><span class="sd">        uid = await app.uuid.get_or(uuid4())</span>
+</span><span id="AsyncOnce-189"><a href="#AsyncOnce-189"><span class="linenos">189</span></a><span class="sd">        await app.send(uid)</span>
+</span><span id="AsyncOnce-190"><a href="#AsyncOnce-190"><span class="linenos">190</span></a>
+</span><span id="AsyncOnce-191"><a href="#AsyncOnce-191"><span class="linenos">191</span></a><span class="sd">    def run_application():</span>
+</span><span id="AsyncOnce-192"><a href="#AsyncOnce-192"><span class="linenos">192</span></a><span class="sd">        # This will init the uuid if its not set or return it if it already is.</span>
+</span><span id="AsyncOnce-193"><a href="#AsyncOnce-193"><span class="linenos">193</span></a><span class="sd">        app = Application()</span>
+</span><span id="AsyncOnce-194"><a href="#AsyncOnce-194"><span class="linenos">194</span></a><span class="sd">        tasks = (asyncio.create_task(spawn(app)) for _ in range(2))</span>
+</span><span id="AsyncOnce-195"><a href="#AsyncOnce-195"><span class="linenos">195</span></a><span class="sd">        await asyncio.gather(*tasks)</span>
+</span><span id="AsyncOnce-196"><a href="#AsyncOnce-196"><span class="linenos">196</span></a>
+</span><span id="AsyncOnce-197"><a href="#AsyncOnce-197"><span class="linenos">197</span></a><span class="sd">        app.uuid.get().is_some()  # True</span>
+</span><span id="AsyncOnce-198"><a href="#AsyncOnce-198"><span class="linenos">198</span></a><span class="sd">    ```</span>
+</span><span id="AsyncOnce-199"><a href="#AsyncOnce-199"><span class="linenos">199</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="AsyncOnce-200"><a href="#AsyncOnce-200"><span class="linenos">200</span></a>
+</span><span id="AsyncOnce-201"><a href="#AsyncOnce-201"><span class="linenos">201</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;_inner&quot;</span><span class="p">,</span> <span class="s2">&quot;_lock&quot;</span><span class="p">)</span>
+</span><span id="AsyncOnce-202"><a href="#AsyncOnce-202"><span class="linenos">202</span></a>
+</span><span id="AsyncOnce-203"><a href="#AsyncOnce-203"><span class="linenos">203</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce-204"><a href="#AsyncOnce-204"><span class="linenos">204</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="AsyncOnce-205"><a href="#AsyncOnce-205"><span class="linenos">205</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="AsyncOnce-206"><a href="#AsyncOnce-206"><span class="linenos">206</span></a>
+</span><span id="AsyncOnce-207"><a href="#AsyncOnce-207"><span class="linenos">207</span></a>    <span class="nd">@property</span>
+</span><span id="AsyncOnce-208"><a href="#AsyncOnce-208"><span class="linenos">208</span></a>    <span class="k">def</span> <span class="nf">is_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="AsyncOnce-209"><a href="#AsyncOnce-209"><span class="linenos">209</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span><span id="AsyncOnce-210"><a href="#AsyncOnce-210"><span class="linenos">210</span></a>
+</span><span id="AsyncOnce-211"><a href="#AsyncOnce-211"><span class="linenos">211</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="AsyncOnce-212"><a href="#AsyncOnce-212"><span class="linenos">212</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value.</span>
+</span><span id="AsyncOnce-213"><a href="#AsyncOnce-213"><span class="linenos">213</span></a>
+</span><span id="AsyncOnce-214"><a href="#AsyncOnce-214"><span class="linenos">214</span></a><span class="sd">        `Option(None)` is returned if nothing is stored. This method will never block.</span>
+</span><span id="AsyncOnce-215"><a href="#AsyncOnce-215"><span class="linenos">215</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AsyncOnce-216"><a href="#AsyncOnce-216"><span class="linenos">216</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
+</span><span id="AsyncOnce-217"><a href="#AsyncOnce-217"><span class="linenos">217</span></a>
+</span><span id="AsyncOnce-218"><a href="#AsyncOnce-218"><span class="linenos">218</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+</span><span id="AsyncOnce-219"><a href="#AsyncOnce-219"><span class="linenos">219</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="AsyncOnce-220"><a href="#AsyncOnce-220"><span class="linenos">220</span></a>
+</span><span id="AsyncOnce-221"><a href="#AsyncOnce-221"><span class="linenos">221</span></a><span class="sd">        Example</span>
+</span><span id="AsyncOnce-222"><a href="#AsyncOnce-222"><span class="linenos">222</span></a><span class="sd">        --------</span>
+</span><span id="AsyncOnce-223"><a href="#AsyncOnce-223"><span class="linenos">223</span></a><span class="sd">        ```py</span>
+</span><span id="AsyncOnce-224"><a href="#AsyncOnce-224"><span class="linenos">224</span></a><span class="sd">        flag = AsyncOnce[bool]()</span>
+</span><span id="AsyncOnce-225"><a href="#AsyncOnce-225"><span class="linenos">225</span></a><span class="sd">        # flag is empty.</span>
+</span><span id="AsyncOnce-226"><a href="#AsyncOnce-226"><span class="linenos">226</span></a><span class="sd">        assert await flag.get_or(True) is True.</span>
+</span><span id="AsyncOnce-227"><a href="#AsyncOnce-227"><span class="linenos">227</span></a>
+</span><span id="AsyncOnce-228"><a href="#AsyncOnce-228"><span class="linenos">228</span></a><span class="sd">        # flag is not empty, so it returns the value we set first.</span>
+</span><span id="AsyncOnce-229"><a href="#AsyncOnce-229"><span class="linenos">229</span></a><span class="sd">        assert (await flag.set(False)) == Err(True)</span>
+</span><span id="AsyncOnce-230"><a href="#AsyncOnce-230"><span class="linenos">230</span></a><span class="sd">        ```</span>
+</span><span id="AsyncOnce-231"><a href="#AsyncOnce-231"><span class="linenos">231</span></a>
+</span><span id="AsyncOnce-232"><a href="#AsyncOnce-232"><span class="linenos">232</span></a><span class="sd">        Returns</span>
+</span><span id="AsyncOnce-233"><a href="#AsyncOnce-233"><span class="linenos">233</span></a><span class="sd">        -------</span>
+</span><span id="AsyncOnce-234"><a href="#AsyncOnce-234"><span class="linenos">234</span></a><span class="sd">        `sain.Result[None, T]`</span>
+</span><span id="AsyncOnce-235"><a href="#AsyncOnce-235"><span class="linenos">235</span></a><span class="sd">            This cell returns `Ok(None)` if it was empty. otherwise `Err(T)` if it was full.</span>
+</span><span id="AsyncOnce-236"><a href="#AsyncOnce-236"><span class="linenos">236</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AsyncOnce-237"><a href="#AsyncOnce-237"><span class="linenos">237</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce-238"><a href="#AsyncOnce-238"><span class="linenos">238</span></a>            <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
+</span><span id="AsyncOnce-239"><a href="#AsyncOnce-239"><span class="linenos">239</span></a>
+</span><span id="AsyncOnce-240"><a href="#AsyncOnce-240"><span class="linenos">240</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_or</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span><span id="AsyncOnce-241"><a href="#AsyncOnce-241"><span class="linenos">241</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="AsyncOnce-242"><a href="#AsyncOnce-242"><span class="linenos">242</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</span><span id="AsyncOnce-243"><a href="#AsyncOnce-243"><span class="linenos">243</span></a>
+</span><span id="AsyncOnce-244"><a href="#AsyncOnce-244"><span class="linenos">244</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce-245"><a href="#AsyncOnce-245"><span class="linenos">245</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="AsyncOnce-246"><a href="#AsyncOnce-246"><span class="linenos">246</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="AsyncOnce-247"><a href="#AsyncOnce-247"><span class="linenos">247</span></a>
+</span><span id="AsyncOnce-248"><a href="#AsyncOnce-248"><span class="linenos">248</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="AsyncOnce-249"><a href="#AsyncOnce-249"><span class="linenos">249</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if its not `None`, Otherwise set `f` value and returning it.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce-250"><a href="#AsyncOnce-250"><span class="linenos">250</span></a>
+</span><span id="AsyncOnce-251"><a href="#AsyncOnce-251"><span class="linenos">251</span></a>        <span class="c1"># If the value is not empty we return it immediately.</span>
+</span><span id="AsyncOnce-252"><a href="#AsyncOnce-252"><span class="linenos">252</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce-253"><a href="#AsyncOnce-253"><span class="linenos">253</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
+</span><span id="AsyncOnce-254"><a href="#AsyncOnce-254"><span class="linenos">254</span></a>
+</span><span id="AsyncOnce-255"><a href="#AsyncOnce-255"><span class="linenos">255</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce-256"><a href="#AsyncOnce-256"><span class="linenos">256</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+</span><span id="AsyncOnce-257"><a href="#AsyncOnce-257"><span class="linenos">257</span></a>
+</span><span id="AsyncOnce-258"><a href="#AsyncOnce-258"><span class="linenos">258</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+</span><span id="AsyncOnce-259"><a href="#AsyncOnce-259"><span class="linenos">259</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="n">f</span>
+</span><span id="AsyncOnce-260"><a href="#AsyncOnce-260"><span class="linenos">260</span></a>            <span class="k">return</span> <span class="n">f</span>
+</span><span id="AsyncOnce-261"><a href="#AsyncOnce-261"><span class="linenos">261</span></a>
+</span><span id="AsyncOnce-262"><a href="#AsyncOnce-262"><span class="linenos">262</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="AsyncOnce-263"><a href="#AsyncOnce-263"><span class="linenos">263</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Once(value: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="AsyncOnce-264"><a href="#AsyncOnce-264"><span class="linenos">264</span></a>
+</span><span id="AsyncOnce-265"><a href="#AsyncOnce-265"><span class="linenos">265</span></a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="AsyncOnce-266"><a href="#AsyncOnce-266"><span class="linenos">266</span></a>        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
+</span><span id="AsyncOnce-267"><a href="#AsyncOnce-267"><span class="linenos">267</span></a>
+</span><span id="AsyncOnce-268"><a href="#AsyncOnce-268"><span class="linenos">268</span></a>    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__value</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="AsyncOnce-269"><a href="#AsyncOnce-269"><span class="linenos">269</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">__value</span><span class="p">,</span> <span class="n">Once</span><span class="p">):</span>
+</span><span id="AsyncOnce-270"><a href="#AsyncOnce-270"><span class="linenos">270</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">==</span> <span class="n">__value</span><span class="o">.</span><span class="n">_inner</span>  <span class="c1"># pyright: ignore</span>
+</span><span id="AsyncOnce-271"><a href="#AsyncOnce-271"><span class="linenos">271</span></a>
+</span><span id="AsyncOnce-272"><a href="#AsyncOnce-272"><span class="linenos">272</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">__value</span><span class="p">)):</span>
+</span><span id="AsyncOnce-273"><a href="#AsyncOnce-273"><span class="linenos">273</span></a>            <span class="k">return</span> <span class="n">__value</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
+</span><span id="AsyncOnce-274"><a href="#AsyncOnce-274"><span class="linenos">274</span></a>
+</span><span id="AsyncOnce-275"><a href="#AsyncOnce-275"><span class="linenos">275</span></a>        <span class="k">return</span> <span class="bp">NotImplemented</span>
+</span><span id="AsyncOnce-276"><a href="#AsyncOnce-276"><span class="linenos">276</span></a>
+</span><span id="AsyncOnce-277"><a href="#AsyncOnce-277"><span class="linenos">277</span></a>    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__value</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="AsyncOnce-278"><a href="#AsyncOnce-278"><span class="linenos">278</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">__value</span><span class="p">)</span>
+</span><span id="AsyncOnce-279"><a href="#AsyncOnce-279"><span class="linenos">279</span></a>
+</span><span id="AsyncOnce-280"><a href="#AsyncOnce-280"><span class="linenos">280</span></a>    <span class="k">def</span> <span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="AsyncOnce-281"><a href="#AsyncOnce-281"><span class="linenos">281</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_set</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>A synchronization primitive which can be written to only once.</p>
+
+<p>This is an <code>async</code> version of <code><a href="#Once">Once</a></code>.</p>
+
+<h6 id="example">Example</h6>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span> <span class="nn">sain.once</span> <span class="kn">import</span> <span class="n">Once</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span><span class="p">,</span> <span class="n">UUID</span>
+
+<span class="k">class</span> <span class="nc">Application</span><span class="p">:</span>
+    <span class="c1"># Not initialized yet</span>
+    <span class="n">uuid</span><span class="p">:</span> <span class="n">Once</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="n">Once</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">spawn</span><span class="p">(</span><span class="n">app</span><span class="p">:</span> <span class="n">Application</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">uuid</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">is_none</span><span class="p">()</span> <span class="c1"># True</span>
+    <span class="n">uid</span> <span class="o">=</span> <span class="k">await</span> <span class="n">app</span><span class="o">.</span><span class="n">uuid</span><span class="o">.</span><span class="n">get_or</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">app</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run_application</span><span class="p">():</span>
+    <span class="c1"># This will init the uuid if its not set or return it if it already is.</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">spawn</span><span class="p">(</span><span class="n">app</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">uuid</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">is_some</span><span class="p">()</span>  <span class="c1"># True</span>
+</code></pre>
+</div>
+</div>
+
+
+                            <div id="AsyncOnce.is_set" class="classattr">
+                                        <input id="AsyncOnce.is_set-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">is_set</span><span class="annotation">: bool</span>
+
+                <label class="view-source-button" for="AsyncOnce.is_set-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AsyncOnce.is_set"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.is_set-207"><a href="#AsyncOnce.is_set-207"><span class="linenos">207</span></a>    <span class="nd">@property</span>
+</span><span id="AsyncOnce.is_set-208"><a href="#AsyncOnce.is_set-208"><span class="linenos">208</span></a>    <span class="k">def</span> <span class="nf">is_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="AsyncOnce.is_set-209"><a href="#AsyncOnce.is_set-209"><span class="linenos">209</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="AsyncOnce.get" class="classattr">
+                                        <input id="AsyncOnce.get-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="option.html#Some">sain.option.Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+
+                <label class="view-source-button" for="AsyncOnce.get-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AsyncOnce.get"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get-211"><a href="#AsyncOnce.get-211"><span class="linenos">211</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="AsyncOnce.get-212"><a href="#AsyncOnce.get-212"><span class="linenos">212</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value.</span>
+</span><span id="AsyncOnce.get-213"><a href="#AsyncOnce.get-213"><span class="linenos">213</span></a>
+</span><span id="AsyncOnce.get-214"><a href="#AsyncOnce.get-214"><span class="linenos">214</span></a><span class="sd">        `Option(None)` is returned if nothing is stored. This method will never block.</span>
+</span><span id="AsyncOnce.get-215"><a href="#AsyncOnce.get-215"><span class="linenos">215</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AsyncOnce.get-216"><a href="#AsyncOnce.get-216"><span class="linenos">216</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Gets the stored value.</p>
+
+<p><code>Option(None)</code> is returned if nothing is stored. This method will never block.</p>
+</div>
+
+
+                            </div>
+                            <div id="AsyncOnce.set" class="classattr">
+                                        <input id="AsyncOnce.set-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">async def</span>
+        <span class="name">set</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">v</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="result.html#Ok">sain.result.Ok</a></span><span class="p">[</span><span class="n">NoneType</span><span class="p">],</span> <span class="n"><a href="result.html#Err">sain.result.Err</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span>:</span></span>
+
+                <label class="view-source-button" for="AsyncOnce.set-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AsyncOnce.set"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.set-218"><a href="#AsyncOnce.set-218"><span class="linenos">218</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+</span><span id="AsyncOnce.set-219"><a href="#AsyncOnce.set-219"><span class="linenos">219</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="AsyncOnce.set-220"><a href="#AsyncOnce.set-220"><span class="linenos">220</span></a>
+</span><span id="AsyncOnce.set-221"><a href="#AsyncOnce.set-221"><span class="linenos">221</span></a><span class="sd">        Example</span>
+</span><span id="AsyncOnce.set-222"><a href="#AsyncOnce.set-222"><span class="linenos">222</span></a><span class="sd">        --------</span>
+</span><span id="AsyncOnce.set-223"><a href="#AsyncOnce.set-223"><span class="linenos">223</span></a><span class="sd">        ```py</span>
+</span><span id="AsyncOnce.set-224"><a href="#AsyncOnce.set-224"><span class="linenos">224</span></a><span class="sd">        flag = AsyncOnce[bool]()</span>
+</span><span id="AsyncOnce.set-225"><a href="#AsyncOnce.set-225"><span class="linenos">225</span></a><span class="sd">        # flag is empty.</span>
+</span><span id="AsyncOnce.set-226"><a href="#AsyncOnce.set-226"><span class="linenos">226</span></a><span class="sd">        assert await flag.get_or(True) is True.</span>
+</span><span id="AsyncOnce.set-227"><a href="#AsyncOnce.set-227"><span class="linenos">227</span></a>
+</span><span id="AsyncOnce.set-228"><a href="#AsyncOnce.set-228"><span class="linenos">228</span></a><span class="sd">        # flag is not empty, so it returns the value we set first.</span>
+</span><span id="AsyncOnce.set-229"><a href="#AsyncOnce.set-229"><span class="linenos">229</span></a><span class="sd">        assert (await flag.set(False)) == Err(True)</span>
+</span><span id="AsyncOnce.set-230"><a href="#AsyncOnce.set-230"><span class="linenos">230</span></a><span class="sd">        ```</span>
+</span><span id="AsyncOnce.set-231"><a href="#AsyncOnce.set-231"><span class="linenos">231</span></a>
+</span><span id="AsyncOnce.set-232"><a href="#AsyncOnce.set-232"><span class="linenos">232</span></a><span class="sd">        Returns</span>
+</span><span id="AsyncOnce.set-233"><a href="#AsyncOnce.set-233"><span class="linenos">233</span></a><span class="sd">        -------</span>
+</span><span id="AsyncOnce.set-234"><a href="#AsyncOnce.set-234"><span class="linenos">234</span></a><span class="sd">        `sain.Result[None, T]`</span>
+</span><span id="AsyncOnce.set-235"><a href="#AsyncOnce.set-235"><span class="linenos">235</span></a><span class="sd">            This cell returns `Ok(None)` if it was empty. otherwise `Err(T)` if it was full.</span>
+</span><span id="AsyncOnce.set-236"><a href="#AsyncOnce.set-236"><span class="linenos">236</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AsyncOnce.set-237"><a href="#AsyncOnce.set-237"><span class="linenos">237</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce.set-238"><a href="#AsyncOnce.set-238"><span class="linenos">238</span></a>            <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
+</span><span id="AsyncOnce.set-239"><a href="#AsyncOnce.set-239"><span class="linenos">239</span></a>
+</span><span id="AsyncOnce.set-240"><a href="#AsyncOnce.set-240"><span class="linenos">240</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_or</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span><span id="AsyncOnce.set-241"><a href="#AsyncOnce.set-241"><span class="linenos">241</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="AsyncOnce.set-242"><a href="#AsyncOnce.set-242"><span class="linenos">242</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Set the const value if its not set. returning <code>T</code> if its already set.</p>
+
+<h6 id="example">Example</h6>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="n">flag</span> <span class="o">=</span> <span class="n">AsyncOnce</span><span class="p">[</span><span class="nb">bool</span><span class="p">]()</span>
+<span class="c1"># flag is empty.</span>
+<span class="k">assert</span> <span class="k">await</span> <span class="n">flag</span><span class="o">.</span><span class="n">get_or</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="o">.</span>
+
+<span class="c1"># flag is not empty, so it returns the value we set first.</span>
+<span class="k">assert</span> <span class="p">(</span><span class="k">await</span> <span class="n">flag</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span> <span class="o">==</span> <span class="n">Err</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h6 id="returns">Returns</h6>
+
+<ul>
+<li><strong><code><a href="../sain.html#Result">sain.Result</a>[None, T]</code></strong>: This cell returns <code>Ok(None)</code> if it was empty. otherwise <code>Err(T)</code> if it was full.</li>
+</ul>
+</div>
+
+
+                            </div>
+                            <div id="AsyncOnce.clear" class="classattr">
+                                        <input id="AsyncOnce.clear-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">clear</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
+
+                <label class="view-source-button" for="AsyncOnce.clear-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AsyncOnce.clear"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.clear-244"><a href="#AsyncOnce.clear-244"><span class="linenos">244</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce.clear-245"><a href="#AsyncOnce.clear-245"><span class="linenos">245</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="AsyncOnce.clear-246"><a href="#AsyncOnce.clear-246"><span class="linenos">246</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="AsyncOnce.get_or" class="classattr">
+                                        <input id="AsyncOnce.get_or-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">async def</span>
+        <span class="name">get_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
+
+                <label class="view-source-button" for="AsyncOnce.get_or-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AsyncOnce.get_or"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get_or-248"><a href="#AsyncOnce.get_or-248"><span class="linenos">248</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="AsyncOnce.get_or-249"><a href="#AsyncOnce.get_or-249"><span class="linenos">249</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if its not `None`, Otherwise set `f` value and returning it.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce.get_or-250"><a href="#AsyncOnce.get_or-250"><span class="linenos">250</span></a>
+</span><span id="AsyncOnce.get_or-251"><a href="#AsyncOnce.get_or-251"><span class="linenos">251</span></a>        <span class="c1"># If the value is not empty we return it immediately.</span>
+</span><span id="AsyncOnce.get_or-252"><a href="#AsyncOnce.get_or-252"><span class="linenos">252</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce.get_or-253"><a href="#AsyncOnce.get_or-253"><span class="linenos">253</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
+</span><span id="AsyncOnce.get_or-254"><a href="#AsyncOnce.get_or-254"><span class="linenos">254</span></a>
+</span><span id="AsyncOnce.get_or-255"><a href="#AsyncOnce.get_or-255"><span class="linenos">255</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AsyncOnce.get_or-256"><a href="#AsyncOnce.get_or-256"><span class="linenos">256</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+</span><span id="AsyncOnce.get_or-257"><a href="#AsyncOnce.get_or-257"><span class="linenos">257</span></a>
+</span><span id="AsyncOnce.get_or-258"><a href="#AsyncOnce.get_or-258"><span class="linenos">258</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+</span><span id="AsyncOnce.get_or-259"><a href="#AsyncOnce.get_or-259"><span class="linenos">259</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="n">f</span>
+</span><span id="AsyncOnce.get_or-260"><a href="#AsyncOnce.get_or-260"><span class="linenos">260</span></a>            <span class="k">return</span> <span class="n">f</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Get the value if its not <code>None</code>, Otherwise set <code>f</code> value and returning it.</p>
 </div>
 
 
