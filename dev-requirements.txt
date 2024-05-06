@@ -5,7 +5,7 @@ nox~=2024.4.15
 pdoc~=14.4.0
 
 # Format - Type checking.
-ruff~=0.4.2
+ruff~=0.4.3
 isort~=5.13.2
 pyright~=1.1.360
 codespell~=2.2.6
