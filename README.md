@@ -64,7 +64,7 @@ class BlobStore:
         return self
             .buffer
             .iter()
-            .filter(lambda tag: tag in filtered)
+            .take_while(lambda tag: tag.name in filtered)
             .next()
 
 storage = BlobStore()
