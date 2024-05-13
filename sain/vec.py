@@ -313,6 +313,7 @@ class Vec(typing.Generic[T]):
         """Push an element at the end of the vector.
 
         Example
+        -------
         ```py
         vec = Vec()
         vec.push(1)

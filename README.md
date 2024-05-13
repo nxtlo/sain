@@ -27,25 +27,30 @@ Advanced examples in [examples](https://github.com/nxtlo/sain/tree/master/exampl
 Exceptions suck, `Result` and `Option` is a much better way to avoid runtime exceptions.
 
 ```py
+from __future__ import annotations
+
 from sain import Ok, Err
 from sain import Some
 from sain import Vec
 
 import typing
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 if typing.TYPE_CHECKING:
     # These are just type aliases that have no cost at runtime.
+    # __annotations__ needs to be imported.
     from sain import Result, Option
+
 
 @dataclass
 class Chunk:
-    name: str
-    description: Option[str] = Some(None)
+    tag: str
+    data: Option[bytes] = Some(None)
+
 
 @dataclass
 class BlobStore:
-    buffer: Vec[Chunk] = Vec()
+    buffer: Vec[Chunk] = field(default_factory=Vec)
     size: int = 1024
 
     def put(self, tag: str) -> Result[Chunk, str]:
@@ -55,7 +60,7 @@ class BlobStore:
             # or any data type with more context.
             return Err("Reached maximum capacity sry :3")
 
-        chunk = Chunk(tag, Some("Evil within."))
+        chunk = Chunk(tag, Some(f"chunk.{tag}".encode("utf-8")))
         self.buffer.push(chunk)
         return Ok(chunk)
 
@@ -64,14 +69,14 @@ class BlobStore:
         return self
             .buffer
             .iter()
-            .take_while(lambda tag: tag.name in filtered)
+            .take_while(lambda chunk: filtered in chunk.tag)
             .next()
 
+
 storage = BlobStore()
-match storage.put("wiped"):
+match storage.put("first"):
     case Ok(chunk):
-        # Success
-        ...
+        print(storage.next_chunk())
     case Err(why):
         print(why)
 ```
