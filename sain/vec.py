@@ -191,7 +191,7 @@ class Vec(typing.Generic[T]):
         """
         return self._capacity
 
-    def iter(self) -> _iter.Iter[T]:
+    def iter(self) -> _iter.Iterator[T]:
         """Return an iterator over this vector elements.
 
         Example

@@ -414,7 +414,7 @@ class Ok(typing.Generic[T]):
     # * Iterator constructors. * #
     ##############################
 
-    def iter(self) -> _iter.Iter[T]:
+    def iter(self) -> _iter.Iterator[T]:
         """Return an iterator over the contained value.
 
         If it was `Ok[T]` then it will return `Iter[T]`, otherwise it will return `Iter[Never]`.
@@ -431,7 +431,7 @@ class Ok(typing.Generic[T]):
         """
         return self.__iter__()
 
-    def __iter__(self) -> _iter.Iter[T]:
+    def __iter__(self) -> _iter.Iterator[T]:
         return _iter.once(self._inner)
 
     #################
@@ -570,10 +570,10 @@ class Err(typing.Generic[E]):
     # * Iterator constructors. * #
     ##############################
 
-    def iter(self) -> _iter.Iter[Never]:
+    def iter(self) -> _iter.Iterator[Never]:
         return self.__iter__()
 
-    def __iter__(self) -> _iter.Iter[Never]:
+    def __iter__(self) -> _iter.Iterator[Never]:
         return _iter.empty()
 
     #################

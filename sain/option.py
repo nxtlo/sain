@@ -373,7 +373,7 @@ class Some(typing.Generic[T], _default.Default[None]):
 
     # *- Builder methods *-
 
-    def iter(self) -> iter.Iter[T]:
+    def iter(self) -> iter.Iterator[T]:
         """Returns an iterator over the contained value.
 
         Example

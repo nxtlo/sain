@@ -36,10 +36,11 @@ Equivalent types
 ----------------
 - `Option<T>` -> `Option[T]` | `Some[T]`
 - `Result<T, E>` -> `Result[T, E]`
-- `Error` -> `Error`
+- `&dyn Error` -> `Error`
 - `Vec<T>` -> `Vec[T]`
 - `Default<T>` -> `Default[T]`
-- `Iter<Item>` -> `Iter[Item]`
+- `slice::Iter<Item>` -> `Iter[Item]`
+- `iter::Iterator<Item>` -> `Iterator[Item]`
 - `Box<T>` -> `Box[T]`, not a heap box.
 - `cell::Cell<T>` -> `Cell[T]`, slightly different.
 - `cell::RefCell<T>` -> `RefCell[T]`, slightly different.
@@ -74,6 +75,7 @@ __all__ = (
     "NOTHING",
     # iter.py
     "Iter",
+    "Iterator",
     "iter",
     # macros.py
     "macros",
@@ -116,6 +118,7 @@ from .cfg import cfg_attr
 from .default import Default
 from .error import Error
 from .iter import Iter
+from .iter import Iterator
 from .macros import deprecated
 from .macros import doc
 from .macros import todo
