@@ -31,7 +31,6 @@
 
 from __future__ import annotations
 
-
 __all__ = ("Iter", "Iterator", "into_iter", "empty", "once", "repeat")
 
 import abc
@@ -44,7 +43,6 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-from .macros import unstable
 from .vec import Vec
 
 Item = typing.TypeVar("Item")
@@ -55,6 +53,7 @@ OtherItem = typing.TypeVar("OtherItem")
 
 if typing.TYPE_CHECKING:
     import _typeshed
+
     from .option import Option
 
 
@@ -169,6 +168,24 @@ class Iterator(
         for _ in self:
             pass
 
+    @typing.final
+    def raw_parts(self) -> collections.Generator[Item, None, None]:
+        """Decompose all elements from this iterator, yielding it one by one
+        as a normal generator.
+
+        This mainly used for objects that needs to satisfy its exact type.
+
+        ```py
+        it = Iter("cba")
+        sort = sorted(it.raw_parts())
+
+        assert it.count() == 0
+        assert sort == ["a", "b", "c"]
+        ```
+        """
+        for item in self:
+            yield item
+
     ##################
     # default impl's #
     ##################
@@ -193,15 +210,30 @@ class Iterator(
     def cloned(self) -> Cloned[Item]:
         """Creates an iterator which shallow copies its elements by reference.
 
+        If you need a copy of the actual iterator and not the elements.
+        use `Iter.clone()`
+
+        .. note::
+            This method calls `[copy.copy()[https://docs.python.org/3/library/copy.html]`
+            on each item that is being yielded.
+
         Example
         -------
         ```py
-        it = Iter([None, None, None])
-        for ref in it.by_ref():
-            ...
+        @dataclass
+        class User:
+            users_ids: list[int] = []
 
-        # Original not consumed.
-        assert it.count() == 3
+        # An iterator which elements points to the same user.
+        user = User()
+        it = Iter((user, user))
+
+        for u in it.cloned():
+            u.user_ids.append(1)
+
+        # We iterated over the same user pointer twice and appended "1"
+        # since `copy` returns a shallow copy of nested structures.
+        assert len(user.user_ids) == 2
         ```
         """
         return Cloned(self)
@@ -209,15 +241,29 @@ class Iterator(
     def copied(self) -> Copied[Item]:
         """Creates an iterator which copies all of its elements by value.
 
+        If you only need a copy of the item reference, Use `.cloned()` instead.
+
         .. note::
-            If you only need a copy of the item reference, Use `by_ref` instead.
+            This method simply calls `[copy.deepcopy()](https://docs.python.org/3/library/copy.html)`
+            on each item that is being yielded.
 
         Example
         -------
         ```py
-        it = Iter([None, None, None])
-        copied = it.copied()
-        assert it.collect() == copied.collect()
+        @dataclass
+        class User:
+            users_ids: list[int] = []
+
+        # An iterator which elements points to the same user.
+        user = User()
+        it = Iter((user, user))
+
+        for u in it.copied():
+            # A new list is created for each item.
+            u.user_ids.append(1)
+
+        # The actual list is untouched since we consumed a deep copy of it.
+        assert len(user.user_ids) == 0
         ```
         """
         return Copied(self)
@@ -390,7 +436,6 @@ class Iterator(
         """
         return any(predicate(item) for item in self)
 
-    @unstable()
     def zip(
         self, other: collections.Iterable[OtherItem]
     ) -> Iterator[tuple[Item, OtherItem]]:
@@ -416,9 +461,8 @@ class Iterator(
             The zipped iterator.
 
         """
-        return Iter(zip(self, other))
+        return Iter(zip(self.raw_parts(), other))
 
-    @unstable()
     def sort(
         self,
         *,
@@ -447,9 +491,8 @@ class Iterator(
             Whether to reverse the sort.
 
         """
-        return Iter(sorted(self, key=key, reverse=reverse))
+        return Iter(sorted(self.raw_parts(), key=key, reverse=reverse))
 
-    @unstable()
     def reversed(self) -> Iterator[Item]:
         """Returns a new iterator that yields the items in the iterator in reverse order.
 
@@ -465,17 +508,19 @@ class Iterator(
         # 3
         ```
         """
+        # NOTE: In order to reverse the iterator we need to
+        # first collect it into some collection.
         return Iter(reversed(self.collect()))
 
-    @unstable()
-    def union(self, other: Iter[Item]) -> Iterator[Item]:
+    def union(self, other: collections.Iterable[Item]) -> Iterator[Item]:
         """Returns a new iterator that yields all items from both iterators.
 
         Example
         -------
         ```py
         iterator = Iter([1, 2, 3])
-        other = Iter([4, 5, 6])
+        other = [4, 5, 6]
+
         for item in iterator.union(other):
             print(item)
         # 1
@@ -491,7 +536,7 @@ class Iterator(
         other: `Iter[Item]`
             The iterable to union with.
         """
-        return Iter(itertools.chain(self, other))
+        return Iter(itertools.chain(self.raw_parts(), other))
 
     def first(self) -> Option[Item]:
         """Returns the first item in the iterator.
@@ -643,6 +688,21 @@ class Iter(Iterator[Item]):
     def __init__(self, iterable: collections.Iterable[Item]) -> None:
         self._it = iter(iterable)
 
+    def clone(self) -> typing.Self:
+        """Return a copy of this iterator.
+
+        ```py
+        it = Iterator([1, 2, 3])
+
+        for i in it.clone():
+            ...
+
+        # The actual iterator hasn't been exhausted.
+        assert it.count() == 3
+        ```
+        """
+        return self.__class__(copy.copy(self._it))
+
     def __next__(self) -> Item:
         try:
             return next(self._it)
@@ -672,7 +732,14 @@ class Cloned(typing.Generic[Item], Iterator[Item]):
         self._it = it
 
     def __next__(self) -> Item:
-        return copy.copy(self._it.__next__())
+        n = self._it.__next__()
+
+        # Avoid useless function call for a list.
+        if isinstance(n, list):
+            # SAFETY: We know this is a list.
+            return n[:]  # pyright: ignore
+
+        return copy.copy(n)
 
 
 class Copied(typing.Generic[Item], Iterator[Item]):

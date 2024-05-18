@@ -667,7 +667,7 @@ wide variety of different methods.</p>
 </span><span id="L-414"><a href="#L-414"><span class="linenos">414</span></a>    <span class="c1"># * Iterator constructors. * #</span>
 </span><span id="L-415"><a href="#L-415"><span class="linenos">415</span></a>    <span class="c1">##############################</span>
 </span><span id="L-416"><a href="#L-416"><span class="linenos">416</span></a>
-</span><span id="L-417"><a href="#L-417"><span class="linenos">417</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="L-417"><a href="#L-417"><span class="linenos">417</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="L-418"><a href="#L-418"><span class="linenos">418</span></a>        <span class="sd">&quot;&quot;&quot;Return an iterator over the contained value.</span>
 </span><span id="L-419"><a href="#L-419"><span class="linenos">419</span></a>
 </span><span id="L-420"><a href="#L-420"><span class="linenos">420</span></a><span class="sd">        If it was `Ok[T]` then it will return `Iter[T]`, otherwise it will return `Iter[Never]`.</span>
@@ -684,7 +684,7 @@ wide variety of different methods.</p>
 </span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
 </span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a>
-</span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a>
 </span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a>    <span class="c1">#################</span>
@@ -823,10 +823,10 @@ wide variety of different methods.</p>
 </span><span id="L-570"><a href="#L-570"><span class="linenos">570</span></a>    <span class="c1"># * Iterator constructors. * #</span>
 </span><span id="L-571"><a href="#L-571"><span class="linenos">571</span></a>    <span class="c1">##############################</span>
 </span><span id="L-572"><a href="#L-572"><span class="linenos">572</span></a>
-</span><span id="L-573"><a href="#L-573"><span class="linenos">573</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
+</span><span id="L-573"><a href="#L-573"><span class="linenos">573</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
 </span><span id="L-574"><a href="#L-574"><span class="linenos">574</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
 </span><span id="L-575"><a href="#L-575"><span class="linenos">575</span></a>
-</span><span id="L-576"><a href="#L-576"><span class="linenos">576</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
+</span><span id="L-576"><a href="#L-576"><span class="linenos">576</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
 </span><span id="L-577"><a href="#L-577"><span class="linenos">577</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 </span><span id="L-578"><a href="#L-578"><span class="linenos">578</span></a>
 </span><span id="L-579"><a href="#L-579"><span class="linenos">579</span></a>    <span class="c1">#################</span>
@@ -1152,7 +1152,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-415"><a href="#Ok-415"><span class="linenos">415</span></a>    <span class="c1"># * Iterator constructors. * #</span>
 </span><span id="Ok-416"><a href="#Ok-416"><span class="linenos">416</span></a>    <span class="c1">##############################</span>
 </span><span id="Ok-417"><a href="#Ok-417"><span class="linenos">417</span></a>
-</span><span id="Ok-418"><a href="#Ok-418"><span class="linenos">418</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="Ok-418"><a href="#Ok-418"><span class="linenos">418</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="Ok-419"><a href="#Ok-419"><span class="linenos">419</span></a>        <span class="sd">&quot;&quot;&quot;Return an iterator over the contained value.</span>
 </span><span id="Ok-420"><a href="#Ok-420"><span class="linenos">420</span></a>
 </span><span id="Ok-421"><a href="#Ok-421"><span class="linenos">421</span></a><span class="sd">        If it was `Ok[T]` then it will return `Iter[T]`, otherwise it will return `Iter[Never]`.</span>
@@ -1169,7 +1169,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-432"><a href="#Ok-432"><span class="linenos">432</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Ok-433"><a href="#Ok-433"><span class="linenos">433</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
 </span><span id="Ok-434"><a href="#Ok-434"><span class="linenos">434</span></a>
-</span><span id="Ok-435"><a href="#Ok-435"><span class="linenos">435</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="Ok-435"><a href="#Ok-435"><span class="linenos">435</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="Ok-436"><a href="#Ok-436"><span class="linenos">436</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Ok-437"><a href="#Ok-437"><span class="linenos">437</span></a>
 </span><span id="Ok-438"><a href="#Ok-438"><span class="linenos">438</span></a>    <span class="c1">#################</span>
@@ -1981,13 +1981,13 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="iter.html#Iter">sain.iter.Iter</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="iter.html#Iterator">sain.iter.Iterator</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Ok.iter-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Ok.iter"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.iter-418"><a href="#Ok.iter-418"><span class="linenos">418</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.iter-418"><a href="#Ok.iter-418"><span class="linenos">418</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="Ok.iter-419"><a href="#Ok.iter-419"><span class="linenos">419</span></a>        <span class="sd">&quot;&quot;&quot;Return an iterator over the contained value.</span>
 </span><span id="Ok.iter-420"><a href="#Ok.iter-420"><span class="linenos">420</span></a>
 </span><span id="Ok.iter-421"><a href="#Ok.iter-421"><span class="linenos">421</span></a><span class="sd">        If it was `Ok[T]` then it will return `Iter[T]`, otherwise it will return `Iter[Never]`.</span>
@@ -2160,10 +2160,10 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
 </span><span id="Err-571"><a href="#Err-571"><span class="linenos">571</span></a>    <span class="c1"># * Iterator constructors. * #</span>
 </span><span id="Err-572"><a href="#Err-572"><span class="linenos">572</span></a>    <span class="c1">##############################</span>
 </span><span id="Err-573"><a href="#Err-573"><span class="linenos">573</span></a>
-</span><span id="Err-574"><a href="#Err-574"><span class="linenos">574</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
+</span><span id="Err-574"><a href="#Err-574"><span class="linenos">574</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
 </span><span id="Err-575"><a href="#Err-575"><span class="linenos">575</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
 </span><span id="Err-576"><a href="#Err-576"><span class="linenos">576</span></a>
-</span><span id="Err-577"><a href="#Err-577"><span class="linenos">577</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
+</span><span id="Err-577"><a href="#Err-577"><span class="linenos">577</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
 </span><span id="Err-578"><a href="#Err-578"><span class="linenos">578</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 </span><span id="Err-579"><a href="#Err-579"><span class="linenos">579</span></a>
 </span><span id="Err-580"><a href="#Err-580"><span class="linenos">580</span></a>    <span class="c1">#################</span>
@@ -2634,13 +2634,13 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="iter.html#Iter">sain.iter.Iter</a></span><span class="p">[</span><span class="n">typing_extensions</span><span class="o">.</span><span class="n">Never</span><span class="p">]</span>:</span></span>
+        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="iter.html#Iterator">sain.iter.Iterator</a></span><span class="p">[</span><span class="n">typing_extensions</span><span class="o">.</span><span class="n">Never</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Err.iter-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Err.iter"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Err.iter-574"><a href="#Err.iter-574"><span class="linenos">574</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Err.iter-574"><a href="#Err.iter-574"><span class="linenos">574</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
 </span><span id="Err.iter-575"><a href="#Err.iter-575"><span class="linenos">575</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
 </span></pre></div>
 

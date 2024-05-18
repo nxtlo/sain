@@ -506,7 +506,7 @@
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>
 </span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>    <span class="c1"># *- Builder methods *-</span>
 </span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a>
-</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>
 </span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a><span class="sd">        Example</span>
@@ -1063,7 +1063,7 @@
 </span><span id="Some-374"><a href="#Some-374"><span class="linenos">374</span></a>
 </span><span id="Some-375"><a href="#Some-375"><span class="linenos">375</span></a>    <span class="c1"># *- Builder methods *-</span>
 </span><span id="Some-376"><a href="#Some-376"><span class="linenos">376</span></a>
-</span><span id="Some-377"><a href="#Some-377"><span class="linenos">377</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="Some-377"><a href="#Some-377"><span class="linenos">377</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="Some-378"><a href="#Some-378"><span class="linenos">378</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
 </span><span id="Some-379"><a href="#Some-379"><span class="linenos">379</span></a>
 </span><span id="Some-380"><a href="#Some-380"><span class="linenos">380</span></a><span class="sd">        Example</span>
@@ -2016,13 +2016,13 @@ on <code>T</code> and return <code>Option[T]</code> if it's value not <code>None
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="iter.html#Iter">sain.iter.Iter</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="iter.html#Iterator">sain.iter.Iterator</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.iter-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.iter"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Some.iter-377"><a href="#Some.iter-377"><span class="linenos">377</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Some.iter-377"><a href="#Some.iter-377"><span class="linenos">377</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="Some.iter-378"><a href="#Some.iter-378"><span class="linenos">378</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
 </span><span id="Some.iter-379"><a href="#Some.iter-379"><span class="linenos">379</span></a>
 </span><span id="Some.iter-380"><a href="#Some.iter-380"><span class="linenos">380</span></a><span class="sd">        Example</span>
