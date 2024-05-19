@@ -27,7 +27,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Composable external iteration. See `Iter` for more details."""
+"""Composable external iteration. See `Iterator` for more details."""
 
 from __future__ import annotations
 
@@ -97,6 +97,36 @@ class Iterator(
 
     If you want to use a ready iterator for general purposes, Use `Iter`. This interface is only for implementors
     and type hints.
+
+    Example
+    -------
+    ```py
+    @dataclass
+    class Message:
+        content: str
+
+    class MessageIterator(sain.Iterator[Message]):
+        def __init__(self, id: int = random.randint(0, 100)) -> None:
+            self._session: requests.Session | None = None
+            self.id = id
+
+        def __next__(self) -> Message:
+            if self._session is None:
+                self._session = requests.session()
+
+            try:
+                with self._session:
+                    response = self._session.get(f"https://dummyjson.com/products/{self.id}").json()
+            finally:
+                self._session = None
+
+            return Message(response["description"])
+
+    it = MessageIterator()
+    # Lazily fetch the first 5 messages from the API.
+    for msg in it.take(5):
+        print(msg)
+    ```
     """
 
     @abc.abstractmethod
@@ -945,7 +975,7 @@ class DropWhile(typing.Generic[Item], Iterator[Item]):
 class Empty(typing.Generic[Item], Iterator[Item]):
     """An iterator that yields literally nothing.
 
-    This is the default iterator that is created by `Iterators.empty` or `empty()`
+    This is the default iterator that is created by `Iterator.empty` or `empty()`
     """
 
     __slots__ = ("_it",)
