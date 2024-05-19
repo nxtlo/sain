@@ -28,42 +28,44 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import nox
+from __future__ import annotations
+
+import pytest
+
+from sain import iter
 
 
-@nox.session(reuse_venv=True)
-def pdoc(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("pdoc", "sain", "-d", "numpy", "-o", "./docs", "-t", "./templates")
+@pytest.fixture()
+def default_iterator() -> iter.Iterator[str]:
+    return iter.Iter[str].default()
 
 
-@nox.session(reuse_venv=True)
-def lint(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("ruff", "check", ".", "--fix")
+class TestIterator:
+    def test_default(self, default_iterator: iter.Iterator[str]):
+        assert default_iterator.next().is_none()
 
+    def test_collect_cast(self):
+        it = iter.Iter(("a", "b", "c", "d"))
+        assert it.collect(cast=str.encode) == (b"a", b"b", b"c", b"d")
 
-@nox.session(reuse_venv=True)
-def type_check(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("pyright", "sain")
+    def test_collect(self):
+        it = iter.Iter(("a", "b", "c", "d"))
+        assert "a" in it.collect()
 
+    def test_for_iter(self):
+        it = iter.Iter(("a", "b", "c", "d"))
+        for _ in it:
+            pass
 
-@nox.session(reuse_venv=True)
-def pytest(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("pytest", "tests")
+        assert it.next().is_none()
 
+    def test_next(self):
+        it = iter.Iter(("a", "b"))
+        assert it.next().is_some_and(lambda x: x == "a")
+        assert it.next().is_some_and(lambda x: x == "b")
+        assert it.next().is_none()
 
-# @nox.session(reuse_venv=True)
-# def verify_types(session: nox.Session) -> None:
-#     session.install("-r", "dev-requirements.txt")
-#     session.run("pyright", "--verifytypes", "sain", "--ignoreexternal")
-
-
-@nox.session(reuse_venv=True)
-def reformat(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("ruff", "format", ".")
-    session.run("ruff", "check", ".")
-    session.run("isort", "sain")
+    def test_to_vec(self):
+        it = iter.Iter(("a", "b"))
+        v = it.to_vec()
+        assert v == ["a", "b"]

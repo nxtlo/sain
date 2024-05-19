@@ -1,5 +1,6 @@
-# Tester.
+# Tests.
 nox~=2024.4.15
+pytest~=8.2.0
 
 # Documentation.
 pdoc~=14.4.0

@@ -28,42 +28,38 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import nox
+import pytest
+from sain import boxed
+
+import time
 
 
-@nox.session(reuse_venv=True)
-def pdoc(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("pdoc", "sain", "-d", "numpy", "-o", "./docs", "-t", "./templates")
+def _assert_eq(x: int, y: int):
+    assert x != y
 
 
-@nox.session(reuse_venv=True)
-def lint(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("ruff", "check", ".", "--fix")
+@pytest.fixture()
+def box() -> boxed.Box[int]:
+    return boxed.Box(0, 3).on_expire(lambda v: _assert_eq(v, 0))
 
 
-@nox.session(reuse_venv=True)
-def type_check(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("pyright", "sain")
+class TestBox:
+    def test_has_expired(self, box: boxed.Box[int]):
+        assert box.get().is_some()
+        time.sleep(box.remaining())
+        assert box.has_expired
 
+    def test_remaining(self, box: boxed.Box[int]):
+        assert box.remaining() <= 3
 
-@nox.session(reuse_venv=True)
-def pytest(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("pytest", "tests")
+    def test_get_is_none(self, box: boxed.Box[int]):
+        if box.get().is_some():
+            time.sleep(box.remaining())
+        else:
+            assert box.get().is_none()
 
-
-# @nox.session(reuse_venv=True)
-# def verify_types(session: nox.Session) -> None:
-#     session.install("-r", "dev-requirements.txt")
-#     session.run("pyright", "--verifytypes", "sain", "--ignoreexternal")
-
-
-@nox.session(reuse_venv=True)
-def reformat(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("ruff", "format", ".")
-    session.run("ruff", "check", ".")
-    session.run("isort", "sain")
+    def test_get_is_not_none(self, box: boxed.Box[int]):
+        if box.get().is_none():
+            time.sleep(box.remaining())
+        else:
+            assert box.get().is_some()
