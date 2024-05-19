@@ -31,7 +31,27 @@
 
 from __future__ import annotations
 
-__all__ = ("Iter", "Iterator", "into_iter", "empty", "once", "repeat")
+__all__ = (
+    # Core
+    "Iter",
+    "Iterator",
+    # Adapters
+    "Cloned",
+    "Copied",
+    "Take",
+    "Filter",
+    "Map",
+    "Skip",
+    "Enumerate",
+    "TakeWhile",
+    "DropWhile",
+    "Empty",
+    # Functions
+    "into_iter",
+    "empty",
+    "once",
+    "repeat",
+)
 
 import abc
 import collections.abc as collections
@@ -214,7 +234,7 @@ class Iterator(
         use `Iter.clone()`
 
         .. note::
-            This method calls `[copy.copy()[https://docs.python.org/3/library/copy.html]`
+            This method calls [`copy.copy()`](https://docs.python.org/3/library/copy.html)
             on each item that is being yielded.
 
         Example
@@ -244,7 +264,7 @@ class Iterator(
         If you only need a copy of the item reference, Use `.cloned()` instead.
 
         .. note::
-            This method simply calls `[copy.deepcopy()](https://docs.python.org/3/library/copy.html)`
+            This method simply calls [`copy.deepcopy()`](https://docs.python.org/3/library/copy.html)
             on each item that is being yielded.
 
         Example
@@ -348,7 +368,7 @@ class Iterator(
 
         # 0 1
         # 1 2
-        # , 3
+        # 2 3
         ```
         """
         return Enumerate(self, start)
@@ -726,6 +746,11 @@ class Iter(Iterator[Item]):
 
 
 class Cloned(typing.Generic[Item], Iterator[Item]):
+    """An iterator that copies the elements from an underlying iterator.
+
+    This iterator is created by the `Iterator.cloned` method.
+    """
+
     __slots__ = ("_it",)
 
     def __init__(self, it: Iterator[Item]) -> None:
@@ -743,6 +768,11 @@ class Cloned(typing.Generic[Item], Iterator[Item]):
 
 
 class Copied(typing.Generic[Item], Iterator[Item]):
+    """An iterator that deeply-copies the elements from an underlying iterator.
+
+    This iterator is created by the `Iterator.copied` method.
+    """
+
     __slots__ = ("_it",)
 
     def __init__(self, it: Iterator[Item]) -> None:
@@ -753,6 +783,11 @@ class Copied(typing.Generic[Item], Iterator[Item]):
 
 
 class Map(typing.Generic[Item, OtherItem], Iterator[Item]):
+    """An iterator that maps the elements to a callable.
+
+    This iterator is created by the `Iterator.map` method.
+    """
+
     __slots__ = ("_it", "_call")
 
     def __init__(
@@ -766,6 +801,11 @@ class Map(typing.Generic[Item, OtherItem], Iterator[Item]):
 
 
 class Filter(typing.Generic[Item], Iterator[Item]):
+    """An iterator that filters the elements to a `predicate`.
+
+    This iterator is created by the `Iterator.filter` method.
+    """
+
     __slots__ = ("_it", "_call")
 
     def __init__(
@@ -783,6 +823,11 @@ class Filter(typing.Generic[Item], Iterator[Item]):
 
 
 class Take(typing.Generic[Item], Iterator[Item]):
+    """An iterator that yields the first `number` of elements and drops the rest.
+
+    This iterator is created by the `Iterator.take` method.
+    """
+
     __slots__ = ("_it", "_taken", "_count")
 
     def __init__(self, it: Iterator[Item], count: int) -> None:
@@ -803,6 +848,11 @@ class Take(typing.Generic[Item], Iterator[Item]):
 
 
 class Skip(typing.Generic[Item], Iterator[Item]):
+    """An iterator that skips the first `number` of elements and yields the rest.
+
+    This iterator is created by the `Iterator.skip` method.
+    """
+
     __slots__ = ("_it", "_count", "_skipped")
 
     def __init__(self, it: Iterator[Item], count: int) -> None:
@@ -822,6 +872,11 @@ class Skip(typing.Generic[Item], Iterator[Item]):
 
 
 class Enumerate(typing.Generic[Item], Iterator[tuple[int, Item]]):
+    """An iterator that yields the current count and the element during iteration.
+
+    This iterator is created by the `Iterator.enumerate` method.
+    """
+
     __slots__ = ("_it", "_count")
 
     def __init__(self, it: Iterator[Item], start: int) -> None:
@@ -839,6 +894,11 @@ class Enumerate(typing.Generic[Item], Iterator[tuple[int, Item]]):
 
 
 class TakeWhile(typing.Generic[Item], Iterator[Item]):
+    """An iterator that yields elements while `predicate` returns `True`.
+
+    This iterator is created by the `Iterator.take_while` method.
+    """
+
     __slots__ = ("_it", "_predicate")
 
     def __init__(
@@ -857,6 +917,11 @@ class TakeWhile(typing.Generic[Item], Iterator[Item]):
 
 
 class DropWhile(typing.Generic[Item], Iterator[Item]):
+    """An iterator that yields elements while `predicate` returns `False`.
+
+    This iterator is created by the `Iterator.drop_while` method.
+    """
+
     __slots__ = ("_it", "_predicate", "_dropped")
 
     def __init__(
@@ -878,6 +943,11 @@ class DropWhile(typing.Generic[Item], Iterator[Item]):
 
 
 class Empty(typing.Generic[Item], Iterator[Item]):
+    """An iterator that yields literally nothing.
+
+    This is the default iterator that is created by `Iterators.empty` or `empty()`
+    """
+
     __slots__ = ("_it",)
 
     def __init__(self) -> None:
@@ -957,7 +1027,7 @@ def into_iter(
     -------
     ```py
     sequence = [1,2,3]
-    for item in sain.iter(sequence).reversed():
+    for item in sain.into_iter(sequence).reversed():
         print(item)
     # 3
     # 2
