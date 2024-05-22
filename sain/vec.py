@@ -29,9 +29,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """A contiguous growable alternative to builtin `list` with extra functionalities.
 
-When initializing a vec, it will not build the underlying list until the first element gets pushed.
-Which saves a little bit of memory.
-
 Example
 -------
 ```py
@@ -43,19 +40,13 @@ names.push('bar')
 print(names) # ['foo', 'bar']
 assert names.len() == 2
 ```
-
-Equality is supported.
-
-```py
-vec = Vec((1,2,3))
-vec == [1, 2, 3] and vec # True
-```
 """
 
 from __future__ import annotations
 
 __all__ = ("Vec", "vec")
 
+import sys as _sys
 import typing
 from collections import abc as collections
 
@@ -63,13 +54,20 @@ from . import iter as _iter
 from . import macros
 from . import option as _option
 
+if typing.TYPE_CHECKING:
+    from typing_extensions import Self
+
 T = typing.TypeVar("T")
+
+_LIST_REPR = _sys.intern("[]")
 
 
 # We are our own implementation, since MutableSequence have some conflicts with the return types.
 @typing.final
 class Vec(typing.Generic[T]):
     """A contiguous growable alternative to builtin `list` with extra functionalities.
+
+    The layout of `Vec` is basically the same as `list`.
 
     When initializing a vec, it will not build the underlying list until the first element gets pushed.
     Which saves a little bit of memory.
@@ -78,7 +76,6 @@ class Vec(typing.Generic[T]):
     -------
     ```py
     names = Vec()
-
     names.push('foo')
     names.push('bar')
 
@@ -86,11 +83,74 @@ class Vec(typing.Generic[T]):
     assert names.len() == 2
     ```
 
-    Equality is supported.
+    Iterating over `Vec`
+    -------------------
+    There're two ways to iterate over a `Vec`. The first is to normally use `for` loop.
+
+    ```py
+    for i in names:
+        print(i)
+    # foo
+    # bar
+    ```
+
+    The second is to use `Vec.iter`, which yields all items in this `Vec` from start to end.
+    Then the iterator gets exhausted as usual, See `sain.Iterator`.
+
+    ```py
+    iterator = names.iter()
+    for name in iterator.map(str.upper):
+        print(name)
+    # FOO
+    # BAR
+
+    # No more items, The actual vec is left unchanged.
+    assert iterator.next().is_none()
+    ```
+
+    Comparison operators
+    --------------------
+    Comparing different collections with `Vec` have a cost. Depending on what you're comparing it wit.
+
+    Any iterable that is not a `list` or `Vec` that is used to compare with will get copied into a `list`,
+    So be careful what you compare a `Vec` with.
 
     ```py
     vec = Vec((1,2,3))
-    vec == [1, 2, 3] and vec # True
+    # zero-cost
+    vec == [1, 2, 3]
+    # Copies {1, 2, 3} -> [1, 2, 3] which can cost.
+    vec == {1, 2, 3}
+    ```
+
+    Zero-Copy
+    ---------
+    A vec that gets initialized from a `list` will *point* to it and doesn't copy it.
+    So any element that gets appended to the collection will also get pushed into the vec.
+
+    ```py
+    cells: list[str] = []
+    vec = Vec(cells) # This DOES NOT copy the `cells`.
+
+    cells.append("foo")
+    vec[0] == "foo"  # True
+    ```
+
+    The opposite of the above is to initialize the vec from either
+    an iterable or args, or copy the list.
+
+    ```py
+    # Creates a new list and extend it with the elements.
+    from_args = Vec.from_args("foo", "bar")
+
+    # inlined from another iterable.
+    from_iter = Vec(["foo", "bar"])
+
+    # Copy the list into a vec.
+    vec = Vec(cells[:])
+    cells.append("bar")
+
+    vec[2] # IndexError: "bar" doesn't exist in vec.
     ```
     """
 
@@ -103,33 +163,26 @@ class Vec(typing.Generic[T]):
     def __init__(self, iterable: collections.Iterable[T]) -> None: ...
 
     def __init__(self, iterable: collections.Iterable[T] | None = None) -> None:
-        """Initializes a new vec, This won't actually create the internal list until an element is appended into it.
-
-        Example
-        -------
-        ```py
-        names = Vec[str]()
-
-        names.push('foo')
-        names.push('bar')
-
-        assert names.len() == 2
-
-        # Initialize a vec from another iterable.
-        from_iter = Vec((1,2,3))
-        assert from_iter.len() == 3
-        ```
-        """
-
         # We won't allocate to build the list here.
         # Instead, On first push or fist indexed set
         # we allocate if it was None.
-        self._ptr: list[T] | None = list(iterable) if iterable else None
+        if isinstance(iterable, list):
+            # Calling `list()` on another list will copy it.
+            self._ptr = iterable
+        elif isinstance(iterable, Vec):
+            self._ptr = iterable._ptr
+        else:
+            self._ptr: list[T] | None = list(iterable) if iterable else None
+
         self._capacity = 0
 
     @classmethod
+    def from_args(cls, *args: T) -> Self:
+        return cls(args)
+
+    @classmethod
     @macros.unstable()
-    def with_capacity(cls, capacity: int) -> Vec[T]:
+    def with_capacity(cls, capacity: int) -> Self:
         """Create a new `Vec` with at least the specified capacity.
 
         This vec will be able to hold `capacity` elements without pushing further if `len(vec) == capacity`.
@@ -149,12 +202,10 @@ class Vec(typing.Generic[T]):
         vec.push(4)
         ```
         """
-        v = Vec[T]()
-        v._capacity = capacity
-        return v
+        return cls()
 
     def boxed(self) -> collections.Collection[T]:
-        """Return an immutable tuple over this vector elements.
+        """Return an immutable view over this vector elements.
 
         Example
         -------
@@ -179,7 +230,7 @@ class Vec(typing.Generic[T]):
         """
         return self.__len__()
 
-    @macros.unstable(reason="not unimplemented yet.")
+    @macros.unstable(reason="`Vec` capacity is not unimplemented yet.")
     def capacity(self) -> int:
         """Return the capacity of this vector.
 
@@ -430,8 +481,8 @@ class Vec(typing.Generic[T]):
         assert vec == [1, 2, 3, 4, 5, 6]
         ```
         """
-        if not self._ptr:
-            return
+        if self._ptr is None:
+            self._ptr = []
 
         self._ptr.extend(iterable)
 
@@ -508,7 +559,7 @@ class Vec(typing.Generic[T]):
         return self._ptr.__iter__()
 
     def __repr__(self) -> str:
-        return "[]" if not self._ptr else repr(self._ptr)
+        return _LIST_REPR if not self._ptr else repr(self._ptr)
 
     def __eq__(self, other: object) -> bool:
         if not self._ptr:
@@ -516,36 +567,42 @@ class Vec(typing.Generic[T]):
 
         if isinstance(other, Vec):
             return self._ptr == other._ptr
-        if isinstance(other, (collections.Iterable, collections.MutableSequence)):
-            return list(other) == self._ptr
+
+        elif isinstance(other, list):
+            return self._ptr == other
+
+        elif isinstance(other, collections.Iterable):
+            # We have to copy here.
+            return self._ptr == list(other)
 
         return NotImplemented
 
     def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)
 
-    def __le__(self, other: collections.Iterable[T]) -> bool:
-        if not self._ptr:
-            return False
-        return self._ptr <= list(other)
-
-    def __ge__(self, other: collections.Iterable[T]) -> bool:
+    def __le__(self, other: list[T]) -> bool:
         if not self._ptr:
             return False
 
-        return self._ptr >= list(other)
+        return self._ptr <= other
 
-    def __lt__(self, other: collections.Iterable[T]) -> bool:
+    def __ge__(self, other: list[T]) -> bool:
         if not self._ptr:
             return False
 
-        return self._ptr < list(other)
+        return self._ptr >= other
 
-    def __gt__(self, other: collections.Iterable[T]) -> bool:
+    def __lt__(self, other: list[T]) -> bool:
         if not self._ptr:
             return False
 
-        return self._ptr > list(other)
+        return self._ptr < other
+
+    def __gt__(self, other: list[T]) -> bool:
+        if not self._ptr:
+            return False
+
+        return self._ptr > other
 
     def __bool__(self) -> bool:
         return bool(self._ptr)
