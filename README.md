@@ -83,16 +83,18 @@ match storage.put("first"):
 
 ## Equivalent types
 
-- `Option<T>` -> `Option[T]` | `Some(T)`
-- `Result<T, E>` -> `Result[T, E]` | `Ok(T)` | `Err(T)`
+- `Option<T>` -> `Option[T]` | `Some[T]`
+- `Result<T, E>` -> `Result[T, E]` | `Ok` | `Err`
 - `&dyn Error` -> `Error`
 - `Vec<T>` -> `Vec[T]`
 - `Default<T>` -> `Default[T]`
-- `AsRef<T>` -> `AsRef[T]`
-- `AsMut<T>` -> `AsMut[T]`
-- `Iterator<Item>` -> `Iter[Item]`
-- `OnceLock<T>` -> `Once[T]`
-- `N/A` -> `Box[T]`, This is different from a rust box.
+- `slice::Iter<Item>` -> `Iter[Item]`
+- `IntoIterator<Item>` -> `Iterator[Item]`
+- `Box<T>` -> `Box[T]`, Not a heap box.
+- `cell::Cell<T>` -> `Cell[T]`, Slightly different.
+- `cell::RefCell<T>` -> `RefCell[T]`, Slightly different.
+- `sync::LazyLock<T>` -> `Lazy[T]`
+- `sync::OnceLock<T>` -> `Once[T]`
 
 ## Equivalent functions / macros
 

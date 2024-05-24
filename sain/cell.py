@@ -104,12 +104,13 @@ class RefCell(typing.Generic[_T_co]):
         self.ref_count += 1
 
     def copy(self) -> _T_co:
-        """Copy the referenced object.
+        """Copy the referenced object. Calling this method increments the reference count.
 
         .. note::
             If the referenced object is a collection or contains a collection,
             Then this will copy its reference.
         """
+        self.ref_count += 1
         return copy.copy(self.object)
 
     def increment(self) -> int:

@@ -297,22 +297,49 @@ class Some(typing.Generic[T], _default.Default[None]):
 
     # *- Inner operations *-
 
-    def take(self) -> None:
-        """Take the value from `Some` object setting it to `None`.
+    def take(self) -> Option[T]:
+        """Take the value from `Self`, Setting it to `None`.
 
         Example
         -------
         ```py
-        value = Some("Hi")
-        value = value.take()
-        print(value)
-        # None
+        original = Some("Hi")
+        new = original.take()
+
+        print(original, new)
+        # None, Some("Hi")
         ```
         """
         if self._value is None:
-            return
+            return nothing_unchecked()
 
+        val = self._value
         self._value = None
+        return Some(val)
+
+    def take_if(self, predicate: collections.Callable[[T], bool]) -> Option[T]:
+        """Take the value from `Self`, Setting it to `None` only if predicate returns `True`.
+
+        Example
+        -------
+        ```py
+        def validate(email: str) -> bool:
+            # you can obviously validate this better.
+            return email.find('@') == 1
+
+        original = Some("flex@gg.com")
+        valid = original.take_if(allowed)
+        assert is_allowed.is_some() and original.is_none()
+
+        original = Some("mail.example.com")
+        invalid = original.take_if(allowed)
+        assert invalid.is_none() and original.is_some()
+        ```
+        """
+        if self.map_or(False, predicate):
+            return self.take()
+
+        return nothing_unchecked()
 
     def replace(self, value: T) -> Some[T]:
         """Replace the contained value with another value.
@@ -510,6 +537,8 @@ class Some(typing.Generic[T], _default.Default[None]):
         return self._value is None
 
     def __repr__(self) -> str:
+        if self._value is None:
+            return "None"
         return f"Some({self._value!r})"
 
     __str__ = __repr__

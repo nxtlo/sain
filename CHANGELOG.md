@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- `Iterator` interface which represents `Iterator`  trait in Rust
+- Default external adapters for `Iterator`.
+- `Vec.push_within_capacity`
+- `Vec.reserve`
+- `Some.take_if`
+
+### Changed
+
+- `Option.take` now return `Option[T]` instead of `None`
+- Stabilized `Vec.with_capacity` and its fellow methods.
+- Calling `RefCell.copy` now increment its ref count when called.
+- The repr of `Some[None]` is now `None` instead of `Some(None)`
+- Passing a `list` variable when constructing a `Vec` now will point to that list instead of copying it.
+- Better documentation on `Vec`
+- `vec.vec` is renamed to `vec.from_args`
+
 ## 0.0.6 - 05/04/2024
 
 ### Added

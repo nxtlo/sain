@@ -112,6 +112,7 @@ from . import macros
 from . import option
 from . import result
 from . import sync
+from . import vec
 from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr
@@ -130,7 +131,6 @@ from .result import Err
 from .result import Ok
 from .result import Result
 from .vec import Vec
-from .vec import vec
 
 __version__: str = "0.0.6"
 __url__: str = "https://github.com/nxtlo/sain"

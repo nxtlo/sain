@@ -44,18 +44,20 @@ assert names.len() == 2
 
 from __future__ import annotations
 
-__all__ = ("Vec", "vec")
+__all__ = ("Vec", "from_args")
 
 import sys as _sys
 import typing
 from collections import abc as collections
 
 from . import iter as _iter
-from . import macros
 from . import option as _option
+from . import result as _result
 
 if typing.TYPE_CHECKING:
     from typing_extensions import Self
+
+    from . import Result
 
 T = typing.TypeVar("T")
 
@@ -67,7 +69,7 @@ _LIST_REPR = _sys.intern("[]")
 class Vec(typing.Generic[T]):
     """A contiguous growable alternative to builtin `list` with extra functionalities.
 
-    The layout of `Vec` is basically the same as `list`.
+    The layout of `Vec` is almost the same as `list`.
 
     When initializing a vec, it will not build the underlying list until the first element gets pushed.
     Which saves a little bit of memory.
@@ -83,6 +85,14 @@ class Vec(typing.Generic[T]):
     assert names.len() == 2
     ```
 
+    Constructing
+    ------------
+    * `Vec()`: Create an unallocated vec, Which means the underlying list will be `None` until you start pushing into it
+    * `Vec(other_list)`: Create a vec which points to `other_list`
+    * `Vec((1, 2, 3))`: Create a vec with `[1, 2, 3]` pre-allocated
+    * `Vec.with_capacity(5)`: Create a vec that can hold up to 5 elements
+    * `from_args(1, 2, 3)`: Create a vec from arguments. This is not a classmethod
+
     Iterating over `Vec`
     -------------------
     There're two ways to iterate over a `Vec`. The first is to normally use `for` loop.
@@ -90,6 +100,7 @@ class Vec(typing.Generic[T]):
     ```py
     for i in names:
         print(i)
+
     # foo
     # bar
     ```
@@ -101,6 +112,7 @@ class Vec(typing.Generic[T]):
     iterator = names.iter()
     for name in iterator.map(str.upper):
         print(name)
+
     # FOO
     # BAR
 
@@ -108,8 +120,7 @@ class Vec(typing.Generic[T]):
     assert iterator.next().is_none()
     ```
 
-    Comparison operators
-    --------------------
+    ## Comparison operators
     Comparing different collections with `Vec` have a cost. Depending on what you're comparing it wit.
 
     Any iterable that is not a `list` or `Vec` that is used to compare with will get copied into a `list`,
@@ -140,8 +151,8 @@ class Vec(typing.Generic[T]):
     an iterable or args, or copy the list.
 
     ```py
-    # Creates a new list and extend it with the elements.
-    from_args = Vec.from_args("foo", "bar")
+    # Creates a new vec and extend it with the elements.
+    from_args = vec.from_args("foo", "bar")
 
     # inlined from another iterable.
     from_iter = Vec(["foo", "bar"])
@@ -167,25 +178,22 @@ class Vec(typing.Generic[T]):
         # Instead, On first push or fist indexed set
         # we allocate if it was None.
         if isinstance(iterable, list):
-            # Calling `list()` on another list will copy it.
+            # Calling `list()` on another list will copy it, So instead we just point to it.
             self._ptr = iterable
         elif isinstance(iterable, Vec):
             self._ptr = iterable._ptr
+        # any other iterable that ain't a list needs to get copied into a new list.
         else:
             self._ptr: list[T] | None = list(iterable) if iterable else None
 
-        self._capacity = 0
+        self._capacity: int | None = None
 
     @classmethod
-    def from_args(cls, *args: T) -> Self:
-        return cls(args)
-
-    @classmethod
-    @macros.unstable()
     def with_capacity(cls, capacity: int) -> Self:
         """Create a new `Vec` with at least the specified capacity.
+        This vec will be able to hold `capacity` elements without pushing further.
 
-        This vec will be able to hold `capacity` elements without pushing further if `len(vec) == capacity`.
+        Check out `Vec.push_within_capacity` as well.
 
         Example
         -------
@@ -202,9 +210,11 @@ class Vec(typing.Generic[T]):
         vec.push(4)
         ```
         """
-        return cls()
+        v = cls()
+        v._capacity = capacity
+        return v
 
-    def boxed(self) -> collections.Collection[T]:
+    def as_ref(self) -> collections.Collection[T]:
         """Return an immutable view over this vector elements.
 
         Example
@@ -212,7 +222,7 @@ class Vec(typing.Generic[T]):
         ```py
         vec = Vec((1,2,3))
 
-        assert vec.boxed() == (1,2,3)
+        assert vec.as_ref() == (1,2,3)
         ```
         """
         return tuple(self)
@@ -230,17 +240,20 @@ class Vec(typing.Generic[T]):
         """
         return self.__len__()
 
-    @macros.unstable(reason="`Vec` capacity is not unimplemented yet.")
     def capacity(self) -> int:
-        """Return the capacity of this vector.
+        """Return the capacity of this vector if set. 0 if not .
 
         Example
         -------
         ```py
-        TODO
+        vec_with_cap = Vec.with_capacity(3)
+        assert vec_with_cap.capacity().unwrap() == 3
+
+        vec = Vec([1, 2, 3])
+        assert vec.capacity().is_none()
         ```
         """
-        return self._capacity
+        return 0 if self._capacity is None else self._capacity
 
     def iter(self) -> _iter.Iterator[T]:
         """Return an iterator over this vector elements.
@@ -260,10 +273,12 @@ class Vec(typing.Generic[T]):
 
     def is_empty(self) -> bool:
         """Returns true if the vector contains no elements."""
-        return self.len() == 0
+        return not self._ptr
 
     def split_off(self, at: int) -> Vec[T]:
         """Split the vector off at the specified position.
+
+        if this vec is empty, `self` is returned unchanged.
 
         Example
         -------
@@ -273,6 +288,11 @@ class Vec(typing.Generic[T]):
 
         print(split, vec)  # [1], [2, 3]
         ```
+
+        Raises
+        ------
+        `RuntimeError`
+            This method will raise if `at` > `len(self)`
         """
         if at > self.len():
             raise RuntimeError(
@@ -293,11 +313,11 @@ class Vec(typing.Generic[T]):
         Example
         -------
         ```py
-        vec = vec(1, 2, 3)
+        vec = Vec([1, 2, 3])
         split = vec.split_first()
         assert split == Some((1, [2, 3]))
 
-        vec: Vec[int] = vec()
+        vec: Vec[int] = Vec()
         split = vec.split_first()
         assert split == Some(None)
         ```
@@ -327,7 +347,7 @@ class Vec(typing.Generic[T]):
         Example
         -------
         ```py
-        vec = vec(1,2,3)
+        vec = Vec([1,2,3])
         vec.truncate(1)
         assert vec == [1]
         ```
@@ -345,7 +365,7 @@ class Vec(typing.Generic[T]):
         Example
         -------
         ```py
-        vec = vec(1, 2, 3)
+        vec = Vec([1, 2, 3])
         vec.retain(lambda elem: elem > 1)
 
         assert vec == [2, 3]
@@ -356,9 +376,32 @@ class Vec(typing.Generic[T]):
 
         self._ptr = [e for e in self._ptr if f(e)]
 
-    ##########################
-    # * Builtin Operations *
-    ##########################
+    def swap_remove(self, item: T) -> T:
+        """Remove the first appearance of `item` from this vector and return it.
+
+        Raises
+        ------
+        * `ValueError`: if `item` is not in this vector.
+        * `MemoryError`: if this vector hasn't allocated, Aka nothing has been pushed to it.
+
+        Example
+        -------
+        ```py
+        vec = Vector(('a', 'b', 'c'))
+        element = vec.remove('a')
+        assert vec == ['b', 'c'] and element == 'a'
+        ```
+        """
+        if self._ptr is None:
+            raise MemoryError("Vec is unallocated.") from None
+
+        try:
+            i = next(i for i in self._ptr if i == item)
+        except StopIteration:
+            raise ValueError(f"Item `{item}` not in list") from None
+
+        self.remove(i)
+        return i
 
     def push(self, item: T) -> None:
         """Push an element at the end of the vector.
@@ -372,10 +415,79 @@ class Vec(typing.Generic[T]):
         assert vec == [1]
         ```
         """
+        if self._capacity is not None:
+            self.push_within_capacity(item)
+            return
+
         if self._ptr is None:
             self._ptr = []
 
         self._ptr.append(item)
+
+    def push_within_capacity(self, x: T) -> Result[None, T]:
+        """Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.
+
+        Example
+        -------
+        ```py
+        vec: Vec[int] = Vec.with_capacity(3)
+        for i in range(3):
+            match vec.push_within_capacity(i):
+                case Ok(_):
+                    print("All good.")
+                case Err(elem):
+                    print("Reached max cap :< cant push", elem)
+        ```
+
+        Or you can also just call `Vec.push` and it will push within capacity if `Vec.capacity()` is not `None`.
+        ```py
+        vec: Vec[int] = Vec.with_capacity(3)
+
+        vec.extend((1, 2, 3))
+        vec.push(4)
+
+        assert vec.len() == 3
+        ```
+        """
+        if self._ptr is None:
+            self._ptr = []
+
+        if self._capacity is not None and self._capacity <= self.len():
+            return _result.Err(x)
+
+        self._ptr.append(x)
+        return _result.Ok(None)
+
+    def reserve(self, additional: int) -> None:
+        """Reserves capacity for at least additional more elements to be inserted in the given Vec<T>.
+
+        Example
+        -------
+        ```py
+        vec = Vec.with_capacity(3)
+        is_vip = random.choice((True, False))
+
+        for i in range(4):
+            match vec.push_within_capacity(i):
+                case Ok(_):
+                    print("All good")
+                case Err(person):
+                    # If the person is a VIP, then reserve for one more.
+                    if is_vip:
+                        vec.reserve(1)
+                        continue
+
+                    # is_vip was false.
+                    print("Can't reserve for non-VIP members...", person)
+                    break
+        ```
+        """
+        if self._capacity is not None:
+            self._capacity += additional
+
+    ##########################
+    # * Builtin Operations *
+    ##########################
 
     # For people how are used to calling list.append
     append = push
@@ -441,33 +553,6 @@ class Vec(typing.Generic[T]):
             return
 
         self._ptr.remove(item)
-
-    def swap_remove(self, item: T) -> T:
-        """Remove the first appearance of `item` from this vector and return it.
-
-        Raises
-        ------
-        * `ValueError`: if `item` is not in this vector.
-        * `MemoryError`: if this vector hasn't allocated, Aka nothing has been pushed to it.
-
-        Example
-        -------
-        ```py
-        vec = Vector(('a', 'b', 'c'))
-        element = vec.remove('a')
-        assert vec == ['b', 'c'] and element == 'a'
-        ```
-        """
-        if self._ptr is None:
-            raise MemoryError("Vec is unallocated.") from None
-
-        try:
-            i = next(i for i in self._ptr if i == item)
-        except StopIteration:
-            raise ValueError(f"Item `{item}` not in list") from None
-
-        self.remove(i)
-        return i
 
     def extend(self, iterable: collections.Iterable[T]) -> None:
         """Extend this vector from another iterable.
@@ -608,13 +693,15 @@ class Vec(typing.Generic[T]):
         return bool(self._ptr)
 
 
-def vec(*elements: T) -> Vec[T]:
+def from_args(*elements: T) -> Vec[T]:
     """Construct a vector containing `elements`.
 
     Example
     -------
     ```py
-    items = vec('Apple', 'Orange', 'Lemon')
+    import sain.vec as vec
+
+    items = vec.from_args('Apple', 'Orange', 'Lemon')
     items.push('Grape')
     ```
     """
