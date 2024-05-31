@@ -75,7 +75,7 @@ class Box(typing.Generic[T]):
     ```
     """
 
-    __slots__ = ("__inner", "_expire_in", "_on_expire", "_mono")
+    __slots__ = ("_inner", "_expire_in", "_on_expire", "_mono")
 
     def __init__(self, value: T, expire_in: int | float | datetime.timedelta) -> None:
         if isinstance(expire_in, datetime.timedelta):
@@ -88,7 +88,7 @@ class Box(typing.Generic[T]):
 
         # We set the last call on the first access to the value.
         self._mono: float | None = None
-        self.__inner: Option[T] = option.Some(value)
+        self._inner: Option[T] = option.Some(value)
         self._on_expire: collections.Callable[[T], typing.Any] | None = None
         self._expire_in = expire_in
 
@@ -172,14 +172,14 @@ class Box(typing.Generic[T]):
                 try:
                     if asyncio.iscoroutinefunction(self._on_expire):
                         futures.loop().run_until_complete(
-                            self._on_expire(self.__inner.unwrap_unchecked())
+                            self._on_expire(self._inner.unwrap_unchecked())
                         )
                     else:
-                        self._on_expire(self.__inner.unwrap_unchecked())
+                        self._on_expire(self._inner.unwrap_unchecked())
                 finally:
                     self._on_expire = None
 
-            self.__inner.take()
+            self._inner.take()
             self._mono = None
             # SAFETY: The value is expired, therefore we always return None.
             return option.nothing_unchecked()
@@ -187,4 +187,28 @@ class Box(typing.Generic[T]):
         if self._mono is None:
             self._mono = time.monotonic()
 
-        return self.__inner
+        return self._inner
+
+    def __repr__(self) -> str:
+        return f"Box(value: {self._inner}, expired: {self.has_expired})"
+
+    __str__ = __repr__
+
+    def __eq__(self, value: object, /) -> bool:
+        if not isinstance(value, Box):
+            return NotImplemented
+
+        return (
+            self._inner == value._inner
+            and not self.has_expired
+            and not value.has_expired
+        )
+
+    def __ne__(self, value: object, /) -> bool:
+        return not self.__eq__(value)
+
+    def __hash__(self) -> int:
+        return hash(self._inner)
+
+    def __bool__(self) -> bool:
+        return not self.has_expired

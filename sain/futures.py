@@ -46,7 +46,7 @@ if typing.TYPE_CHECKING:
     T = typing.TypeVar("T", bound=collections.Callable[..., typing.Any])
 
 
-class SpawnErr(enum.Enum):
+class SpawnError(enum.Enum):
     EMPTY = 0
     """No awaitables were passed."""
     CANCELED = 1
@@ -58,7 +58,7 @@ class SpawnErr(enum.Enum):
 async def spawn(
     *aws: collections.Awaitable[T_co],
     timeout: float | None = None,
-) -> _result.Result[collections.Sequence[T_co], SpawnErr]:
+) -> _result.Result[collections.Sequence[T_co], SpawnError]:
     """Spawn all given awaitables concurrently.
 
     Example
@@ -87,12 +87,12 @@ async def spawn(
 
     Returns
     -------
-    `sain.Result[T, SpawnErr]`:
+    `sain.Result[T, SpawnError]`:
         The result of the gathered awaitables.
     """
 
     if not aws:
-        return _result.Err(SpawnErr.EMPTY)
+        return _result.Err(SpawnError.EMPTY)
 
     tasks: list[asyncio.Task[T_co]] = []
 
@@ -102,9 +102,9 @@ async def spawn(
         return _result.Ok(await asyncio.wait_for(gatherer, timeout=timeout))
 
     except asyncio.CancelledError:
-        return _result.Err(SpawnErr.CANCELED)
+        return _result.Err(SpawnError.CANCELED)
     except asyncio.TimeoutError:
-        return _result.Err(SpawnErr.TIMEOUT)
+        return _result.Err(SpawnError.TIMEOUT)
 
     finally:
         for task in tasks:

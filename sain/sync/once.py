@@ -38,10 +38,13 @@ import asyncio
 import threading
 import typing
 
+from sain import macros
 from sain import option as _option
 from sain import result as _result
 
 if typing.TYPE_CHECKING:
+    import collections.abc as collections
+
     from sain import Option
 
 T = typing.TypeVar("T")
@@ -57,25 +60,16 @@ class Once(typing.Generic[T]):
     from sain.once import Once
     from uuid import uuid4, UUID
 
-    class Application:
-        # Not initialized yet
-        uuid: Once[UUID] = Once()
+    UUID: Once[UUID] = Once()
 
-        def send(self, id: UUID) -> None:
-            ...
+    def start() -> None:
+        assert UUID.get().is_none()
 
-    def spawn(app: Application) -> None:
-        app.uuid.get().is_none() # True
-        uid = app.uuid.get_or(uuid4())
-        app.send(uid)
+        # First initialization.
+        UUID.get_or(uuid4()) # some-uuid
 
-    def run_application():
-        # This will init the uuid if its not set or return it if it already is.
-        app = Application()
-        thread = threading.Thread(target=spawn, args=(app,))
-        thread.start()
-
-        app.uuid.get().is_some()  # True
+        # Won't set, returns the same uuid that got initialized first.
+        UUID.get_or(uuid4()) # some-uuid
     ```
     """
 
@@ -90,14 +84,38 @@ class Once(typing.Generic[T]):
         return self._inner is not None
 
     def get(self) -> Option[T]:
-        """Gets the stored value.
+        """Gets the stored value, returning `None` if not initialized.
 
-        `Option(None)` is returned if nothing is stored. This method will never block.
+        This method will never block.
         """
-        return _option.Some(self._inner)
+        return _option.Some(self._inner) if self.is_set else _option.nothing_unchecked()
+
+    @macros.unsafe
+    def get_unchecked(self) -> T:
+        """Get the contained value without checking if it was initialized.
+
+        Example
+        -------
+        ```py
+        cell = Once[float]()
+        inner = cell.get_unchecked() # Undefined Behavior!!
+
+        # Initialize it first.
+        cell.get_or(math.sqrt(2.0))
+
+        # At this point of the program,
+        # it is guaranteed that the value is initialized.
+        inner = cell.get_unchecked()
+        ```
+        """
+        # SAFETY: The caller guarantees that the value is initialized.
+        return self.get().unwrap_unchecked()
 
     def set(self, v: T) -> _result.Result[None, T]:
         """Set the const value if its not set. returning `T` if its already set.
+
+        This method may block if another thread is trying to initialize the value.
+        The value is guaranteed to be set, just not necessarily the one provided.
 
         Example
         --------
@@ -127,8 +145,28 @@ class Once(typing.Generic[T]):
         self._lock = None
         self._inner = None
 
-    def get_or(self, f: T) -> T:
-        """Get the value if its not `None`, Otherwise set `f` value and returning it."""
+    def get_or(self, init: T) -> T:
+        """Get the value if it was not initialized, Otherwise set `init` value and returning it.
+
+        Many threads may call `get_or` concurrently with different
+        initializing functions, but it is guaranteed that only one function
+        will be executed.
+
+        Example
+        -------
+        ```py
+        UUID: Once[UUID] = Once()
+
+        def main() -> None:
+            assert UUID.get().is_none()
+
+            # First initialization.
+            UUID.get_or(uuid4()) # some-uuid
+
+            # Won't set, returns the same uuid that got initialized first.
+            UUID.get_or(uuid4()) # some-uuid
+            ```
+        """
 
         # If the value is not empty we return it immediately.
         if self._inner is not None:
@@ -138,21 +176,54 @@ class Once(typing.Generic[T]):
             self._lock = threading.Lock()
 
         with self._lock:
-            self._inner = f
-            return f
+            self._inner = init
+            return init
+
+    def get_or_with(self, f: collections.Callable[..., T]) -> T:
+        """Gets the contents of the cell, initializing it with `f` if the cell
+        was empty.
+
+        Many threads may call `get_or_with` concurrently with different
+        initializing functions, but it is guaranteed that only one function
+        will be executed.
+
+        Examples
+        --------
+        ```py
+        cell = Once[int]()
+        value = cell.get_or_with(lambda: 92)
+        assert value == 92
+
+        value = cell.get_or_with(lambda: 0)
+        assert value == 92
+        ```
+        """
+        # If the value is not empty we return it immediately.
+        if self._inner is not None:
+            return self._inner
+
+        if self._lock is None:
+            self._lock = threading.Lock()
+
+        with self._lock:
+            v = f()
+            self._inner = v
+            return v
+
+    def into_inner(self) -> T | None:
+        return self.get().into_inner()
 
     def __repr__(self) -> str:
-        return f"Once(value: {self._inner})"
+        if not self.is_set:
+            return "<uninit>"
 
-    def __str__(self) -> str:
-        return str(self._inner)
+        return f"Once(inner: {self._inner!r})"
+
+    __str__ = __repr__
 
     def __eq__(self, __value: object) -> bool:
         if isinstance(__value, Once):
             return self._inner == __value._inner  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-
-        if isinstance(self._inner, type(__value)):
-            return __value == self._inner
 
         return NotImplemented
 
@@ -175,25 +246,15 @@ class AsyncOnce(typing.Generic[T]):
     from sain.once import Once
     from uuid import uuid4, UUID
 
-    class Application:
-        # Not initialized yet
-        uuid: Once[UUID] = Once()
+    # A global uuid
+    UUID: AsyncOnce[UUID] = AsyncOnce()
 
-        async def send(self, id: UUID) -> None:
-            ...
-
-    async def spawn(app: Application) -> None:
-        app.uuid.get().is_none() # True
-        uid = await app.uuid.get_or(uuid4())
-        await app.send(uid)
-
-    def run_application():
-        # This will init the uuid if its not set or return it if it already is.
-        app = Application()
-        tasks = (asyncio.create_task(spawn(app)) for _ in range(2))
-        await asyncio.gather(*tasks)
-
-        app.uuid.get().is_some()  # True
+    async def start() -> None:
+        assert UUID.get().is_none()
+        # First initialization.
+        await UUID.get_or(uuid4()) # some-uuid
+        # Won't set, returns the same uuid that got initialized first.
+        await UUID.get_or(uuid4()) # some-uuid
     ```
     """
 
@@ -205,17 +266,42 @@ class AsyncOnce(typing.Generic[T]):
 
     @property
     def is_set(self) -> bool:
+        """Whether this inner value has ben initialized or not."""
         return self._inner is not None
 
     def get(self) -> Option[T]:
-        """Gets the stored value.
+        """Gets the stored value. `Some(None)` is returned if nothing is stored.
 
-        `Option(None)` is returned if nothing is stored. This method will never block.
+        This method will never block.
         """
         return _option.Some(self._inner)
 
+    @macros.unsafe
+    def get_unchecked(self) -> T:
+        """Get the contained value without checking if it was initialized.
+
+        Example
+        -------
+        ```py
+        cell = AsyncOnce[float]()
+        inner = cell.get_unchecked() # Undefined Behavior!!
+
+        # Initialize it first.
+        cell.get_or(math.sqrt(2.0))
+
+        # At this point of the program,
+        # it is guaranteed that the value is initialized.
+        inner = cell.get_unchecked()
+        ```
+        """
+        # SAFETY: The caller guarantees that the value is initialized.
+        return self.get().unwrap_unchecked()
+
     async def set(self, v: T) -> _result.Result[None, T]:
         """Set the const value if its not set. returning `T` if its already set.
+
+        if another thread is trying to initialize the value, The value is guaranteed to be set,
+        just not necessarily the one provided.
 
         Example
         --------
@@ -223,9 +309,8 @@ class AsyncOnce(typing.Generic[T]):
         flag = AsyncOnce[bool]()
         # flag is empty.
         assert await flag.get_or(True) is True.
-
         # flag is not empty, so it returns the value we set first.
-        assert (await flag.set(False)) == Err(True)
+        assert await flag.set(False) == Err(True)
         ```
 
         Returns
@@ -241,12 +326,31 @@ class AsyncOnce(typing.Generic[T]):
         return _result.Ok(None)
 
     def clear(self) -> None:
+        """Clear the inner value, Setting it to `None`."""
         self._lock = None
         self._inner = None
 
-    async def get_or(self, f: T) -> T:
-        """Get the value if its not `None`, Otherwise set `f` value and returning it."""
+    async def get_or(self, init: T) -> T:
+        """Gets the contents of the cell, initializing it with `init` if the cell
+        was empty.
 
+        Many threads may call `get_or` concurrently with different
+        initializing functions, but it is guaranteed that only one function
+        will be executed.
+
+        Examples
+        --------
+        ```py
+        from sain.sync import AsyncOnce
+
+        cell = AsyncOnce[int]()
+        value = await cell.get_or(92)
+        assert value == 92
+
+        value = await cell.get_or(0)
+        assert value == 92
+        ```
+        """
         # If the value is not empty we return it immediately.
         if self._inner is not None:
             return self._inner
@@ -255,21 +359,52 @@ class AsyncOnce(typing.Generic[T]):
             self._lock = asyncio.Lock()
 
         async with self._lock:
-            self._inner = f
-            return f
+            self._inner = init
+            return init
+
+    async def get_or_with(self, f: collections.Callable[..., T]) -> T:
+        """Gets the contents of the cell, initializing it with `f` if the cell
+        was empty.
+
+        Many threads may call `get_or_with` concurrently with different
+        initializing functions, but it is guaranteed that only one function
+        will be executed.
+
+        Examples
+        --------
+        ```py
+        from sain.sync import AsyncOnce
+
+        cell = AsyncOnce[int]()
+        value = await cell.get_or_with(lambda: 92)
+        assert value == 92
+
+        value = await cell.get_or_init(lambda: 0)
+        assert value == 92
+        ```
+        """
+        # If the value is not empty we return it immediately.
+        if self._inner is not None:
+            return self._inner
+
+        if self._lock is None:
+            self._lock = asyncio.Lock()
+
+        async with self._lock:
+            v = f()
+            self._inner = v
+            return v
 
     def __repr__(self) -> str:
-        return f"Once(value: {self._inner})"
+        if self._inner is not None:
+            return f"AsyncOnce(value: {self._inner})"
+        return "<async_uninit>"
 
-    def __str__(self) -> str:
-        return str(self._inner)
+    __str__ = __repr__
 
     def __eq__(self, __value: object) -> bool:
-        if isinstance(__value, Once):
+        if isinstance(__value, AsyncOnce):
             return self._inner == __value._inner  # pyright: ignore
-
-        if isinstance(self._inner, type(__value)):
-            return __value == self._inner
 
         return NotImplemented
 

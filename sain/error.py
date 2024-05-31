@@ -33,7 +33,7 @@ This exposes one abstract interface, `Error` that other errors can implement and
 
 Usually this error is returned from a `Result[T, Error]` object.
 
-Those errors can be converted into `RuntimeError` exceptions by calling `sain.Err.unwrap` and `sain.Option.unwrap`.
+Those errors can be converted into `RuntimeError` exceptions by calling `sain.Result.unwrap` and `sain.Option.unwrap`.
 
 For an example
 
@@ -41,6 +41,26 @@ For an example
 # Read the env variable, raises `RuntimeError` if it is not present.
 path: Option[str] = Some(os.environ.get('SOME_PATH')).unwrap()
 ```
+
+HTTP requests are good example where errors can be returned all the time.
+Lets implement one.
+
+Example
+-------
+from sain import Error
+from dataclasses import dataclass
+
+# Base error.
+class HTTPError(Error):
+    ...
+
+@dataclass
+class NotFound(HTTPError):
+    message = "Response not found."
+    response =
+
+    def description(self) -> str:
+        ...
 """
 
 from __future__ import annotations
@@ -50,6 +70,9 @@ __all__ = ("Error",)
 import typing
 
 from . import option as _option
+
+if typing.TYPE_CHECKING:
+    from sain import Option
 
 
 @typing.runtime_checkable
@@ -61,34 +84,72 @@ class Error(typing.Protocol):
     Example
     -------
     ```py
-    class PathError(Error):
-        # The base message of this error. It will be shown when printing the error.
-        def __init__(self, message: str = "...") -> None:
-            super().__init__(message)
+    import requests
+    from dataclasses import dataclass
 
-        def source(self) -> _option.Option[type[Error]]:
-            # If this error was derived from another error, It can be returned here.
-            # For an example, This PathError might be derived from `IOError`
-            # where `IOError` is also derived from `Error`.
-            return Some(IOError)
+    from sain import Error, Option, Some
+    from sain import Result, Ok, Err
+
+    # Base error.
+    class HTTPError(Error): ...
+
+    @dataclass
+    class NotFound(HTTPError):
+        message = "The response returned [404]: not found."
+        http_status = 404
+        response: requests.Response
 
         def description(self) -> str:
-            return "A very detailed description about the error."
+            return "Couldn't find what you're looking for " + self.response.url
 
-    def read(path: str) -> Result[str, Error]:
-        try:
-            with open(path, "r") as file:
-                return Ok(file.read())
+        # It is not necessary to define this method,
+        # it just gives more context to the user handling this error.
+        def source(self) -> Option[type[HTTPError]]:
+            return Some(HTTPError)
 
-        # FileNotFoundError is a subclass of IOError
-        except (FileNotFoundError, IOError) as e:
-            return Err(PathError(str(e)))
+    @dataclass
+    class UserNotFound(NotFound):
+        user_id: int
 
-    match read("/dev/null"):
-        case Ok(content):
+        def __post_init__(self) -> None:
+            request = self.response.request
+            self.message = f"User {self.user_id} fetched from {request.path_url} was not found."
+
+        # It is not necessary to define this method,
+        # it just gives more context to the user handling this error.
+        def source(self) -> Option[type[NotFound]]:
+            return Some(NotFound)
+
+        def description(self) -> str:
+            return f"Couldn't find the resource: {self.response.raw}."
+
+    # A simple request that handles [404] responses.
+    def request(
+        url: str,
+        resourceful: bool = False,
+        uid: int
+    ) -> Result[requests.Response, HTTPError]:
+        response = requests.get(
+            url,
+            json={"resourceful": True, "user_id": uid}
+            if resourceful else None
+        )
+
+        if response.status_code == 404:
+            if resourceful:
+                return Err(UserNotFound(response, uid))
+            return Err(NotFound(response))
+
+        return Ok(response)
+
+    # Execute the request
+    match request("some-url.com', True, uid=0):
+        case Ok(response):
+            # Deal with the response
             ...
-        case Err(err):
-            print(err)
+        case Err(why):
+            # Deal with the error.
+            print(why.message)
     ```
     """
 
@@ -96,8 +157,9 @@ class Error(typing.Protocol):
 
     def __init__(self, message: str = "") -> None:
         self.message = message
+        """A basic error message."""
 
-    def source(self) -> _option.Option[type[Error]]:
+    def source(self) -> Option[type[Error]]:
         """The source of this error, if any."""
         return _option.nothing_unchecked()
 

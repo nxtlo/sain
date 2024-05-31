@@ -91,9 +91,20 @@ class Some(typing.Generic[T], _default.Default[None]):
 
     # *- Reading the value -*
 
-    @property
-    def read(self) -> T | None:
-        """Read the contained value."""
+    def into_inner(self) -> T | None:
+        """Consume `Self`, returning the wrapped value as `T | None`.
+
+        Examples
+        --------
+        ```py
+        opt = Some('char')
+        x = opt.into_inner()
+        assert x is not None
+
+        opt = Some(None)
+        assert opt.into_inner() is None
+        ```
+        """
         return self._value
 
     def unwrap(self) -> T:

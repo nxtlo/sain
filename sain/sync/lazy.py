@@ -54,55 +54,53 @@ class Lazy(typing.Generic[T]):
     Then this `None` gets replaced at runtime when calling `Lazy.set` method.
 
     This is a well-known approach used in Python to lazily initialize expensive objects
-    that needs to be `None` until it gets initialized with a function call.
+    that needs to be `None` until it gets initialized with a function call at runtime.
 
     Example
     -------
     ```py
     @dataclass
-    class TCPClient:
-        # This inner value is pre-allocated and set to `None`.
-        session: Lazy[requests.Session] = Lazy()
+    class Config:
+        token: Lazy[str] = Lazy()
 
-        def handshake(url: str) -> None:
-            # This is the only place where session gets initialized.
-            session = self.session.set(requests.Session())
-            session.post(url)
+    @dataclass
+    class Application:
+        config: Config
 
-        def send(message: str) -> None:
-            # This ensures that the session is locked until its re-set.
-            session = self.session.get().unwrap()
-            session.post(f'website.com/?message={message}')
+    # application entry point.
+    def run(app: Application) -> None:
+        token = app.config.token.set('token')
+        app.run(token=token)
     ```
     """
 
-    __slots__ = ("__inner", "_lock")
+    __slots__ = ("_inner", "_lock")
 
     def __init__(self) -> None:
-        self.__inner: T | None = None
+        self._inner: T | None = None
         self._lock: threading.Lock | None = None
 
     @property
-    def initialized(self) -> bool:
+    def is_initialized(self) -> bool:
         """Whether the contained value is initialized or not."""
-        return self.__inner is not None
+        return self._inner is not None
 
     def get(self) -> Option[T]:
         """Hold ownership of the contained value and return it.
 
         This ensures that the value is only generated once and kept
-        acquired until its set again with `LazyFuture.set`.
+        acquired until its set again with `Lazy.set`.
         """
-        if self.__inner is not None:
-            return option.Some(self.__inner)
+        if self._inner is not None:
+            return option.Some(self._inner)
 
         if not self._lock:
             self._lock = threading.Lock()
 
         with self._lock:
-            if self.__inner is not None:
+            if self._inner is not None:
                 # inner here is never none.
-                return option.Some(self.__inner)
+                return option.Some(self._inner)
 
         return option.nothing_unchecked()
 
@@ -122,9 +120,9 @@ class Lazy(typing.Generic[T]):
         ```
         """
         # SAFETY: This caller guarantees that the value is initialized.
-        return self.__inner  # type: ignore
+        return self._inner  # type: ignore
 
-    def set(self, value: T) -> T:
+    def set(self, value: T, /) -> T:
         """Set the contained value to `value`.
 
         This will clear any ownership of the value until the next `get` call.
@@ -132,28 +130,30 @@ class Lazy(typing.Generic[T]):
         Example
         -------
         ```py
-        lazy = LazyFuture()
+        lazy = Lazy[str]()
         print(lazy.set("foo"))
         ```
         """
-        self.__inner = value
+        self._inner = value
         self._lock = None
         return value
 
     def __repr__(self) -> str:
-        return f"Lazy(initialized: {self.initialized})"
+        if self._inner is None:
+            return "<uninit>"
+        return f"Lazy(value: {self._inner!r})"
 
     __str__ = __repr__
 
     def __bool__(self) -> bool:
-        return self.initialized
+        return self.is_initialized
 
     def __eq__(self, other: object) -> bool:
-        if not self.initialized:
+        if not self.is_initialized:
             return False
 
         if isinstance(other, Lazy):
-            return self.__inner == other.__inner
+            return self._inner == other._inner
 
         return NotImplemented
 
@@ -169,60 +169,57 @@ class LazyFuture(typing.Generic[T]):
     Then this `None` gets replaced at runtime when calling `LazyFuture.set` method.
 
     This is a well-known approach used in Python to lazily initialize expensive objects
-    that needs to be `None` until it gets initialized with a function call.
+    that needs to be `None` until it gets initialized with a function call at runtime.
 
     Example
     -------
     ```py
     @dataclass
-    class TCPClient:
-        # This inner value is pre-allocated and set to `None`.
-        session: LazyFuture[aiohttp.ClientSession] = LazyFuture()
+    class Config:
+        token: Lazy[str] = Lazy()
 
-        async def handshake(url: str) -> None:
-            # This is the only place where session gets initialized.
-            session = self.session.set(aiohttp.ClientSession())
-            await session.post(url)
+    @dataclass
+    class Application:
+        config: Config
 
-        async def send(message: str) -> None:
-            # This ensures that the session is locked until its re-set.
-            session = await self.session.get().unwrap()
-            await session.post(f'website.com/?message={message}')
+    # application entry point.
+    def run(app: Application) -> None:
+        token = app.config.token.set('token')
+        app.run(token=token)
     ```
     """
 
-    __slots__ = ("__inner", "_lock")
+    __slots__ = ("_inner", "_lock")
 
     def __init__(self) -> None:
-        self.__inner: T | None = None
+        self._inner: T | None = None
         self._lock: asyncio.Lock | None = None
 
     @property
-    def initialized(self) -> bool:
+    def is_initialized(self) -> bool:
         """Whether the contained value is initialized or not."""
-        return self.__inner is not None
+        return self._inner is not None
 
     @macros.unsafe
     async def get(self) -> Option[T]:
         """Hold ownership of the contained value and return it.
 
-        This ensures that the value is only generated once and kept
-        acquired until its set again with `LazyFuture.set`.
+        This ensures that the value is only generated once and kept acquired.
         """
-        if self.__inner is not None:
-            return option.Some(self.__inner)
+        if self._inner is not None:
+            return option.Some(self._inner)
 
         if not self._lock:
             self._lock = asyncio.Lock()
 
         async with self._lock:
-            if self.__inner is not None:
+            if self._inner is not None:
                 # inner here is never none.
-                return option.Some(self.__inner)
+                return option.Some(self._inner)
 
         return option.nothing_unchecked()
 
-    def set(self, value: T) -> T:
+    def set(self, value: T, /) -> T:
         """Set the contained value to `value`.
 
         This will clear any ownership of the value until the next `get` call.
@@ -234,24 +231,26 @@ class LazyFuture(typing.Generic[T]):
         print(lazy.set("foo"))
         ```
         """
-        self.__inner = value
+        self._inner = value
         self._lock = None
         return value
 
     def __repr__(self) -> str:
-        return f"Lazy(initialized: {self.initialized})"
+        if self._inner is None:
+            return "uninit"
+        return f"LazyFuture(value: {self._inner!r})"
 
     __str__ = __repr__
 
     def __bool__(self) -> bool:
-        return self.initialized
+        return self.is_initialized
 
     def __eq__(self, other: object) -> bool:
-        if not self.initialized:
+        if not self.is_initialized:
             return False
 
         if isinstance(other, Lazy):
-            return self.__inner == other.__inner  # pyright: ignore
+            return self._inner == other._inner  # pyright: ignore
 
         return NotImplemented
 

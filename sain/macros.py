@@ -66,7 +66,7 @@ def _warn(msg: str, stacklevel: int = 2) -> None:
     warnings.warn(message=msg, stacklevel=stacklevel, category=Error)
 
 
-def unsafe(fn: collections.Callable[..., U]) -> collections.Callable[..., U]:
+def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     """Mark a function as unsafe.
 
     The caller of the decorated function is responsible for the undefined behavior if occurred.
