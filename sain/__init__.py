@@ -46,6 +46,7 @@ Equivalent types
 - `cell::RefCell<T>` -> `RefCell[T]`, slightly different.
 - `sync::LazyLock<T>` -> `Lazy[T]`
 - `sync::OnceLock<T>` -> `Once[T]`
+- `mem::MaybeUninit<T>` -> `MaybeUninit[T]`
 
 Equivalent macros
 -----------------
@@ -101,6 +102,7 @@ __all__ = (
     "Box",
     # sync
     "sync",
+    "MaybeUninit",
 )
 
 from . import boxed
@@ -124,6 +126,7 @@ from .macros import deprecated
 from .macros import doc
 from .macros import todo
 from .macros import unimplemented
+from .maybe_uninit import MaybeUninit
 from .option import NOTHING
 from .option import Option
 from .option import Some
