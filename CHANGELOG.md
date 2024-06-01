@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `MaybeUninit[T]` type.
 - `Iterator` interface which represents `Iterator`  trait in Rust
 - Default external adapters for `Iterator`.
 - `Vec.push_within_capacity`
