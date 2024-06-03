@@ -33,7 +33,10 @@ from __future__ import annotations
 
 import typing
 
+from . import macros
+
 if typing.TYPE_CHECKING:
+    import collections.abc as collections
     from typing_extensions import Self
 
 T = typing.TypeVar("T")
@@ -81,7 +84,7 @@ class MaybeUninit(typing.Generic[T]):
 
     def __init__(self, value: T | None = None) -> None:
         if value is None:
-            return super().__init__()
+            return None
         else:
             # we simply pre-initialize the value if it was passed
             # when constructing the instance.
@@ -100,15 +103,15 @@ class MaybeUninit(typing.Generic[T]):
         return cls()
 
     @classmethod
-    def uninit_array(cls, n: int) -> list[Self]:
-        """Creates a new list of `MaybeUninit<T>` in an uninitialized state.
+    def uninit_array(cls, n: int) -> collections.Sequence[Self]:
+        """Creates an immutable sequence of `MaybeUninit<T>` in an uninitialized state.
 
         Note that `inner` value doesn't exist in this state until you call `.write` to set it.
 
         Example
         -------
         ```py
-        v : list[MaybeUninit[str]] = MaybeUninit().uninit_array(3)
+        v = MaybeUninit[str].uninit_array(3)
         assert len(v) == 3
         for uninit in v:
             uninit.write('content')
@@ -116,9 +119,9 @@ class MaybeUninit(typing.Generic[T]):
             initialized = uninit.assume_init()
         ```
         """
+        return tuple(cls() for _ in range(n))
 
-        return [cls()] * n
-
+    @macros.unsafe
     def assume_init(self) -> T:
         """Get the inner value, assuming that it was initialized by the caller.
 
@@ -180,6 +183,12 @@ class MaybeUninit(typing.Generic[T]):
         return getattr(self, "_MaybeUninit__value")
 
     def __repr__(self) -> str:
+        # We could technically do an `if self: ...` here but
+        # thats not how bool checks work. for example if an empty str
+        # in the content of this cell it will return `False`
+        # which isn't correct. So we actually need to check
+        # whether the attribute is set or not. Also since 3.11,
+        # exception are zero cost, So this shouldn't be a critically inefficient.
         try:
             return f"MaybeUninit(value: {self.__read_mangling()!r})"
         except AttributeError:
