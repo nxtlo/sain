@@ -9,5 +9,5 @@ pdoc~=14.5.0
 ruff~=0.4.7
 isort~=5.13.2
 pyright~=1.1.365
-codespell~=2.2.6
+codespell~=2.3.0
 typing-extensions~=4.12.1 
