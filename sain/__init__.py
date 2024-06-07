@@ -28,37 +28,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""sain is a set of minimal abstraction that brings Rust's ecosystem to Python.
-It offers a few of the core Rust features like `Vec<T>` and `Result<T, E>` and more.
-See the equivalent type section below.
-
-Equivalent types
-----------------
-- `Option<T>` -> `Option[T]` | `Some[T]`
-- `Result<T, E>` -> `Result[T, E]`
-- `&dyn Error` -> `Error`
-- `Vec<T>` -> `Vec[T]`
-- `Default<T>` -> `Default[T]`
-- `slice::Iter<Item>` -> `Iter[Item]`
-- `iter::Iterator<Item>` -> `Iterator[Item]`
-- `Box<T>` -> `Box[T]`, not a heap box.
-- `cell::Cell<T>` -> `Cell[T]`, slightly different.
-- `cell::RefCell<T>` -> `RefCell[T]`, slightly different.
-- `sync::LazyLock<T>` -> `Lazy[T]`
-- `sync::OnceLock<T>` -> `Once[T]`
-- `mem::MaybeUninit<T>` -> `MaybeUninit[T]`
-
-Equivalent macros
------------------
-As decorators.
-
-- `cfg!()` -> `sain.cfg`
-- `todo!()` -> `sain.todo`. This is not a decorator.
-- `deprecated!()` -> `sain.deprecated`
-- `unimplemented!()` -> `sain.unimplemented`
-- `#[cfg_attr]` -> `sain.cfg_attr`
-- `#[doc()]` -> `sain.doc()`
-"""
+"""sain is a set of minimal abstraction that brings Rust's ecosystem to Python. It offers a few of the core Rust types like `Vec<T>` and `Result<T, E>` and more."""
 
 from __future__ import annotations
 

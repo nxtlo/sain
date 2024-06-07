@@ -81,31 +81,32 @@ match storage.put("first"):
         print(why)
 ```
 
-## Equivalent types
+## Builtin types
 
-- `Option<T>` -> `Option[T]` | `Some[T]`
-- `Result<T, E>` -> `Result[T, E]` | `Ok` | `Err`
-- `&dyn Error` -> `Error`
-- `Vec<T>` -> `Vec[T]`
-- `Default<T>` -> `Default[T]`
-- `slice::Iter<Item>` -> `Iter[Item]`
-- `IntoIterator<Item>` -> `Iterator[Item]`
-- `Box<T>` -> `Box[T]`, Not a heap box.
-- `cell::Cell<T>` -> `Cell[T]`, Slightly different.
-- `cell::RefCell<T>` -> `RefCell[T]`, Slightly different.
-- `sync::LazyLock<T>` -> `Lazy[T]`
-- `sync::OnceLock<T>` -> `Once[T]`
-
-## Equivalent functions / macros
-
-- `cfg!()` -> `sain.cfg`
-- `todo!()` -> `sain.todo`. This is not a decorator.
-- `deprecated!()` -> `sain.deprecated`
-- `unimplemented!()` -> `sain.unimplemented`
-- `std::iter::once()` -> `sain.iter.once`
-- `std::iter::empty()` -> `sain.iter.empty`
-- `#[cfg_attr]` -> `sain.cfg_attr`
-- `#[doc(...)]` -> `sain.doc(...)`
+| name in Rust                  | name in Python                   | note                                                                                                                       | restrictions               |
+| ----------------------------- | -------------------------------  | -------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| Option\<T>, Some(T), None     | Option[T], Some(T), Some(None)   | Some(None) has the same layout as `None` in Rust                                                                           | this can't be matched upon |
+| Result\<T, E>, Ok(T), Err(E)  | Result[T, E], Ok(T), Err(E)      |                                                                                                                            |                            |
+| Vec\<T>                       | Vec[T]                           |                                                                                                                            |                            |
+| Cell\<T>                      | Cell[T]                          | this isn't an interior mutability type                                                                                     |                            |
+| RefCell\<T>                   | RefCell[T]                       | this isn't an interior mutability type                                                                                     |                            |
+| LazyLock\<T>                  | Lazy[T]                          |                                                                                                                            |                            |
+| OnceLock\<T>                  | Once[T]                          |                                                                                                                            |                            |
+| Box\<T>                       | Box[T]                           | this isn't a heap box, [See]([https://nxtlo.github.io/sain/sain/boxed.html](https://nxtlo.github.io/sain/sain/boxed.html)) |                            |
+| MaybeUninit\<T>               | MaybeUninit[T]                   | they serve the same purpose, but slightly different                                                                        |                            |
+| Default                       | Default[T]                       |                                                                                                                            |                            |
+| &dyn Error                    | Error                            |                                                                                                                            |                            |
+| Iterator\<T>                  | Iterator[T]                      |                                                                                                                            |                            |
+| Iter\<'a, T>                  | Iter[T]                          | collections called by `.iter` are built from this type                                                                     |                            |
+| iter::once::\<T>()            | iter.once[T]                     |                                                                                                                            |                            |
+| iter::empty::\<T>()           | iter.empty[T]                    |                                                                                                                            |                            |
+| iter::repeat::\<T>()          | iter.repeat[T]                   |                                                                                                                            |                            |
+| cfg!()                        | cfg()                            | runtime cfg, not all predictions are supported                                                                             |                            |
+| #[cfg_attr]                   | @cfg_attr()                      | runtime cfg, not all predictions are supported                                                                             |                            |
+| #[doc]                        | @doc()                           | the docs get generated at runtime                                                                                          |                            |
+| todo!()                       | todo()                           |                                                                                                                            |                            |
+| #[deprecated]                 | @deprecated()                    | will get removed when it get stabilized in `warnings` in Python `3.13`                                                     |                            |
+| unimplemented!()              | @unimplemented()                 |                                                                                                                            |                            |
 
 ## Notes
 

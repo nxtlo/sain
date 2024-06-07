@@ -31,6 +31,7 @@
 from __future__ import annotations
 
 import pytest
+import collections.abc
 
 from sain import MaybeUninit
 
@@ -42,13 +43,15 @@ def uninit() -> MaybeUninit[None]:
 
 class TestMaybeUninit:
     @pytest.fixture()
-    def uninit_array(self) -> list[MaybeUninit[None]]:
+    def uninit_array(self) -> collections.abc.Sequence[MaybeUninit[None]]:
         return MaybeUninit[None].uninit_array(3)
 
     def test_uninit_array_basic(self, uninit_array: list[MaybeUninit[None]]) -> None:
         assert len(uninit_array) == 3 and all(not _ for _ in uninit_array)
 
-    def test_uninit_array_write(self, uninit_array: list[MaybeUninit[None]]) -> None:
+    def test_uninit_array_write(
+        self, uninit_array: tuple[MaybeUninit[None], ...]
+    ) -> None:
         for uninit in uninit_array:
             uninit.write(None)
 

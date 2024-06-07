@@ -37,6 +37,7 @@ from . import macros
 
 if typing.TYPE_CHECKING:
     import collections.abc as collections
+
     from typing_extensions import Self
 
 T = typing.TypeVar("T")

@@ -79,7 +79,8 @@ class Some(typing.Generic[T], _default.Default[None]):
     ```
     """
 
-    __slots__ = ("_value",)
+    __slots__ = ("_value", "__default")
+    __match_args__ = ("_value",)
 
     def __init__(self, value: T | None, /) -> None:
         self._value = value
@@ -109,6 +110,8 @@ class Some(typing.Generic[T], _default.Default[None]):
 
     def unwrap(self) -> T:
         """Unwrap the inner value either returning if its not `None` or raising a `RuntimeError`.
+
+        It's usually not recommended to use this method in production code, since it raises.
 
         Example
         -------
@@ -339,11 +342,11 @@ class Some(typing.Generic[T], _default.Default[None]):
             return email.find('@') == 1
 
         original = Some("flex@gg.com")
-        valid = original.take_if(allowed)
+        valid = original.take_if(validate)
         assert is_allowed.is_some() and original.is_none()
 
         original = Some("mail.example.com")
-        invalid = original.take_if(allowed)
+        invalid = original.take_if(validate)
         assert invalid.is_none() and original.is_some()
         ```
         """
