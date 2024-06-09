@@ -52,7 +52,7 @@ if typing.TYPE_CHECKING:
 
 
 @typing.final
-class Some(typing.Generic[T], _default.Default[None]):
+class Some(typing.Generic[T], _default.Default["Option[None]"]):
     """The `Option` type. An object that might be `T` or `None`.
 
     It is a drop-in replacement for `typing.Optional[T]`, But has proper methods to handle the contained value.
@@ -86,9 +86,16 @@ class Some(typing.Generic[T], _default.Default[None]):
         self._value = value
 
     @staticmethod
-    def default() -> None:
-        """Default value for `Some`. Returns `None`."""
-        return None
+    def default() -> Option[None]:
+        """Default value for `Some`. Returns `None` wrapped in `Some`.
+
+        Example
+        -------
+        ```py
+        assert Some.default() == NOTHING
+        ```
+        """
+        return NOTHING
 
     # *- Reading the value -*
 

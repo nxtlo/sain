@@ -216,7 +216,7 @@
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="c1"># We are our own implementation, since MutableSequence have some conflicts with the return types.</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="k">class</span> <span class="nc">Vec</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="sd">&quot;&quot;&quot;A contiguous growable alternative to builtin `list` with extra functionalities.</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A contiguous growable alternative to builtin `list` with extra functionalities.</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">    The layout of `Vec` is almost the same as `list`.</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
@@ -339,7 +339,7 @@
 </span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>    <span class="k">def</span> <span class="nf">with_capacity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">        This vec will be able to hold `capacity` elements without pushing further.</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">        Check out `Vec.push_within_capacity` as well.</span>
@@ -364,7 +364,7 @@
 </span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>        <span class="k">return</span> <span class="n">v</span>
 </span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>
 </span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Collection</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>        <span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
 </span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
 </span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">        Example</span>
 </span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">        -------</span>
@@ -377,7 +377,7 @@
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="sd">        Example</span>
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">        -------</span>
@@ -390,7 +390,7 @@
 </span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
 </span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
 </span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="k">def</span> <span class="nf">capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>        <span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
 </span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>
 </span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">        Example</span>
 </span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="sd">        -------</span>
@@ -405,7 +405,7 @@
 </span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span>
 </span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>        <span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
 </span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>
 </span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="sd">        Example</span>
 </span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a><span class="sd">        -------</span>
@@ -421,11 +421,11 @@
 </span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>
 </span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>        <span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
 </span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span>
 </span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>
 </span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>    <span class="k">def</span> <span class="nf">split_off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>        <span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
 </span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>
 </span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a><span class="sd">        if this vec is empty, `self` is returned unchanged.</span>
 </span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>
@@ -446,7 +446,7 @@
 </span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>        <span class="k">if</span> <span class="n">at</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">():</span>
 </span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>                <span class="sa">f</span><span class="s2">&quot;Index `at` (</span><span class="si">{</span><span class="n">at</span><span class="si">}</span><span class="s2">) should be &lt;= than len of vector (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="si">}</span><span class="s2">) &quot;</span>
-</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a>
 </span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a>        <span class="c1"># Either the list is empty or uninit.</span>
 </span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">:</span>
@@ -457,7 +457,7 @@
 </span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>        <span class="k">return</span> <span class="n">split</span>
 </span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a>
 </span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>    <span class="k">def</span> <span class="nf">split_first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]]]:</span>
-</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>        <span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
+</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a><span class="sd">        Example</span>
 </span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a><span class="sd">        -------</span>
@@ -478,7 +478,7 @@
 </span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">((</span><span class="n">first</span><span class="p">,</span> <span class="n">rest</span><span class="p">))</span>
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>
 </span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>        <span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
 </span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>
 </span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a><span class="sd">        Example</span>
 </span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="sd">        -------</span>
@@ -491,7 +491,7 @@
 </span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>
 </span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>        <span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
+</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
 </span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>
 </span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a><span class="sd">        Example</span>
 </span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a><span class="sd">        -------</span>
@@ -507,7 +507,7 @@
 </span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">[:</span><span class="n">size</span><span class="p">]</span>
 </span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>
 </span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>    <span class="k">def</span> <span class="nf">retain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>        <span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
+</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
 </span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>
 </span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a><span class="sd">        In other words, filter this vector based on `f()`.</span>
 </span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>
@@ -526,7 +526,7 @@
 </span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">e</span><span class="p">)]</span>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>
 </span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>    <span class="k">def</span> <span class="nf">swap_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>        <span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
+</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
 </span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a>
 </span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a><span class="sd">        Raises</span>
 </span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a><span class="sd">        ------</span>
@@ -542,18 +542,18 @@
 </span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a><span class="sd">        ```</span>
 </span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-396"><a href="#L-396"><span class="linenos">396</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="L-396"><a href="#L-396"><span class="linenos">396</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="L-397"><a href="#L-397"><span class="linenos">397</span></a>
 </span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a>            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">item</span><span class="p">)</span>
 </span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a>        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a>
 </span><span id="L-403"><a href="#L-403"><span class="linenos">403</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </span><span id="L-404"><a href="#L-404"><span class="linenos">404</span></a>        <span class="k">return</span> <span class="n">i</span>
 </span><span id="L-405"><a href="#L-405"><span class="linenos">405</span></a>
 </span><span id="L-406"><a href="#L-406"><span class="linenos">406</span></a>    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-407"><a href="#L-407"><span class="linenos">407</span></a>        <span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
+</span><span id="L-407"><a href="#L-407"><span class="linenos">407</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
 </span><span id="L-408"><a href="#L-408"><span class="linenos">408</span></a>
 </span><span id="L-409"><a href="#L-409"><span class="linenos">409</span></a><span class="sd">        Example</span>
 </span><span id="L-410"><a href="#L-410"><span class="linenos">410</span></a><span class="sd">        -------</span>
@@ -574,7 +574,7 @@
 </span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 </span><span id="L-426"><a href="#L-426"><span class="linenos">426</span></a>
 </span><span id="L-427"><a href="#L-427"><span class="linenos">427</span></a>    <span class="k">def</span> <span class="nf">push_within_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="L-428"><a href="#L-428"><span class="linenos">428</span></a>        <span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
+</span><span id="L-428"><a href="#L-428"><span class="linenos">428</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
 </span><span id="L-429"><a href="#L-429"><span class="linenos">429</span></a>
 </span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a><span class="sd">        Example</span>
 </span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a><span class="sd">        -------</span>
@@ -608,7 +608,7 @@
 </span><span id="L-459"><a href="#L-459"><span class="linenos">459</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </span><span id="L-460"><a href="#L-460"><span class="linenos">460</span></a>
 </span><span id="L-461"><a href="#L-461"><span class="linenos">461</span></a>    <span class="k">def</span> <span class="nf">reserve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-462"><a href="#L-462"><span class="linenos">462</span></a>        <span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
+</span><span id="L-462"><a href="#L-462"><span class="linenos">462</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
 </span><span id="L-463"><a href="#L-463"><span class="linenos">463</span></a>
 </span><span id="L-464"><a href="#L-464"><span class="linenos">464</span></a><span class="sd">        Example</span>
 </span><span id="L-465"><a href="#L-465"><span class="linenos">465</span></a><span class="sd">        -------</span>
@@ -640,10 +640,10 @@
 </span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>
 </span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a>    <span class="c1"># For people how are used to calling list.append</span>
 </span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a>    <span class="n">append</span> <span class="o">=</span> <span class="n">push</span>
-</span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a>    <span class="sd">&quot;&quot;&quot;An alias for `Vec.push` method.&quot;&quot;&quot;</span>
+</span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An alias for `Vec.push` method.&quot;&quot;&quot;</span>
 </span><span id="L-495"><a href="#L-495"><span class="linenos">495</span></a>
 </span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a>        <span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
+</span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
 </span><span id="L-498"><a href="#L-498"><span class="linenos">498</span></a>
 </span><span id="L-499"><a href="#L-499"><span class="linenos">499</span></a><span class="sd">        Example</span>
 </span><span id="L-500"><a href="#L-500"><span class="linenos">500</span></a><span class="sd">        -------</span>
@@ -659,7 +659,7 @@
 </span><span id="L-510"><a href="#L-510"><span class="linenos">510</span></a>            <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="L-511"><a href="#L-511"><span class="linenos">511</span></a>
 </span><span id="L-512"><a href="#L-512"><span class="linenos">512</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-513"><a href="#L-513"><span class="linenos">513</span></a>        <span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
+</span><span id="L-513"><a href="#L-513"><span class="linenos">513</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
 </span><span id="L-514"><a href="#L-514"><span class="linenos">514</span></a>
 </span><span id="L-515"><a href="#L-515"><span class="linenos">515</span></a><span class="sd">        Example</span>
 </span><span id="L-516"><a href="#L-516"><span class="linenos">516</span></a><span class="sd">        --------</span>
@@ -672,7 +672,7 @@
 </span><span id="L-523"><a href="#L-523"><span class="linenos">523</span></a>        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </span><span id="L-524"><a href="#L-524"><span class="linenos">524</span></a>
 </span><span id="L-525"><a href="#L-525"><span class="linenos">525</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-526"><a href="#L-526"><span class="linenos">526</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
+</span><span id="L-526"><a href="#L-526"><span class="linenos">526</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
 </span><span id="L-527"><a href="#L-527"><span class="linenos">527</span></a>
 </span><span id="L-528"><a href="#L-528"><span class="linenos">528</span></a><span class="sd">        Example</span>
 </span><span id="L-529"><a href="#L-529"><span class="linenos">529</span></a><span class="sd">        -------</span>
@@ -688,7 +688,7 @@
 </span><span id="L-539"><a href="#L-539"><span class="linenos">539</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
 </span><span id="L-540"><a href="#L-540"><span class="linenos">540</span></a>
 </span><span id="L-541"><a href="#L-541"><span class="linenos">541</span></a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-542"><a href="#L-542"><span class="linenos">542</span></a>        <span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
+</span><span id="L-542"><a href="#L-542"><span class="linenos">542</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
 </span><span id="L-543"><a href="#L-543"><span class="linenos">543</span></a>
 </span><span id="L-544"><a href="#L-544"><span class="linenos">544</span></a><span class="sd">        Example</span>
 </span><span id="L-545"><a href="#L-545"><span class="linenos">545</span></a><span class="sd">        -------</span>
@@ -704,7 +704,7 @@
 </span><span id="L-555"><a href="#L-555"><span class="linenos">555</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 </span><span id="L-556"><a href="#L-556"><span class="linenos">556</span></a>
 </span><span id="L-557"><a href="#L-557"><span class="linenos">557</span></a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-558"><a href="#L-558"><span class="linenos">558</span></a>        <span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
+</span><span id="L-558"><a href="#L-558"><span class="linenos">558</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
 </span><span id="L-559"><a href="#L-559"><span class="linenos">559</span></a>
 </span><span id="L-560"><a href="#L-560"><span class="linenos">560</span></a><span class="sd">        Example</span>
 </span><span id="L-561"><a href="#L-561"><span class="linenos">561</span></a><span class="sd">        -------</span>
@@ -721,7 +721,7 @@
 </span><span id="L-572"><a href="#L-572"><span class="linenos">572</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
 </span><span id="L-573"><a href="#L-573"><span class="linenos">573</span></a>
 </span><span id="L-574"><a href="#L-574"><span class="linenos">574</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-575"><a href="#L-575"><span class="linenos">575</span></a>        <span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
+</span><span id="L-575"><a href="#L-575"><span class="linenos">575</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
 </span><span id="L-576"><a href="#L-576"><span class="linenos">576</span></a>
 </span><span id="L-577"><a href="#L-577"><span class="linenos">577</span></a><span class="sd">        If the vector hasn&#39;t been allocated, `self` is returned.</span>
 </span><span id="L-578"><a href="#L-578"><span class="linenos">578</span></a>
@@ -738,7 +738,7 @@
 </span><span id="L-589"><a href="#L-589"><span class="linenos">589</span></a>        <span class="k">return</span> <span class="n">Vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">[:])</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span>
 </span><span id="L-590"><a href="#L-590"><span class="linenos">590</span></a>
 </span><span id="L-591"><a href="#L-591"><span class="linenos">591</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-592"><a href="#L-592"><span class="linenos">592</span></a>        <span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
+</span><span id="L-592"><a href="#L-592"><span class="linenos">592</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
 </span><span id="L-593"><a href="#L-593"><span class="linenos">593</span></a>
 </span><span id="L-594"><a href="#L-594"><span class="linenos">594</span></a><span class="sd">        Example</span>
 </span><span id="L-595"><a href="#L-595"><span class="linenos">595</span></a><span class="sd">        -------</span>
@@ -843,7 +843,7 @@
 </span><span id="L-694"><a href="#L-694"><span class="linenos">694</span></a>
 </span><span id="L-695"><a href="#L-695"><span class="linenos">695</span></a>
 </span><span id="L-696"><a href="#L-696"><span class="linenos">696</span></a><span class="k">def</span> <span class="nf">from_args</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-697"><a href="#L-697"><span class="linenos">697</span></a>    <span class="sd">&quot;&quot;&quot;Construct a vector containing `elements`.</span>
+</span><span id="L-697"><a href="#L-697"><span class="linenos">697</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct a vector containing `elements`.</span>
 </span><span id="L-698"><a href="#L-698"><span class="linenos">698</span></a>
 </span><span id="L-699"><a href="#L-699"><span class="linenos">699</span></a><span class="sd">    Example</span>
 </span><span id="L-700"><a href="#L-700"><span class="linenos">700</span></a><span class="sd">    -------</span>
@@ -873,7 +873,7 @@
     <a class="headerlink" href="#Vec"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec-69"><a href="#Vec-69"><span class="linenos"> 69</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Vec-70"><a href="#Vec-70"><span class="linenos"> 70</span></a><span class="k">class</span> <span class="nc">Vec</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="Vec-71"><a href="#Vec-71"><span class="linenos"> 71</span></a>    <span class="sd">&quot;&quot;&quot;A contiguous growable alternative to builtin `list` with extra functionalities.</span>
+</span><span id="Vec-71"><a href="#Vec-71"><span class="linenos"> 71</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A contiguous growable alternative to builtin `list` with extra functionalities.</span>
 </span><span id="Vec-72"><a href="#Vec-72"><span class="linenos"> 72</span></a>
 </span><span id="Vec-73"><a href="#Vec-73"><span class="linenos"> 73</span></a><span class="sd">    The layout of `Vec` is almost the same as `list`.</span>
 </span><span id="Vec-74"><a href="#Vec-74"><span class="linenos"> 74</span></a>
@@ -996,7 +996,7 @@
 </span><span id="Vec-191"><a href="#Vec-191"><span class="linenos">191</span></a>
 </span><span id="Vec-192"><a href="#Vec-192"><span class="linenos">192</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Vec-193"><a href="#Vec-193"><span class="linenos">193</span></a>    <span class="k">def</span> <span class="nf">with_capacity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Vec-194"><a href="#Vec-194"><span class="linenos">194</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
+</span><span id="Vec-194"><a href="#Vec-194"><span class="linenos">194</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
 </span><span id="Vec-195"><a href="#Vec-195"><span class="linenos">195</span></a><span class="sd">        This vec will be able to hold `capacity` elements without pushing further.</span>
 </span><span id="Vec-196"><a href="#Vec-196"><span class="linenos">196</span></a>
 </span><span id="Vec-197"><a href="#Vec-197"><span class="linenos">197</span></a><span class="sd">        Check out `Vec.push_within_capacity` as well.</span>
@@ -1021,7 +1021,7 @@
 </span><span id="Vec-216"><a href="#Vec-216"><span class="linenos">216</span></a>        <span class="k">return</span> <span class="n">v</span>
 </span><span id="Vec-217"><a href="#Vec-217"><span class="linenos">217</span></a>
 </span><span id="Vec-218"><a href="#Vec-218"><span class="linenos">218</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Collection</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-219"><a href="#Vec-219"><span class="linenos">219</span></a>        <span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
+</span><span id="Vec-219"><a href="#Vec-219"><span class="linenos">219</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
 </span><span id="Vec-220"><a href="#Vec-220"><span class="linenos">220</span></a>
 </span><span id="Vec-221"><a href="#Vec-221"><span class="linenos">221</span></a><span class="sd">        Example</span>
 </span><span id="Vec-222"><a href="#Vec-222"><span class="linenos">222</span></a><span class="sd">        -------</span>
@@ -1034,7 +1034,7 @@
 </span><span id="Vec-229"><a href="#Vec-229"><span class="linenos">229</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="Vec-230"><a href="#Vec-230"><span class="linenos">230</span></a>
 </span><span id="Vec-231"><a href="#Vec-231"><span class="linenos">231</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec-232"><a href="#Vec-232"><span class="linenos">232</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
+</span><span id="Vec-232"><a href="#Vec-232"><span class="linenos">232</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
 </span><span id="Vec-233"><a href="#Vec-233"><span class="linenos">233</span></a>
 </span><span id="Vec-234"><a href="#Vec-234"><span class="linenos">234</span></a><span class="sd">        Example</span>
 </span><span id="Vec-235"><a href="#Vec-235"><span class="linenos">235</span></a><span class="sd">        -------</span>
@@ -1047,7 +1047,7 @@
 </span><span id="Vec-242"><a href="#Vec-242"><span class="linenos">242</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
 </span><span id="Vec-243"><a href="#Vec-243"><span class="linenos">243</span></a>
 </span><span id="Vec-244"><a href="#Vec-244"><span class="linenos">244</span></a>    <span class="k">def</span> <span class="nf">capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec-245"><a href="#Vec-245"><span class="linenos">245</span></a>        <span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
+</span><span id="Vec-245"><a href="#Vec-245"><span class="linenos">245</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
 </span><span id="Vec-246"><a href="#Vec-246"><span class="linenos">246</span></a>
 </span><span id="Vec-247"><a href="#Vec-247"><span class="linenos">247</span></a><span class="sd">        Example</span>
 </span><span id="Vec-248"><a href="#Vec-248"><span class="linenos">248</span></a><span class="sd">        -------</span>
@@ -1062,7 +1062,7 @@
 </span><span id="Vec-257"><a href="#Vec-257"><span class="linenos">257</span></a>        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span>
 </span><span id="Vec-258"><a href="#Vec-258"><span class="linenos">258</span></a>
 </span><span id="Vec-259"><a href="#Vec-259"><span class="linenos">259</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-260"><a href="#Vec-260"><span class="linenos">260</span></a>        <span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
+</span><span id="Vec-260"><a href="#Vec-260"><span class="linenos">260</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
 </span><span id="Vec-261"><a href="#Vec-261"><span class="linenos">261</span></a>
 </span><span id="Vec-262"><a href="#Vec-262"><span class="linenos">262</span></a><span class="sd">        Example</span>
 </span><span id="Vec-263"><a href="#Vec-263"><span class="linenos">263</span></a><span class="sd">        -------</span>
@@ -1078,11 +1078,11 @@
 </span><span id="Vec-273"><a href="#Vec-273"><span class="linenos">273</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="Vec-274"><a href="#Vec-274"><span class="linenos">274</span></a>
 </span><span id="Vec-275"><a href="#Vec-275"><span class="linenos">275</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Vec-276"><a href="#Vec-276"><span class="linenos">276</span></a>        <span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
+</span><span id="Vec-276"><a href="#Vec-276"><span class="linenos">276</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
 </span><span id="Vec-277"><a href="#Vec-277"><span class="linenos">277</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span>
 </span><span id="Vec-278"><a href="#Vec-278"><span class="linenos">278</span></a>
 </span><span id="Vec-279"><a href="#Vec-279"><span class="linenos">279</span></a>    <span class="k">def</span> <span class="nf">split_off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-280"><a href="#Vec-280"><span class="linenos">280</span></a>        <span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
+</span><span id="Vec-280"><a href="#Vec-280"><span class="linenos">280</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
 </span><span id="Vec-281"><a href="#Vec-281"><span class="linenos">281</span></a>
 </span><span id="Vec-282"><a href="#Vec-282"><span class="linenos">282</span></a><span class="sd">        if this vec is empty, `self` is returned unchanged.</span>
 </span><span id="Vec-283"><a href="#Vec-283"><span class="linenos">283</span></a>
@@ -1103,7 +1103,7 @@
 </span><span id="Vec-298"><a href="#Vec-298"><span class="linenos">298</span></a>        <span class="k">if</span> <span class="n">at</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">():</span>
 </span><span id="Vec-299"><a href="#Vec-299"><span class="linenos">299</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="Vec-300"><a href="#Vec-300"><span class="linenos">300</span></a>                <span class="sa">f</span><span class="s2">&quot;Index `at` (</span><span class="si">{</span><span class="n">at</span><span class="si">}</span><span class="s2">) should be &lt;= than len of vector (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="si">}</span><span class="s2">) &quot;</span>
-</span><span id="Vec-301"><a href="#Vec-301"><span class="linenos">301</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec-301"><a href="#Vec-301"><span class="linenos">301</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec-302"><a href="#Vec-302"><span class="linenos">302</span></a>
 </span><span id="Vec-303"><a href="#Vec-303"><span class="linenos">303</span></a>        <span class="c1"># Either the list is empty or uninit.</span>
 </span><span id="Vec-304"><a href="#Vec-304"><span class="linenos">304</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">:</span>
@@ -1114,7 +1114,7 @@
 </span><span id="Vec-309"><a href="#Vec-309"><span class="linenos">309</span></a>        <span class="k">return</span> <span class="n">split</span>
 </span><span id="Vec-310"><a href="#Vec-310"><span class="linenos">310</span></a>
 </span><span id="Vec-311"><a href="#Vec-311"><span class="linenos">311</span></a>    <span class="k">def</span> <span class="nf">split_first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]]]:</span>
-</span><span id="Vec-312"><a href="#Vec-312"><span class="linenos">312</span></a>        <span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
+</span><span id="Vec-312"><a href="#Vec-312"><span class="linenos">312</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
 </span><span id="Vec-313"><a href="#Vec-313"><span class="linenos">313</span></a>
 </span><span id="Vec-314"><a href="#Vec-314"><span class="linenos">314</span></a><span class="sd">        Example</span>
 </span><span id="Vec-315"><a href="#Vec-315"><span class="linenos">315</span></a><span class="sd">        -------</span>
@@ -1135,7 +1135,7 @@
 </span><span id="Vec-330"><a href="#Vec-330"><span class="linenos">330</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">((</span><span class="n">first</span><span class="p">,</span> <span class="n">rest</span><span class="p">))</span>
 </span><span id="Vec-331"><a href="#Vec-331"><span class="linenos">331</span></a>
 </span><span id="Vec-332"><a href="#Vec-332"><span class="linenos">332</span></a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-333"><a href="#Vec-333"><span class="linenos">333</span></a>        <span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
+</span><span id="Vec-333"><a href="#Vec-333"><span class="linenos">333</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
 </span><span id="Vec-334"><a href="#Vec-334"><span class="linenos">334</span></a>
 </span><span id="Vec-335"><a href="#Vec-335"><span class="linenos">335</span></a><span class="sd">        Example</span>
 </span><span id="Vec-336"><a href="#Vec-336"><span class="linenos">336</span></a><span class="sd">        -------</span>
@@ -1148,7 +1148,7 @@
 </span><span id="Vec-343"><a href="#Vec-343"><span class="linenos">343</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </span><span id="Vec-344"><a href="#Vec-344"><span class="linenos">344</span></a>
 </span><span id="Vec-345"><a href="#Vec-345"><span class="linenos">345</span></a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-346"><a href="#Vec-346"><span class="linenos">346</span></a>        <span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
+</span><span id="Vec-346"><a href="#Vec-346"><span class="linenos">346</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
 </span><span id="Vec-347"><a href="#Vec-347"><span class="linenos">347</span></a>
 </span><span id="Vec-348"><a href="#Vec-348"><span class="linenos">348</span></a><span class="sd">        Example</span>
 </span><span id="Vec-349"><a href="#Vec-349"><span class="linenos">349</span></a><span class="sd">        -------</span>
@@ -1164,7 +1164,7 @@
 </span><span id="Vec-359"><a href="#Vec-359"><span class="linenos">359</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">[:</span><span class="n">size</span><span class="p">]</span>
 </span><span id="Vec-360"><a href="#Vec-360"><span class="linenos">360</span></a>
 </span><span id="Vec-361"><a href="#Vec-361"><span class="linenos">361</span></a>    <span class="k">def</span> <span class="nf">retain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-362"><a href="#Vec-362"><span class="linenos">362</span></a>        <span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
+</span><span id="Vec-362"><a href="#Vec-362"><span class="linenos">362</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
 </span><span id="Vec-363"><a href="#Vec-363"><span class="linenos">363</span></a>
 </span><span id="Vec-364"><a href="#Vec-364"><span class="linenos">364</span></a><span class="sd">        In other words, filter this vector based on `f()`.</span>
 </span><span id="Vec-365"><a href="#Vec-365"><span class="linenos">365</span></a>
@@ -1183,7 +1183,7 @@
 </span><span id="Vec-378"><a href="#Vec-378"><span class="linenos">378</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">e</span><span class="p">)]</span>
 </span><span id="Vec-379"><a href="#Vec-379"><span class="linenos">379</span></a>
 </span><span id="Vec-380"><a href="#Vec-380"><span class="linenos">380</span></a>    <span class="k">def</span> <span class="nf">swap_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Vec-381"><a href="#Vec-381"><span class="linenos">381</span></a>        <span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
+</span><span id="Vec-381"><a href="#Vec-381"><span class="linenos">381</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
 </span><span id="Vec-382"><a href="#Vec-382"><span class="linenos">382</span></a>
 </span><span id="Vec-383"><a href="#Vec-383"><span class="linenos">383</span></a><span class="sd">        Raises</span>
 </span><span id="Vec-384"><a href="#Vec-384"><span class="linenos">384</span></a><span class="sd">        ------</span>
@@ -1199,18 +1199,18 @@
 </span><span id="Vec-394"><a href="#Vec-394"><span class="linenos">394</span></a><span class="sd">        ```</span>
 </span><span id="Vec-395"><a href="#Vec-395"><span class="linenos">395</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Vec-396"><a href="#Vec-396"><span class="linenos">396</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-397"><a href="#Vec-397"><span class="linenos">397</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec-397"><a href="#Vec-397"><span class="linenos">397</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec-398"><a href="#Vec-398"><span class="linenos">398</span></a>
 </span><span id="Vec-399"><a href="#Vec-399"><span class="linenos">399</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="Vec-400"><a href="#Vec-400"><span class="linenos">400</span></a>            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">item</span><span class="p">)</span>
 </span><span id="Vec-401"><a href="#Vec-401"><span class="linenos">401</span></a>        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-</span><span id="Vec-402"><a href="#Vec-402"><span class="linenos">402</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec-402"><a href="#Vec-402"><span class="linenos">402</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec-403"><a href="#Vec-403"><span class="linenos">403</span></a>
 </span><span id="Vec-404"><a href="#Vec-404"><span class="linenos">404</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </span><span id="Vec-405"><a href="#Vec-405"><span class="linenos">405</span></a>        <span class="k">return</span> <span class="n">i</span>
 </span><span id="Vec-406"><a href="#Vec-406"><span class="linenos">406</span></a>
 </span><span id="Vec-407"><a href="#Vec-407"><span class="linenos">407</span></a>    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-408"><a href="#Vec-408"><span class="linenos">408</span></a>        <span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
+</span><span id="Vec-408"><a href="#Vec-408"><span class="linenos">408</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
 </span><span id="Vec-409"><a href="#Vec-409"><span class="linenos">409</span></a>
 </span><span id="Vec-410"><a href="#Vec-410"><span class="linenos">410</span></a><span class="sd">        Example</span>
 </span><span id="Vec-411"><a href="#Vec-411"><span class="linenos">411</span></a><span class="sd">        -------</span>
@@ -1231,7 +1231,7 @@
 </span><span id="Vec-426"><a href="#Vec-426"><span class="linenos">426</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 </span><span id="Vec-427"><a href="#Vec-427"><span class="linenos">427</span></a>
 </span><span id="Vec-428"><a href="#Vec-428"><span class="linenos">428</span></a>    <span class="k">def</span> <span class="nf">push_within_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-429"><a href="#Vec-429"><span class="linenos">429</span></a>        <span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
+</span><span id="Vec-429"><a href="#Vec-429"><span class="linenos">429</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
 </span><span id="Vec-430"><a href="#Vec-430"><span class="linenos">430</span></a>
 </span><span id="Vec-431"><a href="#Vec-431"><span class="linenos">431</span></a><span class="sd">        Example</span>
 </span><span id="Vec-432"><a href="#Vec-432"><span class="linenos">432</span></a><span class="sd">        -------</span>
@@ -1265,7 +1265,7 @@
 </span><span id="Vec-460"><a href="#Vec-460"><span class="linenos">460</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </span><span id="Vec-461"><a href="#Vec-461"><span class="linenos">461</span></a>
 </span><span id="Vec-462"><a href="#Vec-462"><span class="linenos">462</span></a>    <span class="k">def</span> <span class="nf">reserve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-463"><a href="#Vec-463"><span class="linenos">463</span></a>        <span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
+</span><span id="Vec-463"><a href="#Vec-463"><span class="linenos">463</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
 </span><span id="Vec-464"><a href="#Vec-464"><span class="linenos">464</span></a>
 </span><span id="Vec-465"><a href="#Vec-465"><span class="linenos">465</span></a><span class="sd">        Example</span>
 </span><span id="Vec-466"><a href="#Vec-466"><span class="linenos">466</span></a><span class="sd">        -------</span>
@@ -1297,10 +1297,10 @@
 </span><span id="Vec-492"><a href="#Vec-492"><span class="linenos">492</span></a>
 </span><span id="Vec-493"><a href="#Vec-493"><span class="linenos">493</span></a>    <span class="c1"># For people how are used to calling list.append</span>
 </span><span id="Vec-494"><a href="#Vec-494"><span class="linenos">494</span></a>    <span class="n">append</span> <span class="o">=</span> <span class="n">push</span>
-</span><span id="Vec-495"><a href="#Vec-495"><span class="linenos">495</span></a>    <span class="sd">&quot;&quot;&quot;An alias for `Vec.push` method.&quot;&quot;&quot;</span>
+</span><span id="Vec-495"><a href="#Vec-495"><span class="linenos">495</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An alias for `Vec.push` method.&quot;&quot;&quot;</span>
 </span><span id="Vec-496"><a href="#Vec-496"><span class="linenos">496</span></a>
 </span><span id="Vec-497"><a href="#Vec-497"><span class="linenos">497</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-498"><a href="#Vec-498"><span class="linenos">498</span></a>        <span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
+</span><span id="Vec-498"><a href="#Vec-498"><span class="linenos">498</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
 </span><span id="Vec-499"><a href="#Vec-499"><span class="linenos">499</span></a>
 </span><span id="Vec-500"><a href="#Vec-500"><span class="linenos">500</span></a><span class="sd">        Example</span>
 </span><span id="Vec-501"><a href="#Vec-501"><span class="linenos">501</span></a><span class="sd">        -------</span>
@@ -1316,7 +1316,7 @@
 </span><span id="Vec-511"><a href="#Vec-511"><span class="linenos">511</span></a>            <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="Vec-512"><a href="#Vec-512"><span class="linenos">512</span></a>
 </span><span id="Vec-513"><a href="#Vec-513"><span class="linenos">513</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-514"><a href="#Vec-514"><span class="linenos">514</span></a>        <span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
+</span><span id="Vec-514"><a href="#Vec-514"><span class="linenos">514</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
 </span><span id="Vec-515"><a href="#Vec-515"><span class="linenos">515</span></a>
 </span><span id="Vec-516"><a href="#Vec-516"><span class="linenos">516</span></a><span class="sd">        Example</span>
 </span><span id="Vec-517"><a href="#Vec-517"><span class="linenos">517</span></a><span class="sd">        --------</span>
@@ -1329,7 +1329,7 @@
 </span><span id="Vec-524"><a href="#Vec-524"><span class="linenos">524</span></a>        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </span><span id="Vec-525"><a href="#Vec-525"><span class="linenos">525</span></a>
 </span><span id="Vec-526"><a href="#Vec-526"><span class="linenos">526</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-527"><a href="#Vec-527"><span class="linenos">527</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
+</span><span id="Vec-527"><a href="#Vec-527"><span class="linenos">527</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
 </span><span id="Vec-528"><a href="#Vec-528"><span class="linenos">528</span></a>
 </span><span id="Vec-529"><a href="#Vec-529"><span class="linenos">529</span></a><span class="sd">        Example</span>
 </span><span id="Vec-530"><a href="#Vec-530"><span class="linenos">530</span></a><span class="sd">        -------</span>
@@ -1345,7 +1345,7 @@
 </span><span id="Vec-540"><a href="#Vec-540"><span class="linenos">540</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
 </span><span id="Vec-541"><a href="#Vec-541"><span class="linenos">541</span></a>
 </span><span id="Vec-542"><a href="#Vec-542"><span class="linenos">542</span></a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-543"><a href="#Vec-543"><span class="linenos">543</span></a>        <span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
+</span><span id="Vec-543"><a href="#Vec-543"><span class="linenos">543</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
 </span><span id="Vec-544"><a href="#Vec-544"><span class="linenos">544</span></a>
 </span><span id="Vec-545"><a href="#Vec-545"><span class="linenos">545</span></a><span class="sd">        Example</span>
 </span><span id="Vec-546"><a href="#Vec-546"><span class="linenos">546</span></a><span class="sd">        -------</span>
@@ -1361,7 +1361,7 @@
 </span><span id="Vec-556"><a href="#Vec-556"><span class="linenos">556</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 </span><span id="Vec-557"><a href="#Vec-557"><span class="linenos">557</span></a>
 </span><span id="Vec-558"><a href="#Vec-558"><span class="linenos">558</span></a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-559"><a href="#Vec-559"><span class="linenos">559</span></a>        <span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
+</span><span id="Vec-559"><a href="#Vec-559"><span class="linenos">559</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
 </span><span id="Vec-560"><a href="#Vec-560"><span class="linenos">560</span></a>
 </span><span id="Vec-561"><a href="#Vec-561"><span class="linenos">561</span></a><span class="sd">        Example</span>
 </span><span id="Vec-562"><a href="#Vec-562"><span class="linenos">562</span></a><span class="sd">        -------</span>
@@ -1378,7 +1378,7 @@
 </span><span id="Vec-573"><a href="#Vec-573"><span class="linenos">573</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
 </span><span id="Vec-574"><a href="#Vec-574"><span class="linenos">574</span></a>
 </span><span id="Vec-575"><a href="#Vec-575"><span class="linenos">575</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-576"><a href="#Vec-576"><span class="linenos">576</span></a>        <span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
+</span><span id="Vec-576"><a href="#Vec-576"><span class="linenos">576</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
 </span><span id="Vec-577"><a href="#Vec-577"><span class="linenos">577</span></a>
 </span><span id="Vec-578"><a href="#Vec-578"><span class="linenos">578</span></a><span class="sd">        If the vector hasn&#39;t been allocated, `self` is returned.</span>
 </span><span id="Vec-579"><a href="#Vec-579"><span class="linenos">579</span></a>
@@ -1395,7 +1395,7 @@
 </span><span id="Vec-590"><a href="#Vec-590"><span class="linenos">590</span></a>        <span class="k">return</span> <span class="n">Vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">[:])</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span>
 </span><span id="Vec-591"><a href="#Vec-591"><span class="linenos">591</span></a>
 </span><span id="Vec-592"><a href="#Vec-592"><span class="linenos">592</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-593"><a href="#Vec-593"><span class="linenos">593</span></a>        <span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
+</span><span id="Vec-593"><a href="#Vec-593"><span class="linenos">593</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
 </span><span id="Vec-594"><a href="#Vec-594"><span class="linenos">594</span></a>
 </span><span id="Vec-595"><a href="#Vec-595"><span class="linenos">595</span></a><span class="sd">        Example</span>
 </span><span id="Vec-596"><a href="#Vec-596"><span class="linenos">596</span></a><span class="sd">        -------</span>
@@ -1644,7 +1644,7 @@ an iterable or args, or copy the list.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">with_capacity</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">with_capacity</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Vec.with_capacity-view-source"><span>View Source</span></label>
 
@@ -1652,7 +1652,7 @@ an iterable or args, or copy the list.</p>
     <a class="headerlink" href="#Vec.with_capacity"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.with_capacity-192"><a href="#Vec.with_capacity-192"><span class="linenos">192</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Vec.with_capacity-193"><a href="#Vec.with_capacity-193"><span class="linenos">193</span></a>    <span class="k">def</span> <span class="nf">with_capacity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Vec.with_capacity-194"><a href="#Vec.with_capacity-194"><span class="linenos">194</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
+</span><span id="Vec.with_capacity-194"><a href="#Vec.with_capacity-194"><span class="linenos">194</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
 </span><span id="Vec.with_capacity-195"><a href="#Vec.with_capacity-195"><span class="linenos">195</span></a><span class="sd">        This vec will be able to hold `capacity` elements without pushing further.</span>
 </span><span id="Vec.with_capacity-196"><a href="#Vec.with_capacity-196"><span class="linenos">196</span></a>
 </span><span id="Vec.with_capacity-197"><a href="#Vec.with_capacity-197"><span class="linenos">197</span></a><span class="sd">        Check out `Vec.push_within_capacity` as well.</span>
@@ -1714,7 +1714,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.as_ref"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.as_ref-218"><a href="#Vec.as_ref-218"><span class="linenos">218</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Collection</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.as_ref-219"><a href="#Vec.as_ref-219"><span class="linenos">219</span></a>        <span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
+</span><span id="Vec.as_ref-219"><a href="#Vec.as_ref-219"><span class="linenos">219</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
 </span><span id="Vec.as_ref-220"><a href="#Vec.as_ref-220"><span class="linenos">220</span></a>
 </span><span id="Vec.as_ref-221"><a href="#Vec.as_ref-221"><span class="linenos">221</span></a><span class="sd">        Example</span>
 </span><span id="Vec.as_ref-222"><a href="#Vec.as_ref-222"><span class="linenos">222</span></a><span class="sd">        -------</span>
@@ -1754,7 +1754,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.len"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.len-231"><a href="#Vec.len-231"><span class="linenos">231</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec.len-232"><a href="#Vec.len-232"><span class="linenos">232</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
+</span><span id="Vec.len-232"><a href="#Vec.len-232"><span class="linenos">232</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
 </span><span id="Vec.len-233"><a href="#Vec.len-233"><span class="linenos">233</span></a>
 </span><span id="Vec.len-234"><a href="#Vec.len-234"><span class="linenos">234</span></a><span class="sd">        Example</span>
 </span><span id="Vec.len-235"><a href="#Vec.len-235"><span class="linenos">235</span></a><span class="sd">        -------</span>
@@ -1794,7 +1794,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.capacity"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.capacity-244"><a href="#Vec.capacity-244"><span class="linenos">244</span></a>    <span class="k">def</span> <span class="nf">capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec.capacity-245"><a href="#Vec.capacity-245"><span class="linenos">245</span></a>        <span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
+</span><span id="Vec.capacity-245"><a href="#Vec.capacity-245"><span class="linenos">245</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
 </span><span id="Vec.capacity-246"><a href="#Vec.capacity-246"><span class="linenos">246</span></a>
 </span><span id="Vec.capacity-247"><a href="#Vec.capacity-247"><span class="linenos">247</span></a><span class="sd">        Example</span>
 </span><span id="Vec.capacity-248"><a href="#Vec.capacity-248"><span class="linenos">248</span></a><span class="sd">        -------</span>
@@ -1838,7 +1838,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.iter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.iter-259"><a href="#Vec.iter-259"><span class="linenos">259</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.iter-260"><a href="#Vec.iter-260"><span class="linenos">260</span></a>        <span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
+</span><span id="Vec.iter-260"><a href="#Vec.iter-260"><span class="linenos">260</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
 </span><span id="Vec.iter-261"><a href="#Vec.iter-261"><span class="linenos">261</span></a>
 </span><span id="Vec.iter-262"><a href="#Vec.iter-262"><span class="linenos">262</span></a><span class="sd">        Example</span>
 </span><span id="Vec.iter-263"><a href="#Vec.iter-263"><span class="linenos">263</span></a><span class="sd">        -------</span>
@@ -1884,7 +1884,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.is_empty"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.is_empty-275"><a href="#Vec.is_empty-275"><span class="linenos">275</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Vec.is_empty-276"><a href="#Vec.is_empty-276"><span class="linenos">276</span></a>        <span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
+</span><span id="Vec.is_empty-276"><a href="#Vec.is_empty-276"><span class="linenos">276</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
 </span><span id="Vec.is_empty-277"><a href="#Vec.is_empty-277"><span class="linenos">277</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span>
 </span></pre></div>
 
@@ -1906,7 +1906,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.split_off"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.split_off-279"><a href="#Vec.split_off-279"><span class="linenos">279</span></a>    <span class="k">def</span> <span class="nf">split_off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.split_off-280"><a href="#Vec.split_off-280"><span class="linenos">280</span></a>        <span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
+</span><span id="Vec.split_off-280"><a href="#Vec.split_off-280"><span class="linenos">280</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
 </span><span id="Vec.split_off-281"><a href="#Vec.split_off-281"><span class="linenos">281</span></a>
 </span><span id="Vec.split_off-282"><a href="#Vec.split_off-282"><span class="linenos">282</span></a><span class="sd">        if this vec is empty, `self` is returned unchanged.</span>
 </span><span id="Vec.split_off-283"><a href="#Vec.split_off-283"><span class="linenos">283</span></a>
@@ -1927,7 +1927,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 </span><span id="Vec.split_off-298"><a href="#Vec.split_off-298"><span class="linenos">298</span></a>        <span class="k">if</span> <span class="n">at</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">():</span>
 </span><span id="Vec.split_off-299"><a href="#Vec.split_off-299"><span class="linenos">299</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="Vec.split_off-300"><a href="#Vec.split_off-300"><span class="linenos">300</span></a>                <span class="sa">f</span><span class="s2">&quot;Index `at` (</span><span class="si">{</span><span class="n">at</span><span class="si">}</span><span class="s2">) should be &lt;= than len of vector (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="si">}</span><span class="s2">) &quot;</span>
-</span><span id="Vec.split_off-301"><a href="#Vec.split_off-301"><span class="linenos">301</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec.split_off-301"><a href="#Vec.split_off-301"><span class="linenos">301</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec.split_off-302"><a href="#Vec.split_off-302"><span class="linenos">302</span></a>
 </span><span id="Vec.split_off-303"><a href="#Vec.split_off-303"><span class="linenos">303</span></a>        <span class="c1"># Either the list is empty or uninit.</span>
 </span><span id="Vec.split_off-304"><a href="#Vec.split_off-304"><span class="linenos">304</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">:</span>
@@ -1974,7 +1974,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.split_first"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.split_first-311"><a href="#Vec.split_first-311"><span class="linenos">311</span></a>    <span class="k">def</span> <span class="nf">split_first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]]]:</span>
-</span><span id="Vec.split_first-312"><a href="#Vec.split_first-312"><span class="linenos">312</span></a>        <span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
+</span><span id="Vec.split_first-312"><a href="#Vec.split_first-312"><span class="linenos">312</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
 </span><span id="Vec.split_first-313"><a href="#Vec.split_first-313"><span class="linenos">313</span></a>
 </span><span id="Vec.split_first-314"><a href="#Vec.split_first-314"><span class="linenos">314</span></a><span class="sd">        Example</span>
 </span><span id="Vec.split_first-315"><a href="#Vec.split_first-315"><span class="linenos">315</span></a><span class="sd">        -------</span>
@@ -2026,7 +2026,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.first"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.first-332"><a href="#Vec.first-332"><span class="linenos">332</span></a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.first-333"><a href="#Vec.first-333"><span class="linenos">333</span></a>        <span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
+</span><span id="Vec.first-333"><a href="#Vec.first-333"><span class="linenos">333</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
 </span><span id="Vec.first-334"><a href="#Vec.first-334"><span class="linenos">334</span></a>
 </span><span id="Vec.first-335"><a href="#Vec.first-335"><span class="linenos">335</span></a><span class="sd">        Example</span>
 </span><span id="Vec.first-336"><a href="#Vec.first-336"><span class="linenos">336</span></a><span class="sd">        -------</span>
@@ -2066,7 +2066,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.truncate"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.truncate-345"><a href="#Vec.truncate-345"><span class="linenos">345</span></a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.truncate-346"><a href="#Vec.truncate-346"><span class="linenos">346</span></a>        <span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
+</span><span id="Vec.truncate-346"><a href="#Vec.truncate-346"><span class="linenos">346</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
 </span><span id="Vec.truncate-347"><a href="#Vec.truncate-347"><span class="linenos">347</span></a>
 </span><span id="Vec.truncate-348"><a href="#Vec.truncate-348"><span class="linenos">348</span></a><span class="sd">        Example</span>
 </span><span id="Vec.truncate-349"><a href="#Vec.truncate-349"><span class="linenos">349</span></a><span class="sd">        -------</span>
@@ -2109,7 +2109,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.retain"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.retain-361"><a href="#Vec.retain-361"><span class="linenos">361</span></a>    <span class="k">def</span> <span class="nf">retain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.retain-362"><a href="#Vec.retain-362"><span class="linenos">362</span></a>        <span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
+</span><span id="Vec.retain-362"><a href="#Vec.retain-362"><span class="linenos">362</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
 </span><span id="Vec.retain-363"><a href="#Vec.retain-363"><span class="linenos">363</span></a>
 </span><span id="Vec.retain-364"><a href="#Vec.retain-364"><span class="linenos">364</span></a><span class="sd">        In other words, filter this vector based on `f()`.</span>
 </span><span id="Vec.retain-365"><a href="#Vec.retain-365"><span class="linenos">365</span></a>
@@ -2158,7 +2158,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.swap_remove"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.swap_remove-380"><a href="#Vec.swap_remove-380"><span class="linenos">380</span></a>    <span class="k">def</span> <span class="nf">swap_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Vec.swap_remove-381"><a href="#Vec.swap_remove-381"><span class="linenos">381</span></a>        <span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
+</span><span id="Vec.swap_remove-381"><a href="#Vec.swap_remove-381"><span class="linenos">381</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
 </span><span id="Vec.swap_remove-382"><a href="#Vec.swap_remove-382"><span class="linenos">382</span></a>
 </span><span id="Vec.swap_remove-383"><a href="#Vec.swap_remove-383"><span class="linenos">383</span></a><span class="sd">        Raises</span>
 </span><span id="Vec.swap_remove-384"><a href="#Vec.swap_remove-384"><span class="linenos">384</span></a><span class="sd">        ------</span>
@@ -2174,12 +2174,12 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 </span><span id="Vec.swap_remove-394"><a href="#Vec.swap_remove-394"><span class="linenos">394</span></a><span class="sd">        ```</span>
 </span><span id="Vec.swap_remove-395"><a href="#Vec.swap_remove-395"><span class="linenos">395</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Vec.swap_remove-396"><a href="#Vec.swap_remove-396"><span class="linenos">396</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.swap_remove-397"><a href="#Vec.swap_remove-397"><span class="linenos">397</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec.swap_remove-397"><a href="#Vec.swap_remove-397"><span class="linenos">397</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec.swap_remove-398"><a href="#Vec.swap_remove-398"><span class="linenos">398</span></a>
 </span><span id="Vec.swap_remove-399"><a href="#Vec.swap_remove-399"><span class="linenos">399</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="Vec.swap_remove-400"><a href="#Vec.swap_remove-400"><span class="linenos">400</span></a>            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">item</span><span class="p">)</span>
 </span><span id="Vec.swap_remove-401"><a href="#Vec.swap_remove-401"><span class="linenos">401</span></a>        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-</span><span id="Vec.swap_remove-402"><a href="#Vec.swap_remove-402"><span class="linenos">402</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec.swap_remove-402"><a href="#Vec.swap_remove-402"><span class="linenos">402</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec.swap_remove-403"><a href="#Vec.swap_remove-403"><span class="linenos">403</span></a>
 </span><span id="Vec.swap_remove-404"><a href="#Vec.swap_remove-404"><span class="linenos">404</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </span><span id="Vec.swap_remove-405"><a href="#Vec.swap_remove-405"><span class="linenos">405</span></a>        <span class="k">return</span> <span class="n">i</span>
@@ -2219,7 +2219,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.push"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.push-407"><a href="#Vec.push-407"><span class="linenos">407</span></a>    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.push-408"><a href="#Vec.push-408"><span class="linenos">408</span></a>        <span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
+</span><span id="Vec.push-408"><a href="#Vec.push-408"><span class="linenos">408</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
 </span><span id="Vec.push-409"><a href="#Vec.push-409"><span class="linenos">409</span></a>
 </span><span id="Vec.push-410"><a href="#Vec.push-410"><span class="linenos">410</span></a><span class="sd">        Example</span>
 </span><span id="Vec.push-411"><a href="#Vec.push-411"><span class="linenos">411</span></a><span class="sd">        -------</span>
@@ -2268,7 +2268,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.push_within_capacity"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.push_within_capacity-428"><a href="#Vec.push_within_capacity-428"><span class="linenos">428</span></a>    <span class="k">def</span> <span class="nf">push_within_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.push_within_capacity-429"><a href="#Vec.push_within_capacity-429"><span class="linenos">429</span></a>        <span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
+</span><span id="Vec.push_within_capacity-429"><a href="#Vec.push_within_capacity-429"><span class="linenos">429</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
 </span><span id="Vec.push_within_capacity-430"><a href="#Vec.push_within_capacity-430"><span class="linenos">430</span></a>
 </span><span id="Vec.push_within_capacity-431"><a href="#Vec.push_within_capacity-431"><span class="linenos">431</span></a><span class="sd">        Example</span>
 </span><span id="Vec.push_within_capacity-432"><a href="#Vec.push_within_capacity-432"><span class="linenos">432</span></a><span class="sd">        -------</span>
@@ -2311,7 +2311,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 <pre><span></span><code><span class="n">vec</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n"><a href="#Vec.with_capacity">Vec.with_capacity</a></span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="k">match</span> <span class="n">vec</span><span class="o">.</span><span class="n">push_within_capacity</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-        <span class="k">case</span> <span class="n">Ok</span><span class="p">(</span><span class="k">_</span><span class="p">):</span>
+        <span class="k">case</span><span class="w"> </span><span class="n">Ok</span><span class="p">(</span><span class="k">_</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All good.&quot;</span><span class="p">)</span>
         <span class="k">case</span> <span class="n">Err</span><span class="p">(</span><span class="n">elem</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reached max cap :&lt; cant push&quot;</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
@@ -2345,7 +2345,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.reserve"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.reserve-462"><a href="#Vec.reserve-462"><span class="linenos">462</span></a>    <span class="k">def</span> <span class="nf">reserve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.reserve-463"><a href="#Vec.reserve-463"><span class="linenos">463</span></a>        <span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
+</span><span id="Vec.reserve-463"><a href="#Vec.reserve-463"><span class="linenos">463</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
 </span><span id="Vec.reserve-464"><a href="#Vec.reserve-464"><span class="linenos">464</span></a>
 </span><span id="Vec.reserve-465"><a href="#Vec.reserve-465"><span class="linenos">465</span></a><span class="sd">        Example</span>
 </span><span id="Vec.reserve-466"><a href="#Vec.reserve-466"><span class="linenos">466</span></a><span class="sd">        -------</span>
@@ -2383,7 +2383,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
     <span class="k">match</span> <span class="n">vec</span><span class="o">.</span><span class="n">push_within_capacity</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-        <span class="k">case</span> <span class="n">Ok</span><span class="p">(</span><span class="k">_</span><span class="p">):</span>
+        <span class="k">case</span><span class="w"> </span><span class="n">Ok</span><span class="p">(</span><span class="k">_</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All good&quot;</span><span class="p">)</span>
         <span class="k">case</span> <span class="n">Err</span><span class="p">(</span><span class="n">person</span><span class="p">):</span>
             <span class="c1"># If the person is a VIP, then reserve for one more.</span>
@@ -2412,7 +2412,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.append"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.append-407"><a href="#Vec.append-407"><span class="linenos">407</span></a>    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.append-408"><a href="#Vec.append-408"><span class="linenos">408</span></a>        <span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
+</span><span id="Vec.append-408"><a href="#Vec.append-408"><span class="linenos">408</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
 </span><span id="Vec.append-409"><a href="#Vec.append-409"><span class="linenos">409</span></a>
 </span><span id="Vec.append-410"><a href="#Vec.append-410"><span class="linenos">410</span></a><span class="sd">        Example</span>
 </span><span id="Vec.append-411"><a href="#Vec.append-411"><span class="linenos">411</span></a><span class="sd">        -------</span>
@@ -2451,7 +2451,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.get-497"><a href="#Vec.get-497"><span class="linenos">497</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.get-498"><a href="#Vec.get-498"><span class="linenos">498</span></a>        <span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
+</span><span id="Vec.get-498"><a href="#Vec.get-498"><span class="linenos">498</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
 </span><span id="Vec.get-499"><a href="#Vec.get-499"><span class="linenos">499</span></a>
 </span><span id="Vec.get-500"><a href="#Vec.get-500"><span class="linenos">500</span></a><span class="sd">        Example</span>
 </span><span id="Vec.get-501"><a href="#Vec.get-501"><span class="linenos">501</span></a><span class="sd">        -------</span>
@@ -2494,7 +2494,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.insert"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.insert-513"><a href="#Vec.insert-513"><span class="linenos">513</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.insert-514"><a href="#Vec.insert-514"><span class="linenos">514</span></a>        <span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
+</span><span id="Vec.insert-514"><a href="#Vec.insert-514"><span class="linenos">514</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
 </span><span id="Vec.insert-515"><a href="#Vec.insert-515"><span class="linenos">515</span></a>
 </span><span id="Vec.insert-516"><a href="#Vec.insert-516"><span class="linenos">516</span></a><span class="sd">        Example</span>
 </span><span id="Vec.insert-517"><a href="#Vec.insert-517"><span class="linenos">517</span></a><span class="sd">        --------</span>
@@ -2534,7 +2534,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.pop"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.pop-526"><a href="#Vec.pop-526"><span class="linenos">526</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.pop-527"><a href="#Vec.pop-527"><span class="linenos">527</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
+</span><span id="Vec.pop-527"><a href="#Vec.pop-527"><span class="linenos">527</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
 </span><span id="Vec.pop-528"><a href="#Vec.pop-528"><span class="linenos">528</span></a>
 </span><span id="Vec.pop-529"><a href="#Vec.pop-529"><span class="linenos">529</span></a><span class="sd">        Example</span>
 </span><span id="Vec.pop-530"><a href="#Vec.pop-530"><span class="linenos">530</span></a><span class="sd">        -------</span>
@@ -2577,7 +2577,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.remove"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.remove-542"><a href="#Vec.remove-542"><span class="linenos">542</span></a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.remove-543"><a href="#Vec.remove-543"><span class="linenos">543</span></a>        <span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
+</span><span id="Vec.remove-543"><a href="#Vec.remove-543"><span class="linenos">543</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
 </span><span id="Vec.remove-544"><a href="#Vec.remove-544"><span class="linenos">544</span></a>
 </span><span id="Vec.remove-545"><a href="#Vec.remove-545"><span class="linenos">545</span></a><span class="sd">        Example</span>
 </span><span id="Vec.remove-546"><a href="#Vec.remove-546"><span class="linenos">546</span></a><span class="sd">        -------</span>
@@ -2620,7 +2620,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.extend"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.extend-558"><a href="#Vec.extend-558"><span class="linenos">558</span></a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.extend-559"><a href="#Vec.extend-559"><span class="linenos">559</span></a>        <span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
+</span><span id="Vec.extend-559"><a href="#Vec.extend-559"><span class="linenos">559</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
 </span><span id="Vec.extend-560"><a href="#Vec.extend-560"><span class="linenos">560</span></a>
 </span><span id="Vec.extend-561"><a href="#Vec.extend-561"><span class="linenos">561</span></a><span class="sd">        Example</span>
 </span><span id="Vec.extend-562"><a href="#Vec.extend-562"><span class="linenos">562</span></a><span class="sd">        -------</span>
@@ -2665,7 +2665,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.copy"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.copy-575"><a href="#Vec.copy-575"><span class="linenos">575</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.copy-576"><a href="#Vec.copy-576"><span class="linenos">576</span></a>        <span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
+</span><span id="Vec.copy-576"><a href="#Vec.copy-576"><span class="linenos">576</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
 </span><span id="Vec.copy-577"><a href="#Vec.copy-577"><span class="linenos">577</span></a>
 </span><span id="Vec.copy-578"><a href="#Vec.copy-578"><span class="linenos">578</span></a><span class="sd">        If the vector hasn&#39;t been allocated, `self` is returned.</span>
 </span><span id="Vec.copy-579"><a href="#Vec.copy-579"><span class="linenos">579</span></a>
@@ -2713,7 +2713,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.clear"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.clear-592"><a href="#Vec.clear-592"><span class="linenos">592</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.clear-593"><a href="#Vec.clear-593"><span class="linenos">593</span></a>        <span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
+</span><span id="Vec.clear-593"><a href="#Vec.clear-593"><span class="linenos">593</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
 </span><span id="Vec.clear-594"><a href="#Vec.clear-594"><span class="linenos">594</span></a>
 </span><span id="Vec.clear-595"><a href="#Vec.clear-595"><span class="linenos">595</span></a><span class="sd">        Example</span>
 </span><span id="Vec.clear-596"><a href="#Vec.clear-596"><span class="linenos">596</span></a><span class="sd">        -------</span>
@@ -2757,7 +2757,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#from_args"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="from_args-697"><a href="#from_args-697"><span class="linenos">697</span></a><span class="k">def</span> <span class="nf">from_args</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="from_args-698"><a href="#from_args-698"><span class="linenos">698</span></a>    <span class="sd">&quot;&quot;&quot;Construct a vector containing `elements`.</span>
+</span><span id="from_args-698"><a href="#from_args-698"><span class="linenos">698</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct a vector containing `elements`.</span>
 </span><span id="from_args-699"><a href="#from_args-699"><span class="linenos">699</span></a>
 </span><span id="from_args-700"><a href="#from_args-700"><span class="linenos">700</span></a><span class="sd">    Example</span>
 </span><span id="from_args-701"><a href="#from_args-701"><span class="linenos">701</span></a><span class="sd">    -------</span>

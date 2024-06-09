@@ -58,7 +58,7 @@ class TestOption:
         assert opt.is_some_and(lambda x: x > 0)
 
     def test_default(self, opt: Option[int]) -> None:
-        assert opt.default() is None
+        assert opt.default().is_none()
 
     def test_into_inner(self, opt: Option[int]) -> None:
         assert opt.into_inner() == 1

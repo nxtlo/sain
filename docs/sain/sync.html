@@ -200,7 +200,7 @@
     <a class="headerlink" href="#Lazy"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy-50"><a href="#Lazy-50"><span class="linenos"> 50</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Lazy-51"><a href="#Lazy-51"><span class="linenos"> 51</span></a><span class="k">class</span> <span class="nc">Lazy</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="Lazy-52"><a href="#Lazy-52"><span class="linenos"> 52</span></a>    <span class="sd">&quot;&quot;&quot;A thread-safe value that gets lazily initialized at runtime.</span>
+</span><span id="Lazy-52"><a href="#Lazy-52"><span class="linenos"> 52</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A thread-safe value that gets lazily initialized at runtime.</span>
 </span><span id="Lazy-53"><a href="#Lazy-53"><span class="linenos"> 53</span></a>
 </span><span id="Lazy-54"><a href="#Lazy-54"><span class="linenos"> 54</span></a><span class="sd">    This isn&#39;t some sort of magic, the inner value is set to `None` when first initialized,</span>
 </span><span id="Lazy-55"><a href="#Lazy-55"><span class="linenos"> 55</span></a><span class="sd">    Then this `None` gets replaced at runtime when calling `Lazy.set` method.</span>
@@ -234,11 +234,11 @@
 </span><span id="Lazy-83"><a href="#Lazy-83"><span class="linenos"> 83</span></a>
 </span><span id="Lazy-84"><a href="#Lazy-84"><span class="linenos"> 84</span></a>    <span class="nd">@property</span>
 </span><span id="Lazy-85"><a href="#Lazy-85"><span class="linenos"> 85</span></a>    <span class="k">def</span> <span class="nf">is_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Lazy-86"><a href="#Lazy-86"><span class="linenos"> 86</span></a>        <span class="sd">&quot;&quot;&quot;Whether the contained value is initialized or not.&quot;&quot;&quot;</span>
+</span><span id="Lazy-86"><a href="#Lazy-86"><span class="linenos"> 86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether the contained value is initialized or not.&quot;&quot;&quot;</span>
 </span><span id="Lazy-87"><a href="#Lazy-87"><span class="linenos"> 87</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="Lazy-88"><a href="#Lazy-88"><span class="linenos"> 88</span></a>
 </span><span id="Lazy-89"><a href="#Lazy-89"><span class="linenos"> 89</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Lazy-90"><a href="#Lazy-90"><span class="linenos"> 90</span></a>        <span class="sd">&quot;&quot;&quot;Hold ownership of the contained value and return it.</span>
+</span><span id="Lazy-90"><a href="#Lazy-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Hold ownership of the contained value and return it.</span>
 </span><span id="Lazy-91"><a href="#Lazy-91"><span class="linenos"> 91</span></a>
 </span><span id="Lazy-92"><a href="#Lazy-92"><span class="linenos"> 92</span></a><span class="sd">        This ensures that the value is only generated once and kept</span>
 </span><span id="Lazy-93"><a href="#Lazy-93"><span class="linenos"> 93</span></a><span class="sd">        acquired until its set again with `Lazy.set`.</span>
@@ -258,7 +258,7 @@
 </span><span id="Lazy-107"><a href="#Lazy-107"><span class="linenos">107</span></a>
 </span><span id="Lazy-108"><a href="#Lazy-108"><span class="linenos">108</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="Lazy-109"><a href="#Lazy-109"><span class="linenos">109</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Lazy-110"><a href="#Lazy-110"><span class="linenos">110</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="Lazy-110"><a href="#Lazy-110"><span class="linenos">110</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="Lazy-111"><a href="#Lazy-111"><span class="linenos">111</span></a>
 </span><span id="Lazy-112"><a href="#Lazy-112"><span class="linenos">112</span></a><span class="sd">        Example</span>
 </span><span id="Lazy-113"><a href="#Lazy-113"><span class="linenos">113</span></a><span class="sd">        -------</span>
@@ -275,7 +275,7 @@
 </span><span id="Lazy-124"><a href="#Lazy-124"><span class="linenos">124</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>  <span class="c1"># type: ignore</span>
 </span><span id="Lazy-125"><a href="#Lazy-125"><span class="linenos">125</span></a>
 </span><span id="Lazy-126"><a href="#Lazy-126"><span class="linenos">126</span></a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Lazy-127"><a href="#Lazy-127"><span class="linenos">127</span></a>        <span class="sd">&quot;&quot;&quot;Set the contained value to `value`.</span>
+</span><span id="Lazy-127"><a href="#Lazy-127"><span class="linenos">127</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the contained value to `value`.</span>
 </span><span id="Lazy-128"><a href="#Lazy-128"><span class="linenos">128</span></a>
 </span><span id="Lazy-129"><a href="#Lazy-129"><span class="linenos">129</span></a><span class="sd">        This will clear any ownership of the value until the next `get` call.</span>
 </span><span id="Lazy-130"><a href="#Lazy-130"><span class="linenos">130</span></a>
@@ -353,7 +353,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     <a class="headerlink" href="#Lazy.is_initialized"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy.is_initialized-84"><a href="#Lazy.is_initialized-84"><span class="linenos">84</span></a>    <span class="nd">@property</span>
 </span><span id="Lazy.is_initialized-85"><a href="#Lazy.is_initialized-85"><span class="linenos">85</span></a>    <span class="k">def</span> <span class="nf">is_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Lazy.is_initialized-86"><a href="#Lazy.is_initialized-86"><span class="linenos">86</span></a>        <span class="sd">&quot;&quot;&quot;Whether the contained value is initialized or not.&quot;&quot;&quot;</span>
+</span><span id="Lazy.is_initialized-86"><a href="#Lazy.is_initialized-86"><span class="linenos">86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether the contained value is initialized or not.&quot;&quot;&quot;</span>
 </span><span id="Lazy.is_initialized-87"><a href="#Lazy.is_initialized-87"><span class="linenos">87</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span></pre></div>
 
@@ -375,7 +375,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     </div>
     <a class="headerlink" href="#Lazy.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy.get-89"><a href="#Lazy.get-89"><span class="linenos"> 89</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Lazy.get-90"><a href="#Lazy.get-90"><span class="linenos"> 90</span></a>        <span class="sd">&quot;&quot;&quot;Hold ownership of the contained value and return it.</span>
+</span><span id="Lazy.get-90"><a href="#Lazy.get-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Hold ownership of the contained value and return it.</span>
 </span><span id="Lazy.get-91"><a href="#Lazy.get-91"><span class="linenos"> 91</span></a>
 </span><span id="Lazy.get-92"><a href="#Lazy.get-92"><span class="linenos"> 92</span></a><span class="sd">        This ensures that the value is only generated once and kept</span>
 </span><span id="Lazy.get-93"><a href="#Lazy.get-93"><span class="linenos"> 93</span></a><span class="sd">        acquired until its set again with `Lazy.set`.</span>
@@ -417,7 +417,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
     <a class="headerlink" href="#Lazy.get_unchecked"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy.get_unchecked-108"><a href="#Lazy.get_unchecked-108"><span class="linenos">108</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="Lazy.get_unchecked-109"><a href="#Lazy.get_unchecked-109"><span class="linenos">109</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Lazy.get_unchecked-110"><a href="#Lazy.get_unchecked-110"><span class="linenos">110</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="Lazy.get_unchecked-110"><a href="#Lazy.get_unchecked-110"><span class="linenos">110</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="Lazy.get_unchecked-111"><a href="#Lazy.get_unchecked-111"><span class="linenos">111</span></a>
 </span><span id="Lazy.get_unchecked-112"><a href="#Lazy.get_unchecked-112"><span class="linenos">112</span></a><span class="sd">        Example</span>
 </span><span id="Lazy.get_unchecked-113"><a href="#Lazy.get_unchecked-113"><span class="linenos">113</span></a><span class="sd">        -------</span>
@@ -468,7 +468,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
     </div>
     <a class="headerlink" href="#Lazy.set"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy.set-126"><a href="#Lazy.set-126"><span class="linenos">126</span></a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Lazy.set-127"><a href="#Lazy.set-127"><span class="linenos">127</span></a>        <span class="sd">&quot;&quot;&quot;Set the contained value to `value`.</span>
+</span><span id="Lazy.set-127"><a href="#Lazy.set-127"><span class="linenos">127</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the contained value to `value`.</span>
 </span><span id="Lazy.set-128"><a href="#Lazy.set-128"><span class="linenos">128</span></a>
 </span><span id="Lazy.set-129"><a href="#Lazy.set-129"><span class="linenos">129</span></a><span class="sd">        This will clear any ownership of the value until the next `get` call.</span>
 </span><span id="Lazy.set-130"><a href="#Lazy.set-130"><span class="linenos">130</span></a>
@@ -515,7 +515,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
     <a class="headerlink" href="#Once"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once-54"><a href="#Once-54"><span class="linenos"> 54</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Once-55"><a href="#Once-55"><span class="linenos"> 55</span></a><span class="k">class</span> <span class="nc">Once</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="Once-56"><a href="#Once-56"><span class="linenos"> 56</span></a>    <span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
+</span><span id="Once-56"><a href="#Once-56"><span class="linenos"> 56</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
 </span><span id="Once-57"><a href="#Once-57"><span class="linenos"> 57</span></a>
 </span><span id="Once-58"><a href="#Once-58"><span class="linenos"> 58</span></a><span class="sd">    Example</span>
 </span><span id="Once-59"><a href="#Once-59"><span class="linenos"> 59</span></a><span class="sd">    -------</span>
@@ -547,7 +547,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
 </span><span id="Once-85"><a href="#Once-85"><span class="linenos"> 85</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="Once-86"><a href="#Once-86"><span class="linenos"> 86</span></a>
 </span><span id="Once-87"><a href="#Once-87"><span class="linenos"> 87</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Once-88"><a href="#Once-88"><span class="linenos"> 88</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value, returning `None` if not initialized.</span>
+</span><span id="Once-88"><a href="#Once-88"><span class="linenos"> 88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the stored value, returning `None` if not initialized.</span>
 </span><span id="Once-89"><a href="#Once-89"><span class="linenos"> 89</span></a>
 </span><span id="Once-90"><a href="#Once-90"><span class="linenos"> 90</span></a><span class="sd">        This method will never block.</span>
 </span><span id="Once-91"><a href="#Once-91"><span class="linenos"> 91</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -555,7 +555,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
 </span><span id="Once-93"><a href="#Once-93"><span class="linenos"> 93</span></a>
 </span><span id="Once-94"><a href="#Once-94"><span class="linenos"> 94</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="Once-95"><a href="#Once-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once-96"><a href="#Once-96"><span class="linenos"> 96</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="Once-96"><a href="#Once-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="Once-97"><a href="#Once-97"><span class="linenos"> 97</span></a>
 </span><span id="Once-98"><a href="#Once-98"><span class="linenos"> 98</span></a><span class="sd">        Example</span>
 </span><span id="Once-99"><a href="#Once-99"><span class="linenos"> 99</span></a><span class="sd">        -------</span>
@@ -575,7 +575,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
 </span><span id="Once-113"><a href="#Once-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">unwrap_unchecked</span><span class="p">()</span>
 </span><span id="Once-114"><a href="#Once-114"><span class="linenos">114</span></a>
 </span><span id="Once-115"><a href="#Once-115"><span class="linenos">115</span></a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="Once-116"><a href="#Once-116"><span class="linenos">116</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="Once-116"><a href="#Once-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
 </span><span id="Once-117"><a href="#Once-117"><span class="linenos">117</span></a>
 </span><span id="Once-118"><a href="#Once-118"><span class="linenos">118</span></a><span class="sd">        This method may block if another thread is trying to initialize the value.</span>
 </span><span id="Once-119"><a href="#Once-119"><span class="linenos">119</span></a><span class="sd">        The value is guaranteed to be set, just not necessarily the one provided.</span>
@@ -604,12 +604,12 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
 </span><span id="Once-142"><a href="#Once-142"><span class="linenos">142</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </span><span id="Once-143"><a href="#Once-143"><span class="linenos">143</span></a>
 </span><span id="Once-144"><a href="#Once-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Once-145"><a href="#Once-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
+</span><span id="Once-145"><a href="#Once-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
 </span><span id="Once-146"><a href="#Once-146"><span class="linenos">146</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Once-147"><a href="#Once-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Once-148"><a href="#Once-148"><span class="linenos">148</span></a>
 </span><span id="Once-149"><a href="#Once-149"><span class="linenos">149</span></a>    <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once-150"><a href="#Once-150"><span class="linenos">150</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if it was not initialized, Otherwise set `init` value and returning it.</span>
+</span><span id="Once-150"><a href="#Once-150"><span class="linenos">150</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value if it was not initialized, Otherwise set `init` value and returning it.</span>
 </span><span id="Once-151"><a href="#Once-151"><span class="linenos">151</span></a>
 </span><span id="Once-152"><a href="#Once-152"><span class="linenos">152</span></a><span class="sd">        Many threads may call `get_or` concurrently with different</span>
 </span><span id="Once-153"><a href="#Once-153"><span class="linenos">153</span></a><span class="sd">        initializing functions, but it is guaranteed that only one function</span>
@@ -643,7 +643,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
 </span><span id="Once-181"><a href="#Once-181"><span class="linenos">181</span></a>            <span class="k">return</span> <span class="n">init</span>
 </span><span id="Once-182"><a href="#Once-182"><span class="linenos">182</span></a>
 </span><span id="Once-183"><a href="#Once-183"><span class="linenos">183</span></a>    <span class="k">def</span> <span class="nf">get_or_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once-184"><a href="#Once-184"><span class="linenos">184</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
+</span><span id="Once-184"><a href="#Once-184"><span class="linenos">184</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
 </span><span id="Once-185"><a href="#Once-185"><span class="linenos">185</span></a><span class="sd">        was empty.</span>
 </span><span id="Once-186"><a href="#Once-186"><span class="linenos">186</span></a>
 </span><span id="Once-187"><a href="#Once-187"><span class="linenos">187</span></a><span class="sd">        Many threads may call `get_or_with` concurrently with different</span>
@@ -751,7 +751,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
     </div>
     <a class="headerlink" href="#Once.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.get-87"><a href="#Once.get-87"><span class="linenos">87</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Once.get-88"><a href="#Once.get-88"><span class="linenos">88</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value, returning `None` if not initialized.</span>
+</span><span id="Once.get-88"><a href="#Once.get-88"><span class="linenos">88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the stored value, returning `None` if not initialized.</span>
 </span><span id="Once.get-89"><a href="#Once.get-89"><span class="linenos">89</span></a>
 </span><span id="Once.get-90"><a href="#Once.get-90"><span class="linenos">90</span></a><span class="sd">        This method will never block.</span>
 </span><span id="Once.get-91"><a href="#Once.get-91"><span class="linenos">91</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -780,7 +780,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
     <a class="headerlink" href="#Once.get_unchecked"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.get_unchecked-94"><a href="#Once.get_unchecked-94"><span class="linenos"> 94</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="Once.get_unchecked-95"><a href="#Once.get_unchecked-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once.get_unchecked-96"><a href="#Once.get_unchecked-96"><span class="linenos"> 96</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="Once.get_unchecked-96"><a href="#Once.get_unchecked-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="Once.get_unchecked-97"><a href="#Once.get_unchecked-97"><span class="linenos"> 97</span></a>
 </span><span id="Once.get_unchecked-98"><a href="#Once.get_unchecked-98"><span class="linenos"> 98</span></a><span class="sd">        Example</span>
 </span><span id="Once.get_unchecked-99"><a href="#Once.get_unchecked-99"><span class="linenos"> 99</span></a><span class="sd">        -------</span>
@@ -837,7 +837,7 @@ acquired until its set again with <code><a href="#Lazy.set">Lazy.set</a></code>.
     </div>
     <a class="headerlink" href="#Once.set"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.set-115"><a href="#Once.set-115"><span class="linenos">115</span></a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="Once.set-116"><a href="#Once.set-116"><span class="linenos">116</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="Once.set-116"><a href="#Once.set-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
 </span><span id="Once.set-117"><a href="#Once.set-117"><span class="linenos">117</span></a>
 </span><span id="Once.set-118"><a href="#Once.set-118"><span class="linenos">118</span></a><span class="sd">        This method may block if another thread is trying to initialize the value.</span>
 </span><span id="Once.set-119"><a href="#Once.set-119"><span class="linenos">119</span></a><span class="sd">        The value is guaranteed to be set, just not necessarily the one provided.</span>
@@ -905,7 +905,7 @@ The value is guaranteed to be set, just not necessarily the one provided.</p>
     </div>
     <a class="headerlink" href="#Once.clear"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.clear-144"><a href="#Once.clear-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Once.clear-145"><a href="#Once.clear-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
+</span><span id="Once.clear-145"><a href="#Once.clear-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
 </span><span id="Once.clear-146"><a href="#Once.clear-146"><span class="linenos">146</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Once.clear-147"><a href="#Once.clear-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
 </span></pre></div>
@@ -928,7 +928,7 @@ The value is guaranteed to be set, just not necessarily the one provided.</p>
     </div>
     <a class="headerlink" href="#Once.get_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.get_or-149"><a href="#Once.get_or-149"><span class="linenos">149</span></a>    <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once.get_or-150"><a href="#Once.get_or-150"><span class="linenos">150</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if it was not initialized, Otherwise set `init` value and returning it.</span>
+</span><span id="Once.get_or-150"><a href="#Once.get_or-150"><span class="linenos">150</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value if it was not initialized, Otherwise set `init` value and returning it.</span>
 </span><span id="Once.get_or-151"><a href="#Once.get_or-151"><span class="linenos">151</span></a>
 </span><span id="Once.get_or-152"><a href="#Once.get_or-152"><span class="linenos">152</span></a><span class="sd">        Many threads may call `get_or` concurrently with different</span>
 </span><span id="Once.get_or-153"><a href="#Once.get_or-153"><span class="linenos">153</span></a><span class="sd">        initializing functions, but it is guaranteed that only one function</span>
@@ -1001,7 +1001,7 @@ will be executed.</p>
     </div>
     <a class="headerlink" href="#Once.get_or_with"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.get_or_with-183"><a href="#Once.get_or_with-183"><span class="linenos">183</span></a>    <span class="k">def</span> <span class="nf">get_or_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once.get_or_with-184"><a href="#Once.get_or_with-184"><span class="linenos">184</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
+</span><span id="Once.get_or_with-184"><a href="#Once.get_or_with-184"><span class="linenos">184</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
 </span><span id="Once.get_or_with-185"><a href="#Once.get_or_with-185"><span class="linenos">185</span></a><span class="sd">        was empty.</span>
 </span><span id="Once.get_or_with-186"><a href="#Once.get_or_with-186"><span class="linenos">186</span></a>
 </span><span id="Once.get_or_with-187"><a href="#Once.get_or_with-187"><span class="linenos">187</span></a><span class="sd">        Many threads may call `get_or_with` concurrently with different</span>
@@ -1089,7 +1089,7 @@ will be executed.</p>
     <a class="headerlink" href="#LazyFuture"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture-165"><a href="#LazyFuture-165"><span class="linenos">165</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="LazyFuture-166"><a href="#LazyFuture-166"><span class="linenos">166</span></a><span class="k">class</span> <span class="nc">LazyFuture</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="LazyFuture-167"><a href="#LazyFuture-167"><span class="linenos">167</span></a>    <span class="sd">&quot;&quot;&quot;A thread-safe value that gets lazily initialized at runtime asynchronously.</span>
+</span><span id="LazyFuture-167"><a href="#LazyFuture-167"><span class="linenos">167</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A thread-safe value that gets lazily initialized at runtime asynchronously.</span>
 </span><span id="LazyFuture-168"><a href="#LazyFuture-168"><span class="linenos">168</span></a>
 </span><span id="LazyFuture-169"><a href="#LazyFuture-169"><span class="linenos">169</span></a><span class="sd">    This isn&#39;t some sort of magic, the inner value is set to `None` when first initialized,</span>
 </span><span id="LazyFuture-170"><a href="#LazyFuture-170"><span class="linenos">170</span></a><span class="sd">    Then this `None` gets replaced at runtime when calling `LazyFuture.set` method.</span>
@@ -1123,12 +1123,12 @@ will be executed.</p>
 </span><span id="LazyFuture-198"><a href="#LazyFuture-198"><span class="linenos">198</span></a>
 </span><span id="LazyFuture-199"><a href="#LazyFuture-199"><span class="linenos">199</span></a>    <span class="nd">@property</span>
 </span><span id="LazyFuture-200"><a href="#LazyFuture-200"><span class="linenos">200</span></a>    <span class="k">def</span> <span class="nf">is_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="LazyFuture-201"><a href="#LazyFuture-201"><span class="linenos">201</span></a>        <span class="sd">&quot;&quot;&quot;Whether the contained value is initialized or not.&quot;&quot;&quot;</span>
+</span><span id="LazyFuture-201"><a href="#LazyFuture-201"><span class="linenos">201</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether the contained value is initialized or not.&quot;&quot;&quot;</span>
 </span><span id="LazyFuture-202"><a href="#LazyFuture-202"><span class="linenos">202</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="LazyFuture-203"><a href="#LazyFuture-203"><span class="linenos">203</span></a>
 </span><span id="LazyFuture-204"><a href="#LazyFuture-204"><span class="linenos">204</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="LazyFuture-205"><a href="#LazyFuture-205"><span class="linenos">205</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="LazyFuture-206"><a href="#LazyFuture-206"><span class="linenos">206</span></a>        <span class="sd">&quot;&quot;&quot;Hold ownership of the contained value and return it.</span>
+</span><span id="LazyFuture-206"><a href="#LazyFuture-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Hold ownership of the contained value and return it.</span>
 </span><span id="LazyFuture-207"><a href="#LazyFuture-207"><span class="linenos">207</span></a>
 </span><span id="LazyFuture-208"><a href="#LazyFuture-208"><span class="linenos">208</span></a><span class="sd">        This ensures that the value is only generated once and kept acquired.</span>
 </span><span id="LazyFuture-209"><a href="#LazyFuture-209"><span class="linenos">209</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1146,7 +1146,7 @@ will be executed.</p>
 </span><span id="LazyFuture-221"><a href="#LazyFuture-221"><span class="linenos">221</span></a>        <span class="k">return</span> <span class="n">option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="LazyFuture-222"><a href="#LazyFuture-222"><span class="linenos">222</span></a>
 </span><span id="LazyFuture-223"><a href="#LazyFuture-223"><span class="linenos">223</span></a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="LazyFuture-224"><a href="#LazyFuture-224"><span class="linenos">224</span></a>        <span class="sd">&quot;&quot;&quot;Set the contained value to `value`.</span>
+</span><span id="LazyFuture-224"><a href="#LazyFuture-224"><span class="linenos">224</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the contained value to `value`.</span>
 </span><span id="LazyFuture-225"><a href="#LazyFuture-225"><span class="linenos">225</span></a>
 </span><span id="LazyFuture-226"><a href="#LazyFuture-226"><span class="linenos">226</span></a><span class="sd">        This will clear any ownership of the value until the next `get` call.</span>
 </span><span id="LazyFuture-227"><a href="#LazyFuture-227"><span class="linenos">227</span></a>
@@ -1224,7 +1224,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     <a class="headerlink" href="#LazyFuture.is_initialized"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture.is_initialized-199"><a href="#LazyFuture.is_initialized-199"><span class="linenos">199</span></a>    <span class="nd">@property</span>
 </span><span id="LazyFuture.is_initialized-200"><a href="#LazyFuture.is_initialized-200"><span class="linenos">200</span></a>    <span class="k">def</span> <span class="nf">is_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="LazyFuture.is_initialized-201"><a href="#LazyFuture.is_initialized-201"><span class="linenos">201</span></a>        <span class="sd">&quot;&quot;&quot;Whether the contained value is initialized or not.&quot;&quot;&quot;</span>
+</span><span id="LazyFuture.is_initialized-201"><a href="#LazyFuture.is_initialized-201"><span class="linenos">201</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether the contained value is initialized or not.&quot;&quot;&quot;</span>
 </span><span id="LazyFuture.is_initialized-202"><a href="#LazyFuture.is_initialized-202"><span class="linenos">202</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span></pre></div>
 
@@ -1248,7 +1248,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     <a class="headerlink" href="#LazyFuture.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture.get-204"><a href="#LazyFuture.get-204"><span class="linenos">204</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="LazyFuture.get-205"><a href="#LazyFuture.get-205"><span class="linenos">205</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="LazyFuture.get-206"><a href="#LazyFuture.get-206"><span class="linenos">206</span></a>        <span class="sd">&quot;&quot;&quot;Hold ownership of the contained value and return it.</span>
+</span><span id="LazyFuture.get-206"><a href="#LazyFuture.get-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Hold ownership of the contained value and return it.</span>
 </span><span id="LazyFuture.get-207"><a href="#LazyFuture.get-207"><span class="linenos">207</span></a>
 </span><span id="LazyFuture.get-208"><a href="#LazyFuture.get-208"><span class="linenos">208</span></a><span class="sd">        This ensures that the value is only generated once and kept acquired.</span>
 </span><span id="LazyFuture.get-209"><a href="#LazyFuture.get-209"><span class="linenos">209</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1290,7 +1290,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     </div>
     <a class="headerlink" href="#LazyFuture.set"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture.set-223"><a href="#LazyFuture.set-223"><span class="linenos">223</span></a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="LazyFuture.set-224"><a href="#LazyFuture.set-224"><span class="linenos">224</span></a>        <span class="sd">&quot;&quot;&quot;Set the contained value to `value`.</span>
+</span><span id="LazyFuture.set-224"><a href="#LazyFuture.set-224"><span class="linenos">224</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the contained value to `value`.</span>
 </span><span id="LazyFuture.set-225"><a href="#LazyFuture.set-225"><span class="linenos">225</span></a>
 </span><span id="LazyFuture.set-226"><a href="#LazyFuture.set-226"><span class="linenos">226</span></a><span class="sd">        This will clear any ownership of the value until the next `get` call.</span>
 </span><span id="LazyFuture.set-227"><a href="#LazyFuture.set-227"><span class="linenos">227</span></a>
@@ -1337,7 +1337,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     <a class="headerlink" href="#AsyncOnce"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce-238"><a href="#AsyncOnce-238"><span class="linenos">238</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="AsyncOnce-239"><a href="#AsyncOnce-239"><span class="linenos">239</span></a><span class="k">class</span> <span class="nc">AsyncOnce</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="AsyncOnce-240"><a href="#AsyncOnce-240"><span class="linenos">240</span></a>    <span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
+</span><span id="AsyncOnce-240"><a href="#AsyncOnce-240"><span class="linenos">240</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
 </span><span id="AsyncOnce-241"><a href="#AsyncOnce-241"><span class="linenos">241</span></a>
 </span><span id="AsyncOnce-242"><a href="#AsyncOnce-242"><span class="linenos">242</span></a><span class="sd">    This is an `async` version of `Once`.</span>
 </span><span id="AsyncOnce-243"><a href="#AsyncOnce-243"><span class="linenos">243</span></a>
@@ -1367,11 +1367,11 @@ that needs to be <code>None</code> until it gets initialized with a function cal
 </span><span id="AsyncOnce-267"><a href="#AsyncOnce-267"><span class="linenos">267</span></a>
 </span><span id="AsyncOnce-268"><a href="#AsyncOnce-268"><span class="linenos">268</span></a>    <span class="nd">@property</span>
 </span><span id="AsyncOnce-269"><a href="#AsyncOnce-269"><span class="linenos">269</span></a>    <span class="k">def</span> <span class="nf">is_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="AsyncOnce-270"><a href="#AsyncOnce-270"><span class="linenos">270</span></a>        <span class="sd">&quot;&quot;&quot;Whether this inner value has ben initialized or not.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce-270"><a href="#AsyncOnce-270"><span class="linenos">270</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether this inner value has ben initialized or not.&quot;&quot;&quot;</span>
 </span><span id="AsyncOnce-271"><a href="#AsyncOnce-271"><span class="linenos">271</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="AsyncOnce-272"><a href="#AsyncOnce-272"><span class="linenos">272</span></a>
 </span><span id="AsyncOnce-273"><a href="#AsyncOnce-273"><span class="linenos">273</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="AsyncOnce-274"><a href="#AsyncOnce-274"><span class="linenos">274</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value. `Some(None)` is returned if nothing is stored.</span>
+</span><span id="AsyncOnce-274"><a href="#AsyncOnce-274"><span class="linenos">274</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the stored value. `Some(None)` is returned if nothing is stored.</span>
 </span><span id="AsyncOnce-275"><a href="#AsyncOnce-275"><span class="linenos">275</span></a>
 </span><span id="AsyncOnce-276"><a href="#AsyncOnce-276"><span class="linenos">276</span></a><span class="sd">        This method will never block.</span>
 </span><span id="AsyncOnce-277"><a href="#AsyncOnce-277"><span class="linenos">277</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1379,7 +1379,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
 </span><span id="AsyncOnce-279"><a href="#AsyncOnce-279"><span class="linenos">279</span></a>
 </span><span id="AsyncOnce-280"><a href="#AsyncOnce-280"><span class="linenos">280</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="AsyncOnce-281"><a href="#AsyncOnce-281"><span class="linenos">281</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce-282"><a href="#AsyncOnce-282"><span class="linenos">282</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="AsyncOnce-282"><a href="#AsyncOnce-282"><span class="linenos">282</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="AsyncOnce-283"><a href="#AsyncOnce-283"><span class="linenos">283</span></a>
 </span><span id="AsyncOnce-284"><a href="#AsyncOnce-284"><span class="linenos">284</span></a><span class="sd">        Example</span>
 </span><span id="AsyncOnce-285"><a href="#AsyncOnce-285"><span class="linenos">285</span></a><span class="sd">        -------</span>
@@ -1399,7 +1399,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
 </span><span id="AsyncOnce-299"><a href="#AsyncOnce-299"><span class="linenos">299</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">unwrap_unchecked</span><span class="p">()</span>
 </span><span id="AsyncOnce-300"><a href="#AsyncOnce-300"><span class="linenos">300</span></a>
 </span><span id="AsyncOnce-301"><a href="#AsyncOnce-301"><span class="linenos">301</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="AsyncOnce-302"><a href="#AsyncOnce-302"><span class="linenos">302</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="AsyncOnce-302"><a href="#AsyncOnce-302"><span class="linenos">302</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
 </span><span id="AsyncOnce-303"><a href="#AsyncOnce-303"><span class="linenos">303</span></a>
 </span><span id="AsyncOnce-304"><a href="#AsyncOnce-304"><span class="linenos">304</span></a><span class="sd">        if another thread is trying to initialize the value, The value is guaranteed to be set,</span>
 </span><span id="AsyncOnce-305"><a href="#AsyncOnce-305"><span class="linenos">305</span></a><span class="sd">        just not necessarily the one provided.</span>
@@ -1427,12 +1427,12 @@ that needs to be <code>None</code> until it gets initialized with a function cal
 </span><span id="AsyncOnce-327"><a href="#AsyncOnce-327"><span class="linenos">327</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </span><span id="AsyncOnce-328"><a href="#AsyncOnce-328"><span class="linenos">328</span></a>
 </span><span id="AsyncOnce-329"><a href="#AsyncOnce-329"><span class="linenos">329</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AsyncOnce-330"><a href="#AsyncOnce-330"><span class="linenos">330</span></a>        <span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce-330"><a href="#AsyncOnce-330"><span class="linenos">330</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
 </span><span id="AsyncOnce-331"><a href="#AsyncOnce-331"><span class="linenos">331</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="AsyncOnce-332"><a href="#AsyncOnce-332"><span class="linenos">332</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="AsyncOnce-333"><a href="#AsyncOnce-333"><span class="linenos">333</span></a>
 </span><span id="AsyncOnce-334"><a href="#AsyncOnce-334"><span class="linenos">334</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce-335"><a href="#AsyncOnce-335"><span class="linenos">335</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `init` if the cell</span>
+</span><span id="AsyncOnce-335"><a href="#AsyncOnce-335"><span class="linenos">335</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `init` if the cell</span>
 </span><span id="AsyncOnce-336"><a href="#AsyncOnce-336"><span class="linenos">336</span></a><span class="sd">        was empty.</span>
 </span><span id="AsyncOnce-337"><a href="#AsyncOnce-337"><span class="linenos">337</span></a>
 </span><span id="AsyncOnce-338"><a href="#AsyncOnce-338"><span class="linenos">338</span></a><span class="sd">        Many threads may call `get_or` concurrently with different</span>
@@ -1464,7 +1464,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
 </span><span id="AsyncOnce-364"><a href="#AsyncOnce-364"><span class="linenos">364</span></a>            <span class="k">return</span> <span class="n">init</span>
 </span><span id="AsyncOnce-365"><a href="#AsyncOnce-365"><span class="linenos">365</span></a>
 </span><span id="AsyncOnce-366"><a href="#AsyncOnce-366"><span class="linenos">366</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce-367"><a href="#AsyncOnce-367"><span class="linenos">367</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
+</span><span id="AsyncOnce-367"><a href="#AsyncOnce-367"><span class="linenos">367</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
 </span><span id="AsyncOnce-368"><a href="#AsyncOnce-368"><span class="linenos">368</span></a><span class="sd">        was empty.</span>
 </span><span id="AsyncOnce-369"><a href="#AsyncOnce-369"><span class="linenos">369</span></a>
 </span><span id="AsyncOnce-370"><a href="#AsyncOnce-370"><span class="linenos">370</span></a><span class="sd">        Many threads may call `get_or_with` concurrently with different</span>
@@ -1552,7 +1552,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     <a class="headerlink" href="#AsyncOnce.is_set"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.is_set-268"><a href="#AsyncOnce.is_set-268"><span class="linenos">268</span></a>    <span class="nd">@property</span>
 </span><span id="AsyncOnce.is_set-269"><a href="#AsyncOnce.is_set-269"><span class="linenos">269</span></a>    <span class="k">def</span> <span class="nf">is_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="AsyncOnce.is_set-270"><a href="#AsyncOnce.is_set-270"><span class="linenos">270</span></a>        <span class="sd">&quot;&quot;&quot;Whether this inner value has ben initialized or not.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce.is_set-270"><a href="#AsyncOnce.is_set-270"><span class="linenos">270</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether this inner value has ben initialized or not.&quot;&quot;&quot;</span>
 </span><span id="AsyncOnce.is_set-271"><a href="#AsyncOnce.is_set-271"><span class="linenos">271</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span></pre></div>
 
@@ -1574,7 +1574,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     </div>
     <a class="headerlink" href="#AsyncOnce.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get-273"><a href="#AsyncOnce.get-273"><span class="linenos">273</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="AsyncOnce.get-274"><a href="#AsyncOnce.get-274"><span class="linenos">274</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value. `Some(None)` is returned if nothing is stored.</span>
+</span><span id="AsyncOnce.get-274"><a href="#AsyncOnce.get-274"><span class="linenos">274</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the stored value. `Some(None)` is returned if nothing is stored.</span>
 </span><span id="AsyncOnce.get-275"><a href="#AsyncOnce.get-275"><span class="linenos">275</span></a>
 </span><span id="AsyncOnce.get-276"><a href="#AsyncOnce.get-276"><span class="linenos">276</span></a><span class="sd">        This method will never block.</span>
 </span><span id="AsyncOnce.get-277"><a href="#AsyncOnce.get-277"><span class="linenos">277</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1603,7 +1603,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     <a class="headerlink" href="#AsyncOnce.get_unchecked"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get_unchecked-280"><a href="#AsyncOnce.get_unchecked-280"><span class="linenos">280</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="AsyncOnce.get_unchecked-281"><a href="#AsyncOnce.get_unchecked-281"><span class="linenos">281</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce.get_unchecked-282"><a href="#AsyncOnce.get_unchecked-282"><span class="linenos">282</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="AsyncOnce.get_unchecked-282"><a href="#AsyncOnce.get_unchecked-282"><span class="linenos">282</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="AsyncOnce.get_unchecked-283"><a href="#AsyncOnce.get_unchecked-283"><span class="linenos">283</span></a>
 </span><span id="AsyncOnce.get_unchecked-284"><a href="#AsyncOnce.get_unchecked-284"><span class="linenos">284</span></a><span class="sd">        Example</span>
 </span><span id="AsyncOnce.get_unchecked-285"><a href="#AsyncOnce.get_unchecked-285"><span class="linenos">285</span></a><span class="sd">        -------</span>
@@ -1660,7 +1660,7 @@ that needs to be <code>None</code> until it gets initialized with a function cal
     </div>
     <a class="headerlink" href="#AsyncOnce.set"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.set-301"><a href="#AsyncOnce.set-301"><span class="linenos">301</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="AsyncOnce.set-302"><a href="#AsyncOnce.set-302"><span class="linenos">302</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="AsyncOnce.set-302"><a href="#AsyncOnce.set-302"><span class="linenos">302</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
 </span><span id="AsyncOnce.set-303"><a href="#AsyncOnce.set-303"><span class="linenos">303</span></a>
 </span><span id="AsyncOnce.set-304"><a href="#AsyncOnce.set-304"><span class="linenos">304</span></a><span class="sd">        if another thread is trying to initialize the value, The value is guaranteed to be set,</span>
 </span><span id="AsyncOnce.set-305"><a href="#AsyncOnce.set-305"><span class="linenos">305</span></a><span class="sd">        just not necessarily the one provided.</span>
@@ -1726,7 +1726,7 @@ just not necessarily the one provided.</p>
     </div>
     <a class="headerlink" href="#AsyncOnce.clear"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.clear-329"><a href="#AsyncOnce.clear-329"><span class="linenos">329</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AsyncOnce.clear-330"><a href="#AsyncOnce.clear-330"><span class="linenos">330</span></a>        <span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce.clear-330"><a href="#AsyncOnce.clear-330"><span class="linenos">330</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
 </span><span id="AsyncOnce.clear-331"><a href="#AsyncOnce.clear-331"><span class="linenos">331</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="AsyncOnce.clear-332"><a href="#AsyncOnce.clear-332"><span class="linenos">332</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
 </span></pre></div>
@@ -1749,7 +1749,7 @@ just not necessarily the one provided.</p>
     </div>
     <a class="headerlink" href="#AsyncOnce.get_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get_or-334"><a href="#AsyncOnce.get_or-334"><span class="linenos">334</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce.get_or-335"><a href="#AsyncOnce.get_or-335"><span class="linenos">335</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `init` if the cell</span>
+</span><span id="AsyncOnce.get_or-335"><a href="#AsyncOnce.get_or-335"><span class="linenos">335</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `init` if the cell</span>
 </span><span id="AsyncOnce.get_or-336"><a href="#AsyncOnce.get_or-336"><span class="linenos">336</span></a><span class="sd">        was empty.</span>
 </span><span id="AsyncOnce.get_or-337"><a href="#AsyncOnce.get_or-337"><span class="linenos">337</span></a>
 </span><span id="AsyncOnce.get_or-338"><a href="#AsyncOnce.get_or-338"><span class="linenos">338</span></a><span class="sd">        Many threads may call `get_or` concurrently with different</span>
@@ -1818,7 +1818,7 @@ will be executed.</p>
     </div>
     <a class="headerlink" href="#AsyncOnce.get_or_with"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get_or_with-366"><a href="#AsyncOnce.get_or_with-366"><span class="linenos">366</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce.get_or_with-367"><a href="#AsyncOnce.get_or_with-367"><span class="linenos">367</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
+</span><span id="AsyncOnce.get_or_with-367"><a href="#AsyncOnce.get_or_with-367"><span class="linenos">367</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
 </span><span id="AsyncOnce.get_or_with-368"><a href="#AsyncOnce.get_or_with-368"><span class="linenos">368</span></a><span class="sd">        was empty.</span>
 </span><span id="AsyncOnce.get_or_with-369"><a href="#AsyncOnce.get_or_with-369"><span class="linenos">369</span></a>
 </span><span id="AsyncOnce.get_or_with-370"><a href="#AsyncOnce.get_or_with-370"><span class="linenos">370</span></a><span class="sd">        Many threads may call `get_or_with` concurrently with different</span>

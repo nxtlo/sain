@@ -132,7 +132,7 @@
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="sd">&quot;&quot;&quot;The box object for expiring data. not thread-safe.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The box object for expiring data. not thread-safe.</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">    A box is an object that contains a value of type `T` which expires it after the given amount of time,</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">    The box won&#39;t start expiring the data until its first access with `Box.get` method.</span>
@@ -170,7 +170,7 @@
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="nd">@property</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="nf">has_expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="sd">&quot;&quot;&quot;Returns True if the value has expired.&quot;&quot;&quot;</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns True if the value has expired.&quot;&quot;&quot;</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="c1"># return self._mono is not None and not self._expire_in &lt;= (</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="c1"># time.monotonic() - self._mono</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="c1"># )</span>
@@ -179,7 +179,7 @@
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="p">)</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="k">def</span> <span class="nf">on_expire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="sd">&quot;&quot;&quot;Set a callback that will be invoked when this value gets expired.</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a callback that will be invoked when this value gets expired.</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">        Both async and sync callbacks are supported.</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
@@ -209,7 +209,7 @@
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="sd">&quot;&quot;&quot;Returns when this box will expire in seconds.</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns when this box will expire in seconds.</span>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        Example</span>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">        --------</span>
@@ -229,7 +229,7 @@
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>        <span class="p">)</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value if it was not expired, otherwise `Some(None)` is returned.</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value if it was not expired, otherwise `Some(None)` is returned.</span>
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">        Example</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        -------</span>
@@ -306,7 +306,7 @@
     <a class="headerlink" href="#Box"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Box-58"><a href="#Box-58"><span class="linenos"> 58</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Box-59"><a href="#Box-59"><span class="linenos"> 59</span></a><span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="Box-60"><a href="#Box-60"><span class="linenos"> 60</span></a>    <span class="sd">&quot;&quot;&quot;The box object for expiring data. not thread-safe.</span>
+</span><span id="Box-60"><a href="#Box-60"><span class="linenos"> 60</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The box object for expiring data. not thread-safe.</span>
 </span><span id="Box-61"><a href="#Box-61"><span class="linenos"> 61</span></a>
 </span><span id="Box-62"><a href="#Box-62"><span class="linenos"> 62</span></a><span class="sd">    A box is an object that contains a value of type `T` which expires it after the given amount of time,</span>
 </span><span id="Box-63"><a href="#Box-63"><span class="linenos"> 63</span></a><span class="sd">    The box won&#39;t start expiring the data until its first access with `Box.get` method.</span>
@@ -344,7 +344,7 @@
 </span><span id="Box-95"><a href="#Box-95"><span class="linenos"> 95</span></a>
 </span><span id="Box-96"><a href="#Box-96"><span class="linenos"> 96</span></a>    <span class="nd">@property</span>
 </span><span id="Box-97"><a href="#Box-97"><span class="linenos"> 97</span></a>    <span class="k">def</span> <span class="nf">has_expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Box-98"><a href="#Box-98"><span class="linenos"> 98</span></a>        <span class="sd">&quot;&quot;&quot;Returns True if the value has expired.&quot;&quot;&quot;</span>
+</span><span id="Box-98"><a href="#Box-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns True if the value has expired.&quot;&quot;&quot;</span>
 </span><span id="Box-99"><a href="#Box-99"><span class="linenos"> 99</span></a>        <span class="c1"># return self._mono is not None and not self._expire_in &lt;= (</span>
 </span><span id="Box-100"><a href="#Box-100"><span class="linenos">100</span></a>        <span class="c1"># time.monotonic() - self._mono</span>
 </span><span id="Box-101"><a href="#Box-101"><span class="linenos">101</span></a>        <span class="c1"># )</span>
@@ -353,7 +353,7 @@
 </span><span id="Box-104"><a href="#Box-104"><span class="linenos">104</span></a>        <span class="p">)</span>
 </span><span id="Box-105"><a href="#Box-105"><span class="linenos">105</span></a>
 </span><span id="Box-106"><a href="#Box-106"><span class="linenos">106</span></a>    <span class="k">def</span> <span class="nf">on_expire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Box-107"><a href="#Box-107"><span class="linenos">107</span></a>        <span class="sd">&quot;&quot;&quot;Set a callback that will be invoked when this value gets expired.</span>
+</span><span id="Box-107"><a href="#Box-107"><span class="linenos">107</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a callback that will be invoked when this value gets expired.</span>
 </span><span id="Box-108"><a href="#Box-108"><span class="linenos">108</span></a>
 </span><span id="Box-109"><a href="#Box-109"><span class="linenos">109</span></a><span class="sd">        Both async and sync callbacks are supported.</span>
 </span><span id="Box-110"><a href="#Box-110"><span class="linenos">110</span></a>
@@ -383,7 +383,7 @@
 </span><span id="Box-134"><a href="#Box-134"><span class="linenos">134</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="Box-135"><a href="#Box-135"><span class="linenos">135</span></a>
 </span><span id="Box-136"><a href="#Box-136"><span class="linenos">136</span></a>    <span class="k">def</span> <span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="Box-137"><a href="#Box-137"><span class="linenos">137</span></a>        <span class="sd">&quot;&quot;&quot;Returns when this box will expire in seconds.</span>
+</span><span id="Box-137"><a href="#Box-137"><span class="linenos">137</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns when this box will expire in seconds.</span>
 </span><span id="Box-138"><a href="#Box-138"><span class="linenos">138</span></a>
 </span><span id="Box-139"><a href="#Box-139"><span class="linenos">139</span></a><span class="sd">        Example</span>
 </span><span id="Box-140"><a href="#Box-140"><span class="linenos">140</span></a><span class="sd">        --------</span>
@@ -403,7 +403,7 @@
 </span><span id="Box-154"><a href="#Box-154"><span class="linenos">154</span></a>        <span class="p">)</span>
 </span><span id="Box-155"><a href="#Box-155"><span class="linenos">155</span></a>
 </span><span id="Box-156"><a href="#Box-156"><span class="linenos">156</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Box-157"><a href="#Box-157"><span class="linenos">157</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value if it was not expired, otherwise `Some(None)` is returned.</span>
+</span><span id="Box-157"><a href="#Box-157"><span class="linenos">157</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value if it was not expired, otherwise `Some(None)` is returned.</span>
 </span><span id="Box-158"><a href="#Box-158"><span class="linenos">158</span></a>
 </span><span id="Box-159"><a href="#Box-159"><span class="linenos">159</span></a><span class="sd">        Example</span>
 </span><span id="Box-160"><a href="#Box-160"><span class="linenos">160</span></a><span class="sd">        -------</span>
@@ -527,7 +527,7 @@ The box won't start expiring the data until its first access with <code><a href=
     <a class="headerlink" href="#Box.has_expired"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Box.has_expired-96"><a href="#Box.has_expired-96"><span class="linenos"> 96</span></a>    <span class="nd">@property</span>
 </span><span id="Box.has_expired-97"><a href="#Box.has_expired-97"><span class="linenos"> 97</span></a>    <span class="k">def</span> <span class="nf">has_expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Box.has_expired-98"><a href="#Box.has_expired-98"><span class="linenos"> 98</span></a>        <span class="sd">&quot;&quot;&quot;Returns True if the value has expired.&quot;&quot;&quot;</span>
+</span><span id="Box.has_expired-98"><a href="#Box.has_expired-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns True if the value has expired.&quot;&quot;&quot;</span>
 </span><span id="Box.has_expired-99"><a href="#Box.has_expired-99"><span class="linenos"> 99</span></a>        <span class="c1"># return self._mono is not None and not self._expire_in &lt;= (</span>
 </span><span id="Box.has_expired-100"><a href="#Box.has_expired-100"><span class="linenos">100</span></a>        <span class="c1"># time.monotonic() - self._mono</span>
 </span><span id="Box.has_expired-101"><a href="#Box.has_expired-101"><span class="linenos">101</span></a>        <span class="c1"># )</span>
@@ -547,14 +547,14 @@ The box won't start expiring the data until its first access with <code><a href=
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">on_expire</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">callback</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">+</span><span class="n">T</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">on_expire</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">callback</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">+</span><span class="n">T</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Box.on_expire-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Box.on_expire"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Box.on_expire-106"><a href="#Box.on_expire-106"><span class="linenos">106</span></a>    <span class="k">def</span> <span class="nf">on_expire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Box.on_expire-107"><a href="#Box.on_expire-107"><span class="linenos">107</span></a>        <span class="sd">&quot;&quot;&quot;Set a callback that will be invoked when this value gets expired.</span>
+</span><span id="Box.on_expire-107"><a href="#Box.on_expire-107"><span class="linenos">107</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a callback that will be invoked when this value gets expired.</span>
 </span><span id="Box.on_expire-108"><a href="#Box.on_expire-108"><span class="linenos">108</span></a>
 </span><span id="Box.on_expire-109"><a href="#Box.on_expire-109"><span class="linenos">109</span></a><span class="sd">        Both async and sync callbacks are supported.</span>
 </span><span id="Box.on_expire-110"><a href="#Box.on_expire-110"><span class="linenos">110</span></a>
@@ -630,7 +630,7 @@ also the inner value will be set to <code>Some(None)</code>.</p>
     </div>
     <a class="headerlink" href="#Box.remaining"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Box.remaining-136"><a href="#Box.remaining-136"><span class="linenos">136</span></a>    <span class="k">def</span> <span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="Box.remaining-137"><a href="#Box.remaining-137"><span class="linenos">137</span></a>        <span class="sd">&quot;&quot;&quot;Returns when this box will expire in seconds.</span>
+</span><span id="Box.remaining-137"><a href="#Box.remaining-137"><span class="linenos">137</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns when this box will expire in seconds.</span>
 </span><span id="Box.remaining-138"><a href="#Box.remaining-138"><span class="linenos">138</span></a>
 </span><span id="Box.remaining-139"><a href="#Box.remaining-139"><span class="linenos">139</span></a><span class="sd">        Example</span>
 </span><span id="Box.remaining-140"><a href="#Box.remaining-140"><span class="linenos">140</span></a><span class="sd">        --------</span>
@@ -679,7 +679,7 @@ also the inner value will be set to <code>Some(None)</code>.</p>
     </div>
     <a class="headerlink" href="#Box.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Box.get-156"><a href="#Box.get-156"><span class="linenos">156</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Box.get-157"><a href="#Box.get-157"><span class="linenos">157</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value if it was not expired, otherwise `Some(None)` is returned.</span>
+</span><span id="Box.get-157"><a href="#Box.get-157"><span class="linenos">157</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value if it was not expired, otherwise `Some(None)` is returned.</span>
 </span><span id="Box.get-158"><a href="#Box.get-158"><span class="linenos">158</span></a>
 </span><span id="Box.get-159"><a href="#Box.get-159"><span class="linenos">159</span></a><span class="sd">        Example</span>
 </span><span id="Box.get-160"><a href="#Box.get-160"><span class="linenos">160</span></a><span class="sd">        -------</span>

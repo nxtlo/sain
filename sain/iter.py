@@ -71,6 +71,8 @@ Item = typing.TypeVar("Item")
 OtherItem = typing.TypeVar("OtherItem")
 """The type of the item that is being mapped into then yielded."""
 
+AnyIter = typing.TypeVar("AnyIter", bound="Iterator[typing.Any]")
+
 if typing.TYPE_CHECKING:
     import _typeshed
 
@@ -81,6 +83,14 @@ def unreachable() -> typing.NoReturn:
     raise StopIteration(
         "No more items exist in this iterator. It has been exhausted."
     ) from None
+
+
+def diagnostic(cls: type[AnyIter]) -> type[AnyIter]:
+    def _repr(self: Iterator[typing.Any]) -> str:
+        return f"{type(self).__name__}(source: Iter<{type(self._it).__name__}>)"  # pyright: ignore
+
+    cls.__repr__ = _repr
+    return cls
 
 
 class Iterator(
@@ -681,8 +691,13 @@ class Iterator(
     def __reversed__(self) -> Iterator[Item]:
         return self.reversed()
 
+    def __setitem__(self, _: None, __: None) -> typing.NoReturn:
+        raise NotImplementedError(
+            f"{type(self).__name__} doesn't support item assignment."
+        ) from None
+
     def __repr__(self) -> str:
-        return f"<Iter(ptr: {hex(id(self))})>"
+        return "<Iterator>"
 
     def __copy__(self) -> Cloned[Item]:
         return self.cloned()
@@ -698,6 +713,7 @@ class Iterator(
 
 
 @typing.final
+@diagnostic
 class Iter(Iterator[Item]):
     """a lazy iterator that has its items ready in-memory.
 
@@ -765,16 +781,11 @@ class Iter(Iterator[Item]):
         except IndexError:
             unreachable()
 
-    # This is a never.
-    def __setitem__(self, _: None, __: None) -> typing.NoReturn:
-        raise NotImplementedError(
-            f"{type(self).__name__} doesn't support item assignment."
-        ) from None
-
     def __contains__(self, item: Item) -> bool:
         return item in self._it
 
 
+@diagnostic
 class Cloned(typing.Generic[Item], Iterator[Item]):
     """An iterator that copies the elements from an underlying iterator.
 
@@ -797,6 +808,7 @@ class Cloned(typing.Generic[Item], Iterator[Item]):
         return copy.copy(n)
 
 
+@diagnostic
 class Copied(typing.Generic[Item], Iterator[Item]):
     """An iterator that deeply-copies the elements from an underlying iterator.
 
@@ -812,6 +824,7 @@ class Copied(typing.Generic[Item], Iterator[Item]):
         return copy.deepcopy(self._it.__next__())
 
 
+@diagnostic
 class Map(typing.Generic[Item, OtherItem], Iterator[Item]):
     """An iterator that maps the elements to a callable.
 
@@ -830,6 +843,7 @@ class Map(typing.Generic[Item, OtherItem], Iterator[Item]):
         return self._call(self._it.__next__())
 
 
+@diagnostic
 class Filter(typing.Generic[Item], Iterator[Item]):
     """An iterator that filters the elements to a `predicate`.
 
@@ -852,6 +866,7 @@ class Filter(typing.Generic[Item], Iterator[Item]):
         unreachable()
 
 
+@diagnostic
 class Take(typing.Generic[Item], Iterator[Item]):
     """An iterator that yields the first `number` of elements and drops the rest.
 
@@ -877,6 +892,7 @@ class Take(typing.Generic[Item], Iterator[Item]):
         return item
 
 
+@diagnostic
 class Skip(typing.Generic[Item], Iterator[Item]):
     """An iterator that skips the first `number` of elements and yields the rest.
 
@@ -901,6 +917,7 @@ class Skip(typing.Generic[Item], Iterator[Item]):
         return self._it.__next__()
 
 
+@diagnostic
 class Enumerate(typing.Generic[Item], Iterator[tuple[int, Item]]):
     """An iterator that yields the current count and the element during iteration.
 
@@ -923,6 +940,7 @@ class Enumerate(typing.Generic[Item], Iterator[tuple[int, Item]]):
         return i, a
 
 
+@diagnostic
 class TakeWhile(typing.Generic[Item], Iterator[Item]):
     """An iterator that yields elements while `predicate` returns `True`.
 
@@ -946,6 +964,7 @@ class TakeWhile(typing.Generic[Item], Iterator[Item]):
         unreachable()
 
 
+@diagnostic
 class DropWhile(typing.Generic[Item], Iterator[Item]):
     """An iterator that yields elements while `predicate` returns `False`.
 
@@ -972,10 +991,11 @@ class DropWhile(typing.Generic[Item], Iterator[Item]):
         unreachable()
 
 
+@diagnostic
 class Empty(typing.Generic[Item], Iterator[Item]):
     """An iterator that yields literally nothing.
 
-    This is the default iterator that is created by `Iterator.empty` or `empty()`
+    This is the default iterator that is created by `Iterator.default()` or `empty()`
     """
 
     __slots__ = ("_it",)

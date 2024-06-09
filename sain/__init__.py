@@ -105,7 +105,7 @@ from .result import Ok
 from .result import Result
 from .vec import Vec
 
-__version__: str = "0.0.6"
+__version__: str = "1.0.0"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
 __about__: str = (
