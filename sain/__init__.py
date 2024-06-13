@@ -73,9 +73,16 @@ __all__ = (
     # sync
     "sync",
     "MaybeUninit",
+    # convert
+    "convert",
+    "From",
+    "TryFrom",
+    "Into",
+    "TryInto",
 )
 
 from . import boxed
+from . import convert
 from . import default
 from . import error
 from . import futures
@@ -88,6 +95,10 @@ from . import vec
 from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr
+from .convert import From
+from .convert import Into
+from .convert import TryFrom
+from .convert import TryInto
 from .default import Default
 from .error import Error
 from .iter import Iter

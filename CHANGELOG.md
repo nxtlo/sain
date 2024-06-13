@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- `conversion` interfaces `Into`, `From`, `TryInto` and `TryFrom`.
+
 ## 09/06/2024
 
 ### Added
