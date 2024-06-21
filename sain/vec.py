@@ -56,6 +56,7 @@ from . import result as _result
 
 if typing.TYPE_CHECKING:
     from typing_extensions import Self
+    from _typeshed import SupportsRichComparison
 
     from . import Result
 
@@ -603,6 +604,64 @@ class Vec(typing.Generic[T]):
             return
 
         self._ptr.clear()
+
+    def sort(
+        self,
+        *,
+        key: collections.Callable[[T], SupportsRichComparison] | None = None,
+        reverse: bool = False,
+    ) -> None:
+        """This method sorts the list in place, using only < comparisons between items.
+
+        Example
+        -------
+        ```py
+        vec = Vec((2, 1, 3))
+        vec.sort()
+        assert vec == [1, 2, 3]
+        ```
+        """
+        if not self._ptr:
+            return
+
+        # key can be `None` here just fine, idk why pyright is complaining.
+        self._ptr.sort(key=key, reverse=reverse)  # pyright: ignore
+
+    def index(
+        self, item: T, start: typing.SupportsIndex = 0, end: int = _sys.maxsize
+    ) -> int:
+        # << Official documentation >>
+        """Return zero-based index in the vec of the first item whose value is equal to `item`.
+        Raises a ValueError if there is no such item.
+
+        Example
+        -------
+        ```py
+        vec = Vec((1, 2, 3))
+        assert vec.index(2) == 1
+        ```
+        """
+        if self._ptr is None:
+            raise ValueError from None
+
+        return self._ptr.index(item, start, end)
+
+    def count(self, item: T) -> int:
+        """Return the number of items in the vec.
+
+        `0` is returned if the vector is empty or hasn't been initialized, as well if them item not found.
+
+        Example
+        --------
+        ```py
+        vec = Vec((1, 2, 3, 3))
+        assert vec.count(3) == 2
+        ```
+        """
+        if self._ptr is None:
+            return 0
+
+        return self._ptr.count(item)
 
     def __len__(self) -> int:
         return len(self._ptr) if self._ptr else 0

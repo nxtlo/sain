@@ -29,21 +29,18 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """Runtime attr configuration.
 
-### Warning
-* The `cfg_attr` currently is buggy, Specifically when passing multiple modules into the
-`required_modules` parameter.
-
 Notes
 -----
 Target OS must be one of the following:
 * `linux`
 * `win32` | `windows`
-* `darwin`
+* `darwin` | `macos`
+* `ios`
 * `unix`, which is assumed to be either linux or darwin.
 
 Target architecture must be one of the following:
 * `x86`
-* `x64`
+* `x86_64`
 * `arm`
 * `arm64`
 
@@ -60,38 +57,39 @@ __all__ = ("cfg_attr", "cfg")
 
 import collections.abc as collections
 import functools
-import importlib.util as importlib
 import inspect
 import platform
 import sys
 import typing
 
-from . import macros
 
 F = typing.TypeVar("F", bound=collections.Callable[..., object])
 
-System = typing.Literal["linux", "win32", "darwin", "unix", "windows"]
-Arch = typing.Literal["x86", "x64", "arm", "arm64"]
+System = typing.Literal["linux", "win32", "darwin", "macos", "unix", "windows", "ios"]
+Arch = typing.Literal["x86", "x86_64", "arm", "arm64"]
 Python = typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
 
 if typing.TYPE_CHECKING:
     from typing_extensions import Self
 
 
-def _machine() -> str:
-    return platform.machine()
+_machine = platform.machine()
 
 
 def _is_arm() -> bool:
-    return "ARM" in _machine()
+    return "arm" in _machine
 
 
 def _is_arm_64() -> bool:
-    return _is_arm() and _is_x64()
+    return "arm" in _machine and _machine.endswith("64")
 
 
-def _is_x64() -> bool:
-    return _machine().endswith("64")
+def _is_x86_64() -> bool:
+    return _machine == "AMD64" or _machine == "x86_64"
+
+
+def _is_x86() -> bool:
+    return _machine == "i386" or _machine == "x86"
 
 
 def _py_version() -> str:
@@ -100,7 +98,6 @@ def _py_version() -> str:
 
 def cfg_attr(
     *,
-    requires: str | None = None,
     target_os: System | None = None,
     python_version: tuple[int, int, int] | None = None,
     target_arch: Arch | None = None,
@@ -111,24 +108,19 @@ def cfg_attr(
     If the decorated object gets called and one of the attributes returns `False`,
     `RuntimeError` will be raised and the object will not run.
 
-    .. warning::
-        The `requires` parameter is bugged and scheduled for deprecation
-        and will be removed in a future release.
-        Instead, directly import modules at the top of the file or function.
-
     Example
     -------
     ```py
     import sain
 
-    @sain.cfg_attr(target_os="windows")
+    @cfg_attr(target_os="windows")
     def windows_only():
         # Do stuff with Windows's API.
         ...
 
     # Mut be PyPy Python implementation or `RuntimeError` will be raised
     # when creating the instance.
-    @sain.cfg_attr(impl="PyPy")
+    @cfg_attr(impl="PyPy")
     class Zoo:
         @sain.cfg_attr(target_os="linux")
         def bark(self) -> None:
@@ -143,8 +135,6 @@ def cfg_attr(
 
     Parameters
     ----------
-    requires : `str | None`
-        A required module to run the object.
     target_os : `str | None`
         The targeted operating system thats required for the object.
     python_version : `tuple[int, int, int] | None`
@@ -157,9 +147,7 @@ def cfg_attr(
     Raises
     ------
     `RuntimeError`
-        This fails if any of the attributes returns `False`. `required_modules` is not included.
-    `ModuleNotFoundError`
-        If the module check fails. i.e., if `required_modules` was provided and it returns `False`.
+        This fails if any of the attributes returns `False`.
     `ValueError`
         If the passed Python implementation is unknown.
     """
@@ -169,7 +157,6 @@ def cfg_attr(
         def wrapper(*args: typing.Any, **kwargs: typing.Any) -> F:
             checker = _AttrCheck(
                 callback,
-                requires=requires,
                 target_os=target_os,
                 python_version=python_version,
                 target_arch=target_arch,
@@ -184,16 +171,11 @@ def cfg_attr(
 
 def cfg(
     target_os: System | None = None,
-    requires: str | None = None,
     python_version: tuple[int, int, int] | None = None,
     target_arch: Arch | None = None,
     impl: Python | None = None,
 ) -> bool:
     """A function that will run the code only if all predicate attributes returns `True`.
-
-    .. warning::
-        The `requires` parameter is bugged and scheduled for deprecation and will be removed in a future release.
-        Instead, directly import modules at the top of the file or function.
 
     The difference between this function and `cfg_attr` is that this function will not raise an exception.
     Instead it will return `False` if any of the attributes fails.
@@ -203,9 +185,9 @@ def cfg(
     ```py
     import sain
 
-    if sain.cfg(target_os="windows"):
+    if cfg(target_os="windows"):
         print("Windows")
-    elif sain.cfg(target_os="linux"):
+    elif cfg(target_os="linux", target_arch="arm64"):
         print("Linux")
     else:
         print("Something else")
@@ -213,8 +195,6 @@ def cfg(
 
     Parameters
     ----------
-    requires : `str | None`
-        A required module to run the object.
     target_os : `str | None`
         The targeted operating system thats required for the object to be ran.
     python_version : `tuple[int, int, int] | None`
@@ -232,7 +212,6 @@ def cfg(
     checker = _AttrCheck(
         lambda: None,
         no_raise=True,
-        requires=requires,
         target_os=target_os,
         python_version=python_version,
         target_arch=target_arch,
@@ -244,7 +223,6 @@ def cfg(
 @typing.final
 class _AttrCheck(typing.Generic[F]):
     __slots__ = (
-        "_requires",
         "_target_os",
         "_callback",
         "_py_version",
@@ -257,7 +235,6 @@ class _AttrCheck(typing.Generic[F]):
     def __init__(
         self,
         callback: F,
-        requires: str | None = None,
         target_os: System | None = None,
         python_version: tuple[int, int, int] | None = None,
         target_arch: Arch | None = None,
@@ -266,7 +243,6 @@ class _AttrCheck(typing.Generic[F]):
         no_raise: bool = False,
     ) -> None:
         self._callback = callback
-        self._requires = requires
         self._target_os = target_os
         self._py_version = python_version
         self._target_arch = target_arch
@@ -290,9 +266,6 @@ class _AttrCheck(typing.Generic[F]):
         if self._py_version is not None:
             results.append(self._check_py_version())
 
-        if self._requires is not None:
-            results.append(self._check_modules())
-
         if self._target_arch is not None:
             results.append(self._check_target_arch())
 
@@ -305,24 +278,6 @@ class _AttrCheck(typing.Generic[F]):
 
         return all(results)
 
-    @macros.unstable(reason="The function is buggy.")
-    @macros.deprecated(
-        since="0.0.4", use_instead="Self-Check the module locally", removed_in="0.0.6"
-    )
-    def _check_modules(self) -> bool:
-        """__intrinsics__"""
-        assert self._requires
-
-        if importlib.find_spec(self._requires) is None:
-            if self._no_raise:
-                self._debugger.flag(True)
-
-        return (
-            self._debugger.exception(ModuleNotFoundError)
-            .message(f"Requires modules ({self._requires}) to be installed")
-            .finish()
-        )
-
     def _check_target_arch(self) -> bool:
         match self._target_arch:
             case "arm":
@@ -330,14 +285,14 @@ class _AttrCheck(typing.Generic[F]):
             case "arm64":
                 return _is_arm_64()
             case "x86":
-                return not _is_x64()
-            case "x64":
-                return _is_x64()
+                return _is_x86()
+            case "x86_64":
+                return _is_x86_64()
             case _:
                 raise ValueError(f"Unknown target arch: {self._target_arch}")
 
     def _check_platform(self) -> bool:
-        is_unix = sys.platform in {"linux", "darwin"}
+        is_unix = sys.platform in {"linux", "darwin", "macos"}
 
         # If the target os is unix, then we assume that it's either linux or darwin.
         if self._target_os == "unix" and is_unix:
@@ -345,6 +300,9 @@ class _AttrCheck(typing.Generic[F]):
 
         # Alias to win32
         if self._target_os == "windows" and sys.platform == "win32":
+            return True
+
+        if self._target_os == "macos" and sys.platform == "darwin":
             return True
 
         if sys.platform == self._target_os:
@@ -411,7 +369,7 @@ class _Debug(typing.Generic[F]):
     def flag(self, cond: bool) -> None:
         self._no_raise = cond
 
-    def message(self, message: str) -> _Debug[F]:
+    def message(self, message: str) -> Self:
         """Set a message to be included in the exception that is getting raised."""
         fn_name = (
             "" if self._callback.__name__ == "<lambda>" else self._callback.__name__

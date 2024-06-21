@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `conversion` interfaces `Into`, `From`, `TryInto` and `TryFrom`.
+- `count`, `index` and `sort` methods to `Vec`.
+- `macos` alias to `darwin` for `target_os`.
+- `ios` support to `target_os`.
 
 ## 09/06/2024
 

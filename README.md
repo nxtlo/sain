@@ -85,7 +85,7 @@ match storage.put("first"):
 
 | name in Rust                  | name in Python                   | note                                                                                                                       | restrictions               |
 | ----------------------------- | -------------------------------  | -------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| Option\<T>, Some(T), None     | Option[T], Some(T), Some(None)   | Some(None) has the same layout as `None` in Rust                                                                           | this can't be matched upon |
+| Option\<T>, Some(T), None     | Option[T], Some(T), Some(None)   | Some(None) has the same layout as `None` in Rust                                                                           |                            |
 | Result\<T, E>, Ok(T), Err(E)  | Result[T, E], Ok(T), Err(E)      |                                                                                                                            |                            |
 | Vec\<T>                       | Vec[T]                           |                                                                                                                            |                            |
 | Cell\<T>                      | Cell[T]                          | this isn't an interior mutability type                                                                                     |                            |
