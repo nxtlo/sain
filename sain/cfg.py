@@ -62,7 +62,6 @@ import platform
 import sys
 import typing
 
-
 F = typing.TypeVar("F", bound=collections.Callable[..., object])
 
 System = typing.Literal["linux", "win32", "darwin", "macos", "unix", "windows", "ios"]

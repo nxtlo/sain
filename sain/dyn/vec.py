@@ -50,15 +50,15 @@ import sys as _sys
 import typing
 from collections import abc as collections
 
-from . import iter as _iter
-from . import option as _option
-from . import result as _result
+from sain import iter as _iter
+from sain import option as _option
+from sain import result as _result
 
 if typing.TYPE_CHECKING:
-    from typing_extensions import Self
     from _typeshed import SupportsRichComparison
+    from typing_extensions import Self
 
-    from . import Result
+    from sain import Result
 
 T = typing.TypeVar("T")
 

@@ -63,7 +63,7 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-from .vec import Vec
+from .dyn.vec import Vec
 
 Item = typing.TypeVar("Item")
 """The type of the item that is being yielded."""
