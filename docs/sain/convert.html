@@ -262,142 +262,150 @@
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="kn">import</span> <span class="nn">typing</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="kn">from</span> <span class="nn">sain</span> <span class="kn">import</span> <span class="n">Result</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>    <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Self</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="n">T</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="n">T_co</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T_co&quot;</span><span class="p">,</span> <span class="n">contravariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="n">T_cov</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T_cov&quot;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="n">E</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">)</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="k">class</span> <span class="nc">From</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">    As the Rust documentation says, One should always prefer implementing From over Into</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">    because implementing From automatically provides one with an implementation of Into.</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">    But there&#39;s no such thing in Python, as it&#39;s impossible to auto-impl `Into&lt;T&gt;` for all types</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">    that impl `From&lt;T&gt;`.</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">    So for the sake of simplicity, You should implement whichever interface you want deal with,</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">    Or simply, implement both as the same time.</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    Example</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">    -------</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">    ```py</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">    @dataclass</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">    class Id(From[str]):</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        value: int</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        @classmethod</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">        def from_t(cls, value: str) -&gt; Self:</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">            return cls(value=int(value))</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">    ```</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="k">class</span> <span class="nc">TryFrom</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple and safe type conversions that may fail in a controlled way under some circumstances.</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">    It is the reciprocal of `TryInto`.</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">    Generic Implementations</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">    -------------------</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">    This interface takes two type arguments, and return `Result&lt;Self, E&gt;`</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Self</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="kn">from</span> <span class="nn">sain</span> <span class="kn">import</span> <span class="n">Result</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="n">T</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="n">T_co</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T_co&quot;</span><span class="p">,</span> <span class="n">contravariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="n">T_cov</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T_cov&quot;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="n">E</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">)</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="k">class</span> <span class="nc">From</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">    As the Rust documentation says, One should always prefer implementing From over Into</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">    because implementing From automatically provides one with an implementation of Into.</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">    But there&#39;s no such thing in Python, as it&#39;s impossible to auto-impl `Into&lt;T&gt;` for all types</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">    that impl `From&lt;T&gt;`.</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">    So for the sake of simplicity, You should implement whichever interface you want deal with,</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    Or simply, implement both as the same time.</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">    Example</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">    -------</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">    ```py</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">    @dataclass</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">    class Id(From[str]):</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        value: int</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">        @classmethod</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        def from_t(cls, value: str) -&gt; Self:</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">            return cls(value=int(value))</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">    ```</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>    <span class="nd">@classmethod</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="k">class</span> <span class="nc">TryFrom</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple and safe type conversions that may fail in a controlled way under some circumstances.</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">    It is the reciprocal of `TryInto`.</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    * `T`: Which&#39;s the first generic `T` is the type that&#39;s being converted from.</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">    * `E`: If the conversion fails in a way, this is what will return as the error.</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">    * `Self`: Which&#39;s the instance of the class that is being converted into.</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    Generic Implementations</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">    -------------------</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">    This interface takes two type arguments, and return `Result&lt;Self, E&gt;`</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">    Example</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    -------</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">    ```py</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">    @dataclass</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">    class Id(TryFrom[str, str]):</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">        value: int</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">        @classmethod</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">        def try_from(cls, value: str) -&gt; Result[Self, str]:</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">            if not value.isnumeric():</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">                # NaN</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">                return Err(f&quot;Couldn&#39;t convert: {value} to self&quot;)</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">            # otherwise convert it to an Id instance.</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">            return Ok(value=cls(int(value)))</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">    ```</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="k">class</span> <span class="nc">Into</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_cov</span><span class="p">]):</span>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Conversion from `self`, which may or may not be expensive.</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">    * `T`: Which&#39;s the first generic `T` is the type that&#39;s being converted from.</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    * `E`: If the conversion fails in a way, this is what will return as the error.</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">    * `Self`: Which&#39;s the instance of the class that is being converted into.</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">    Example</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">    -------</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">    ```py</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">    @dataclass</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">    class Id(TryFrom[str, str]):</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">        value: int</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">        @classmethod</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">        def try_from(cls, value: str) -&gt; Result[Self, str]:</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">            if not value.isnumeric():</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">                # NaN</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">                return Err(f&quot;Couldn&#39;t convert: {value} to self&quot;)</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">            # otherwise convert it to an Id instance.</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">            return Ok(value=cls(int(value)))</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">    ```</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
+</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>    <span class="nd">@classmethod</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">    Example</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">    -------</span>
-</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">    ```py</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">    @dataclass</span>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">    class Id(Into[str]):</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">        value: int</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">        def into(self) -&gt; str:</span>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">            return str(self.value)</span>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">    ```</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="k">class</span> <span class="nc">Into</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_cov</span><span class="p">]):</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Conversion from `self`, which may or may not be expensive.</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">    Example</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">    -------</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">    ```py</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">    @dataclass</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">    class Id(Into[str]):</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">        value: int</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="sd">        def into(self) -&gt; str:</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">            return str(self.value)</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="sd">    ```</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="k">class</span> <span class="nc">TryInto</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An attempted conversion from `self`, which may or may not be expensive.</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">    Generic Implementations</span>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">    -------------------</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">    This interface takes two type arguments, and return `Result&lt;T, E&gt;`</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">    * `T`: The first generic `T` is the type that&#39;s being converted into.</span>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">    * `E`: If the conversion fails in a way, this is what will return as the error.</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="k">class</span> <span class="nc">TryInto</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An attempted conversion from `self`, which may or may not be expensive.</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">    Example</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">    -------</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">    ```py</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">    @dataclass</span>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">    class Id(TryInto[int, str]):</span>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">        value: str</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">    Generic Implementations</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">    -------------------</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">    This interface takes two type arguments, and return `Result&lt;T, E&gt;`</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">    * `T`: The first generic `T` is the type that&#39;s being converted into.</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">    * `E`: If the conversion fails in a way, this is what will return as the error.</span>
 </span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">        def try_into(self) -&gt; Result[int, str]:</span>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">            if not self.value.isnumeric():</span>
-</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="sd">                return Err(f&quot;{self.value} is not a number...&quot;)</span>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">            return Ok(int(self.value))</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">    ```</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">    Example</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">    -------</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="sd">    ```py</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">    @dataclass</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">    class Id(TryInto[int, str]):</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">        value: str</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">        def try_into(self) -&gt; Result[int, str]:</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">            if not self.value.isnumeric():</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">                return Err(f&quot;{self.value} is not a number...&quot;)</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">            return Ok(int(self.value))</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="sd">    ```</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -414,38 +422,39 @@
 
     </div>
     <a class="headerlink" href="#From"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="From-110"><a href="#From-110"><span class="linenos">110</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="From-111"><a href="#From-111"><span class="linenos">111</span></a><span class="k">class</span> <span class="nc">From</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
-</span><span id="From-112"><a href="#From-112"><span class="linenos">112</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.</span>
-</span><span id="From-113"><a href="#From-113"><span class="linenos">113</span></a>
-</span><span id="From-114"><a href="#From-114"><span class="linenos">114</span></a><span class="sd">    As the Rust documentation says, One should always prefer implementing From over Into</span>
-</span><span id="From-115"><a href="#From-115"><span class="linenos">115</span></a><span class="sd">    because implementing From automatically provides one with an implementation of Into.</span>
-</span><span id="From-116"><a href="#From-116"><span class="linenos">116</span></a>
-</span><span id="From-117"><a href="#From-117"><span class="linenos">117</span></a><span class="sd">    But there&#39;s no such thing in Python, as it&#39;s impossible to auto-impl `Into&lt;T&gt;` for all types</span>
-</span><span id="From-118"><a href="#From-118"><span class="linenos">118</span></a><span class="sd">    that impl `From&lt;T&gt;`.</span>
-</span><span id="From-119"><a href="#From-119"><span class="linenos">119</span></a>
-</span><span id="From-120"><a href="#From-120"><span class="linenos">120</span></a><span class="sd">    So for the sake of simplicity, You should implement whichever interface you want deal with,</span>
-</span><span id="From-121"><a href="#From-121"><span class="linenos">121</span></a><span class="sd">    Or simply, implement both as the same time.</span>
-</span><span id="From-122"><a href="#From-122"><span class="linenos">122</span></a>
-</span><span id="From-123"><a href="#From-123"><span class="linenos">123</span></a><span class="sd">    Example</span>
-</span><span id="From-124"><a href="#From-124"><span class="linenos">124</span></a><span class="sd">    -------</span>
-</span><span id="From-125"><a href="#From-125"><span class="linenos">125</span></a><span class="sd">    ```py</span>
-</span><span id="From-126"><a href="#From-126"><span class="linenos">126</span></a><span class="sd">    @dataclass</span>
-</span><span id="From-127"><a href="#From-127"><span class="linenos">127</span></a><span class="sd">    class Id(From[str]):</span>
-</span><span id="From-128"><a href="#From-128"><span class="linenos">128</span></a><span class="sd">        value: int</span>
-</span><span id="From-129"><a href="#From-129"><span class="linenos">129</span></a>
-</span><span id="From-130"><a href="#From-130"><span class="linenos">130</span></a><span class="sd">        @classmethod</span>
-</span><span id="From-131"><a href="#From-131"><span class="linenos">131</span></a><span class="sd">        def from_t(cls, value: str) -&gt; Self:</span>
-</span><span id="From-132"><a href="#From-132"><span class="linenos">132</span></a><span class="sd">            return cls(value=int(value))</span>
-</span><span id="From-133"><a href="#From-133"><span class="linenos">133</span></a>
-</span><span id="From-134"><a href="#From-134"><span class="linenos">134</span></a><span class="sd">    ```</span>
-</span><span id="From-135"><a href="#From-135"><span class="linenos">135</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="From-136"><a href="#From-136"><span class="linenos">136</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="From-137"><a href="#From-137"><span class="linenos">137</span></a>
-</span><span id="From-138"><a href="#From-138"><span class="linenos">138</span></a>    <span class="nd">@classmethod</span>
-</span><span id="From-139"><a href="#From-139"><span class="linenos">139</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="From-140"><a href="#From-140"><span class="linenos">140</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="From-141"><a href="#From-141"><span class="linenos">141</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="From-112"><a href="#From-112"><span class="linenos">112</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="From-113"><a href="#From-113"><span class="linenos">113</span></a><span class="k">class</span> <span class="nc">From</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
+</span><span id="From-114"><a href="#From-114"><span class="linenos">114</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.</span>
+</span><span id="From-115"><a href="#From-115"><span class="linenos">115</span></a>
+</span><span id="From-116"><a href="#From-116"><span class="linenos">116</span></a><span class="sd">    As the Rust documentation says, One should always prefer implementing From over Into</span>
+</span><span id="From-117"><a href="#From-117"><span class="linenos">117</span></a><span class="sd">    because implementing From automatically provides one with an implementation of Into.</span>
+</span><span id="From-118"><a href="#From-118"><span class="linenos">118</span></a>
+</span><span id="From-119"><a href="#From-119"><span class="linenos">119</span></a><span class="sd">    But there&#39;s no such thing in Python, as it&#39;s impossible to auto-impl `Into&lt;T&gt;` for all types</span>
+</span><span id="From-120"><a href="#From-120"><span class="linenos">120</span></a><span class="sd">    that impl `From&lt;T&gt;`.</span>
+</span><span id="From-121"><a href="#From-121"><span class="linenos">121</span></a>
+</span><span id="From-122"><a href="#From-122"><span class="linenos">122</span></a><span class="sd">    So for the sake of simplicity, You should implement whichever interface you want deal with,</span>
+</span><span id="From-123"><a href="#From-123"><span class="linenos">123</span></a><span class="sd">    Or simply, implement both as the same time.</span>
+</span><span id="From-124"><a href="#From-124"><span class="linenos">124</span></a>
+</span><span id="From-125"><a href="#From-125"><span class="linenos">125</span></a><span class="sd">    Example</span>
+</span><span id="From-126"><a href="#From-126"><span class="linenos">126</span></a><span class="sd">    -------</span>
+</span><span id="From-127"><a href="#From-127"><span class="linenos">127</span></a><span class="sd">    ```py</span>
+</span><span id="From-128"><a href="#From-128"><span class="linenos">128</span></a><span class="sd">    @dataclass</span>
+</span><span id="From-129"><a href="#From-129"><span class="linenos">129</span></a><span class="sd">    class Id(From[str]):</span>
+</span><span id="From-130"><a href="#From-130"><span class="linenos">130</span></a><span class="sd">        value: int</span>
+</span><span id="From-131"><a href="#From-131"><span class="linenos">131</span></a>
+</span><span id="From-132"><a href="#From-132"><span class="linenos">132</span></a><span class="sd">        @classmethod</span>
+</span><span id="From-133"><a href="#From-133"><span class="linenos">133</span></a><span class="sd">        def from_t(cls, value: str) -&gt; Self:</span>
+</span><span id="From-134"><a href="#From-134"><span class="linenos">134</span></a><span class="sd">            return cls(value=int(value))</span>
+</span><span id="From-135"><a href="#From-135"><span class="linenos">135</span></a>
+</span><span id="From-136"><a href="#From-136"><span class="linenos">136</span></a><span class="sd">    ```</span>
+</span><span id="From-137"><a href="#From-137"><span class="linenos">137</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="From-138"><a href="#From-138"><span class="linenos">138</span></a>
+</span><span id="From-139"><a href="#From-139"><span class="linenos">139</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="From-140"><a href="#From-140"><span class="linenos">140</span></a>
+</span><span id="From-141"><a href="#From-141"><span class="linenos">141</span></a>    <span class="nd">@classmethod</span>
+</span><span id="From-142"><a href="#From-142"><span class="linenos">142</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="From-143"><a href="#From-143"><span class="linenos">143</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="From-144"><a href="#From-144"><span class="linenos">144</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -530,10 +539,10 @@ Or simply, implement both as the same time.</p>
 
     </div>
     <a class="headerlink" href="#From.from_t"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="From.from_t-138"><a href="#From.from_t-138"><span class="linenos">138</span></a>    <span class="nd">@classmethod</span>
-</span><span id="From.from_t-139"><a href="#From.from_t-139"><span class="linenos">139</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="From.from_t-140"><a href="#From.from_t-140"><span class="linenos">140</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="From.from_t-141"><a href="#From.from_t-141"><span class="linenos">141</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="From.from_t-141"><a href="#From.from_t-141"><span class="linenos">141</span></a>    <span class="nd">@classmethod</span>
+</span><span id="From.from_t-142"><a href="#From.from_t-142"><span class="linenos">142</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="From.from_t-143"><a href="#From.from_t-143"><span class="linenos">143</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="From.from_t-144"><a href="#From.from_t-144"><span class="linenos">144</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -555,44 +564,44 @@ Or simply, implement both as the same time.</p>
 
     </div>
     <a class="headerlink" href="#TryFrom"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TryFrom-143"><a href="#TryFrom-143"><span class="linenos">143</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="TryFrom-144"><a href="#TryFrom-144"><span class="linenos">144</span></a><span class="k">class</span> <span class="nc">TryFrom</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
-</span><span id="TryFrom-145"><a href="#TryFrom-145"><span class="linenos">145</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple and safe type conversions that may fail in a controlled way under some circumstances.</span>
-</span><span id="TryFrom-146"><a href="#TryFrom-146"><span class="linenos">146</span></a><span class="sd">    It is the reciprocal of `TryInto`.</span>
-</span><span id="TryFrom-147"><a href="#TryFrom-147"><span class="linenos">147</span></a>
-</span><span id="TryFrom-148"><a href="#TryFrom-148"><span class="linenos">148</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
-</span><span id="TryFrom-149"><a href="#TryFrom-149"><span class="linenos">149</span></a>
-</span><span id="TryFrom-150"><a href="#TryFrom-150"><span class="linenos">150</span></a><span class="sd">    Generic Implementations</span>
-</span><span id="TryFrom-151"><a href="#TryFrom-151"><span class="linenos">151</span></a><span class="sd">    -------------------</span>
-</span><span id="TryFrom-152"><a href="#TryFrom-152"><span class="linenos">152</span></a><span class="sd">    This interface takes two type arguments, and return `Result&lt;Self, E&gt;`</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TryFrom-147"><a href="#TryFrom-147"><span class="linenos">147</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="TryFrom-148"><a href="#TryFrom-148"><span class="linenos">148</span></a><span class="k">class</span> <span class="nc">TryFrom</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
+</span><span id="TryFrom-149"><a href="#TryFrom-149"><span class="linenos">149</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple and safe type conversions that may fail in a controlled way under some circumstances.</span>
+</span><span id="TryFrom-150"><a href="#TryFrom-150"><span class="linenos">150</span></a><span class="sd">    It is the reciprocal of `TryInto`.</span>
+</span><span id="TryFrom-151"><a href="#TryFrom-151"><span class="linenos">151</span></a>
+</span><span id="TryFrom-152"><a href="#TryFrom-152"><span class="linenos">152</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
 </span><span id="TryFrom-153"><a href="#TryFrom-153"><span class="linenos">153</span></a>
-</span><span id="TryFrom-154"><a href="#TryFrom-154"><span class="linenos">154</span></a><span class="sd">    * `T`: Which&#39;s the first generic `T` is the type that&#39;s being converted from.</span>
-</span><span id="TryFrom-155"><a href="#TryFrom-155"><span class="linenos">155</span></a><span class="sd">    * `E`: If the conversion fails in a way, this is what will return as the error.</span>
-</span><span id="TryFrom-156"><a href="#TryFrom-156"><span class="linenos">156</span></a><span class="sd">    * `Self`: Which&#39;s the instance of the class that is being converted into.</span>
+</span><span id="TryFrom-154"><a href="#TryFrom-154"><span class="linenos">154</span></a><span class="sd">    Generic Implementations</span>
+</span><span id="TryFrom-155"><a href="#TryFrom-155"><span class="linenos">155</span></a><span class="sd">    -------------------</span>
+</span><span id="TryFrom-156"><a href="#TryFrom-156"><span class="linenos">156</span></a><span class="sd">    This interface takes two type arguments, and return `Result&lt;Self, E&gt;`</span>
 </span><span id="TryFrom-157"><a href="#TryFrom-157"><span class="linenos">157</span></a>
-</span><span id="TryFrom-158"><a href="#TryFrom-158"><span class="linenos">158</span></a><span class="sd">    Example</span>
-</span><span id="TryFrom-159"><a href="#TryFrom-159"><span class="linenos">159</span></a><span class="sd">    -------</span>
-</span><span id="TryFrom-160"><a href="#TryFrom-160"><span class="linenos">160</span></a><span class="sd">    ```py</span>
-</span><span id="TryFrom-161"><a href="#TryFrom-161"><span class="linenos">161</span></a><span class="sd">    @dataclass</span>
-</span><span id="TryFrom-162"><a href="#TryFrom-162"><span class="linenos">162</span></a><span class="sd">    class Id(TryFrom[str, str]):</span>
-</span><span id="TryFrom-163"><a href="#TryFrom-163"><span class="linenos">163</span></a><span class="sd">        value: int</span>
-</span><span id="TryFrom-164"><a href="#TryFrom-164"><span class="linenos">164</span></a>
-</span><span id="TryFrom-165"><a href="#TryFrom-165"><span class="linenos">165</span></a><span class="sd">        @classmethod</span>
-</span><span id="TryFrom-166"><a href="#TryFrom-166"><span class="linenos">166</span></a><span class="sd">        def try_from(cls, value: str) -&gt; Result[Self, str]:</span>
-</span><span id="TryFrom-167"><a href="#TryFrom-167"><span class="linenos">167</span></a><span class="sd">            if not value.isnumeric():</span>
-</span><span id="TryFrom-168"><a href="#TryFrom-168"><span class="linenos">168</span></a><span class="sd">                # NaN</span>
-</span><span id="TryFrom-169"><a href="#TryFrom-169"><span class="linenos">169</span></a><span class="sd">                return Err(f&quot;Couldn&#39;t convert: {value} to self&quot;)</span>
-</span><span id="TryFrom-170"><a href="#TryFrom-170"><span class="linenos">170</span></a><span class="sd">            # otherwise convert it to an Id instance.</span>
-</span><span id="TryFrom-171"><a href="#TryFrom-171"><span class="linenos">171</span></a><span class="sd">            return Ok(value=cls(int(value)))</span>
-</span><span id="TryFrom-172"><a href="#TryFrom-172"><span class="linenos">172</span></a><span class="sd">    ```</span>
-</span><span id="TryFrom-173"><a href="#TryFrom-173"><span class="linenos">173</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="TryFrom-174"><a href="#TryFrom-174"><span class="linenos">174</span></a>
-</span><span id="TryFrom-175"><a href="#TryFrom-175"><span class="linenos">175</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="TryFrom-176"><a href="#TryFrom-176"><span class="linenos">176</span></a>
-</span><span id="TryFrom-177"><a href="#TryFrom-177"><span class="linenos">177</span></a>    <span class="nd">@classmethod</span>
-</span><span id="TryFrom-178"><a href="#TryFrom-178"><span class="linenos">178</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="TryFrom-179"><a href="#TryFrom-179"><span class="linenos">179</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="TryFrom-180"><a href="#TryFrom-180"><span class="linenos">180</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="TryFrom-158"><a href="#TryFrom-158"><span class="linenos">158</span></a><span class="sd">    * `T`: Which&#39;s the first generic `T` is the type that&#39;s being converted from.</span>
+</span><span id="TryFrom-159"><a href="#TryFrom-159"><span class="linenos">159</span></a><span class="sd">    * `E`: If the conversion fails in a way, this is what will return as the error.</span>
+</span><span id="TryFrom-160"><a href="#TryFrom-160"><span class="linenos">160</span></a><span class="sd">    * `Self`: Which&#39;s the instance of the class that is being converted into.</span>
+</span><span id="TryFrom-161"><a href="#TryFrom-161"><span class="linenos">161</span></a>
+</span><span id="TryFrom-162"><a href="#TryFrom-162"><span class="linenos">162</span></a><span class="sd">    Example</span>
+</span><span id="TryFrom-163"><a href="#TryFrom-163"><span class="linenos">163</span></a><span class="sd">    -------</span>
+</span><span id="TryFrom-164"><a href="#TryFrom-164"><span class="linenos">164</span></a><span class="sd">    ```py</span>
+</span><span id="TryFrom-165"><a href="#TryFrom-165"><span class="linenos">165</span></a><span class="sd">    @dataclass</span>
+</span><span id="TryFrom-166"><a href="#TryFrom-166"><span class="linenos">166</span></a><span class="sd">    class Id(TryFrom[str, str]):</span>
+</span><span id="TryFrom-167"><a href="#TryFrom-167"><span class="linenos">167</span></a><span class="sd">        value: int</span>
+</span><span id="TryFrom-168"><a href="#TryFrom-168"><span class="linenos">168</span></a>
+</span><span id="TryFrom-169"><a href="#TryFrom-169"><span class="linenos">169</span></a><span class="sd">        @classmethod</span>
+</span><span id="TryFrom-170"><a href="#TryFrom-170"><span class="linenos">170</span></a><span class="sd">        def try_from(cls, value: str) -&gt; Result[Self, str]:</span>
+</span><span id="TryFrom-171"><a href="#TryFrom-171"><span class="linenos">171</span></a><span class="sd">            if not value.isnumeric():</span>
+</span><span id="TryFrom-172"><a href="#TryFrom-172"><span class="linenos">172</span></a><span class="sd">                # NaN</span>
+</span><span id="TryFrom-173"><a href="#TryFrom-173"><span class="linenos">173</span></a><span class="sd">                return Err(f&quot;Couldn&#39;t convert: {value} to self&quot;)</span>
+</span><span id="TryFrom-174"><a href="#TryFrom-174"><span class="linenos">174</span></a><span class="sd">            # otherwise convert it to an Id instance.</span>
+</span><span id="TryFrom-175"><a href="#TryFrom-175"><span class="linenos">175</span></a><span class="sd">            return Ok(value=cls(int(value)))</span>
+</span><span id="TryFrom-176"><a href="#TryFrom-176"><span class="linenos">176</span></a><span class="sd">    ```</span>
+</span><span id="TryFrom-177"><a href="#TryFrom-177"><span class="linenos">177</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="TryFrom-178"><a href="#TryFrom-178"><span class="linenos">178</span></a>
+</span><span id="TryFrom-179"><a href="#TryFrom-179"><span class="linenos">179</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="TryFrom-180"><a href="#TryFrom-180"><span class="linenos">180</span></a>
+</span><span id="TryFrom-181"><a href="#TryFrom-181"><span class="linenos">181</span></a>    <span class="nd">@classmethod</span>
+</span><span id="TryFrom-182"><a href="#TryFrom-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
+</span><span id="TryFrom-183"><a href="#TryFrom-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="TryFrom-184"><a href="#TryFrom-184"><span class="linenos">184</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -685,10 +694,10 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 
     </div>
     <a class="headerlink" href="#TryFrom.try_from"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TryFrom.try_from-177"><a href="#TryFrom.try_from-177"><span class="linenos">177</span></a>    <span class="nd">@classmethod</span>
-</span><span id="TryFrom.try_from-178"><a href="#TryFrom.try_from-178"><span class="linenos">178</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="TryFrom.try_from-179"><a href="#TryFrom.try_from-179"><span class="linenos">179</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="TryFrom.try_from-180"><a href="#TryFrom.try_from-180"><span class="linenos">180</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TryFrom.try_from-181"><a href="#TryFrom.try_from-181"><span class="linenos">181</span></a>    <span class="nd">@classmethod</span>
+</span><span id="TryFrom.try_from-182"><a href="#TryFrom.try_from-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
+</span><span id="TryFrom.try_from-183"><a href="#TryFrom.try_from-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="TryFrom.try_from-184"><a href="#TryFrom.try_from-184"><span class="linenos">184</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -710,26 +719,27 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 
     </div>
     <a class="headerlink" href="#Into"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Into-182"><a href="#Into-182"><span class="linenos">182</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="Into-183"><a href="#Into-183"><span class="linenos">183</span></a><span class="k">class</span> <span class="nc">Into</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_cov</span><span class="p">]):</span>
-</span><span id="Into-184"><a href="#Into-184"><span class="linenos">184</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Conversion from `self`, which may or may not be expensive.</span>
-</span><span id="Into-185"><a href="#Into-185"><span class="linenos">185</span></a>
-</span><span id="Into-186"><a href="#Into-186"><span class="linenos">186</span></a><span class="sd">    Example</span>
-</span><span id="Into-187"><a href="#Into-187"><span class="linenos">187</span></a><span class="sd">    -------</span>
-</span><span id="Into-188"><a href="#Into-188"><span class="linenos">188</span></a><span class="sd">    ```py</span>
-</span><span id="Into-189"><a href="#Into-189"><span class="linenos">189</span></a><span class="sd">    @dataclass</span>
-</span><span id="Into-190"><a href="#Into-190"><span class="linenos">190</span></a><span class="sd">    class Id(Into[str]):</span>
-</span><span id="Into-191"><a href="#Into-191"><span class="linenos">191</span></a><span class="sd">        value: int</span>
-</span><span id="Into-192"><a href="#Into-192"><span class="linenos">192</span></a>
-</span><span id="Into-193"><a href="#Into-193"><span class="linenos">193</span></a><span class="sd">        def into(self) -&gt; str:</span>
-</span><span id="Into-194"><a href="#Into-194"><span class="linenos">194</span></a><span class="sd">            return str(self.value)</span>
-</span><span id="Into-195"><a href="#Into-195"><span class="linenos">195</span></a><span class="sd">    ```</span>
-</span><span id="Into-196"><a href="#Into-196"><span class="linenos">196</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Into-197"><a href="#Into-197"><span class="linenos">197</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="Into-198"><a href="#Into-198"><span class="linenos">198</span></a>
-</span><span id="Into-199"><a href="#Into-199"><span class="linenos">199</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
-</span><span id="Into-200"><a href="#Into-200"><span class="linenos">200</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="Into-201"><a href="#Into-201"><span class="linenos">201</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Into-187"><a href="#Into-187"><span class="linenos">187</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="Into-188"><a href="#Into-188"><span class="linenos">188</span></a><span class="k">class</span> <span class="nc">Into</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_cov</span><span class="p">]):</span>
+</span><span id="Into-189"><a href="#Into-189"><span class="linenos">189</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Conversion from `self`, which may or may not be expensive.</span>
+</span><span id="Into-190"><a href="#Into-190"><span class="linenos">190</span></a>
+</span><span id="Into-191"><a href="#Into-191"><span class="linenos">191</span></a><span class="sd">    Example</span>
+</span><span id="Into-192"><a href="#Into-192"><span class="linenos">192</span></a><span class="sd">    -------</span>
+</span><span id="Into-193"><a href="#Into-193"><span class="linenos">193</span></a><span class="sd">    ```py</span>
+</span><span id="Into-194"><a href="#Into-194"><span class="linenos">194</span></a><span class="sd">    @dataclass</span>
+</span><span id="Into-195"><a href="#Into-195"><span class="linenos">195</span></a><span class="sd">    class Id(Into[str]):</span>
+</span><span id="Into-196"><a href="#Into-196"><span class="linenos">196</span></a><span class="sd">        value: int</span>
+</span><span id="Into-197"><a href="#Into-197"><span class="linenos">197</span></a>
+</span><span id="Into-198"><a href="#Into-198"><span class="linenos">198</span></a><span class="sd">        def into(self) -&gt; str:</span>
+</span><span id="Into-199"><a href="#Into-199"><span class="linenos">199</span></a><span class="sd">            return str(self.value)</span>
+</span><span id="Into-200"><a href="#Into-200"><span class="linenos">200</span></a><span class="sd">    ```</span>
+</span><span id="Into-201"><a href="#Into-201"><span class="linenos">201</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Into-202"><a href="#Into-202"><span class="linenos">202</span></a>
+</span><span id="Into-203"><a href="#Into-203"><span class="linenos">203</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="Into-204"><a href="#Into-204"><span class="linenos">204</span></a>
+</span><span id="Into-205"><a href="#Into-205"><span class="linenos">205</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
+</span><span id="Into-206"><a href="#Into-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="Into-207"><a href="#Into-207"><span class="linenos">207</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -803,9 +813,9 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 
     </div>
     <a class="headerlink" href="#Into.into"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Into.into-199"><a href="#Into.into-199"><span class="linenos">199</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
-</span><span id="Into.into-200"><a href="#Into.into-200"><span class="linenos">200</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="Into.into-201"><a href="#Into.into-201"><span class="linenos">201</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Into.into-205"><a href="#Into.into-205"><span class="linenos">205</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
+</span><span id="Into.into-206"><a href="#Into.into-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="Into.into-207"><a href="#Into.into-207"><span class="linenos">207</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -827,37 +837,38 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 
     </div>
     <a class="headerlink" href="#TryInto"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TryInto-203"><a href="#TryInto-203"><span class="linenos">203</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="TryInto-204"><a href="#TryInto-204"><span class="linenos">204</span></a><span class="k">class</span> <span class="nc">TryInto</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
-</span><span id="TryInto-205"><a href="#TryInto-205"><span class="linenos">205</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An attempted conversion from `self`, which may or may not be expensive.</span>
-</span><span id="TryInto-206"><a href="#TryInto-206"><span class="linenos">206</span></a>
-</span><span id="TryInto-207"><a href="#TryInto-207"><span class="linenos">207</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
-</span><span id="TryInto-208"><a href="#TryInto-208"><span class="linenos">208</span></a>
-</span><span id="TryInto-209"><a href="#TryInto-209"><span class="linenos">209</span></a><span class="sd">    Generic Implementations</span>
-</span><span id="TryInto-210"><a href="#TryInto-210"><span class="linenos">210</span></a><span class="sd">    -------------------</span>
-</span><span id="TryInto-211"><a href="#TryInto-211"><span class="linenos">211</span></a><span class="sd">    This interface takes two type arguments, and return `Result&lt;T, E&gt;`</span>
-</span><span id="TryInto-212"><a href="#TryInto-212"><span class="linenos">212</span></a>
-</span><span id="TryInto-213"><a href="#TryInto-213"><span class="linenos">213</span></a><span class="sd">    * `T`: The first generic `T` is the type that&#39;s being converted into.</span>
-</span><span id="TryInto-214"><a href="#TryInto-214"><span class="linenos">214</span></a><span class="sd">    * `E`: If the conversion fails in a way, this is what will return as the error.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TryInto-210"><a href="#TryInto-210"><span class="linenos">210</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="TryInto-211"><a href="#TryInto-211"><span class="linenos">211</span></a><span class="k">class</span> <span class="nc">TryInto</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
+</span><span id="TryInto-212"><a href="#TryInto-212"><span class="linenos">212</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An attempted conversion from `self`, which may or may not be expensive.</span>
+</span><span id="TryInto-213"><a href="#TryInto-213"><span class="linenos">213</span></a>
+</span><span id="TryInto-214"><a href="#TryInto-214"><span class="linenos">214</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
 </span><span id="TryInto-215"><a href="#TryInto-215"><span class="linenos">215</span></a>
-</span><span id="TryInto-216"><a href="#TryInto-216"><span class="linenos">216</span></a><span class="sd">    Example</span>
-</span><span id="TryInto-217"><a href="#TryInto-217"><span class="linenos">217</span></a><span class="sd">    -------</span>
-</span><span id="TryInto-218"><a href="#TryInto-218"><span class="linenos">218</span></a><span class="sd">    ```py</span>
-</span><span id="TryInto-219"><a href="#TryInto-219"><span class="linenos">219</span></a><span class="sd">    @dataclass</span>
-</span><span id="TryInto-220"><a href="#TryInto-220"><span class="linenos">220</span></a><span class="sd">    class Id(TryInto[int, str]):</span>
-</span><span id="TryInto-221"><a href="#TryInto-221"><span class="linenos">221</span></a><span class="sd">        value: str</span>
+</span><span id="TryInto-216"><a href="#TryInto-216"><span class="linenos">216</span></a><span class="sd">    Generic Implementations</span>
+</span><span id="TryInto-217"><a href="#TryInto-217"><span class="linenos">217</span></a><span class="sd">    -------------------</span>
+</span><span id="TryInto-218"><a href="#TryInto-218"><span class="linenos">218</span></a><span class="sd">    This interface takes two type arguments, and return `Result&lt;T, E&gt;`</span>
+</span><span id="TryInto-219"><a href="#TryInto-219"><span class="linenos">219</span></a>
+</span><span id="TryInto-220"><a href="#TryInto-220"><span class="linenos">220</span></a><span class="sd">    * `T`: The first generic `T` is the type that&#39;s being converted into.</span>
+</span><span id="TryInto-221"><a href="#TryInto-221"><span class="linenos">221</span></a><span class="sd">    * `E`: If the conversion fails in a way, this is what will return as the error.</span>
 </span><span id="TryInto-222"><a href="#TryInto-222"><span class="linenos">222</span></a>
-</span><span id="TryInto-223"><a href="#TryInto-223"><span class="linenos">223</span></a><span class="sd">        def try_into(self) -&gt; Result[int, str]:</span>
-</span><span id="TryInto-224"><a href="#TryInto-224"><span class="linenos">224</span></a><span class="sd">            if not self.value.isnumeric():</span>
-</span><span id="TryInto-225"><a href="#TryInto-225"><span class="linenos">225</span></a><span class="sd">                return Err(f&quot;{self.value} is not a number...&quot;)</span>
-</span><span id="TryInto-226"><a href="#TryInto-226"><span class="linenos">226</span></a><span class="sd">            return Ok(int(self.value))</span>
-</span><span id="TryInto-227"><a href="#TryInto-227"><span class="linenos">227</span></a><span class="sd">    ```</span>
-</span><span id="TryInto-228"><a href="#TryInto-228"><span class="linenos">228</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="TryInto-229"><a href="#TryInto-229"><span class="linenos">229</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="TryInto-230"><a href="#TryInto-230"><span class="linenos">230</span></a>
-</span><span id="TryInto-231"><a href="#TryInto-231"><span class="linenos">231</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="TryInto-232"><a href="#TryInto-232"><span class="linenos">232</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="TryInto-233"><a href="#TryInto-233"><span class="linenos">233</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="TryInto-223"><a href="#TryInto-223"><span class="linenos">223</span></a><span class="sd">    Example</span>
+</span><span id="TryInto-224"><a href="#TryInto-224"><span class="linenos">224</span></a><span class="sd">    -------</span>
+</span><span id="TryInto-225"><a href="#TryInto-225"><span class="linenos">225</span></a><span class="sd">    ```py</span>
+</span><span id="TryInto-226"><a href="#TryInto-226"><span class="linenos">226</span></a><span class="sd">    @dataclass</span>
+</span><span id="TryInto-227"><a href="#TryInto-227"><span class="linenos">227</span></a><span class="sd">    class Id(TryInto[int, str]):</span>
+</span><span id="TryInto-228"><a href="#TryInto-228"><span class="linenos">228</span></a><span class="sd">        value: str</span>
+</span><span id="TryInto-229"><a href="#TryInto-229"><span class="linenos">229</span></a>
+</span><span id="TryInto-230"><a href="#TryInto-230"><span class="linenos">230</span></a><span class="sd">        def try_into(self) -&gt; Result[int, str]:</span>
+</span><span id="TryInto-231"><a href="#TryInto-231"><span class="linenos">231</span></a><span class="sd">            if not self.value.isnumeric():</span>
+</span><span id="TryInto-232"><a href="#TryInto-232"><span class="linenos">232</span></a><span class="sd">                return Err(f&quot;{self.value} is not a number...&quot;)</span>
+</span><span id="TryInto-233"><a href="#TryInto-233"><span class="linenos">233</span></a><span class="sd">            return Ok(int(self.value))</span>
+</span><span id="TryInto-234"><a href="#TryInto-234"><span class="linenos">234</span></a><span class="sd">    ```</span>
+</span><span id="TryInto-235"><a href="#TryInto-235"><span class="linenos">235</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="TryInto-236"><a href="#TryInto-236"><span class="linenos">236</span></a>
+</span><span id="TryInto-237"><a href="#TryInto-237"><span class="linenos">237</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="TryInto-238"><a href="#TryInto-238"><span class="linenos">238</span></a>
+</span><span id="TryInto-239"><a href="#TryInto-239"><span class="linenos">239</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
+</span><span id="TryInto-240"><a href="#TryInto-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="TryInto-241"><a href="#TryInto-241"><span class="linenos">241</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -944,9 +955,9 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 
     </div>
     <a class="headerlink" href="#TryInto.try_into"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TryInto.try_into-231"><a href="#TryInto.try_into-231"><span class="linenos">231</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="TryInto.try_into-232"><a href="#TryInto.try_into-232"><span class="linenos">232</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
-</span><span id="TryInto.try_into-233"><a href="#TryInto.try_into-233"><span class="linenos">233</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TryInto.try_into-239"><a href="#TryInto.try_into-239"><span class="linenos">239</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
+</span><span id="TryInto.try_into-240"><a href="#TryInto.try_into-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="TryInto.try_into-241"><a href="#TryInto.try_into-241"><span class="linenos">241</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 

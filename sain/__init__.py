@@ -64,6 +64,7 @@ __all__ = (
     # vec.py
     "vec",
     "Vec",
+    "Bytes",
     # error.py
     "error",
     "Error",
@@ -100,6 +101,7 @@ from .convert import TryFrom
 from .convert import TryInto
 from .default import Default
 from .dyn import vec
+from .dyn.buf import Bytes
 from .dyn.vec import Vec
 from .error import Error
 from .iter import Iter

@@ -325,7 +325,7 @@
 </span><span id="L-63"><a href="#L-63"><span class="linenos">  63</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">futures</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos">  64</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">option</span> <span class="k">as</span> <span class="n">_option</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">  65</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">result</span> <span class="k">as</span> <span class="n">_result</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">  66</span></a><span class="kn">from</span> <span class="nn">.vec</span> <span class="kn">import</span> <span class="n">Vec</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">  66</span></a><span class="kn">from</span> <span class="nn">.dyn</span> <span class="kn">import</span> <span class="n">vec</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos">  67</span></a>
 </span><span id="L-68"><a href="#L-68"><span class="linenos">  68</span></a><span class="n">Item</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;Item&quot;</span><span class="p">)</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos">  69</span></a><span class="sd">&quot;&quot;&quot;The type of the item that is being yielded.&quot;&quot;&quot;</span>
@@ -461,7 +461,7 @@
 </span><span id="L-199"><a href="#L-199"><span class="linenos"> 199</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos"> 200</span></a>
 </span><span id="L-201"><a href="#L-201"><span class="linenos"> 201</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos"> 202</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos"> 202</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos"> 203</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos"> 204</span></a>
 </span><span id="L-205"><a href="#L-205"><span class="linenos"> 205</span></a><span class="sd">        Example</span>
@@ -473,7 +473,7 @@
 </span><span id="L-211"><a href="#L-211"><span class="linenos"> 211</span></a><span class="sd">        assert to_vec == [0]</span>
 </span><span id="L-212"><a href="#L-212"><span class="linenos"> 212</span></a><span class="sd">        ```</span>
 </span><span id="L-213"><a href="#L-213"><span class="linenos"> 213</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos"> 214</span></a>        <span class="k">return</span> <span class="n">Vec</span><span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos"> 214</span></a>        <span class="k">return</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
 </span><span id="L-215"><a href="#L-215"><span class="linenos"> 215</span></a>
 </span><span id="L-216"><a href="#L-216"><span class="linenos"> 216</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-217"><a href="#L-217"><span class="linenos"> 217</span></a>    <span class="k">def</span> <span class="nf">sink</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1695,7 +1695,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-200"><a href="#Iterator-200"><span class="linenos">200</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
 </span><span id="Iterator-201"><a href="#Iterator-201"><span class="linenos">201</span></a>
 </span><span id="Iterator-202"><a href="#Iterator-202"><span class="linenos">202</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
-</span><span id="Iterator-203"><a href="#Iterator-203"><span class="linenos">203</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+</span><span id="Iterator-203"><a href="#Iterator-203"><span class="linenos">203</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
 </span><span id="Iterator-204"><a href="#Iterator-204"><span class="linenos">204</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
 </span><span id="Iterator-205"><a href="#Iterator-205"><span class="linenos">205</span></a>
 </span><span id="Iterator-206"><a href="#Iterator-206"><span class="linenos">206</span></a><span class="sd">        Example</span>
@@ -1707,7 +1707,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-212"><a href="#Iterator-212"><span class="linenos">212</span></a><span class="sd">        assert to_vec == [0]</span>
 </span><span id="Iterator-213"><a href="#Iterator-213"><span class="linenos">213</span></a><span class="sd">        ```</span>
 </span><span id="Iterator-214"><a href="#Iterator-214"><span class="linenos">214</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Iterator-215"><a href="#Iterator-215"><span class="linenos">215</span></a>        <span class="k">return</span> <span class="n">Vec</span><span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+</span><span id="Iterator-215"><a href="#Iterator-215"><span class="linenos">215</span></a>        <span class="k">return</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
 </span><span id="Iterator-216"><a href="#Iterator-216"><span class="linenos">216</span></a>
 </span><span id="Iterator-217"><a href="#Iterator-217"><span class="linenos">217</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator-218"><a href="#Iterator-218"><span class="linenos">218</span></a>    <span class="k">def</span> <span class="nf">sink</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -2365,14 +2365,14 @@ If not provided the items will be returned as it's original type.</li>
                     <div class="decorator">@typing.final</div>
 
         <span class="def">def</span>
-        <span class="name">to_vec</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="vec.html#Vec">sain.vec.Vec</a></span><span class="p">[</span><span class="o">~</span><span class="n">Item</span><span class="p">]</span>:</span></span>
+        <span class="name">to_vec</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">sain</span><span class="o">.</span><span class="n">dyn</span><span class="o">.</span><span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">[</span><span class="o">~</span><span class="n">Item</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Iterator.to_vec-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Iterator.to_vec"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.to_vec-202"><a href="#Iterator.to_vec-202"><span class="linenos">202</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
-</span><span id="Iterator.to_vec-203"><a href="#Iterator.to_vec-203"><span class="linenos">203</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+</span><span id="Iterator.to_vec-203"><a href="#Iterator.to_vec-203"><span class="linenos">203</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
 </span><span id="Iterator.to_vec-204"><a href="#Iterator.to_vec-204"><span class="linenos">204</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
 </span><span id="Iterator.to_vec-205"><a href="#Iterator.to_vec-205"><span class="linenos">205</span></a>
 </span><span id="Iterator.to_vec-206"><a href="#Iterator.to_vec-206"><span class="linenos">206</span></a><span class="sd">        Example</span>
@@ -2384,7 +2384,7 @@ If not provided the items will be returned as it's original type.</li>
 </span><span id="Iterator.to_vec-212"><a href="#Iterator.to_vec-212"><span class="linenos">212</span></a><span class="sd">        assert to_vec == [0]</span>
 </span><span id="Iterator.to_vec-213"><a href="#Iterator.to_vec-213"><span class="linenos">213</span></a><span class="sd">        ```</span>
 </span><span id="Iterator.to_vec-214"><a href="#Iterator.to_vec-214"><span class="linenos">214</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Iterator.to_vec-215"><a href="#Iterator.to_vec-215"><span class="linenos">215</span></a>        <span class="k">return</span> <span class="n">Vec</span><span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+</span><span id="Iterator.to_vec-215"><a href="#Iterator.to_vec-215"><span class="linenos">215</span></a>        <span class="k">return</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
 </span></pre></div>
 
 
