@@ -63,7 +63,7 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-from .vec import Vec
+from .dyn import vec
 
 Item = typing.TypeVar("Item")
 """The type of the item that is being yielded."""
@@ -199,7 +199,7 @@ class Iterator(
         return tuple(_ for _ in self)
 
     @typing.final
-    def to_vec(self) -> Vec[Item]:
+    def to_vec(self) -> vec.Vec[Item]:
         """Convert this iterator into `Vec[T]`.
 
         Example
@@ -211,7 +211,7 @@ class Iterator(
         assert to_vec == [0]
         ```
         """
-        return Vec(_ for _ in self)
+        return vec.Vec(_ for _ in self)
 
     @typing.final
     def sink(self) -> None:

@@ -50,15 +50,15 @@ import sys as _sys
 import typing
 from collections import abc as collections
 
-from . import iter as _iter
-from . import option as _option
-from . import result as _result
+from sain import iter as _iter
+from sain import option as _option
+from sain import result as _result
 
 if typing.TYPE_CHECKING:
-    from typing_extensions import Self
     from _typeshed import SupportsRichComparison
+    from typing_extensions import Self
 
-    from . import Result
+    from sain import Result
 
 T = typing.TypeVar("T")
 
@@ -647,7 +647,7 @@ class Vec(typing.Generic[T]):
         return self._ptr.index(item, start, end)
 
     def count(self, item: T) -> int:
-        """Return the number of items in the vec.
+        """Return the number of occurrences of `item` in the vec.
 
         `0` is returned if the vector is empty or hasn't been initialized, as well if them item not found.
 
@@ -667,8 +667,8 @@ class Vec(typing.Generic[T]):
         return len(self._ptr) if self._ptr else 0
 
     def __setitem__(self, index: int, value: T):
-        if self._ptr is None:
-            self._ptr = []
+        if not self._ptr:
+            raise IndexError from None
 
         self._ptr[index] = value
 

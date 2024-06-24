@@ -64,6 +64,7 @@ __all__ = (
     # vec.py
     "vec",
     "Vec",
+    "Bytes",
     # error.py
     "error",
     "Error",
@@ -91,7 +92,6 @@ from . import macros
 from . import option
 from . import result
 from . import sync
-from . import vec
 from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr
@@ -100,6 +100,9 @@ from .convert import Into
 from .convert import TryFrom
 from .convert import TryInto
 from .default import Default
+from .dyn import vec
+from .dyn.buf import Bytes
+from .dyn.vec import Vec
 from .error import Error
 from .iter import Iter
 from .iter import Iterator
@@ -114,7 +117,6 @@ from .option import Some
 from .result import Err
 from .result import Ok
 from .result import Result
-from .vec import Vec
 
 __version__: str = "1.0.0"
 __url__: str = "https://github.com/nxtlo/sain"
