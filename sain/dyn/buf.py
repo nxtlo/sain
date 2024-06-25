@@ -41,7 +41,6 @@ import typing
 from collections import abc as collections
 
 from sain import iter as _iter
-from sain import macros
 from sain import option as _option
 from sain import result as _result
 
@@ -51,32 +50,21 @@ if typing.TYPE_CHECKING:
     from sain import Option
     from sain import Result
 
-    Rawish: typing.TypeAlias = (
-        int
-        | bytes
-        | bytearray
-        | "Bytes"
-        | collections.Iterable[int]
-        | typing.SupportsBytes
-        | io.StringIO
-        | io.BytesIO
-        | io.BufferedReader
-    )
+    Rawish: typing.TypeAlias = io.StringIO | io.BytesIO | io.BufferedReader | memoryview
+    Buffer: typing.TypeAlias = bytes | bytearray | collections.Iterable[int] | "Bytes"
 
 ENCODING = "utf-8"
 REPLACEMENT_CHARACTER = "�"
 
 
-def unwrap_bytes(raw: Rawish) -> bytes:
-    if isinstance(raw, (io.BytesIO, io.BufferedReader)):
-        data = raw.read()
-    elif isinstance(raw, io.StringIO):
-        data = raw.read().encode(ENCODING)
-    elif isinstance(raw, int):
-        data = raw.to_bytes()
+def unwrap_bytes(data: Rawish) -> bytes:
+    if isinstance(data, io.StringIO):
+        buf = bytes(data.read(), encoding=ENCODING)
+    elif isinstance(data, memoryview):
+        buf = data.tobytes()
     else:
-        data = bytes(raw)
-    return data
+        buf = data.read()
+    return buf
 
 
 @typing.final
@@ -95,6 +83,7 @@ class Bytes:
 
     * `Bytes()`: Initialize an empty `Bytes` object
     * `from_str`: Create `Bytes` from `str`
+    * `from_bytes`: Create `Bytes` from `bytes` | `bytearray` | `Sequence[int]`
     * `from_raw`: Create `Bytes` from a `Rawish` type
     * `from_static`: Create `Bytes` that points to an `array.array[int]`, no copying.
 
@@ -115,7 +104,6 @@ class Bytes:
         """Creates a new empty `Bytes`.
 
         This won't allocate the array and the returned `Bytes` will be empty.
-        however, when you put data in it, it will get initialized.
         """
         self._buf: array.array[int] | None = None
 
@@ -145,13 +133,27 @@ class Bytes:
         Example
         -------
         ```py
-        buffer = Bytes.from_str("💀")
-        assert buffer.as_ref() == (240, 159, 146, 128)
+        arr = array.array("B")
+        buffer = Bytes.from_static(arr)
         ```
         """
-        # `str` is guaranteed to be utf-8, so it is safe to encode without raising.
         b = cls()
         b._buf = arr
+        return b
+
+    @classmethod
+    def from_bytes(cls, buf: Buffer) -> Self:
+        """Create a new `Bytes` from an initial bytes.
+
+        Example
+        -------
+        ```py
+        arr = array.array("B")
+        buffer = Bytes.from_bytes(b"SIGNATURE")
+        ```
+        """
+        b = cls()
+        b._buf = array.array("B", buf)
         return b
 
     @classmethod
@@ -161,21 +163,21 @@ class Bytes:
         Example
         -------
         ```py
-        # from an int.
-        buff = Bytes.from_raw(71)
-        # from bytes
-        buff = Bytes.from_raw(b"Hello")
-        # from a file's content.
         with open('file.txt', 'rb') as file:
             buff = Bytes.from_raw(file)
-        # from a sequence of bytes
-        buff = Bytes.from_raw([72, 101, 108, 108, 111])
+
+        # in memory bytes io
+        bytes_io = io.BytesIO(b"data")
+        buffer1 = Bytes.from_raw(bytes_io)
+        # in memory string io
+        string_io = io.StringIO("data")
+        buffer2 = Bytes.from_raw(string_io)
         ```
 
         Raises
         ------
         `ValueError`
-            If any contained byte not in range `0..255`
+            If `raw` contains a byte not in range `0..255`
         """
         c = cls()
         c._buf = array.array("B", unwrap_bytes(raw))
@@ -200,7 +202,7 @@ class Bytes:
         Incorrect bytes
         ---------------
         ```py
-        invalid_bytes = Bytes([0, 159, 146, 150])
+        invalid_bytes = Bytes.from_raw([0, 159, 146, 150])
         invalid_bytes.try_to_str().is_err()
         ```
 
@@ -261,6 +263,28 @@ class Bytes:
 
     # buffer evolution
 
+    def leak(self) -> Option[array.array[int]]:
+        """Consumes and leaks the underlying array, setting it to `None` and returning it.
+
+        Nothing happen if it was already `None`.
+
+        Example
+        -------
+        ```py
+        bytes = Bytes.from_str("chunks of data")
+        consumed = bytes.leak()
+
+        assert bytes.is_empty()
+        assert consumed.tobytes() == b"chunks of data"
+        ```
+        """
+        if self._buf is None:
+            return _option.nothing_unchecked()
+
+        arr = self._buf
+        self._buf = None
+        return _option.Some(arr)
+
     def as_bytes(self) -> bytes:
         """Convert `self` into `bytes`.
 
@@ -315,26 +339,12 @@ class Bytes:
 
     # default methods.
 
-    def put(self, src: Rawish) -> None:
-        """Extend `self` from `src`.
+    def put_raw(self, src: Rawish) -> None:
+        """Extend `self` from a raw `src`.
 
         Example
         -------
         ```py
-        buff = Bytes()
-        # Put a single byte
-        buff.put(32)
-        # put bytes
-        buff.put(b'Hello')
-
-        # put a file's content.
-        with open('file.txt', 'rb') as file:
-            buff.put(file)
-
-        # put a sequence of bytes
-        buff.put([72, 101, 108, 108, 111])
-        # put Bytes
-        buff.put(Bytes.from_str("buh"))
         ```
 
         Parameters
@@ -348,26 +358,63 @@ class Bytes:
             If a byte in `src` is greater than `u8->MAX` which is 255.
         """
         if self._buf is None:
-            self._buf = array.array("B")
+            self._buf = array.array("B", unwrap_bytes(src))
+        else:
+            self._buf.extend(unwrap_bytes(src))
 
-        self._buf.extend(unwrap_bytes(src))
+    def put_int(self, u8: int) -> None:
+        if self._buf is None:
+            self._buf = array.array("B", (u8,))
 
-    def put_str(self, s: str) -> None:
-        """Transfer bytes into `self` from a string.
+    def put_bytes(self, src: Buffer) -> None:
+        """Put `bytes` into `self`.
 
-        The string must be a valid UTF-8 encoded string.
+        `src` can be any type that is `bytes`, `bytearray` or a sequence of ints.
+
+        Example
+        -------
+        ```py
+        ```
 
         Parameters
         ----------
-        src : `Rawish`
-            A valid raw data type. See `Rawish` for more details.
+        src : `Buffer`
+            Can be one of `Bytes`, `bytes`, `bytearray` or `Sequence[int]`
+
+        Raises
+        ------
+        `OverflowError`
+            If a byte in `src` is greater than `u8->MAX` which is 255.
+        """
+        if self._buf is None:
+            # If it was `None`, we initialize it with a source instead of extending.
+            self._buf = array.array("B", src)
+        else:
+            self._buf.extend(src)
+
+    def put_str(self, s: str) -> None:
+        """Put bytes into `self` from an encoded string, the string must be a valid UTF-8 encoded string.
+
+        Example
+        -------
+        ```py
+        buffer = Bytes()
+        buffer.put_str("hello")
+
+        assert buffer.to_str() == "hello"
+        ```
+
+        Parameters
+        ----------
+        src: `str`
+            The string
 
         Raises
         ------
         `UnicodeEncodeError`
             If the string isn't a valid `UTF-8`.
         """
-        self.put(s.encode(ENCODING))
+        self.put_bytes(s.encode(ENCODING))
 
     def len(self) -> int:
         """Return the number of elements in this buffer.
@@ -395,17 +442,6 @@ class Bytes:
         if not self._buf:
             return 0
         return self._buf.itemsize
-
-    @macros.unstable()
-    def capacity(self) -> int:
-        """Return the capacity of this buffer if set. 0 if not .
-
-        Example
-        -------
-        ```py
-        ```
-        """
-        ...
 
     def iter(self) -> _iter.Iterator[int]:
         """Returns an iterator over the bytes of `self`.
