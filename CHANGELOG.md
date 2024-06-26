@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ios` support to `target_os`.
 - impl `Bytes`
 
+### Changed
+
+- starting from this release, all collections are moved to `collections` instead of being in top-level.
+of course, core implementations such as `Vec` are still at top level.
+
 ## 09/06/2024
 
 ### Added

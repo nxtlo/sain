@@ -27,11 +27,24 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Dynamically growable containers."""
+"""Dynamically growable collections and containers.
+
+These collections are basic implementations of Rust's standard collections crate. from under the hood, they're an extended
+and more rich implementations of the built-in sequences such as `list` and `bytearray`.
+
+### When Should You Use Which Collection?
+This question's answer should be pretty straightforward.
+
+* Use `Vec` when you want to replace `list`
+* Use `Bytes` when you want to replace `bytearray` or `bytes` or in general, you want to store bytes in memory,
+then perform conversions into other types.
+"""
 
 from __future__ import annotations
 
-__all__ = ("Vec", "Bytes")
+__all__ = ("Vec", "Bytes", "vec", "buf")
 
+from . import buf
+from . import vec
 from .buf import Bytes
 from .vec import Vec

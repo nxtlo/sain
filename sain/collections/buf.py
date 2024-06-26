@@ -35,7 +35,7 @@ from __future__ import annotations
 __all__ = ("Bytes", "Rawish", "Buffer")
 
 import array
-import io
+import io as _io
 import sys as _sys
 import typing
 from collections import abc as collections
@@ -50,36 +50,37 @@ if typing.TYPE_CHECKING:
     from sain import Option
     from sain import Result
 
-    Rawish: typing.TypeAlias = io.StringIO | io.BytesIO | io.BufferedReader | memoryview
-    """A type hint for some raw data type.
+Rawish: typing.TypeAlias = _io.StringIO | _io.BytesIO | _io.BufferedReader | memoryview
+"""A type hint for some raw data type.
 
-    This can be any of:
-    * `io.StringIO`
-    * `io.BytesIO`
-    * `io.BufferedReader`
-    * `memoryview`
-    """
+This can be any of:
+* `io.StringIO`
+* `io.BytesIO`
+* `io.BufferedReader`
+* `memoryview`
+"""
 
-    Buffer: typing.TypeAlias = bytes | bytearray | collections.Iterable[int] | "Bytes"
-    """A type hint for some bytes data type.
+Buffer: typing.TypeAlias = bytes | bytearray | collections.Iterable[int]
+"""A type hint for some bytes data type.
 
-    This can be any of:
-    * `bytes`
-    * `Bytes`
-    * `bytearray`
-    * `Iterable[int]`
-    """
+This can be any of:
+* `bytes`
+* `Bytes`
+* `bytearray`
+* `Iterable[int]`
+"""
 
 ENCODING = "utf-8"
 REPLACEMENT_CHARACTER = "�"
 
 
 def unwrap_bytes(data: Rawish) -> bytes:
-    if isinstance(data, io.StringIO):
+    if isinstance(data, _io.StringIO):
         buf = bytes(data.read(), encoding=ENCODING)
     elif isinstance(data, memoryview):
         buf = data.tobytes()
     else:
+        # BufferedReader | BytesIO
         buf = data.read()
     return buf
 
@@ -113,7 +114,7 @@ class Bytes:
     buffer.put_bytes(b"Hello")
     print(buffer) # [72, 101, 108, 108, 111]
 
-    buf.put_int(1234)
+    buf.put(1234)
     assert buffer.as_bytes() == b"Hello\x04\xd2"
     ```
     """

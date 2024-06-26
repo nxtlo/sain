@@ -61,10 +61,10 @@ __all__ = (
     "Ok",
     "Err",
     "Result",
-    # vec.py
+    # collections
+    "collections",
     "vec",
     "Vec",
-    "Bytes",
     # error.py
     "error",
     "Error",
@@ -83,6 +83,7 @@ __all__ = (
 )
 
 from . import boxed
+from . import collections
 from . import convert
 from . import default
 from . import error
@@ -95,14 +96,13 @@ from . import sync
 from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr
+from .collections import Vec
+from .collections import vec
 from .convert import From
 from .convert import Into
 from .convert import TryFrom
 from .convert import TryInto
 from .default import Default
-from .dyn import vec
-from .dyn.buf import Bytes
-from .dyn.vec import Vec
 from .error import Error
 from .iter import Iter
 from .iter import Iterator
