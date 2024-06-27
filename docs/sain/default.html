@@ -136,7 +136,7 @@
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
 </span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="k">class</span> <span class="nc">Default</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">_T_co</span><span class="p">]):</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="sd">&quot;&quot;&quot;An interface for an object that has a default value.</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An interface for an object that has a default value.</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    Example</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">    -------</span>
@@ -160,7 +160,7 @@
 </span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>
 </span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
 </span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -180,7 +180,7 @@
     <a class="headerlink" href="#Default"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Default-57"><a href="#Default-57"><span class="linenos">57</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="Default-58"><a href="#Default-58"><span class="linenos">58</span></a><span class="k">class</span> <span class="nc">Default</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">_T_co</span><span class="p">]):</span>
-</span><span id="Default-59"><a href="#Default-59"><span class="linenos">59</span></a>    <span class="sd">&quot;&quot;&quot;An interface for an object that has a default value.</span>
+</span><span id="Default-59"><a href="#Default-59"><span class="linenos">59</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An interface for an object that has a default value.</span>
 </span><span id="Default-60"><a href="#Default-60"><span class="linenos">60</span></a>
 </span><span id="Default-61"><a href="#Default-61"><span class="linenos">61</span></a><span class="sd">    Example</span>
 </span><span id="Default-62"><a href="#Default-62"><span class="linenos">62</span></a><span class="sd">    -------</span>
@@ -204,7 +204,7 @@
 </span><span id="Default-80"><a href="#Default-80"><span class="linenos">80</span></a>
 </span><span id="Default-81"><a href="#Default-81"><span class="linenos">81</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="Default-82"><a href="#Default-82"><span class="linenos">82</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="Default-83"><a href="#Default-83"><span class="linenos">83</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="Default-83"><a href="#Default-83"><span class="linenos">83</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
 </span><span id="Default-84"><a href="#Default-84"><span class="linenos">84</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -241,33 +241,33 @@
 
     </div>
     <a class="headerlink" href="#Default.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Default.__init__-1430"><a href="#Default.__init__-1430"><span class="linenos">1430</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="Default.__init__-1431"><a href="#Default.__init__-1431"><span class="linenos">1431</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="Default.__init__-1432"><a href="#Default.__init__-1432"><span class="linenos">1432</span></a>
-</span><span id="Default.__init__-1433"><a href="#Default.__init__-1433"><span class="linenos">1433</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="Default.__init__-1434"><a href="#Default.__init__-1434"><span class="linenos">1434</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="Default.__init__-1435"><a href="#Default.__init__-1435"><span class="linenos">1435</span></a>
-</span><span id="Default.__init__-1436"><a href="#Default.__init__-1436"><span class="linenos">1436</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="Default.__init__-1437"><a href="#Default.__init__-1437"><span class="linenos">1437</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="Default.__init__-1438"><a href="#Default.__init__-1438"><span class="linenos">1438</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="Default.__init__-1439"><a href="#Default.__init__-1439"><span class="linenos">1439</span></a>        <span class="k">return</span>
-</span><span id="Default.__init__-1440"><a href="#Default.__init__-1440"><span class="linenos">1440</span></a>
-</span><span id="Default.__init__-1441"><a href="#Default.__init__-1441"><span class="linenos">1441</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="Default.__init__-1442"><a href="#Default.__init__-1442"><span class="linenos">1442</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="Default.__init__-1443"><a href="#Default.__init__-1443"><span class="linenos">1443</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="Default.__init__-1444"><a href="#Default.__init__-1444"><span class="linenos">1444</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="Default.__init__-1445"><a href="#Default.__init__-1445"><span class="linenos">1445</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="Default.__init__-1446"><a href="#Default.__init__-1446"><span class="linenos">1446</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="Default.__init__-1447"><a href="#Default.__init__-1447"><span class="linenos">1447</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="Default.__init__-1448"><a href="#Default.__init__-1448"><span class="linenos">1448</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="Default.__init__-1449"><a href="#Default.__init__-1449"><span class="linenos">1449</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="Default.__init__-1450"><a href="#Default.__init__-1450"><span class="linenos">1450</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="Default.__init__-1451"><a href="#Default.__init__-1451"><span class="linenos">1451</span></a>            <span class="k">break</span>
-</span><span id="Default.__init__-1452"><a href="#Default.__init__-1452"><span class="linenos">1452</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="Default.__init__-1453"><a href="#Default.__init__-1453"><span class="linenos">1453</span></a>        <span class="c1"># should not happen</span>
-</span><span id="Default.__init__-1454"><a href="#Default.__init__-1454"><span class="linenos">1454</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="Default.__init__-1455"><a href="#Default.__init__-1455"><span class="linenos">1455</span></a>
-</span><span id="Default.__init__-1456"><a href="#Default.__init__-1456"><span class="linenos">1456</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Default.__init__-1739"><a href="#Default.__init__-1739"><span class="linenos">1739</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="Default.__init__-1740"><a href="#Default.__init__-1740"><span class="linenos">1740</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="Default.__init__-1741"><a href="#Default.__init__-1741"><span class="linenos">1741</span></a>
+</span><span id="Default.__init__-1742"><a href="#Default.__init__-1742"><span class="linenos">1742</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="Default.__init__-1743"><a href="#Default.__init__-1743"><span class="linenos">1743</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="Default.__init__-1744"><a href="#Default.__init__-1744"><span class="linenos">1744</span></a>
+</span><span id="Default.__init__-1745"><a href="#Default.__init__-1745"><span class="linenos">1745</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="Default.__init__-1746"><a href="#Default.__init__-1746"><span class="linenos">1746</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="Default.__init__-1747"><a href="#Default.__init__-1747"><span class="linenos">1747</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="Default.__init__-1748"><a href="#Default.__init__-1748"><span class="linenos">1748</span></a>        <span class="k">return</span>
+</span><span id="Default.__init__-1749"><a href="#Default.__init__-1749"><span class="linenos">1749</span></a>
+</span><span id="Default.__init__-1750"><a href="#Default.__init__-1750"><span class="linenos">1750</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="Default.__init__-1751"><a href="#Default.__init__-1751"><span class="linenos">1751</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="Default.__init__-1752"><a href="#Default.__init__-1752"><span class="linenos">1752</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="Default.__init__-1753"><a href="#Default.__init__-1753"><span class="linenos">1753</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="Default.__init__-1754"><a href="#Default.__init__-1754"><span class="linenos">1754</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="Default.__init__-1755"><a href="#Default.__init__-1755"><span class="linenos">1755</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="Default.__init__-1756"><a href="#Default.__init__-1756"><span class="linenos">1756</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="Default.__init__-1757"><a href="#Default.__init__-1757"><span class="linenos">1757</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="Default.__init__-1758"><a href="#Default.__init__-1758"><span class="linenos">1758</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="Default.__init__-1759"><a href="#Default.__init__-1759"><span class="linenos">1759</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="Default.__init__-1760"><a href="#Default.__init__-1760"><span class="linenos">1760</span></a>            <span class="k">break</span>
+</span><span id="Default.__init__-1761"><a href="#Default.__init__-1761"><span class="linenos">1761</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="Default.__init__-1762"><a href="#Default.__init__-1762"><span class="linenos">1762</span></a>        <span class="c1"># should not happen</span>
+</span><span id="Default.__init__-1763"><a href="#Default.__init__-1763"><span class="linenos">1763</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="Default.__init__-1764"><a href="#Default.__init__-1764"><span class="linenos">1764</span></a>
+</span><span id="Default.__init__-1765"><a href="#Default.__init__-1765"><span class="linenos">1765</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -288,7 +288,7 @@
     <a class="headerlink" href="#Default.default"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Default.default-81"><a href="#Default.default-81"><span class="linenos">81</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="Default.default-82"><a href="#Default.default-82"><span class="linenos">82</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="Default.default-83"><a href="#Default.default-83"><span class="linenos">83</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="Default.default-83"><a href="#Default.default-83"><span class="linenos">83</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
 </span><span id="Default.default-84"><a href="#Default.default-84"><span class="linenos">84</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 

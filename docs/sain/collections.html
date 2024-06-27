@@ -290,9 +290,8 @@ then perform conversions into other types.</li>
 </span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
 </span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">buf</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">vec</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="kn">from</span> <span class="nn">.buf</span> <span class="kn">import</span> <span class="n">Bytes</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="kn">from</span> <span class="nn">.vec</span> <span class="kn">import</span> <span class="n">Vec</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="kn">from</span> <span class="nn">.buf</span> <span class="kn">import</span> <span class="n">Bytes</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="kn">from</span> <span class="nn">.vec</span> <span class="kn">import</span> <span class="n">Vec</span>
 </span></pre></div>
 
 
@@ -311,7 +310,7 @@ then perform conversions into other types.</li>
     <a class="headerlink" href="#Vec"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec-70"><a href="#Vec-70"><span class="linenos"> 70</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Vec-71"><a href="#Vec-71"><span class="linenos"> 71</span></a><span class="k">class</span> <span class="nc">Vec</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="Vec-72"><a href="#Vec-72"><span class="linenos"> 72</span></a>    <span class="sd">&quot;&quot;&quot;A contiguous growable alternative to builtin `list` with extra functionalities.</span>
+</span><span id="Vec-72"><a href="#Vec-72"><span class="linenos"> 72</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A contiguous growable alternative to builtin `list` with extra functionalities.</span>
 </span><span id="Vec-73"><a href="#Vec-73"><span class="linenos"> 73</span></a>
 </span><span id="Vec-74"><a href="#Vec-74"><span class="linenos"> 74</span></a><span class="sd">    The layout of `Vec` is almost the same as `list`.</span>
 </span><span id="Vec-75"><a href="#Vec-75"><span class="linenos"> 75</span></a>
@@ -434,7 +433,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-192"><a href="#Vec-192"><span class="linenos">192</span></a>
 </span><span id="Vec-193"><a href="#Vec-193"><span class="linenos">193</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Vec-194"><a href="#Vec-194"><span class="linenos">194</span></a>    <span class="k">def</span> <span class="nf">with_capacity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Vec-195"><a href="#Vec-195"><span class="linenos">195</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
+</span><span id="Vec-195"><a href="#Vec-195"><span class="linenos">195</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
 </span><span id="Vec-196"><a href="#Vec-196"><span class="linenos">196</span></a><span class="sd">        This vec will be able to hold `capacity` elements without pushing further.</span>
 </span><span id="Vec-197"><a href="#Vec-197"><span class="linenos">197</span></a>
 </span><span id="Vec-198"><a href="#Vec-198"><span class="linenos">198</span></a><span class="sd">        Check out `Vec.push_within_capacity` as well.</span>
@@ -459,7 +458,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-217"><a href="#Vec-217"><span class="linenos">217</span></a>        <span class="k">return</span> <span class="n">v</span>
 </span><span id="Vec-218"><a href="#Vec-218"><span class="linenos">218</span></a>
 </span><span id="Vec-219"><a href="#Vec-219"><span class="linenos">219</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Collection</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-220"><a href="#Vec-220"><span class="linenos">220</span></a>        <span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
+</span><span id="Vec-220"><a href="#Vec-220"><span class="linenos">220</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
 </span><span id="Vec-221"><a href="#Vec-221"><span class="linenos">221</span></a>
 </span><span id="Vec-222"><a href="#Vec-222"><span class="linenos">222</span></a><span class="sd">        Example</span>
 </span><span id="Vec-223"><a href="#Vec-223"><span class="linenos">223</span></a><span class="sd">        -------</span>
@@ -472,7 +471,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-230"><a href="#Vec-230"><span class="linenos">230</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="Vec-231"><a href="#Vec-231"><span class="linenos">231</span></a>
 </span><span id="Vec-232"><a href="#Vec-232"><span class="linenos">232</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec-233"><a href="#Vec-233"><span class="linenos">233</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
+</span><span id="Vec-233"><a href="#Vec-233"><span class="linenos">233</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
 </span><span id="Vec-234"><a href="#Vec-234"><span class="linenos">234</span></a>
 </span><span id="Vec-235"><a href="#Vec-235"><span class="linenos">235</span></a><span class="sd">        Example</span>
 </span><span id="Vec-236"><a href="#Vec-236"><span class="linenos">236</span></a><span class="sd">        -------</span>
@@ -485,7 +484,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-243"><a href="#Vec-243"><span class="linenos">243</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
 </span><span id="Vec-244"><a href="#Vec-244"><span class="linenos">244</span></a>
 </span><span id="Vec-245"><a href="#Vec-245"><span class="linenos">245</span></a>    <span class="k">def</span> <span class="nf">capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec-246"><a href="#Vec-246"><span class="linenos">246</span></a>        <span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
+</span><span id="Vec-246"><a href="#Vec-246"><span class="linenos">246</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
 </span><span id="Vec-247"><a href="#Vec-247"><span class="linenos">247</span></a>
 </span><span id="Vec-248"><a href="#Vec-248"><span class="linenos">248</span></a><span class="sd">        Example</span>
 </span><span id="Vec-249"><a href="#Vec-249"><span class="linenos">249</span></a><span class="sd">        -------</span>
@@ -500,7 +499,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-258"><a href="#Vec-258"><span class="linenos">258</span></a>        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capacity</span>
 </span><span id="Vec-259"><a href="#Vec-259"><span class="linenos">259</span></a>
 </span><span id="Vec-260"><a href="#Vec-260"><span class="linenos">260</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-261"><a href="#Vec-261"><span class="linenos">261</span></a>        <span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
+</span><span id="Vec-261"><a href="#Vec-261"><span class="linenos">261</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
 </span><span id="Vec-262"><a href="#Vec-262"><span class="linenos">262</span></a>
 </span><span id="Vec-263"><a href="#Vec-263"><span class="linenos">263</span></a><span class="sd">        Example</span>
 </span><span id="Vec-264"><a href="#Vec-264"><span class="linenos">264</span></a><span class="sd">        -------</span>
@@ -516,11 +515,11 @@ then perform conversions into other types.</li>
 </span><span id="Vec-274"><a href="#Vec-274"><span class="linenos">274</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="Vec-275"><a href="#Vec-275"><span class="linenos">275</span></a>
 </span><span id="Vec-276"><a href="#Vec-276"><span class="linenos">276</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Vec-277"><a href="#Vec-277"><span class="linenos">277</span></a>        <span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
+</span><span id="Vec-277"><a href="#Vec-277"><span class="linenos">277</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
 </span><span id="Vec-278"><a href="#Vec-278"><span class="linenos">278</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span>
 </span><span id="Vec-279"><a href="#Vec-279"><span class="linenos">279</span></a>
 </span><span id="Vec-280"><a href="#Vec-280"><span class="linenos">280</span></a>    <span class="k">def</span> <span class="nf">split_off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-281"><a href="#Vec-281"><span class="linenos">281</span></a>        <span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
+</span><span id="Vec-281"><a href="#Vec-281"><span class="linenos">281</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
 </span><span id="Vec-282"><a href="#Vec-282"><span class="linenos">282</span></a>
 </span><span id="Vec-283"><a href="#Vec-283"><span class="linenos">283</span></a><span class="sd">        if this vec is empty, `self` is returned unchanged.</span>
 </span><span id="Vec-284"><a href="#Vec-284"><span class="linenos">284</span></a>
@@ -541,7 +540,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-299"><a href="#Vec-299"><span class="linenos">299</span></a>        <span class="k">if</span> <span class="n">at</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">():</span>
 </span><span id="Vec-300"><a href="#Vec-300"><span class="linenos">300</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="Vec-301"><a href="#Vec-301"><span class="linenos">301</span></a>                <span class="sa">f</span><span class="s2">&quot;Index `at` (</span><span class="si">{</span><span class="n">at</span><span class="si">}</span><span class="s2">) should be &lt;= than len of vector (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="si">}</span><span class="s2">) &quot;</span>
-</span><span id="Vec-302"><a href="#Vec-302"><span class="linenos">302</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec-302"><a href="#Vec-302"><span class="linenos">302</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec-303"><a href="#Vec-303"><span class="linenos">303</span></a>
 </span><span id="Vec-304"><a href="#Vec-304"><span class="linenos">304</span></a>        <span class="c1"># Either the list is empty or uninit.</span>
 </span><span id="Vec-305"><a href="#Vec-305"><span class="linenos">305</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">:</span>
@@ -552,7 +551,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-310"><a href="#Vec-310"><span class="linenos">310</span></a>        <span class="k">return</span> <span class="n">split</span>
 </span><span id="Vec-311"><a href="#Vec-311"><span class="linenos">311</span></a>
 </span><span id="Vec-312"><a href="#Vec-312"><span class="linenos">312</span></a>    <span class="k">def</span> <span class="nf">split_first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]]]:</span>
-</span><span id="Vec-313"><a href="#Vec-313"><span class="linenos">313</span></a>        <span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
+</span><span id="Vec-313"><a href="#Vec-313"><span class="linenos">313</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
 </span><span id="Vec-314"><a href="#Vec-314"><span class="linenos">314</span></a>
 </span><span id="Vec-315"><a href="#Vec-315"><span class="linenos">315</span></a><span class="sd">        Example</span>
 </span><span id="Vec-316"><a href="#Vec-316"><span class="linenos">316</span></a><span class="sd">        -------</span>
@@ -573,7 +572,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-331"><a href="#Vec-331"><span class="linenos">331</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">((</span><span class="n">first</span><span class="p">,</span> <span class="n">rest</span><span class="p">))</span>
 </span><span id="Vec-332"><a href="#Vec-332"><span class="linenos">332</span></a>
 </span><span id="Vec-333"><a href="#Vec-333"><span class="linenos">333</span></a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-334"><a href="#Vec-334"><span class="linenos">334</span></a>        <span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
+</span><span id="Vec-334"><a href="#Vec-334"><span class="linenos">334</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
 </span><span id="Vec-335"><a href="#Vec-335"><span class="linenos">335</span></a>
 </span><span id="Vec-336"><a href="#Vec-336"><span class="linenos">336</span></a><span class="sd">        Example</span>
 </span><span id="Vec-337"><a href="#Vec-337"><span class="linenos">337</span></a><span class="sd">        -------</span>
@@ -586,7 +585,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-344"><a href="#Vec-344"><span class="linenos">344</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </span><span id="Vec-345"><a href="#Vec-345"><span class="linenos">345</span></a>
 </span><span id="Vec-346"><a href="#Vec-346"><span class="linenos">346</span></a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-347"><a href="#Vec-347"><span class="linenos">347</span></a>        <span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
+</span><span id="Vec-347"><a href="#Vec-347"><span class="linenos">347</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
 </span><span id="Vec-348"><a href="#Vec-348"><span class="linenos">348</span></a>
 </span><span id="Vec-349"><a href="#Vec-349"><span class="linenos">349</span></a><span class="sd">        Example</span>
 </span><span id="Vec-350"><a href="#Vec-350"><span class="linenos">350</span></a><span class="sd">        -------</span>
@@ -602,7 +601,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-360"><a href="#Vec-360"><span class="linenos">360</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">[:</span><span class="n">size</span><span class="p">]</span>
 </span><span id="Vec-361"><a href="#Vec-361"><span class="linenos">361</span></a>
 </span><span id="Vec-362"><a href="#Vec-362"><span class="linenos">362</span></a>    <span class="k">def</span> <span class="nf">retain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-363"><a href="#Vec-363"><span class="linenos">363</span></a>        <span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
+</span><span id="Vec-363"><a href="#Vec-363"><span class="linenos">363</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
 </span><span id="Vec-364"><a href="#Vec-364"><span class="linenos">364</span></a>
 </span><span id="Vec-365"><a href="#Vec-365"><span class="linenos">365</span></a><span class="sd">        In other words, filter this vector based on `f()`.</span>
 </span><span id="Vec-366"><a href="#Vec-366"><span class="linenos">366</span></a>
@@ -621,7 +620,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-379"><a href="#Vec-379"><span class="linenos">379</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">e</span><span class="p">)]</span>
 </span><span id="Vec-380"><a href="#Vec-380"><span class="linenos">380</span></a>
 </span><span id="Vec-381"><a href="#Vec-381"><span class="linenos">381</span></a>    <span class="k">def</span> <span class="nf">swap_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Vec-382"><a href="#Vec-382"><span class="linenos">382</span></a>        <span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
+</span><span id="Vec-382"><a href="#Vec-382"><span class="linenos">382</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
 </span><span id="Vec-383"><a href="#Vec-383"><span class="linenos">383</span></a>
 </span><span id="Vec-384"><a href="#Vec-384"><span class="linenos">384</span></a><span class="sd">        Raises</span>
 </span><span id="Vec-385"><a href="#Vec-385"><span class="linenos">385</span></a><span class="sd">        ------</span>
@@ -637,18 +636,18 @@ then perform conversions into other types.</li>
 </span><span id="Vec-395"><a href="#Vec-395"><span class="linenos">395</span></a><span class="sd">        ```</span>
 </span><span id="Vec-396"><a href="#Vec-396"><span class="linenos">396</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Vec-397"><a href="#Vec-397"><span class="linenos">397</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-398"><a href="#Vec-398"><span class="linenos">398</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec-398"><a href="#Vec-398"><span class="linenos">398</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec-399"><a href="#Vec-399"><span class="linenos">399</span></a>
 </span><span id="Vec-400"><a href="#Vec-400"><span class="linenos">400</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="Vec-401"><a href="#Vec-401"><span class="linenos">401</span></a>            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">item</span><span class="p">)</span>
 </span><span id="Vec-402"><a href="#Vec-402"><span class="linenos">402</span></a>        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-</span><span id="Vec-403"><a href="#Vec-403"><span class="linenos">403</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec-403"><a href="#Vec-403"><span class="linenos">403</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec-404"><a href="#Vec-404"><span class="linenos">404</span></a>
 </span><span id="Vec-405"><a href="#Vec-405"><span class="linenos">405</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </span><span id="Vec-406"><a href="#Vec-406"><span class="linenos">406</span></a>        <span class="k">return</span> <span class="n">i</span>
 </span><span id="Vec-407"><a href="#Vec-407"><span class="linenos">407</span></a>
 </span><span id="Vec-408"><a href="#Vec-408"><span class="linenos">408</span></a>    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-409"><a href="#Vec-409"><span class="linenos">409</span></a>        <span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
+</span><span id="Vec-409"><a href="#Vec-409"><span class="linenos">409</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
 </span><span id="Vec-410"><a href="#Vec-410"><span class="linenos">410</span></a>
 </span><span id="Vec-411"><a href="#Vec-411"><span class="linenos">411</span></a><span class="sd">        Example</span>
 </span><span id="Vec-412"><a href="#Vec-412"><span class="linenos">412</span></a><span class="sd">        -------</span>
@@ -669,7 +668,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-427"><a href="#Vec-427"><span class="linenos">427</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 </span><span id="Vec-428"><a href="#Vec-428"><span class="linenos">428</span></a>
 </span><span id="Vec-429"><a href="#Vec-429"><span class="linenos">429</span></a>    <span class="k">def</span> <span class="nf">push_within_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-430"><a href="#Vec-430"><span class="linenos">430</span></a>        <span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
+</span><span id="Vec-430"><a href="#Vec-430"><span class="linenos">430</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
 </span><span id="Vec-431"><a href="#Vec-431"><span class="linenos">431</span></a>
 </span><span id="Vec-432"><a href="#Vec-432"><span class="linenos">432</span></a><span class="sd">        Example</span>
 </span><span id="Vec-433"><a href="#Vec-433"><span class="linenos">433</span></a><span class="sd">        -------</span>
@@ -703,7 +702,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-461"><a href="#Vec-461"><span class="linenos">461</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </span><span id="Vec-462"><a href="#Vec-462"><span class="linenos">462</span></a>
 </span><span id="Vec-463"><a href="#Vec-463"><span class="linenos">463</span></a>    <span class="k">def</span> <span class="nf">reserve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-464"><a href="#Vec-464"><span class="linenos">464</span></a>        <span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
+</span><span id="Vec-464"><a href="#Vec-464"><span class="linenos">464</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
 </span><span id="Vec-465"><a href="#Vec-465"><span class="linenos">465</span></a>
 </span><span id="Vec-466"><a href="#Vec-466"><span class="linenos">466</span></a><span class="sd">        Example</span>
 </span><span id="Vec-467"><a href="#Vec-467"><span class="linenos">467</span></a><span class="sd">        -------</span>
@@ -735,10 +734,10 @@ then perform conversions into other types.</li>
 </span><span id="Vec-493"><a href="#Vec-493"><span class="linenos">493</span></a>
 </span><span id="Vec-494"><a href="#Vec-494"><span class="linenos">494</span></a>    <span class="c1"># For people how are used to calling list.append</span>
 </span><span id="Vec-495"><a href="#Vec-495"><span class="linenos">495</span></a>    <span class="n">append</span> <span class="o">=</span> <span class="n">push</span>
-</span><span id="Vec-496"><a href="#Vec-496"><span class="linenos">496</span></a>    <span class="sd">&quot;&quot;&quot;An alias for `Vec.push` method.&quot;&quot;&quot;</span>
+</span><span id="Vec-496"><a href="#Vec-496"><span class="linenos">496</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An alias for `Vec.push` method.&quot;&quot;&quot;</span>
 </span><span id="Vec-497"><a href="#Vec-497"><span class="linenos">497</span></a>
 </span><span id="Vec-498"><a href="#Vec-498"><span class="linenos">498</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-499"><a href="#Vec-499"><span class="linenos">499</span></a>        <span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
+</span><span id="Vec-499"><a href="#Vec-499"><span class="linenos">499</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
 </span><span id="Vec-500"><a href="#Vec-500"><span class="linenos">500</span></a>
 </span><span id="Vec-501"><a href="#Vec-501"><span class="linenos">501</span></a><span class="sd">        Example</span>
 </span><span id="Vec-502"><a href="#Vec-502"><span class="linenos">502</span></a><span class="sd">        -------</span>
@@ -754,7 +753,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-512"><a href="#Vec-512"><span class="linenos">512</span></a>            <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="Vec-513"><a href="#Vec-513"><span class="linenos">513</span></a>
 </span><span id="Vec-514"><a href="#Vec-514"><span class="linenos">514</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-515"><a href="#Vec-515"><span class="linenos">515</span></a>        <span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
+</span><span id="Vec-515"><a href="#Vec-515"><span class="linenos">515</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
 </span><span id="Vec-516"><a href="#Vec-516"><span class="linenos">516</span></a>
 </span><span id="Vec-517"><a href="#Vec-517"><span class="linenos">517</span></a><span class="sd">        Example</span>
 </span><span id="Vec-518"><a href="#Vec-518"><span class="linenos">518</span></a><span class="sd">        --------</span>
@@ -767,7 +766,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-525"><a href="#Vec-525"><span class="linenos">525</span></a>        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </span><span id="Vec-526"><a href="#Vec-526"><span class="linenos">526</span></a>
 </span><span id="Vec-527"><a href="#Vec-527"><span class="linenos">527</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-528"><a href="#Vec-528"><span class="linenos">528</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
+</span><span id="Vec-528"><a href="#Vec-528"><span class="linenos">528</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
 </span><span id="Vec-529"><a href="#Vec-529"><span class="linenos">529</span></a>
 </span><span id="Vec-530"><a href="#Vec-530"><span class="linenos">530</span></a><span class="sd">        Example</span>
 </span><span id="Vec-531"><a href="#Vec-531"><span class="linenos">531</span></a><span class="sd">        -------</span>
@@ -783,7 +782,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-541"><a href="#Vec-541"><span class="linenos">541</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
 </span><span id="Vec-542"><a href="#Vec-542"><span class="linenos">542</span></a>
 </span><span id="Vec-543"><a href="#Vec-543"><span class="linenos">543</span></a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-544"><a href="#Vec-544"><span class="linenos">544</span></a>        <span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
+</span><span id="Vec-544"><a href="#Vec-544"><span class="linenos">544</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
 </span><span id="Vec-545"><a href="#Vec-545"><span class="linenos">545</span></a>
 </span><span id="Vec-546"><a href="#Vec-546"><span class="linenos">546</span></a><span class="sd">        Example</span>
 </span><span id="Vec-547"><a href="#Vec-547"><span class="linenos">547</span></a><span class="sd">        -------</span>
@@ -799,7 +798,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-557"><a href="#Vec-557"><span class="linenos">557</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 </span><span id="Vec-558"><a href="#Vec-558"><span class="linenos">558</span></a>
 </span><span id="Vec-559"><a href="#Vec-559"><span class="linenos">559</span></a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-560"><a href="#Vec-560"><span class="linenos">560</span></a>        <span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
+</span><span id="Vec-560"><a href="#Vec-560"><span class="linenos">560</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
 </span><span id="Vec-561"><a href="#Vec-561"><span class="linenos">561</span></a>
 </span><span id="Vec-562"><a href="#Vec-562"><span class="linenos">562</span></a><span class="sd">        Example</span>
 </span><span id="Vec-563"><a href="#Vec-563"><span class="linenos">563</span></a><span class="sd">        -------</span>
@@ -816,7 +815,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-574"><a href="#Vec-574"><span class="linenos">574</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
 </span><span id="Vec-575"><a href="#Vec-575"><span class="linenos">575</span></a>
 </span><span id="Vec-576"><a href="#Vec-576"><span class="linenos">576</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec-577"><a href="#Vec-577"><span class="linenos">577</span></a>        <span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
+</span><span id="Vec-577"><a href="#Vec-577"><span class="linenos">577</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
 </span><span id="Vec-578"><a href="#Vec-578"><span class="linenos">578</span></a>
 </span><span id="Vec-579"><a href="#Vec-579"><span class="linenos">579</span></a><span class="sd">        If the vector hasn&#39;t been allocated, `self` is returned.</span>
 </span><span id="Vec-580"><a href="#Vec-580"><span class="linenos">580</span></a>
@@ -833,7 +832,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-591"><a href="#Vec-591"><span class="linenos">591</span></a>        <span class="k">return</span> <span class="n">Vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">[:])</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span>
 </span><span id="Vec-592"><a href="#Vec-592"><span class="linenos">592</span></a>
 </span><span id="Vec-593"><a href="#Vec-593"><span class="linenos">593</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-594"><a href="#Vec-594"><span class="linenos">594</span></a>        <span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
+</span><span id="Vec-594"><a href="#Vec-594"><span class="linenos">594</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
 </span><span id="Vec-595"><a href="#Vec-595"><span class="linenos">595</span></a>
 </span><span id="Vec-596"><a href="#Vec-596"><span class="linenos">596</span></a><span class="sd">        Example</span>
 </span><span id="Vec-597"><a href="#Vec-597"><span class="linenos">597</span></a><span class="sd">        -------</span>
@@ -854,7 +853,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-612"><a href="#Vec-612"><span class="linenos">612</span></a>        <span class="n">key</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="n">SupportsRichComparison</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="Vec-613"><a href="#Vec-613"><span class="linenos">613</span></a>        <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="Vec-614"><a href="#Vec-614"><span class="linenos">614</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-615"><a href="#Vec-615"><span class="linenos">615</span></a>        <span class="sd">&quot;&quot;&quot;This method sorts the list in place, using only &lt; comparisons between items.</span>
+</span><span id="Vec-615"><a href="#Vec-615"><span class="linenos">615</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method sorts the list in place, using only &lt; comparisons between items.</span>
 </span><span id="Vec-616"><a href="#Vec-616"><span class="linenos">616</span></a>
 </span><span id="Vec-617"><a href="#Vec-617"><span class="linenos">617</span></a><span class="sd">        Example</span>
 </span><span id="Vec-618"><a href="#Vec-618"><span class="linenos">618</span></a><span class="sd">        -------</span>
@@ -874,7 +873,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-632"><a href="#Vec-632"><span class="linenos">632</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">SupportsIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">maxsize</span>
 </span><span id="Vec-633"><a href="#Vec-633"><span class="linenos">633</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="Vec-634"><a href="#Vec-634"><span class="linenos">634</span></a>        <span class="c1"># &lt;&lt; Official documentation &gt;&gt;</span>
-</span><span id="Vec-635"><a href="#Vec-635"><span class="linenos">635</span></a>        <span class="sd">&quot;&quot;&quot;Return zero-based index in the vec of the first item whose value is equal to `item`.</span>
+</span><span id="Vec-635"><a href="#Vec-635"><span class="linenos">635</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return zero-based index in the vec of the first item whose value is equal to `item`.</span>
 </span><span id="Vec-636"><a href="#Vec-636"><span class="linenos">636</span></a><span class="sd">        Raises a ValueError if there is no such item.</span>
 </span><span id="Vec-637"><a href="#Vec-637"><span class="linenos">637</span></a>
 </span><span id="Vec-638"><a href="#Vec-638"><span class="linenos">638</span></a><span class="sd">        Example</span>
@@ -885,12 +884,12 @@ then perform conversions into other types.</li>
 </span><span id="Vec-643"><a href="#Vec-643"><span class="linenos">643</span></a><span class="sd">        ```</span>
 </span><span id="Vec-644"><a href="#Vec-644"><span class="linenos">644</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Vec-645"><a href="#Vec-645"><span class="linenos">645</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec-646"><a href="#Vec-646"><span class="linenos">646</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec-646"><a href="#Vec-646"><span class="linenos">646</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec-647"><a href="#Vec-647"><span class="linenos">647</span></a>
 </span><span id="Vec-648"><a href="#Vec-648"><span class="linenos">648</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
 </span><span id="Vec-649"><a href="#Vec-649"><span class="linenos">649</span></a>
 </span><span id="Vec-650"><a href="#Vec-650"><span class="linenos">650</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec-651"><a href="#Vec-651"><span class="linenos">651</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of occurrences of `item` in the vec.</span>
+</span><span id="Vec-651"><a href="#Vec-651"><span class="linenos">651</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of occurrences of `item` in the vec.</span>
 </span><span id="Vec-652"><a href="#Vec-652"><span class="linenos">652</span></a>
 </span><span id="Vec-653"><a href="#Vec-653"><span class="linenos">653</span></a><span class="sd">        `0` is returned if the vector is empty or hasn&#39;t been initialized, as well if them item not found.</span>
 </span><span id="Vec-654"><a href="#Vec-654"><span class="linenos">654</span></a>
@@ -911,7 +910,7 @@ then perform conversions into other types.</li>
 </span><span id="Vec-669"><a href="#Vec-669"><span class="linenos">669</span></a>
 </span><span id="Vec-670"><a href="#Vec-670"><span class="linenos">670</span></a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">):</span>
 </span><span id="Vec-671"><a href="#Vec-671"><span class="linenos">671</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">:</span>
-</span><span id="Vec-672"><a href="#Vec-672"><span class="linenos">672</span></a>            <span class="k">raise</span> <span class="ne">IndexError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec-672"><a href="#Vec-672"><span class="linenos">672</span></a>            <span class="k">raise</span> <span class="ne">IndexError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec-673"><a href="#Vec-673"><span class="linenos">673</span></a>
 </span><span id="Vec-674"><a href="#Vec-674"><span class="linenos">674</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="Vec-675"><a href="#Vec-675"><span class="linenos">675</span></a>
@@ -1148,7 +1147,7 @@ an iterable or args, or copy the list.</p>
     <a class="headerlink" href="#Vec.with_capacity"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.with_capacity-193"><a href="#Vec.with_capacity-193"><span class="linenos">193</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Vec.with_capacity-194"><a href="#Vec.with_capacity-194"><span class="linenos">194</span></a>    <span class="k">def</span> <span class="nf">with_capacity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Vec.with_capacity-195"><a href="#Vec.with_capacity-195"><span class="linenos">195</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
+</span><span id="Vec.with_capacity-195"><a href="#Vec.with_capacity-195"><span class="linenos">195</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Vec` with at least the specified capacity.</span>
 </span><span id="Vec.with_capacity-196"><a href="#Vec.with_capacity-196"><span class="linenos">196</span></a><span class="sd">        This vec will be able to hold `capacity` elements without pushing further.</span>
 </span><span id="Vec.with_capacity-197"><a href="#Vec.with_capacity-197"><span class="linenos">197</span></a>
 </span><span id="Vec.with_capacity-198"><a href="#Vec.with_capacity-198"><span class="linenos">198</span></a><span class="sd">        Check out `Vec.push_within_capacity` as well.</span>
@@ -1210,7 +1209,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.as_ref"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.as_ref-219"><a href="#Vec.as_ref-219"><span class="linenos">219</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Collection</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.as_ref-220"><a href="#Vec.as_ref-220"><span class="linenos">220</span></a>        <span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
+</span><span id="Vec.as_ref-220"><a href="#Vec.as_ref-220"><span class="linenos">220</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an immutable view over this vector elements.</span>
 </span><span id="Vec.as_ref-221"><a href="#Vec.as_ref-221"><span class="linenos">221</span></a>
 </span><span id="Vec.as_ref-222"><a href="#Vec.as_ref-222"><span class="linenos">222</span></a><span class="sd">        Example</span>
 </span><span id="Vec.as_ref-223"><a href="#Vec.as_ref-223"><span class="linenos">223</span></a><span class="sd">        -------</span>
@@ -1250,7 +1249,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.len"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.len-232"><a href="#Vec.len-232"><span class="linenos">232</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec.len-233"><a href="#Vec.len-233"><span class="linenos">233</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
+</span><span id="Vec.len-233"><a href="#Vec.len-233"><span class="linenos">233</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this vector.</span>
 </span><span id="Vec.len-234"><a href="#Vec.len-234"><span class="linenos">234</span></a>
 </span><span id="Vec.len-235"><a href="#Vec.len-235"><span class="linenos">235</span></a><span class="sd">        Example</span>
 </span><span id="Vec.len-236"><a href="#Vec.len-236"><span class="linenos">236</span></a><span class="sd">        -------</span>
@@ -1290,7 +1289,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.capacity"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.capacity-245"><a href="#Vec.capacity-245"><span class="linenos">245</span></a>    <span class="k">def</span> <span class="nf">capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec.capacity-246"><a href="#Vec.capacity-246"><span class="linenos">246</span></a>        <span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
+</span><span id="Vec.capacity-246"><a href="#Vec.capacity-246"><span class="linenos">246</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the capacity of this vector if set. 0 if not .</span>
 </span><span id="Vec.capacity-247"><a href="#Vec.capacity-247"><span class="linenos">247</span></a>
 </span><span id="Vec.capacity-248"><a href="#Vec.capacity-248"><span class="linenos">248</span></a><span class="sd">        Example</span>
 </span><span id="Vec.capacity-249"><a href="#Vec.capacity-249"><span class="linenos">249</span></a><span class="sd">        -------</span>
@@ -1334,7 +1333,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.iter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.iter-260"><a href="#Vec.iter-260"><span class="linenos">260</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.iter-261"><a href="#Vec.iter-261"><span class="linenos">261</span></a>        <span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
+</span><span id="Vec.iter-261"><a href="#Vec.iter-261"><span class="linenos">261</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over this vector elements.</span>
 </span><span id="Vec.iter-262"><a href="#Vec.iter-262"><span class="linenos">262</span></a>
 </span><span id="Vec.iter-263"><a href="#Vec.iter-263"><span class="linenos">263</span></a><span class="sd">        Example</span>
 </span><span id="Vec.iter-264"><a href="#Vec.iter-264"><span class="linenos">264</span></a><span class="sd">        -------</span>
@@ -1380,7 +1379,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.is_empty"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.is_empty-276"><a href="#Vec.is_empty-276"><span class="linenos">276</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Vec.is_empty-277"><a href="#Vec.is_empty-277"><span class="linenos">277</span></a>        <span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
+</span><span id="Vec.is_empty-277"><a href="#Vec.is_empty-277"><span class="linenos">277</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns true if the vector contains no elements.&quot;&quot;&quot;</span>
 </span><span id="Vec.is_empty-278"><a href="#Vec.is_empty-278"><span class="linenos">278</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span>
 </span></pre></div>
 
@@ -1402,7 +1401,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.split_off"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.split_off-280"><a href="#Vec.split_off-280"><span class="linenos">280</span></a>    <span class="k">def</span> <span class="nf">split_off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.split_off-281"><a href="#Vec.split_off-281"><span class="linenos">281</span></a>        <span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
+</span><span id="Vec.split_off-281"><a href="#Vec.split_off-281"><span class="linenos">281</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the vector off at the specified position.</span>
 </span><span id="Vec.split_off-282"><a href="#Vec.split_off-282"><span class="linenos">282</span></a>
 </span><span id="Vec.split_off-283"><a href="#Vec.split_off-283"><span class="linenos">283</span></a><span class="sd">        if this vec is empty, `self` is returned unchanged.</span>
 </span><span id="Vec.split_off-284"><a href="#Vec.split_off-284"><span class="linenos">284</span></a>
@@ -1423,7 +1422,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 </span><span id="Vec.split_off-299"><a href="#Vec.split_off-299"><span class="linenos">299</span></a>        <span class="k">if</span> <span class="n">at</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">():</span>
 </span><span id="Vec.split_off-300"><a href="#Vec.split_off-300"><span class="linenos">300</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="Vec.split_off-301"><a href="#Vec.split_off-301"><span class="linenos">301</span></a>                <span class="sa">f</span><span class="s2">&quot;Index `at` (</span><span class="si">{</span><span class="n">at</span><span class="si">}</span><span class="s2">) should be &lt;= than len of vector (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="si">}</span><span class="s2">) &quot;</span>
-</span><span id="Vec.split_off-302"><a href="#Vec.split_off-302"><span class="linenos">302</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec.split_off-302"><a href="#Vec.split_off-302"><span class="linenos">302</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec.split_off-303"><a href="#Vec.split_off-303"><span class="linenos">303</span></a>
 </span><span id="Vec.split_off-304"><a href="#Vec.split_off-304"><span class="linenos">304</span></a>        <span class="c1"># Either the list is empty or uninit.</span>
 </span><span id="Vec.split_off-305"><a href="#Vec.split_off-305"><span class="linenos">305</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">:</span>
@@ -1470,7 +1469,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.split_first"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.split_first-312"><a href="#Vec.split_first-312"><span class="linenos">312</span></a>    <span class="k">def</span> <span class="nf">split_first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]]]:</span>
-</span><span id="Vec.split_first-313"><a href="#Vec.split_first-313"><span class="linenos">313</span></a>        <span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
+</span><span id="Vec.split_first-313"><a href="#Vec.split_first-313"><span class="linenos">313</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the first and rest elements of the vector, If empty, `Some[None]` is returned.</span>
 </span><span id="Vec.split_first-314"><a href="#Vec.split_first-314"><span class="linenos">314</span></a>
 </span><span id="Vec.split_first-315"><a href="#Vec.split_first-315"><span class="linenos">315</span></a><span class="sd">        Example</span>
 </span><span id="Vec.split_first-316"><a href="#Vec.split_first-316"><span class="linenos">316</span></a><span class="sd">        -------</span>
@@ -1522,7 +1521,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.first"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.first-333"><a href="#Vec.first-333"><span class="linenos">333</span></a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.first-334"><a href="#Vec.first-334"><span class="linenos">334</span></a>        <span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
+</span><span id="Vec.first-334"><a href="#Vec.first-334"><span class="linenos">334</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the first element in this vec, returning `Some[None]` if there&#39;s none.</span>
 </span><span id="Vec.first-335"><a href="#Vec.first-335"><span class="linenos">335</span></a>
 </span><span id="Vec.first-336"><a href="#Vec.first-336"><span class="linenos">336</span></a><span class="sd">        Example</span>
 </span><span id="Vec.first-337"><a href="#Vec.first-337"><span class="linenos">337</span></a><span class="sd">        -------</span>
@@ -1562,7 +1561,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.truncate"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.truncate-346"><a href="#Vec.truncate-346"><span class="linenos">346</span></a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.truncate-347"><a href="#Vec.truncate-347"><span class="linenos">347</span></a>        <span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
+</span><span id="Vec.truncate-347"><a href="#Vec.truncate-347"><span class="linenos">347</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Shortens the vec, keeping the first `size` elements and dropping the rest.</span>
 </span><span id="Vec.truncate-348"><a href="#Vec.truncate-348"><span class="linenos">348</span></a>
 </span><span id="Vec.truncate-349"><a href="#Vec.truncate-349"><span class="linenos">349</span></a><span class="sd">        Example</span>
 </span><span id="Vec.truncate-350"><a href="#Vec.truncate-350"><span class="linenos">350</span></a><span class="sd">        -------</span>
@@ -1605,7 +1604,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.retain"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.retain-362"><a href="#Vec.retain-362"><span class="linenos">362</span></a>    <span class="k">def</span> <span class="nf">retain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.retain-363"><a href="#Vec.retain-363"><span class="linenos">363</span></a>        <span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
+</span><span id="Vec.retain-363"><a href="#Vec.retain-363"><span class="linenos">363</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove elements from this vec while `f()` returns `True`.</span>
 </span><span id="Vec.retain-364"><a href="#Vec.retain-364"><span class="linenos">364</span></a>
 </span><span id="Vec.retain-365"><a href="#Vec.retain-365"><span class="linenos">365</span></a><span class="sd">        In other words, filter this vector based on `f()`.</span>
 </span><span id="Vec.retain-366"><a href="#Vec.retain-366"><span class="linenos">366</span></a>
@@ -1654,7 +1653,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.swap_remove"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.swap_remove-381"><a href="#Vec.swap_remove-381"><span class="linenos">381</span></a>    <span class="k">def</span> <span class="nf">swap_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Vec.swap_remove-382"><a href="#Vec.swap_remove-382"><span class="linenos">382</span></a>        <span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
+</span><span id="Vec.swap_remove-382"><a href="#Vec.swap_remove-382"><span class="linenos">382</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the first appearance of `item` from this vector and return it.</span>
 </span><span id="Vec.swap_remove-383"><a href="#Vec.swap_remove-383"><span class="linenos">383</span></a>
 </span><span id="Vec.swap_remove-384"><a href="#Vec.swap_remove-384"><span class="linenos">384</span></a><span class="sd">        Raises</span>
 </span><span id="Vec.swap_remove-385"><a href="#Vec.swap_remove-385"><span class="linenos">385</span></a><span class="sd">        ------</span>
@@ -1670,12 +1669,12 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 </span><span id="Vec.swap_remove-395"><a href="#Vec.swap_remove-395"><span class="linenos">395</span></a><span class="sd">        ```</span>
 </span><span id="Vec.swap_remove-396"><a href="#Vec.swap_remove-396"><span class="linenos">396</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Vec.swap_remove-397"><a href="#Vec.swap_remove-397"><span class="linenos">397</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.swap_remove-398"><a href="#Vec.swap_remove-398"><span class="linenos">398</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec.swap_remove-398"><a href="#Vec.swap_remove-398"><span class="linenos">398</span></a>            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Vec is unallocated.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec.swap_remove-399"><a href="#Vec.swap_remove-399"><span class="linenos">399</span></a>
 </span><span id="Vec.swap_remove-400"><a href="#Vec.swap_remove-400"><span class="linenos">400</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="Vec.swap_remove-401"><a href="#Vec.swap_remove-401"><span class="linenos">401</span></a>            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">item</span><span class="p">)</span>
 </span><span id="Vec.swap_remove-402"><a href="#Vec.swap_remove-402"><span class="linenos">402</span></a>        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-</span><span id="Vec.swap_remove-403"><a href="#Vec.swap_remove-403"><span class="linenos">403</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec.swap_remove-403"><a href="#Vec.swap_remove-403"><span class="linenos">403</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Item `</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">` not in list&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec.swap_remove-404"><a href="#Vec.swap_remove-404"><span class="linenos">404</span></a>
 </span><span id="Vec.swap_remove-405"><a href="#Vec.swap_remove-405"><span class="linenos">405</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </span><span id="Vec.swap_remove-406"><a href="#Vec.swap_remove-406"><span class="linenos">406</span></a>        <span class="k">return</span> <span class="n">i</span>
@@ -1715,7 +1714,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.push"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.push-408"><a href="#Vec.push-408"><span class="linenos">408</span></a>    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.push-409"><a href="#Vec.push-409"><span class="linenos">409</span></a>        <span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
+</span><span id="Vec.push-409"><a href="#Vec.push-409"><span class="linenos">409</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
 </span><span id="Vec.push-410"><a href="#Vec.push-410"><span class="linenos">410</span></a>
 </span><span id="Vec.push-411"><a href="#Vec.push-411"><span class="linenos">411</span></a><span class="sd">        Example</span>
 </span><span id="Vec.push-412"><a href="#Vec.push-412"><span class="linenos">412</span></a><span class="sd">        -------</span>
@@ -1764,7 +1763,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.push_within_capacity"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.push_within_capacity-429"><a href="#Vec.push_within_capacity-429"><span class="linenos">429</span></a>    <span class="k">def</span> <span class="nf">push_within_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.push_within_capacity-430"><a href="#Vec.push_within_capacity-430"><span class="linenos">430</span></a>        <span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
+</span><span id="Vec.push_within_capacity-430"><a href="#Vec.push_within_capacity-430"><span class="linenos">430</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.</span>
 </span><span id="Vec.push_within_capacity-431"><a href="#Vec.push_within_capacity-431"><span class="linenos">431</span></a>
 </span><span id="Vec.push_within_capacity-432"><a href="#Vec.push_within_capacity-432"><span class="linenos">432</span></a><span class="sd">        Example</span>
 </span><span id="Vec.push_within_capacity-433"><a href="#Vec.push_within_capacity-433"><span class="linenos">433</span></a><span class="sd">        -------</span>
@@ -1807,7 +1806,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 <pre><span></span><code><span class="n">vec</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n"><a href="#Vec.with_capacity">Vec.with_capacity</a></span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="k">match</span> <span class="n">vec</span><span class="o">.</span><span class="n">push_within_capacity</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-        <span class="k">case</span> <span class="n">Ok</span><span class="p">(</span><span class="k">_</span><span class="p">):</span>
+        <span class="k">case</span><span class="w"> </span><span class="n">Ok</span><span class="p">(</span><span class="k">_</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All good.&quot;</span><span class="p">)</span>
         <span class="k">case</span> <span class="n">Err</span><span class="p">(</span><span class="n">elem</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reached max cap :&lt; cant push&quot;</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
@@ -1841,7 +1840,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.reserve"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.reserve-463"><a href="#Vec.reserve-463"><span class="linenos">463</span></a>    <span class="k">def</span> <span class="nf">reserve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.reserve-464"><a href="#Vec.reserve-464"><span class="linenos">464</span></a>        <span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
+</span><span id="Vec.reserve-464"><a href="#Vec.reserve-464"><span class="linenos">464</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Reserves capacity for at least additional more elements to be inserted in the given Vec&lt;T&gt;.</span>
 </span><span id="Vec.reserve-465"><a href="#Vec.reserve-465"><span class="linenos">465</span></a>
 </span><span id="Vec.reserve-466"><a href="#Vec.reserve-466"><span class="linenos">466</span></a><span class="sd">        Example</span>
 </span><span id="Vec.reserve-467"><a href="#Vec.reserve-467"><span class="linenos">467</span></a><span class="sd">        -------</span>
@@ -1879,7 +1878,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
     <span class="k">match</span> <span class="n">vec</span><span class="o">.</span><span class="n">push_within_capacity</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-        <span class="k">case</span> <span class="n">Ok</span><span class="p">(</span><span class="k">_</span><span class="p">):</span>
+        <span class="k">case</span><span class="w"> </span><span class="n">Ok</span><span class="p">(</span><span class="k">_</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All good&quot;</span><span class="p">)</span>
         <span class="k">case</span> <span class="n">Err</span><span class="p">(</span><span class="n">person</span><span class="p">):</span>
             <span class="c1"># If the person is a VIP, then reserve for one more.</span>
@@ -1908,7 +1907,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.append"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.append-408"><a href="#Vec.append-408"><span class="linenos">408</span></a>    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.append-409"><a href="#Vec.append-409"><span class="linenos">409</span></a>        <span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
+</span><span id="Vec.append-409"><a href="#Vec.append-409"><span class="linenos">409</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Push an element at the end of the vector.</span>
 </span><span id="Vec.append-410"><a href="#Vec.append-410"><span class="linenos">410</span></a>
 </span><span id="Vec.append-411"><a href="#Vec.append-411"><span class="linenos">411</span></a><span class="sd">        Example</span>
 </span><span id="Vec.append-412"><a href="#Vec.append-412"><span class="linenos">412</span></a><span class="sd">        -------</span>
@@ -1947,7 +1946,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.get-498"><a href="#Vec.get-498"><span class="linenos">498</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.get-499"><a href="#Vec.get-499"><span class="linenos">499</span></a>        <span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
+</span><span id="Vec.get-499"><a href="#Vec.get-499"><span class="linenos">499</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the item at the given index, or `Some[None]` if its out of bounds.</span>
 </span><span id="Vec.get-500"><a href="#Vec.get-500"><span class="linenos">500</span></a>
 </span><span id="Vec.get-501"><a href="#Vec.get-501"><span class="linenos">501</span></a><span class="sd">        Example</span>
 </span><span id="Vec.get-502"><a href="#Vec.get-502"><span class="linenos">502</span></a><span class="sd">        -------</span>
@@ -1990,7 +1989,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.insert"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.insert-514"><a href="#Vec.insert-514"><span class="linenos">514</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.insert-515"><a href="#Vec.insert-515"><span class="linenos">515</span></a>        <span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
+</span><span id="Vec.insert-515"><a href="#Vec.insert-515"><span class="linenos">515</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert an element at the position `index`.</span>
 </span><span id="Vec.insert-516"><a href="#Vec.insert-516"><span class="linenos">516</span></a>
 </span><span id="Vec.insert-517"><a href="#Vec.insert-517"><span class="linenos">517</span></a><span class="sd">        Example</span>
 </span><span id="Vec.insert-518"><a href="#Vec.insert-518"><span class="linenos">518</span></a><span class="sd">        --------</span>
@@ -2030,7 +2029,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.pop"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.pop-527"><a href="#Vec.pop-527"><span class="linenos">527</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.pop-528"><a href="#Vec.pop-528"><span class="linenos">528</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
+</span><span id="Vec.pop-528"><a href="#Vec.pop-528"><span class="linenos">528</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.</span>
 </span><span id="Vec.pop-529"><a href="#Vec.pop-529"><span class="linenos">529</span></a>
 </span><span id="Vec.pop-530"><a href="#Vec.pop-530"><span class="linenos">530</span></a><span class="sd">        Example</span>
 </span><span id="Vec.pop-531"><a href="#Vec.pop-531"><span class="linenos">531</span></a><span class="sd">        -------</span>
@@ -2073,7 +2072,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.remove"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.remove-543"><a href="#Vec.remove-543"><span class="linenos">543</span></a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.remove-544"><a href="#Vec.remove-544"><span class="linenos">544</span></a>        <span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
+</span><span id="Vec.remove-544"><a href="#Vec.remove-544"><span class="linenos">544</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove `item` from this vector.</span>
 </span><span id="Vec.remove-545"><a href="#Vec.remove-545"><span class="linenos">545</span></a>
 </span><span id="Vec.remove-546"><a href="#Vec.remove-546"><span class="linenos">546</span></a><span class="sd">        Example</span>
 </span><span id="Vec.remove-547"><a href="#Vec.remove-547"><span class="linenos">547</span></a><span class="sd">        -------</span>
@@ -2116,7 +2115,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.extend"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.extend-559"><a href="#Vec.extend-559"><span class="linenos">559</span></a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.extend-560"><a href="#Vec.extend-560"><span class="linenos">560</span></a>        <span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
+</span><span id="Vec.extend-560"><a href="#Vec.extend-560"><span class="linenos">560</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend this vector from another iterable.</span>
 </span><span id="Vec.extend-561"><a href="#Vec.extend-561"><span class="linenos">561</span></a>
 </span><span id="Vec.extend-562"><a href="#Vec.extend-562"><span class="linenos">562</span></a><span class="sd">        Example</span>
 </span><span id="Vec.extend-563"><a href="#Vec.extend-563"><span class="linenos">563</span></a><span class="sd">        -------</span>
@@ -2161,7 +2160,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.copy"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.copy-576"><a href="#Vec.copy-576"><span class="linenos">576</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Vec.copy-577"><a href="#Vec.copy-577"><span class="linenos">577</span></a>        <span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
+</span><span id="Vec.copy-577"><a href="#Vec.copy-577"><span class="linenos">577</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a vector that copies all of its elements and place it into the new one.</span>
 </span><span id="Vec.copy-578"><a href="#Vec.copy-578"><span class="linenos">578</span></a>
 </span><span id="Vec.copy-579"><a href="#Vec.copy-579"><span class="linenos">579</span></a><span class="sd">        If the vector hasn&#39;t been allocated, `self` is returned.</span>
 </span><span id="Vec.copy-580"><a href="#Vec.copy-580"><span class="linenos">580</span></a>
@@ -2209,7 +2208,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
     </div>
     <a class="headerlink" href="#Vec.clear"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.clear-593"><a href="#Vec.clear-593"><span class="linenos">593</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.clear-594"><a href="#Vec.clear-594"><span class="linenos">594</span></a>        <span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
+</span><span id="Vec.clear-594"><a href="#Vec.clear-594"><span class="linenos">594</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear all elements of this vector.</span>
 </span><span id="Vec.clear-595"><a href="#Vec.clear-595"><span class="linenos">595</span></a>
 </span><span id="Vec.clear-596"><a href="#Vec.clear-596"><span class="linenos">596</span></a><span class="sd">        Example</span>
 </span><span id="Vec.clear-597"><a href="#Vec.clear-597"><span class="linenos">597</span></a><span class="sd">        -------</span>
@@ -2257,7 +2256,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 </span><span id="Vec.sort-612"><a href="#Vec.sort-612"><span class="linenos">612</span></a>        <span class="n">key</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="n">SupportsRichComparison</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="Vec.sort-613"><a href="#Vec.sort-613"><span class="linenos">613</span></a>        <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="Vec.sort-614"><a href="#Vec.sort-614"><span class="linenos">614</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.sort-615"><a href="#Vec.sort-615"><span class="linenos">615</span></a>        <span class="sd">&quot;&quot;&quot;This method sorts the list in place, using only &lt; comparisons between items.</span>
+</span><span id="Vec.sort-615"><a href="#Vec.sort-615"><span class="linenos">615</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method sorts the list in place, using only &lt; comparisons between items.</span>
 </span><span id="Vec.sort-616"><a href="#Vec.sort-616"><span class="linenos">616</span></a>
 </span><span id="Vec.sort-617"><a href="#Vec.sort-617"><span class="linenos">617</span></a><span class="sd">        Example</span>
 </span><span id="Vec.sort-618"><a href="#Vec.sort-618"><span class="linenos">618</span></a><span class="sd">        -------</span>
@@ -2304,7 +2303,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 </span><span id="Vec.index-632"><a href="#Vec.index-632"><span class="linenos">632</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">SupportsIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">maxsize</span>
 </span><span id="Vec.index-633"><a href="#Vec.index-633"><span class="linenos">633</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="Vec.index-634"><a href="#Vec.index-634"><span class="linenos">634</span></a>        <span class="c1"># &lt;&lt; Official documentation &gt;&gt;</span>
-</span><span id="Vec.index-635"><a href="#Vec.index-635"><span class="linenos">635</span></a>        <span class="sd">&quot;&quot;&quot;Return zero-based index in the vec of the first item whose value is equal to `item`.</span>
+</span><span id="Vec.index-635"><a href="#Vec.index-635"><span class="linenos">635</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return zero-based index in the vec of the first item whose value is equal to `item`.</span>
 </span><span id="Vec.index-636"><a href="#Vec.index-636"><span class="linenos">636</span></a><span class="sd">        Raises a ValueError if there is no such item.</span>
 </span><span id="Vec.index-637"><a href="#Vec.index-637"><span class="linenos">637</span></a>
 </span><span id="Vec.index-638"><a href="#Vec.index-638"><span class="linenos">638</span></a><span class="sd">        Example</span>
@@ -2315,7 +2314,7 @@ This vec will be able to hold <code><a href="#Vec.capacity">capacity</a></code> 
 </span><span id="Vec.index-643"><a href="#Vec.index-643"><span class="linenos">643</span></a><span class="sd">        ```</span>
 </span><span id="Vec.index-644"><a href="#Vec.index-644"><span class="linenos">644</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Vec.index-645"><a href="#Vec.index-645"><span class="linenos">645</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Vec.index-646"><a href="#Vec.index-646"><span class="linenos">646</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Vec.index-646"><a href="#Vec.index-646"><span class="linenos">646</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Vec.index-647"><a href="#Vec.index-647"><span class="linenos">647</span></a>
 </span><span id="Vec.index-648"><a href="#Vec.index-648"><span class="linenos">648</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
 </span></pre></div>
@@ -2347,7 +2346,7 @@ Raises a ValueError if there is no such item.</p>
     </div>
     <a class="headerlink" href="#Vec.count"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Vec.count-650"><a href="#Vec.count-650"><span class="linenos">650</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Vec.count-651"><a href="#Vec.count-651"><span class="linenos">651</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of occurrences of `item` in the vec.</span>
+</span><span id="Vec.count-651"><a href="#Vec.count-651"><span class="linenos">651</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of occurrences of `item` in the vec.</span>
 </span><span id="Vec.count-652"><a href="#Vec.count-652"><span class="linenos">652</span></a>
 </span><span id="Vec.count-653"><a href="#Vec.count-653"><span class="linenos">653</span></a><span class="sd">        `0` is returned if the vector is empty or hasn&#39;t been initialized, as well if them item not found.</span>
 </span><span id="Vec.count-654"><a href="#Vec.count-654"><span class="linenos">654</span></a>
@@ -2395,7 +2394,7 @@ Raises a ValueError if there is no such item.</p>
     <a class="headerlink" href="#Bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes-89"><a href="#Bytes-89"><span class="linenos"> 89</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Bytes-90"><a href="#Bytes-90"><span class="linenos"> 90</span></a><span class="k">class</span> <span class="nc">Bytes</span><span class="p">:</span>
-</span><span id="Bytes-91"><a href="#Bytes-91"><span class="linenos"> 91</span></a>    <span class="sd">&quot;&quot;&quot;Provides abstractions for working with UTF-8 compatible bytes.</span>
+</span><span id="Bytes-91"><a href="#Bytes-91"><span class="linenos"> 91</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides abstractions for working with UTF-8 compatible bytes.</span>
 </span><span id="Bytes-92"><a href="#Bytes-92"><span class="linenos"> 92</span></a>
 </span><span id="Bytes-93"><a href="#Bytes-93"><span class="linenos"> 93</span></a><span class="sd">    It is an efficient container for storing and operating with bytes.</span>
 </span><span id="Bytes-94"><a href="#Bytes-94"><span class="linenos"> 94</span></a><span class="sd">    It behaves very much like `array.array[int]` as well has the same layout.</span>
@@ -2430,7 +2429,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-123"><a href="#Bytes-123"><span class="linenos">123</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;_buf&quot;</span><span class="p">,)</span>
 </span><span id="Bytes-124"><a href="#Bytes-124"><span class="linenos">124</span></a>
 </span><span id="Bytes-125"><a href="#Bytes-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-126"><a href="#Bytes-126"><span class="linenos">126</span></a>        <span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
+</span><span id="Bytes-126"><a href="#Bytes-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
 </span><span id="Bytes-127"><a href="#Bytes-127"><span class="linenos">127</span></a>
 </span><span id="Bytes-128"><a href="#Bytes-128"><span class="linenos">128</span></a><span class="sd">        This won&#39;t allocate the array and the returned `Bytes` will be empty.</span>
 </span><span id="Bytes-129"><a href="#Bytes-129"><span class="linenos">129</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -2440,7 +2439,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-133"><a href="#Bytes-133"><span class="linenos">133</span></a>
 </span><span id="Bytes-134"><a href="#Bytes-134"><span class="linenos">134</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes-135"><a href="#Bytes-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-136"><a href="#Bytes-136"><span class="linenos">136</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
+</span><span id="Bytes-136"><a href="#Bytes-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
 </span><span id="Bytes-137"><a href="#Bytes-137"><span class="linenos">137</span></a>
 </span><span id="Bytes-138"><a href="#Bytes-138"><span class="linenos">138</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-139"><a href="#Bytes-139"><span class="linenos">139</span></a><span class="sd">        -------</span>
@@ -2455,7 +2454,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-148"><a href="#Bytes-148"><span class="linenos">148</span></a>
 </span><span id="Bytes-149"><a href="#Bytes-149"><span class="linenos">149</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes-150"><a href="#Bytes-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">from_static</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-151"><a href="#Bytes-151"><span class="linenos">151</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
+</span><span id="Bytes-151"><a href="#Bytes-151"><span class="linenos">151</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
 </span><span id="Bytes-152"><a href="#Bytes-152"><span class="linenos">152</span></a>
 </span><span id="Bytes-153"><a href="#Bytes-153"><span class="linenos">153</span></a><span class="sd">        The returned `Bytes` will directly point to `arr` without copying.</span>
 </span><span id="Bytes-154"><a href="#Bytes-154"><span class="linenos">154</span></a>
@@ -2472,7 +2471,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-165"><a href="#Bytes-165"><span class="linenos">165</span></a>
 </span><span id="Bytes-166"><a href="#Bytes-166"><span class="linenos">166</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes-167"><a href="#Bytes-167"><span class="linenos">167</span></a>    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buf</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-168"><a href="#Bytes-168"><span class="linenos">168</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
+</span><span id="Bytes-168"><a href="#Bytes-168"><span class="linenos">168</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
 </span><span id="Bytes-169"><a href="#Bytes-169"><span class="linenos">169</span></a>
 </span><span id="Bytes-170"><a href="#Bytes-170"><span class="linenos">170</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-171"><a href="#Bytes-171"><span class="linenos">171</span></a><span class="sd">        -------</span>
@@ -2487,7 +2486,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-180"><a href="#Bytes-180"><span class="linenos">180</span></a>
 </span><span id="Bytes-181"><a href="#Bytes-181"><span class="linenos">181</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes-182"><a href="#Bytes-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">from_raw</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-183"><a href="#Bytes-183"><span class="linenos">183</span></a>        <span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
+</span><span id="Bytes-183"><a href="#Bytes-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
 </span><span id="Bytes-184"><a href="#Bytes-184"><span class="linenos">184</span></a>
 </span><span id="Bytes-185"><a href="#Bytes-185"><span class="linenos">185</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-186"><a href="#Bytes-186"><span class="linenos">186</span></a><span class="sd">        -------</span>
@@ -2513,7 +2512,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-206"><a href="#Bytes-206"><span class="linenos">206</span></a>        <span class="k">return</span> <span class="n">c</span>
 </span><span id="Bytes-207"><a href="#Bytes-207"><span class="linenos">207</span></a>
 </span><span id="Bytes-208"><a href="#Bytes-208"><span class="linenos">208</span></a>    <span class="k">def</span> <span class="nf">try_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]:</span>
-</span><span id="Bytes-209"><a href="#Bytes-209"><span class="linenos">209</span></a>        <span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
+</span><span id="Bytes-209"><a href="#Bytes-209"><span class="linenos">209</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
 </span><span id="Bytes-210"><a href="#Bytes-210"><span class="linenos">210</span></a>
 </span><span id="Bytes-211"><a href="#Bytes-211"><span class="linenos">211</span></a><span class="sd">        This may fail if the `self` contains invalid bytes. strings</span>
 </span><span id="Bytes-212"><a href="#Bytes-212"><span class="linenos">212</span></a><span class="sd">        needs to be valid utf-8.</span>
@@ -2547,7 +2546,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-240"><a href="#Bytes-240"><span class="linenos">240</span></a>            <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
 </span><span id="Bytes-241"><a href="#Bytes-241"><span class="linenos">241</span></a>
 </span><span id="Bytes-242"><a href="#Bytes-242"><span class="linenos">242</span></a>    <span class="k">def</span> <span class="nf">to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Bytes-243"><a href="#Bytes-243"><span class="linenos">243</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
+</span><span id="Bytes-243"><a href="#Bytes-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
 </span><span id="Bytes-244"><a href="#Bytes-244"><span class="linenos">244</span></a>
 </span><span id="Bytes-245"><a href="#Bytes-245"><span class="linenos">245</span></a><span class="sd">        During the conversion process, any invalid bytes will get converted to</span>
 </span><span id="Bytes-246"><a href="#Bytes-246"><span class="linenos">246</span></a><span class="sd">        [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))</span>
@@ -2597,7 +2596,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-290"><a href="#Bytes-290"><span class="linenos">290</span></a>    <span class="c1"># buffer evolution</span>
 </span><span id="Bytes-291"><a href="#Bytes-291"><span class="linenos">291</span></a>
 </span><span id="Bytes-292"><a href="#Bytes-292"><span class="linenos">292</span></a>    <span class="k">def</span> <span class="nf">leak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-</span><span id="Bytes-293"><a href="#Bytes-293"><span class="linenos">293</span></a>        <span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
+</span><span id="Bytes-293"><a href="#Bytes-293"><span class="linenos">293</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
 </span><span id="Bytes-294"><a href="#Bytes-294"><span class="linenos">294</span></a>
 </span><span id="Bytes-295"><a href="#Bytes-295"><span class="linenos">295</span></a><span class="sd">        `None` is returned if it was already `None`.</span>
 </span><span id="Bytes-296"><a href="#Bytes-296"><span class="linenos">296</span></a>
@@ -2619,7 +2618,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-312"><a href="#Bytes-312"><span class="linenos">312</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
 </span><span id="Bytes-313"><a href="#Bytes-313"><span class="linenos">313</span></a>
 </span><span id="Bytes-314"><a href="#Bytes-314"><span class="linenos">314</span></a>    <span class="k">def</span> <span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-</span><span id="Bytes-315"><a href="#Bytes-315"><span class="linenos">315</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
+</span><span id="Bytes-315"><a href="#Bytes-315"><span class="linenos">315</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
 </span><span id="Bytes-316"><a href="#Bytes-316"><span class="linenos">316</span></a>
 </span><span id="Bytes-317"><a href="#Bytes-317"><span class="linenos">317</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-318"><a href="#Bytes-318"><span class="linenos">318</span></a><span class="sd">        -------</span>
@@ -2634,7 +2633,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-327"><a href="#Bytes-327"><span class="linenos">327</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
 </span><span id="Bytes-328"><a href="#Bytes-328"><span class="linenos">328</span></a>
 </span><span id="Bytes-329"><a href="#Bytes-329"><span class="linenos">329</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes-330"><a href="#Bytes-330"><span class="linenos">330</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
+</span><span id="Bytes-330"><a href="#Bytes-330"><span class="linenos">330</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
 </span><span id="Bytes-331"><a href="#Bytes-331"><span class="linenos">331</span></a>
 </span><span id="Bytes-332"><a href="#Bytes-332"><span class="linenos">332</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="Bytes-333"><a href="#Bytes-333"><span class="linenos">333</span></a>
@@ -2648,7 +2647,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-341"><a href="#Bytes-341"><span class="linenos">341</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">()</span>
 </span><span id="Bytes-342"><a href="#Bytes-342"><span class="linenos">342</span></a>
 </span><span id="Bytes-343"><a href="#Bytes-343"><span class="linenos">343</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">MutableSequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes-344"><a href="#Bytes-344"><span class="linenos">344</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
+</span><span id="Bytes-344"><a href="#Bytes-344"><span class="linenos">344</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
 </span><span id="Bytes-345"><a href="#Bytes-345"><span class="linenos">345</span></a>
 </span><span id="Bytes-346"><a href="#Bytes-346"><span class="linenos">346</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="Bytes-347"><a href="#Bytes-347"><span class="linenos">347</span></a>
@@ -2664,7 +2663,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-357"><a href="#Bytes-357"><span class="linenos">357</span></a>    <span class="k">def</span> <span class="nf">raw_parts</span><span class="p">(</span>
 </span><span id="Bytes-358"><a href="#Bytes-358"><span class="linenos">358</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Bytes-359"><a href="#Bytes-359"><span class="linenos">359</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;address&quot;</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;len&quot;</span><span class="p">]]:</span>
-</span><span id="Bytes-360"><a href="#Bytes-360"><span class="linenos">360</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
+</span><span id="Bytes-360"><a href="#Bytes-360"><span class="linenos">360</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
 </span><span id="Bytes-361"><a href="#Bytes-361"><span class="linenos">361</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
 </span><span id="Bytes-362"><a href="#Bytes-362"><span class="linenos">362</span></a>            <span class="k">return</span> <span class="p">(</span><span class="mh">0x0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="Bytes-363"><a href="#Bytes-363"><span class="linenos">363</span></a>
@@ -2673,7 +2672,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-366"><a href="#Bytes-366"><span class="linenos">366</span></a>    <span class="c1"># default methods.</span>
 </span><span id="Bytes-367"><a href="#Bytes-367"><span class="linenos">367</span></a>
 </span><span id="Bytes-368"><a href="#Bytes-368"><span class="linenos">368</span></a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-369"><a href="#Bytes-369"><span class="linenos">369</span></a>        <span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
+</span><span id="Bytes-369"><a href="#Bytes-369"><span class="linenos">369</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
 </span><span id="Bytes-370"><a href="#Bytes-370"><span class="linenos">370</span></a>
 </span><span id="Bytes-371"><a href="#Bytes-371"><span class="linenos">371</span></a><span class="sd">        unlike `.put_bytes`, this method appends instead of extending the array</span>
 </span><span id="Bytes-372"><a href="#Bytes-372"><span class="linenos">372</span></a><span class="sd">        which is faster if you&#39;re putting a single byte in a single call.</span>
@@ -2705,7 +2704,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-398"><a href="#Bytes-398"><span class="linenos">398</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
 </span><span id="Bytes-399"><a href="#Bytes-399"><span class="linenos">399</span></a>
 </span><span id="Bytes-400"><a href="#Bytes-400"><span class="linenos">400</span></a>    <span class="k">def</span> <span class="nf">put_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-401"><a href="#Bytes-401"><span class="linenos">401</span></a>        <span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
+</span><span id="Bytes-401"><a href="#Bytes-401"><span class="linenos">401</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
 </span><span id="Bytes-402"><a href="#Bytes-402"><span class="linenos">402</span></a>
 </span><span id="Bytes-403"><a href="#Bytes-403"><span class="linenos">403</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-404"><a href="#Bytes-404"><span class="linenos">404</span></a><span class="sd">        -------</span>
@@ -2738,7 +2737,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-431"><a href="#Bytes-431"><span class="linenos">431</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">unwrap_bytes</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
 </span><span id="Bytes-432"><a href="#Bytes-432"><span class="linenos">432</span></a>
 </span><span id="Bytes-433"><a href="#Bytes-433"><span class="linenos">433</span></a>    <span class="k">def</span> <span class="nf">put_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-434"><a href="#Bytes-434"><span class="linenos">434</span></a>        <span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
+</span><span id="Bytes-434"><a href="#Bytes-434"><span class="linenos">434</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
 </span><span id="Bytes-435"><a href="#Bytes-435"><span class="linenos">435</span></a>
 </span><span id="Bytes-436"><a href="#Bytes-436"><span class="linenos">436</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-437"><a href="#Bytes-437"><span class="linenos">437</span></a><span class="sd">        -------</span>
@@ -2765,7 +2764,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-458"><a href="#Bytes-458"><span class="linenos">458</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
 </span><span id="Bytes-459"><a href="#Bytes-459"><span class="linenos">459</span></a>
 </span><span id="Bytes-460"><a href="#Bytes-460"><span class="linenos">460</span></a>    <span class="k">def</span> <span class="nf">put_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-461"><a href="#Bytes-461"><span class="linenos">461</span></a>        <span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
+</span><span id="Bytes-461"><a href="#Bytes-461"><span class="linenos">461</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
 </span><span id="Bytes-462"><a href="#Bytes-462"><span class="linenos">462</span></a>
 </span><span id="Bytes-463"><a href="#Bytes-463"><span class="linenos">463</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-464"><a href="#Bytes-464"><span class="linenos">464</span></a><span class="sd">        -------</span>
@@ -2784,7 +2783,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-477"><a href="#Bytes-477"><span class="linenos">477</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">put_bytes</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">ENCODING</span><span class="p">))</span>
 </span><span id="Bytes-478"><a href="#Bytes-478"><span class="linenos">478</span></a>
 </span><span id="Bytes-479"><a href="#Bytes-479"><span class="linenos">479</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes-480"><a href="#Bytes-480"><span class="linenos">480</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
+</span><span id="Bytes-480"><a href="#Bytes-480"><span class="linenos">480</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
 </span><span id="Bytes-481"><a href="#Bytes-481"><span class="linenos">481</span></a>
 </span><span id="Bytes-482"><a href="#Bytes-482"><span class="linenos">482</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-483"><a href="#Bytes-483"><span class="linenos">483</span></a><span class="sd">        -------</span>
@@ -2797,7 +2796,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-490"><a href="#Bytes-490"><span class="linenos">490</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
 </span><span id="Bytes-491"><a href="#Bytes-491"><span class="linenos">491</span></a>
 </span><span id="Bytes-492"><a href="#Bytes-492"><span class="linenos">492</span></a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes-493"><a href="#Bytes-493"><span class="linenos">493</span></a>        <span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
+</span><span id="Bytes-493"><a href="#Bytes-493"><span class="linenos">493</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
 </span><span id="Bytes-494"><a href="#Bytes-494"><span class="linenos">494</span></a>
 </span><span id="Bytes-495"><a href="#Bytes-495"><span class="linenos">495</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-496"><a href="#Bytes-496"><span class="linenos">496</span></a><span class="sd">        -------</span>
@@ -2811,7 +2810,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-504"><a href="#Bytes-504"><span class="linenos">504</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">itemsize</span>
 </span><span id="Bytes-505"><a href="#Bytes-505"><span class="linenos">505</span></a>
 </span><span id="Bytes-506"><a href="#Bytes-506"><span class="linenos">506</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes-507"><a href="#Bytes-507"><span class="linenos">507</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
+</span><span id="Bytes-507"><a href="#Bytes-507"><span class="linenos">507</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
 </span><span id="Bytes-508"><a href="#Bytes-508"><span class="linenos">508</span></a>
 </span><span id="Bytes-509"><a href="#Bytes-509"><span class="linenos">509</span></a><span class="sd">        This iterator yields all `int`s from start to end.</span>
 </span><span id="Bytes-510"><a href="#Bytes-510"><span class="linenos">510</span></a>
@@ -2832,7 +2831,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-525"><a href="#Bytes-525"><span class="linenos">525</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="Bytes-526"><a href="#Bytes-526"><span class="linenos">526</span></a>
 </span><span id="Bytes-527"><a href="#Bytes-527"><span class="linenos">527</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Bytes-528"><a href="#Bytes-528"><span class="linenos">528</span></a>        <span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
+</span><span id="Bytes-528"><a href="#Bytes-528"><span class="linenos">528</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
 </span><span id="Bytes-529"><a href="#Bytes-529"><span class="linenos">529</span></a>
 </span><span id="Bytes-530"><a href="#Bytes-530"><span class="linenos">530</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-531"><a href="#Bytes-531"><span class="linenos">531</span></a><span class="sd">        -------</span>
@@ -2846,7 +2845,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-539"><a href="#Bytes-539"><span class="linenos">539</span></a>    <span class="c1"># layout methods.</span>
 </span><span id="Bytes-540"><a href="#Bytes-540"><span class="linenos">540</span></a>
 </span><span id="Bytes-541"><a href="#Bytes-541"><span class="linenos">541</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-542"><a href="#Bytes-542"><span class="linenos">542</span></a>        <span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
+</span><span id="Bytes-542"><a href="#Bytes-542"><span class="linenos">542</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
 </span><span id="Bytes-543"><a href="#Bytes-543"><span class="linenos">543</span></a>
 </span><span id="Bytes-544"><a href="#Bytes-544"><span class="linenos">544</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-545"><a href="#Bytes-545"><span class="linenos">545</span></a><span class="sd">        -------</span>
@@ -2861,7 +2860,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-554"><a href="#Bytes-554"><span class="linenos">554</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_static</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[:])</span>
 </span><span id="Bytes-555"><a href="#Bytes-555"><span class="linenos">555</span></a>
 </span><span id="Bytes-556"><a href="#Bytes-556"><span class="linenos">556</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-557"><a href="#Bytes-557"><span class="linenos">557</span></a>        <span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
+</span><span id="Bytes-557"><a href="#Bytes-557"><span class="linenos">557</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
 </span><span id="Bytes-558"><a href="#Bytes-558"><span class="linenos">558</span></a>
 </span><span id="Bytes-559"><a href="#Bytes-559"><span class="linenos">559</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-560"><a href="#Bytes-560"><span class="linenos">560</span></a><span class="sd">        -------</span>
@@ -2878,19 +2877,19 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-571"><a href="#Bytes-571"><span class="linenos">571</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 </span><span id="Bytes-572"><a href="#Bytes-572"><span class="linenos">572</span></a>
 </span><span id="Bytes-573"><a href="#Bytes-573"><span class="linenos">573</span></a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes-574"><a href="#Bytes-574"><span class="linenos">574</span></a>        <span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
+</span><span id="Bytes-574"><a href="#Bytes-574"><span class="linenos">574</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
 </span><span id="Bytes-575"><a href="#Bytes-575"><span class="linenos">575</span></a><span class="sd">        first occurrence of `v` in the buffer.</span>
 </span><span id="Bytes-576"><a href="#Bytes-576"><span class="linenos">576</span></a>
 </span><span id="Bytes-577"><a href="#Bytes-577"><span class="linenos">577</span></a><span class="sd">        The optional arguments start and stop can be specified to search for x within a</span>
 </span><span id="Bytes-578"><a href="#Bytes-578"><span class="linenos">578</span></a><span class="sd">        subsection of the array. Raise ValueError if x is not found</span>
 </span><span id="Bytes-579"><a href="#Bytes-579"><span class="linenos">579</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Bytes-580"><a href="#Bytes-580"><span class="linenos">580</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
-</span><span id="Bytes-581"><a href="#Bytes-581"><span class="linenos">581</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Bytes-581"><a href="#Bytes-581"><span class="linenos">581</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Bytes-582"><a href="#Bytes-582"><span class="linenos">582</span></a>
 </span><span id="Bytes-583"><a href="#Bytes-583"><span class="linenos">583</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
 </span><span id="Bytes-584"><a href="#Bytes-584"><span class="linenos">584</span></a>
 </span><span id="Bytes-585"><a href="#Bytes-585"><span class="linenos">585</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes-586"><a href="#Bytes-586"><span class="linenos">586</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
+</span><span id="Bytes-586"><a href="#Bytes-586"><span class="linenos">586</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
 </span><span id="Bytes-587"><a href="#Bytes-587"><span class="linenos">587</span></a>
 </span><span id="Bytes-588"><a href="#Bytes-588"><span class="linenos">588</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-589"><a href="#Bytes-589"><span class="linenos">589</span></a><span class="sd">        --------</span>
@@ -2905,7 +2904,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-598"><a href="#Bytes-598"><span class="linenos">598</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span><span id="Bytes-599"><a href="#Bytes-599"><span class="linenos">599</span></a>
 </span><span id="Bytes-600"><a href="#Bytes-600"><span class="linenos">600</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-601"><a href="#Bytes-601"><span class="linenos">601</span></a>        <span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
+</span><span id="Bytes-601"><a href="#Bytes-601"><span class="linenos">601</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
 </span><span id="Bytes-602"><a href="#Bytes-602"><span class="linenos">602</span></a>
 </span><span id="Bytes-603"><a href="#Bytes-603"><span class="linenos">603</span></a><span class="sd">        Negative values are treated as being relative to the end of the buffer.</span>
 </span><span id="Bytes-604"><a href="#Bytes-604"><span class="linenos">604</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -2915,7 +2914,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-608"><a href="#Bytes-608"><span class="linenos">608</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </span><span id="Bytes-609"><a href="#Bytes-609"><span class="linenos">609</span></a>
 </span><span id="Bytes-610"><a href="#Bytes-610"><span class="linenos">610</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes-611"><a href="#Bytes-611"><span class="linenos">611</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
+</span><span id="Bytes-611"><a href="#Bytes-611"><span class="linenos">611</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
 </span><span id="Bytes-612"><a href="#Bytes-612"><span class="linenos">612</span></a>
 </span><span id="Bytes-613"><a href="#Bytes-613"><span class="linenos">613</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-614"><a href="#Bytes-614"><span class="linenos">614</span></a><span class="sd">        -------</span>
@@ -3014,7 +3013,7 @@ Raises a ValueError if there is no such item.</p>
 </span><span id="Bytes-707"><a href="#Bytes-707"><span class="linenos">707</span></a>
 </span><span id="Bytes-708"><a href="#Bytes-708"><span class="linenos">708</span></a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 </span><span id="Bytes-709"><a href="#Bytes-709"><span class="linenos">709</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
-</span><span id="Bytes-710"><a href="#Bytes-710"><span class="linenos">710</span></a>            <span class="k">raise</span> <span class="ne">IndexError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Bytes-710"><a href="#Bytes-710"><span class="linenos">710</span></a>            <span class="k">raise</span> <span class="ne">IndexError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Bytes-711"><a href="#Bytes-711"><span class="linenos">711</span></a>
 </span><span id="Bytes-712"><a href="#Bytes-712"><span class="linenos">712</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="Bytes-713"><a href="#Bytes-713"><span class="linenos">713</span></a>
@@ -3088,7 +3087,7 @@ elsewhere as well.</p>
     </div>
     <a class="headerlink" href="#Bytes.__init__"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.__init__-125"><a href="#Bytes.__init__-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.__init__-126"><a href="#Bytes.__init__-126"><span class="linenos">126</span></a>        <span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
+</span><span id="Bytes.__init__-126"><a href="#Bytes.__init__-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
 </span><span id="Bytes.__init__-127"><a href="#Bytes.__init__-127"><span class="linenos">127</span></a>
 </span><span id="Bytes.__init__-128"><a href="#Bytes.__init__-128"><span class="linenos">128</span></a><span class="sd">        This won&#39;t allocate the array and the returned `Bytes` will be empty.</span>
 </span><span id="Bytes.__init__-129"><a href="#Bytes.__init__-129"><span class="linenos">129</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -3109,7 +3108,7 @@ elsewhere as well.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_str</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">s</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_str</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">s</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.from_str-view-source"><span>View Source</span></label>
 
@@ -3117,7 +3116,7 @@ elsewhere as well.</p>
     <a class="headerlink" href="#Bytes.from_str"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.from_str-134"><a href="#Bytes.from_str-134"><span class="linenos">134</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes.from_str-135"><a href="#Bytes.from_str-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.from_str-136"><a href="#Bytes.from_str-136"><span class="linenos">136</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
+</span><span id="Bytes.from_str-136"><a href="#Bytes.from_str-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
 </span><span id="Bytes.from_str-137"><a href="#Bytes.from_str-137"><span class="linenos">137</span></a>
 </span><span id="Bytes.from_str-138"><a href="#Bytes.from_str-138"><span class="linenos">138</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.from_str-139"><a href="#Bytes.from_str-139"><span class="linenos">139</span></a><span class="sd">        -------</span>
@@ -3151,7 +3150,7 @@ elsewhere as well.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_static</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">arr</span><span class="p">:</span> <span class="s1">&#39;array.array[int]&#39;</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_static</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">arr</span><span class="p">:</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.from_static-view-source"><span>View Source</span></label>
 
@@ -3159,7 +3158,7 @@ elsewhere as well.</p>
     <a class="headerlink" href="#Bytes.from_static"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.from_static-149"><a href="#Bytes.from_static-149"><span class="linenos">149</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes.from_static-150"><a href="#Bytes.from_static-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">from_static</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.from_static-151"><a href="#Bytes.from_static-151"><span class="linenos">151</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
+</span><span id="Bytes.from_static-151"><a href="#Bytes.from_static-151"><span class="linenos">151</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
 </span><span id="Bytes.from_static-152"><a href="#Bytes.from_static-152"><span class="linenos">152</span></a>
 </span><span id="Bytes.from_static-153"><a href="#Bytes.from_static-153"><span class="linenos">153</span></a><span class="sd">        The returned `Bytes` will directly point to `arr` without copying.</span>
 </span><span id="Bytes.from_static-154"><a href="#Bytes.from_static-154"><span class="linenos">154</span></a>
@@ -3197,7 +3196,7 @@ elsewhere as well.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_bytes</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">buf</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_bytes</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">buf</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.from_bytes-view-source"><span>View Source</span></label>
 
@@ -3205,7 +3204,7 @@ elsewhere as well.</p>
     <a class="headerlink" href="#Bytes.from_bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.from_bytes-166"><a href="#Bytes.from_bytes-166"><span class="linenos">166</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes.from_bytes-167"><a href="#Bytes.from_bytes-167"><span class="linenos">167</span></a>    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buf</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.from_bytes-168"><a href="#Bytes.from_bytes-168"><span class="linenos">168</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
+</span><span id="Bytes.from_bytes-168"><a href="#Bytes.from_bytes-168"><span class="linenos">168</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
 </span><span id="Bytes.from_bytes-169"><a href="#Bytes.from_bytes-169"><span class="linenos">169</span></a>
 </span><span id="Bytes.from_bytes-170"><a href="#Bytes.from_bytes-170"><span class="linenos">170</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.from_bytes-171"><a href="#Bytes.from_bytes-171"><span class="linenos">171</span></a><span class="sd">        -------</span>
@@ -3239,7 +3238,7 @@ elsewhere as well.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_raw</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">raw</span><span class="p">:</span> <span class="n">_io</span><span class="o">.</span><span class="n">StringIO</span> <span class="o">|</span> <span class="n">_io</span><span class="o">.</span><span class="n">BytesIO</span> <span class="o">|</span> <span class="n">_io</span><span class="o">.</span><span class="n">BufferedReader</span> <span class="o">|</span> <span class="nb">memoryview</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_raw</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">raw</span><span class="p">:</span> <span class="n">_io</span><span class="o">.</span><span class="n">StringIO</span> <span class="o">|</span> <span class="n">_io</span><span class="o">.</span><span class="n">BytesIO</span> <span class="o">|</span> <span class="n">_io</span><span class="o">.</span><span class="n">BufferedReader</span> <span class="o">|</span> <span class="nb">memoryview</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.from_raw-view-source"><span>View Source</span></label>
 
@@ -3247,7 +3246,7 @@ elsewhere as well.</p>
     <a class="headerlink" href="#Bytes.from_raw"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.from_raw-181"><a href="#Bytes.from_raw-181"><span class="linenos">181</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes.from_raw-182"><a href="#Bytes.from_raw-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">from_raw</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.from_raw-183"><a href="#Bytes.from_raw-183"><span class="linenos">183</span></a>        <span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
+</span><span id="Bytes.from_raw-183"><a href="#Bytes.from_raw-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
 </span><span id="Bytes.from_raw-184"><a href="#Bytes.from_raw-184"><span class="linenos">184</span></a>
 </span><span id="Bytes.from_raw-185"><a href="#Bytes.from_raw-185"><span class="linenos">185</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.from_raw-186"><a href="#Bytes.from_raw-186"><span class="linenos">186</span></a><span class="sd">        -------</span>
@@ -3312,7 +3311,7 @@ elsewhere as well.</p>
     </div>
     <a class="headerlink" href="#Bytes.try_to_str"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.try_to_str-208"><a href="#Bytes.try_to_str-208"><span class="linenos">208</span></a>    <span class="k">def</span> <span class="nf">try_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]:</span>
-</span><span id="Bytes.try_to_str-209"><a href="#Bytes.try_to_str-209"><span class="linenos">209</span></a>        <span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
+</span><span id="Bytes.try_to_str-209"><a href="#Bytes.try_to_str-209"><span class="linenos">209</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
 </span><span id="Bytes.try_to_str-210"><a href="#Bytes.try_to_str-210"><span class="linenos">210</span></a>
 </span><span id="Bytes.try_to_str-211"><a href="#Bytes.try_to_str-211"><span class="linenos">211</span></a><span class="sd">        This may fail if the `self` contains invalid bytes. strings</span>
 </span><span id="Bytes.try_to_str-212"><a href="#Bytes.try_to_str-212"><span class="linenos">212</span></a><span class="sd">        needs to be valid utf-8.</span>
@@ -3393,7 +3392,7 @@ to get decoded.</li>
     </div>
     <a class="headerlink" href="#Bytes.to_str"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.to_str-242"><a href="#Bytes.to_str-242"><span class="linenos">242</span></a>    <span class="k">def</span> <span class="nf">to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Bytes.to_str-243"><a href="#Bytes.to_str-243"><span class="linenos">243</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
+</span><span id="Bytes.to_str-243"><a href="#Bytes.to_str-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
 </span><span id="Bytes.to_str-244"><a href="#Bytes.to_str-244"><span class="linenos">244</span></a>
 </span><span id="Bytes.to_str-245"><a href="#Bytes.to_str-245"><span class="linenos">245</span></a><span class="sd">        During the conversion process, any invalid bytes will get converted to</span>
 </span><span id="Bytes.to_str-246"><a href="#Bytes.to_str-246"><span class="linenos">246</span></a><span class="sd">        [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))</span>
@@ -3488,14 +3487,14 @@ invalid bytes that cannot be decoded.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">leak</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[array.array[int]]&#39;</span>:</span></span>
+        <span class="name">leak</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="option.html#Some">sain.option.Some</a></span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.leak-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Bytes.leak"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.leak-292"><a href="#Bytes.leak-292"><span class="linenos">292</span></a>    <span class="k">def</span> <span class="nf">leak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-</span><span id="Bytes.leak-293"><a href="#Bytes.leak-293"><span class="linenos">293</span></a>        <span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
+</span><span id="Bytes.leak-293"><a href="#Bytes.leak-293"><span class="linenos">293</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
 </span><span id="Bytes.leak-294"><a href="#Bytes.leak-294"><span class="linenos">294</span></a>
 </span><span id="Bytes.leak-295"><a href="#Bytes.leak-295"><span class="linenos">295</span></a><span class="sd">        `None` is returned if it was already `None`.</span>
 </span><span id="Bytes.leak-296"><a href="#Bytes.leak-296"><span class="linenos">296</span></a>
@@ -3548,7 +3547,7 @@ invalid bytes that cannot be decoded.</p>
     </div>
     <a class="headerlink" href="#Bytes.as_bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.as_bytes-314"><a href="#Bytes.as_bytes-314"><span class="linenos">314</span></a>    <span class="k">def</span> <span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-</span><span id="Bytes.as_bytes-315"><a href="#Bytes.as_bytes-315"><span class="linenos">315</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
+</span><span id="Bytes.as_bytes-315"><a href="#Bytes.as_bytes-315"><span class="linenos">315</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
 </span><span id="Bytes.as_bytes-316"><a href="#Bytes.as_bytes-316"><span class="linenos">316</span></a>
 </span><span id="Bytes.as_bytes-317"><a href="#Bytes.as_bytes-317"><span class="linenos">317</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.as_bytes-318"><a href="#Bytes.as_bytes-318"><span class="linenos">318</span></a><span class="sd">        -------</span>
@@ -3589,7 +3588,7 @@ invalid bytes that cannot be decoded.</p>
     </div>
     <a class="headerlink" href="#Bytes.as_ref"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.as_ref-329"><a href="#Bytes.as_ref-329"><span class="linenos">329</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes.as_ref-330"><a href="#Bytes.as_ref-330"><span class="linenos">330</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
+</span><span id="Bytes.as_ref-330"><a href="#Bytes.as_ref-330"><span class="linenos">330</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
 </span><span id="Bytes.as_ref-331"><a href="#Bytes.as_ref-331"><span class="linenos">331</span></a>
 </span><span id="Bytes.as_ref-332"><a href="#Bytes.as_ref-332"><span class="linenos">332</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="Bytes.as_ref-333"><a href="#Bytes.as_ref-333"><span class="linenos">333</span></a>
@@ -3631,7 +3630,7 @@ invalid bytes that cannot be decoded.</p>
     </div>
     <a class="headerlink" href="#Bytes.as_mut"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.as_mut-343"><a href="#Bytes.as_mut-343"><span class="linenos">343</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">MutableSequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes.as_mut-344"><a href="#Bytes.as_mut-344"><span class="linenos">344</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
+</span><span id="Bytes.as_mut-344"><a href="#Bytes.as_mut-344"><span class="linenos">344</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
 </span><span id="Bytes.as_mut-345"><a href="#Bytes.as_mut-345"><span class="linenos">345</span></a>
 </span><span id="Bytes.as_mut-346"><a href="#Bytes.as_mut-346"><span class="linenos">346</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="Bytes.as_mut-347"><a href="#Bytes.as_mut-347"><span class="linenos">347</span></a>
@@ -3675,7 +3674,7 @@ invalid bytes that cannot be decoded.</p>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.raw_parts-357"><a href="#Bytes.raw_parts-357"><span class="linenos">357</span></a>    <span class="k">def</span> <span class="nf">raw_parts</span><span class="p">(</span>
 </span><span id="Bytes.raw_parts-358"><a href="#Bytes.raw_parts-358"><span class="linenos">358</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Bytes.raw_parts-359"><a href="#Bytes.raw_parts-359"><span class="linenos">359</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;address&quot;</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;len&quot;</span><span class="p">]]:</span>
-</span><span id="Bytes.raw_parts-360"><a href="#Bytes.raw_parts-360"><span class="linenos">360</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
+</span><span id="Bytes.raw_parts-360"><a href="#Bytes.raw_parts-360"><span class="linenos">360</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
 </span><span id="Bytes.raw_parts-361"><a href="#Bytes.raw_parts-361"><span class="linenos">361</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
 </span><span id="Bytes.raw_parts-362"><a href="#Bytes.raw_parts-362"><span class="linenos">362</span></a>            <span class="k">return</span> <span class="p">(</span><span class="mh">0x0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="Bytes.raw_parts-363"><a href="#Bytes.raw_parts-363"><span class="linenos">363</span></a>
@@ -3700,7 +3699,7 @@ invalid bytes that cannot be decoded.</p>
     </div>
     <a class="headerlink" href="#Bytes.put"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.put-368"><a href="#Bytes.put-368"><span class="linenos">368</span></a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.put-369"><a href="#Bytes.put-369"><span class="linenos">369</span></a>        <span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
+</span><span id="Bytes.put-369"><a href="#Bytes.put-369"><span class="linenos">369</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
 </span><span id="Bytes.put-370"><a href="#Bytes.put-370"><span class="linenos">370</span></a>
 </span><span id="Bytes.put-371"><a href="#Bytes.put-371"><span class="linenos">371</span></a><span class="sd">        unlike `.put_bytes`, this method appends instead of extending the array</span>
 </span><span id="Bytes.put-372"><a href="#Bytes.put-372"><span class="linenos">372</span></a><span class="sd">        which is faster if you&#39;re putting a single byte in a single call.</span>
@@ -3777,7 +3776,7 @@ An unsigned integer, also known as <code>u8</code> to put.</li>
     </div>
     <a class="headerlink" href="#Bytes.put_raw"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.put_raw-400"><a href="#Bytes.put_raw-400"><span class="linenos">400</span></a>    <span class="k">def</span> <span class="nf">put_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.put_raw-401"><a href="#Bytes.put_raw-401"><span class="linenos">401</span></a>        <span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
+</span><span id="Bytes.put_raw-401"><a href="#Bytes.put_raw-401"><span class="linenos">401</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
 </span><span id="Bytes.put_raw-402"><a href="#Bytes.put_raw-402"><span class="linenos">402</span></a>
 </span><span id="Bytes.put_raw-403"><a href="#Bytes.put_raw-403"><span class="linenos">403</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.put_raw-404"><a href="#Bytes.put_raw-404"><span class="linenos">404</span></a><span class="sd">        -------</span>
@@ -3856,7 +3855,7 @@ A valid raw data type. See <code>Rawish</code> for more details.</li>
     </div>
     <a class="headerlink" href="#Bytes.put_bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.put_bytes-433"><a href="#Bytes.put_bytes-433"><span class="linenos">433</span></a>    <span class="k">def</span> <span class="nf">put_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.put_bytes-434"><a href="#Bytes.put_bytes-434"><span class="linenos">434</span></a>        <span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
+</span><span id="Bytes.put_bytes-434"><a href="#Bytes.put_bytes-434"><span class="linenos">434</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
 </span><span id="Bytes.put_bytes-435"><a href="#Bytes.put_bytes-435"><span class="linenos">435</span></a>
 </span><span id="Bytes.put_bytes-436"><a href="#Bytes.put_bytes-436"><span class="linenos">436</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.put_bytes-437"><a href="#Bytes.put_bytes-437"><span class="linenos">437</span></a><span class="sd">        -------</span>
@@ -3923,7 +3922,7 @@ Can be one of <code><a href="#Bytes">Bytes</a></code>, <code>bytes</code>, <code
     </div>
     <a class="headerlink" href="#Bytes.put_str"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.put_str-460"><a href="#Bytes.put_str-460"><span class="linenos">460</span></a>    <span class="k">def</span> <span class="nf">put_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.put_str-461"><a href="#Bytes.put_str-461"><span class="linenos">461</span></a>        <span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
+</span><span id="Bytes.put_str-461"><a href="#Bytes.put_str-461"><span class="linenos">461</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
 </span><span id="Bytes.put_str-462"><a href="#Bytes.put_str-462"><span class="linenos">462</span></a>
 </span><span id="Bytes.put_str-463"><a href="#Bytes.put_str-463"><span class="linenos">463</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.put_str-464"><a href="#Bytes.put_str-464"><span class="linenos">464</span></a><span class="sd">        -------</span>
@@ -3977,7 +3976,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.len"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.len-479"><a href="#Bytes.len-479"><span class="linenos">479</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes.len-480"><a href="#Bytes.len-480"><span class="linenos">480</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
+</span><span id="Bytes.len-480"><a href="#Bytes.len-480"><span class="linenos">480</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
 </span><span id="Bytes.len-481"><a href="#Bytes.len-481"><span class="linenos">481</span></a>
 </span><span id="Bytes.len-482"><a href="#Bytes.len-482"><span class="linenos">482</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.len-483"><a href="#Bytes.len-483"><span class="linenos">483</span></a><span class="sd">        -------</span>
@@ -4017,7 +4016,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.size"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.size-492"><a href="#Bytes.size-492"><span class="linenos">492</span></a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes.size-493"><a href="#Bytes.size-493"><span class="linenos">493</span></a>        <span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
+</span><span id="Bytes.size-493"><a href="#Bytes.size-493"><span class="linenos">493</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
 </span><span id="Bytes.size-494"><a href="#Bytes.size-494"><span class="linenos">494</span></a>
 </span><span id="Bytes.size-495"><a href="#Bytes.size-495"><span class="linenos">495</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.size-496"><a href="#Bytes.size-496"><span class="linenos">496</span></a><span class="sd">        -------</span>
@@ -4057,7 +4056,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.iter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.iter-506"><a href="#Bytes.iter-506"><span class="linenos">506</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes.iter-507"><a href="#Bytes.iter-507"><span class="linenos">507</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
+</span><span id="Bytes.iter-507"><a href="#Bytes.iter-507"><span class="linenos">507</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
 </span><span id="Bytes.iter-508"><a href="#Bytes.iter-508"><span class="linenos">508</span></a>
 </span><span id="Bytes.iter-509"><a href="#Bytes.iter-509"><span class="linenos">509</span></a><span class="sd">        This iterator yields all `int`s from start to end.</span>
 </span><span id="Bytes.iter-510"><a href="#Bytes.iter-510"><span class="linenos">510</span></a>
@@ -4113,7 +4112,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.is_empty"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.is_empty-527"><a href="#Bytes.is_empty-527"><span class="linenos">527</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Bytes.is_empty-528"><a href="#Bytes.is_empty-528"><span class="linenos">528</span></a>        <span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
+</span><span id="Bytes.is_empty-528"><a href="#Bytes.is_empty-528"><span class="linenos">528</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
 </span><span id="Bytes.is_empty-529"><a href="#Bytes.is_empty-529"><span class="linenos">529</span></a>
 </span><span id="Bytes.is_empty-530"><a href="#Bytes.is_empty-530"><span class="linenos">530</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.is_empty-531"><a href="#Bytes.is_empty-531"><span class="linenos">531</span></a><span class="sd">        -------</span>
@@ -4144,14 +4143,14 @@ The string</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">copy</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">copy</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.copy-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Bytes.copy"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.copy-541"><a href="#Bytes.copy-541"><span class="linenos">541</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.copy-542"><a href="#Bytes.copy-542"><span class="linenos">542</span></a>        <span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
+</span><span id="Bytes.copy-542"><a href="#Bytes.copy-542"><span class="linenos">542</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
 </span><span id="Bytes.copy-543"><a href="#Bytes.copy-543"><span class="linenos">543</span></a>
 </span><span id="Bytes.copy-544"><a href="#Bytes.copy-544"><span class="linenos">544</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.copy-545"><a href="#Bytes.copy-545"><span class="linenos">545</span></a><span class="sd">        -------</span>
@@ -4192,7 +4191,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.clear"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.clear-556"><a href="#Bytes.clear-556"><span class="linenos">556</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.clear-557"><a href="#Bytes.clear-557"><span class="linenos">557</span></a>        <span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
+</span><span id="Bytes.clear-557"><a href="#Bytes.clear-557"><span class="linenos">557</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
 </span><span id="Bytes.clear-558"><a href="#Bytes.clear-558"><span class="linenos">558</span></a>
 </span><span id="Bytes.clear-559"><a href="#Bytes.clear-559"><span class="linenos">559</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.clear-560"><a href="#Bytes.clear-560"><span class="linenos">560</span></a><span class="sd">        -------</span>
@@ -4237,14 +4236,14 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.index"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.index-573"><a href="#Bytes.index-573"><span class="linenos">573</span></a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes.index-574"><a href="#Bytes.index-574"><span class="linenos">574</span></a>        <span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
+</span><span id="Bytes.index-574"><a href="#Bytes.index-574"><span class="linenos">574</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
 </span><span id="Bytes.index-575"><a href="#Bytes.index-575"><span class="linenos">575</span></a><span class="sd">        first occurrence of `v` in the buffer.</span>
 </span><span id="Bytes.index-576"><a href="#Bytes.index-576"><span class="linenos">576</span></a>
 </span><span id="Bytes.index-577"><a href="#Bytes.index-577"><span class="linenos">577</span></a><span class="sd">        The optional arguments start and stop can be specified to search for x within a</span>
 </span><span id="Bytes.index-578"><a href="#Bytes.index-578"><span class="linenos">578</span></a><span class="sd">        subsection of the array. Raise ValueError if x is not found</span>
 </span><span id="Bytes.index-579"><a href="#Bytes.index-579"><span class="linenos">579</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Bytes.index-580"><a href="#Bytes.index-580"><span class="linenos">580</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
-</span><span id="Bytes.index-581"><a href="#Bytes.index-581"><span class="linenos">581</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Bytes.index-581"><a href="#Bytes.index-581"><span class="linenos">581</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Bytes.index-582"><a href="#Bytes.index-582"><span class="linenos">582</span></a>
 </span><span id="Bytes.index-583"><a href="#Bytes.index-583"><span class="linenos">583</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
 </span></pre></div>
@@ -4271,7 +4270,7 @@ subsection of the array. Raise ValueError if x is not found</p>
     </div>
     <a class="headerlink" href="#Bytes.count"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.count-585"><a href="#Bytes.count-585"><span class="linenos">585</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes.count-586"><a href="#Bytes.count-586"><span class="linenos">586</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
+</span><span id="Bytes.count-586"><a href="#Bytes.count-586"><span class="linenos">586</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
 </span><span id="Bytes.count-587"><a href="#Bytes.count-587"><span class="linenos">587</span></a>
 </span><span id="Bytes.count-588"><a href="#Bytes.count-588"><span class="linenos">588</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.count-589"><a href="#Bytes.count-589"><span class="linenos">589</span></a><span class="sd">        --------</span>
@@ -4312,7 +4311,7 @@ subsection of the array. Raise ValueError if x is not found</p>
     </div>
     <a class="headerlink" href="#Bytes.insert"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.insert-600"><a href="#Bytes.insert-600"><span class="linenos">600</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.insert-601"><a href="#Bytes.insert-601"><span class="linenos">601</span></a>        <span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
+</span><span id="Bytes.insert-601"><a href="#Bytes.insert-601"><span class="linenos">601</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
 </span><span id="Bytes.insert-602"><a href="#Bytes.insert-602"><span class="linenos">602</span></a>
 </span><span id="Bytes.insert-603"><a href="#Bytes.insert-603"><span class="linenos">603</span></a><span class="sd">        Negative values are treated as being relative to the end of the buffer.</span>
 </span><span id="Bytes.insert-604"><a href="#Bytes.insert-604"><span class="linenos">604</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -4342,7 +4341,7 @@ subsection of the array. Raise ValueError if x is not found</p>
     </div>
     <a class="headerlink" href="#Bytes.pop"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.pop-610"><a href="#Bytes.pop-610"><span class="linenos">610</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes.pop-611"><a href="#Bytes.pop-611"><span class="linenos">611</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
+</span><span id="Bytes.pop-611"><a href="#Bytes.pop-611"><span class="linenos">611</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
 </span><span id="Bytes.pop-612"><a href="#Bytes.pop-612"><span class="linenos">612</span></a>
 </span><span id="Bytes.pop-613"><a href="#Bytes.pop-613"><span class="linenos">613</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.pop-614"><a href="#Bytes.pop-614"><span class="linenos">614</span></a><span class="sd">        -------</span>

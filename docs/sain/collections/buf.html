@@ -180,9 +180,9 @@
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Bytes&quot;</span><span class="p">,</span> <span class="s2">&quot;Rawish&quot;</span><span class="p">,</span> <span class="s2">&quot;Buffer&quot;</span><span class="p">)</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="kn">import</span> <span class="nn">array</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="kn">import</span> <span class="nn">io</span> <span class="k">as</span> <span class="nn">_io</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="kn">import</span> <span class="nn">sys</span> <span class="k">as</span> <span class="nn">_sys</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="kn">import</span> <span class="nn">io</span> <span class="k">as</span> <span class="nn">_io</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="kn">import</span> <span class="nn">sys</span> <span class="k">as</span> <span class="nn">_sys</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="kn">import</span> <span class="nn">typing</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">abc</span> <span class="k">as</span> <span class="n">collections</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="kn">from</span> <span class="nn">sain</span> <span class="kn">import</span> <span class="nb">iter</span> <span class="k">as</span> <span class="n">_iter</span>
@@ -232,7 +232,7 @@
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="k">class</span> <span class="nc">Bytes</span><span class="p">:</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="sd">&quot;&quot;&quot;Provides abstractions for working with UTF-8 compatible bytes.</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides abstractions for working with UTF-8 compatible bytes.</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">    It is an efficient container for storing and operating with bytes.</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">    It behaves very much like `array.array[int]` as well has the same layout.</span>
@@ -267,7 +267,7 @@
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;_buf&quot;</span><span class="p">,)</span>
 </span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
 </span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
 </span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        This won&#39;t allocate the array and the returned `Bytes` will be empty.</span>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -277,7 +277,7 @@
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">        Example</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        -------</span>
@@ -292,7 +292,7 @@
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="k">def</span> <span class="nf">from_static</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        The returned `Bytes` will directly point to `arr` without copying.</span>
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>
@@ -309,7 +309,7 @@
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>
 </span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buf</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
 </span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">        Example</span>
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">        -------</span>
@@ -324,7 +324,7 @@
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span> <span class="nf">from_raw</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">        Example</span>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">        -------</span>
@@ -350,7 +350,7 @@
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>        <span class="k">return</span> <span class="n">c</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>    <span class="k">def</span> <span class="nf">try_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]:</span>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>        <span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">        This may fail if the `self` contains invalid bytes. strings</span>
 </span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">        needs to be valid utf-8.</span>
@@ -384,7 +384,7 @@
 </span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>            <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
 </span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="k">def</span> <span class="nf">to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
 </span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>
 </span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="sd">        During the conversion process, any invalid bytes will get converted to</span>
 </span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">        [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))</span>
@@ -434,7 +434,7 @@
 </span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a>    <span class="c1"># buffer evolution</span>
 </span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a>
 </span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a>    <span class="k">def</span> <span class="nf">leak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a>        <span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
+</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
 </span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>
 </span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a><span class="sd">        `None` is returned if it was already `None`.</span>
 </span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>
@@ -456,7 +456,7 @@
 </span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>    <span class="k">def</span> <span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
+</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
 </span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>
 </span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a><span class="sd">        Example</span>
 </span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a><span class="sd">        -------</span>
@@ -471,7 +471,7 @@
 </span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
 </span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a>
 </span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
+</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>
 </span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>
@@ -485,7 +485,7 @@
 </span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">()</span>
 </span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a>
 </span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">MutableSequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
+</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
 </span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>
 </span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>
@@ -501,7 +501,7 @@
 </span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a>    <span class="k">def</span> <span class="nf">raw_parts</span><span class="p">(</span>
 </span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;address&quot;</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;len&quot;</span><span class="p">]]:</span>
-</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
+</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
 </span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
 </span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>            <span class="k">return</span> <span class="p">(</span><span class="mh">0x0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>
@@ -510,7 +510,7 @@
 </span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a>    <span class="c1"># default methods.</span>
 </span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a>
 </span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a>        <span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
+</span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
 </span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>
 </span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a><span class="sd">        unlike `.put_bytes`, this method appends instead of extending the array</span>
 </span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a><span class="sd">        which is faster if you&#39;re putting a single byte in a single call.</span>
@@ -542,7 +542,7 @@
 </span><span id="L-397"><a href="#L-397"><span class="linenos">397</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
 </span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a>
 </span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a>    <span class="k">def</span> <span class="nf">put_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a>        <span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
+</span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
 </span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a>
 </span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a><span class="sd">        Example</span>
 </span><span id="L-403"><a href="#L-403"><span class="linenos">403</span></a><span class="sd">        -------</span>
@@ -575,7 +575,7 @@
 </span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">unwrap_bytes</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
 </span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a>
 </span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a>    <span class="k">def</span> <span class="nf">put_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a>        <span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
+</span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
 </span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a>
 </span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a><span class="sd">        Example</span>
 </span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a><span class="sd">        -------</span>
@@ -602,7 +602,7 @@
 </span><span id="L-457"><a href="#L-457"><span class="linenos">457</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
 </span><span id="L-458"><a href="#L-458"><span class="linenos">458</span></a>
 </span><span id="L-459"><a href="#L-459"><span class="linenos">459</span></a>    <span class="k">def</span> <span class="nf">put_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-460"><a href="#L-460"><span class="linenos">460</span></a>        <span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
+</span><span id="L-460"><a href="#L-460"><span class="linenos">460</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
 </span><span id="L-461"><a href="#L-461"><span class="linenos">461</span></a>
 </span><span id="L-462"><a href="#L-462"><span class="linenos">462</span></a><span class="sd">        Example</span>
 </span><span id="L-463"><a href="#L-463"><span class="linenos">463</span></a><span class="sd">        -------</span>
@@ -621,7 +621,7 @@
 </span><span id="L-476"><a href="#L-476"><span class="linenos">476</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">put_bytes</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">ENCODING</span><span class="p">))</span>
 </span><span id="L-477"><a href="#L-477"><span class="linenos">477</span></a>
 </span><span id="L-478"><a href="#L-478"><span class="linenos">478</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-479"><a href="#L-479"><span class="linenos">479</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
+</span><span id="L-479"><a href="#L-479"><span class="linenos">479</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
 </span><span id="L-480"><a href="#L-480"><span class="linenos">480</span></a>
 </span><span id="L-481"><a href="#L-481"><span class="linenos">481</span></a><span class="sd">        Example</span>
 </span><span id="L-482"><a href="#L-482"><span class="linenos">482</span></a><span class="sd">        -------</span>
@@ -634,7 +634,7 @@
 </span><span id="L-489"><a href="#L-489"><span class="linenos">489</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
 </span><span id="L-490"><a href="#L-490"><span class="linenos">490</span></a>
 </span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a>        <span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
+</span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
 </span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a>
 </span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a><span class="sd">        Example</span>
 </span><span id="L-495"><a href="#L-495"><span class="linenos">495</span></a><span class="sd">        -------</span>
@@ -648,7 +648,7 @@
 </span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">itemsize</span>
 </span><span id="L-504"><a href="#L-504"><span class="linenos">504</span></a>
 </span><span id="L-505"><a href="#L-505"><span class="linenos">505</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
+</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
 </span><span id="L-507"><a href="#L-507"><span class="linenos">507</span></a>
 </span><span id="L-508"><a href="#L-508"><span class="linenos">508</span></a><span class="sd">        This iterator yields all `int`s from start to end.</span>
 </span><span id="L-509"><a href="#L-509"><span class="linenos">509</span></a>
@@ -669,7 +669,7 @@
 </span><span id="L-524"><a href="#L-524"><span class="linenos">524</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="L-525"><a href="#L-525"><span class="linenos">525</span></a>
 </span><span id="L-526"><a href="#L-526"><span class="linenos">526</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-527"><a href="#L-527"><span class="linenos">527</span></a>        <span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
+</span><span id="L-527"><a href="#L-527"><span class="linenos">527</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
 </span><span id="L-528"><a href="#L-528"><span class="linenos">528</span></a>
 </span><span id="L-529"><a href="#L-529"><span class="linenos">529</span></a><span class="sd">        Example</span>
 </span><span id="L-530"><a href="#L-530"><span class="linenos">530</span></a><span class="sd">        -------</span>
@@ -683,7 +683,7 @@
 </span><span id="L-538"><a href="#L-538"><span class="linenos">538</span></a>    <span class="c1"># layout methods.</span>
 </span><span id="L-539"><a href="#L-539"><span class="linenos">539</span></a>
 </span><span id="L-540"><a href="#L-540"><span class="linenos">540</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-541"><a href="#L-541"><span class="linenos">541</span></a>        <span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
+</span><span id="L-541"><a href="#L-541"><span class="linenos">541</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
 </span><span id="L-542"><a href="#L-542"><span class="linenos">542</span></a>
 </span><span id="L-543"><a href="#L-543"><span class="linenos">543</span></a><span class="sd">        Example</span>
 </span><span id="L-544"><a href="#L-544"><span class="linenos">544</span></a><span class="sd">        -------</span>
@@ -698,7 +698,7 @@
 </span><span id="L-553"><a href="#L-553"><span class="linenos">553</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_static</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[:])</span>
 </span><span id="L-554"><a href="#L-554"><span class="linenos">554</span></a>
 </span><span id="L-555"><a href="#L-555"><span class="linenos">555</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-556"><a href="#L-556"><span class="linenos">556</span></a>        <span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
+</span><span id="L-556"><a href="#L-556"><span class="linenos">556</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
 </span><span id="L-557"><a href="#L-557"><span class="linenos">557</span></a>
 </span><span id="L-558"><a href="#L-558"><span class="linenos">558</span></a><span class="sd">        Example</span>
 </span><span id="L-559"><a href="#L-559"><span class="linenos">559</span></a><span class="sd">        -------</span>
@@ -715,19 +715,19 @@
 </span><span id="L-570"><a href="#L-570"><span class="linenos">570</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 </span><span id="L-571"><a href="#L-571"><span class="linenos">571</span></a>
 </span><span id="L-572"><a href="#L-572"><span class="linenos">572</span></a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-573"><a href="#L-573"><span class="linenos">573</span></a>        <span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
+</span><span id="L-573"><a href="#L-573"><span class="linenos">573</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
 </span><span id="L-574"><a href="#L-574"><span class="linenos">574</span></a><span class="sd">        first occurrence of `v` in the buffer.</span>
 </span><span id="L-575"><a href="#L-575"><span class="linenos">575</span></a>
 </span><span id="L-576"><a href="#L-576"><span class="linenos">576</span></a><span class="sd">        The optional arguments start and stop can be specified to search for x within a</span>
 </span><span id="L-577"><a href="#L-577"><span class="linenos">577</span></a><span class="sd">        subsection of the array. Raise ValueError if x is not found</span>
 </span><span id="L-578"><a href="#L-578"><span class="linenos">578</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-579"><a href="#L-579"><span class="linenos">579</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
-</span><span id="L-580"><a href="#L-580"><span class="linenos">580</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="L-580"><a href="#L-580"><span class="linenos">580</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="L-581"><a href="#L-581"><span class="linenos">581</span></a>
 </span><span id="L-582"><a href="#L-582"><span class="linenos">582</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
 </span><span id="L-583"><a href="#L-583"><span class="linenos">583</span></a>
 </span><span id="L-584"><a href="#L-584"><span class="linenos">584</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-585"><a href="#L-585"><span class="linenos">585</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
+</span><span id="L-585"><a href="#L-585"><span class="linenos">585</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
 </span><span id="L-586"><a href="#L-586"><span class="linenos">586</span></a>
 </span><span id="L-587"><a href="#L-587"><span class="linenos">587</span></a><span class="sd">        Example</span>
 </span><span id="L-588"><a href="#L-588"><span class="linenos">588</span></a><span class="sd">        --------</span>
@@ -742,7 +742,7 @@
 </span><span id="L-597"><a href="#L-597"><span class="linenos">597</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span><span id="L-598"><a href="#L-598"><span class="linenos">598</span></a>
 </span><span id="L-599"><a href="#L-599"><span class="linenos">599</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-600"><a href="#L-600"><span class="linenos">600</span></a>        <span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
+</span><span id="L-600"><a href="#L-600"><span class="linenos">600</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
 </span><span id="L-601"><a href="#L-601"><span class="linenos">601</span></a>
 </span><span id="L-602"><a href="#L-602"><span class="linenos">602</span></a><span class="sd">        Negative values are treated as being relative to the end of the buffer.</span>
 </span><span id="L-603"><a href="#L-603"><span class="linenos">603</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -752,7 +752,7 @@
 </span><span id="L-607"><a href="#L-607"><span class="linenos">607</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </span><span id="L-608"><a href="#L-608"><span class="linenos">608</span></a>
 </span><span id="L-609"><a href="#L-609"><span class="linenos">609</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="L-610"><a href="#L-610"><span class="linenos">610</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
+</span><span id="L-610"><a href="#L-610"><span class="linenos">610</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
 </span><span id="L-611"><a href="#L-611"><span class="linenos">611</span></a>
 </span><span id="L-612"><a href="#L-612"><span class="linenos">612</span></a><span class="sd">        Example</span>
 </span><span id="L-613"><a href="#L-613"><span class="linenos">613</span></a><span class="sd">        -------</span>
@@ -851,7 +851,7 @@
 </span><span id="L-706"><a href="#L-706"><span class="linenos">706</span></a>
 </span><span id="L-707"><a href="#L-707"><span class="linenos">707</span></a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 </span><span id="L-708"><a href="#L-708"><span class="linenos">708</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
-</span><span id="L-709"><a href="#L-709"><span class="linenos">709</span></a>            <span class="k">raise</span> <span class="ne">IndexError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="L-709"><a href="#L-709"><span class="linenos">709</span></a>            <span class="k">raise</span> <span class="ne">IndexError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="L-710"><a href="#L-710"><span class="linenos">710</span></a>
 </span><span id="L-711"><a href="#L-711"><span class="linenos">711</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="L-712"><a href="#L-712"><span class="linenos">712</span></a>
@@ -893,7 +893,7 @@
     <a class="headerlink" href="#Bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes-89"><a href="#Bytes-89"><span class="linenos"> 89</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Bytes-90"><a href="#Bytes-90"><span class="linenos"> 90</span></a><span class="k">class</span> <span class="nc">Bytes</span><span class="p">:</span>
-</span><span id="Bytes-91"><a href="#Bytes-91"><span class="linenos"> 91</span></a>    <span class="sd">&quot;&quot;&quot;Provides abstractions for working with UTF-8 compatible bytes.</span>
+</span><span id="Bytes-91"><a href="#Bytes-91"><span class="linenos"> 91</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides abstractions for working with UTF-8 compatible bytes.</span>
 </span><span id="Bytes-92"><a href="#Bytes-92"><span class="linenos"> 92</span></a>
 </span><span id="Bytes-93"><a href="#Bytes-93"><span class="linenos"> 93</span></a><span class="sd">    It is an efficient container for storing and operating with bytes.</span>
 </span><span id="Bytes-94"><a href="#Bytes-94"><span class="linenos"> 94</span></a><span class="sd">    It behaves very much like `array.array[int]` as well has the same layout.</span>
@@ -928,7 +928,7 @@
 </span><span id="Bytes-123"><a href="#Bytes-123"><span class="linenos">123</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;_buf&quot;</span><span class="p">,)</span>
 </span><span id="Bytes-124"><a href="#Bytes-124"><span class="linenos">124</span></a>
 </span><span id="Bytes-125"><a href="#Bytes-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-126"><a href="#Bytes-126"><span class="linenos">126</span></a>        <span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
+</span><span id="Bytes-126"><a href="#Bytes-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
 </span><span id="Bytes-127"><a href="#Bytes-127"><span class="linenos">127</span></a>
 </span><span id="Bytes-128"><a href="#Bytes-128"><span class="linenos">128</span></a><span class="sd">        This won&#39;t allocate the array and the returned `Bytes` will be empty.</span>
 </span><span id="Bytes-129"><a href="#Bytes-129"><span class="linenos">129</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -938,7 +938,7 @@
 </span><span id="Bytes-133"><a href="#Bytes-133"><span class="linenos">133</span></a>
 </span><span id="Bytes-134"><a href="#Bytes-134"><span class="linenos">134</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes-135"><a href="#Bytes-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-136"><a href="#Bytes-136"><span class="linenos">136</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
+</span><span id="Bytes-136"><a href="#Bytes-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
 </span><span id="Bytes-137"><a href="#Bytes-137"><span class="linenos">137</span></a>
 </span><span id="Bytes-138"><a href="#Bytes-138"><span class="linenos">138</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-139"><a href="#Bytes-139"><span class="linenos">139</span></a><span class="sd">        -------</span>
@@ -953,7 +953,7 @@
 </span><span id="Bytes-148"><a href="#Bytes-148"><span class="linenos">148</span></a>
 </span><span id="Bytes-149"><a href="#Bytes-149"><span class="linenos">149</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes-150"><a href="#Bytes-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">from_static</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-151"><a href="#Bytes-151"><span class="linenos">151</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
+</span><span id="Bytes-151"><a href="#Bytes-151"><span class="linenos">151</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
 </span><span id="Bytes-152"><a href="#Bytes-152"><span class="linenos">152</span></a>
 </span><span id="Bytes-153"><a href="#Bytes-153"><span class="linenos">153</span></a><span class="sd">        The returned `Bytes` will directly point to `arr` without copying.</span>
 </span><span id="Bytes-154"><a href="#Bytes-154"><span class="linenos">154</span></a>
@@ -970,7 +970,7 @@
 </span><span id="Bytes-165"><a href="#Bytes-165"><span class="linenos">165</span></a>
 </span><span id="Bytes-166"><a href="#Bytes-166"><span class="linenos">166</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes-167"><a href="#Bytes-167"><span class="linenos">167</span></a>    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buf</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-168"><a href="#Bytes-168"><span class="linenos">168</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
+</span><span id="Bytes-168"><a href="#Bytes-168"><span class="linenos">168</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
 </span><span id="Bytes-169"><a href="#Bytes-169"><span class="linenos">169</span></a>
 </span><span id="Bytes-170"><a href="#Bytes-170"><span class="linenos">170</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-171"><a href="#Bytes-171"><span class="linenos">171</span></a><span class="sd">        -------</span>
@@ -985,7 +985,7 @@
 </span><span id="Bytes-180"><a href="#Bytes-180"><span class="linenos">180</span></a>
 </span><span id="Bytes-181"><a href="#Bytes-181"><span class="linenos">181</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes-182"><a href="#Bytes-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">from_raw</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-183"><a href="#Bytes-183"><span class="linenos">183</span></a>        <span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
+</span><span id="Bytes-183"><a href="#Bytes-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
 </span><span id="Bytes-184"><a href="#Bytes-184"><span class="linenos">184</span></a>
 </span><span id="Bytes-185"><a href="#Bytes-185"><span class="linenos">185</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-186"><a href="#Bytes-186"><span class="linenos">186</span></a><span class="sd">        -------</span>
@@ -1011,7 +1011,7 @@
 </span><span id="Bytes-206"><a href="#Bytes-206"><span class="linenos">206</span></a>        <span class="k">return</span> <span class="n">c</span>
 </span><span id="Bytes-207"><a href="#Bytes-207"><span class="linenos">207</span></a>
 </span><span id="Bytes-208"><a href="#Bytes-208"><span class="linenos">208</span></a>    <span class="k">def</span> <span class="nf">try_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]:</span>
-</span><span id="Bytes-209"><a href="#Bytes-209"><span class="linenos">209</span></a>        <span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
+</span><span id="Bytes-209"><a href="#Bytes-209"><span class="linenos">209</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
 </span><span id="Bytes-210"><a href="#Bytes-210"><span class="linenos">210</span></a>
 </span><span id="Bytes-211"><a href="#Bytes-211"><span class="linenos">211</span></a><span class="sd">        This may fail if the `self` contains invalid bytes. strings</span>
 </span><span id="Bytes-212"><a href="#Bytes-212"><span class="linenos">212</span></a><span class="sd">        needs to be valid utf-8.</span>
@@ -1045,7 +1045,7 @@
 </span><span id="Bytes-240"><a href="#Bytes-240"><span class="linenos">240</span></a>            <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Err</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
 </span><span id="Bytes-241"><a href="#Bytes-241"><span class="linenos">241</span></a>
 </span><span id="Bytes-242"><a href="#Bytes-242"><span class="linenos">242</span></a>    <span class="k">def</span> <span class="nf">to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Bytes-243"><a href="#Bytes-243"><span class="linenos">243</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
+</span><span id="Bytes-243"><a href="#Bytes-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
 </span><span id="Bytes-244"><a href="#Bytes-244"><span class="linenos">244</span></a>
 </span><span id="Bytes-245"><a href="#Bytes-245"><span class="linenos">245</span></a><span class="sd">        During the conversion process, any invalid bytes will get converted to</span>
 </span><span id="Bytes-246"><a href="#Bytes-246"><span class="linenos">246</span></a><span class="sd">        [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))</span>
@@ -1095,7 +1095,7 @@
 </span><span id="Bytes-290"><a href="#Bytes-290"><span class="linenos">290</span></a>    <span class="c1"># buffer evolution</span>
 </span><span id="Bytes-291"><a href="#Bytes-291"><span class="linenos">291</span></a>
 </span><span id="Bytes-292"><a href="#Bytes-292"><span class="linenos">292</span></a>    <span class="k">def</span> <span class="nf">leak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-</span><span id="Bytes-293"><a href="#Bytes-293"><span class="linenos">293</span></a>        <span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
+</span><span id="Bytes-293"><a href="#Bytes-293"><span class="linenos">293</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
 </span><span id="Bytes-294"><a href="#Bytes-294"><span class="linenos">294</span></a>
 </span><span id="Bytes-295"><a href="#Bytes-295"><span class="linenos">295</span></a><span class="sd">        `None` is returned if it was already `None`.</span>
 </span><span id="Bytes-296"><a href="#Bytes-296"><span class="linenos">296</span></a>
@@ -1117,7 +1117,7 @@
 </span><span id="Bytes-312"><a href="#Bytes-312"><span class="linenos">312</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
 </span><span id="Bytes-313"><a href="#Bytes-313"><span class="linenos">313</span></a>
 </span><span id="Bytes-314"><a href="#Bytes-314"><span class="linenos">314</span></a>    <span class="k">def</span> <span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-</span><span id="Bytes-315"><a href="#Bytes-315"><span class="linenos">315</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
+</span><span id="Bytes-315"><a href="#Bytes-315"><span class="linenos">315</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
 </span><span id="Bytes-316"><a href="#Bytes-316"><span class="linenos">316</span></a>
 </span><span id="Bytes-317"><a href="#Bytes-317"><span class="linenos">317</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-318"><a href="#Bytes-318"><span class="linenos">318</span></a><span class="sd">        -------</span>
@@ -1132,7 +1132,7 @@
 </span><span id="Bytes-327"><a href="#Bytes-327"><span class="linenos">327</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
 </span><span id="Bytes-328"><a href="#Bytes-328"><span class="linenos">328</span></a>
 </span><span id="Bytes-329"><a href="#Bytes-329"><span class="linenos">329</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes-330"><a href="#Bytes-330"><span class="linenos">330</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
+</span><span id="Bytes-330"><a href="#Bytes-330"><span class="linenos">330</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
 </span><span id="Bytes-331"><a href="#Bytes-331"><span class="linenos">331</span></a>
 </span><span id="Bytes-332"><a href="#Bytes-332"><span class="linenos">332</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="Bytes-333"><a href="#Bytes-333"><span class="linenos">333</span></a>
@@ -1146,7 +1146,7 @@
 </span><span id="Bytes-341"><a href="#Bytes-341"><span class="linenos">341</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">()</span>
 </span><span id="Bytes-342"><a href="#Bytes-342"><span class="linenos">342</span></a>
 </span><span id="Bytes-343"><a href="#Bytes-343"><span class="linenos">343</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">MutableSequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes-344"><a href="#Bytes-344"><span class="linenos">344</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
+</span><span id="Bytes-344"><a href="#Bytes-344"><span class="linenos">344</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
 </span><span id="Bytes-345"><a href="#Bytes-345"><span class="linenos">345</span></a>
 </span><span id="Bytes-346"><a href="#Bytes-346"><span class="linenos">346</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="Bytes-347"><a href="#Bytes-347"><span class="linenos">347</span></a>
@@ -1162,7 +1162,7 @@
 </span><span id="Bytes-357"><a href="#Bytes-357"><span class="linenos">357</span></a>    <span class="k">def</span> <span class="nf">raw_parts</span><span class="p">(</span>
 </span><span id="Bytes-358"><a href="#Bytes-358"><span class="linenos">358</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Bytes-359"><a href="#Bytes-359"><span class="linenos">359</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;address&quot;</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;len&quot;</span><span class="p">]]:</span>
-</span><span id="Bytes-360"><a href="#Bytes-360"><span class="linenos">360</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
+</span><span id="Bytes-360"><a href="#Bytes-360"><span class="linenos">360</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
 </span><span id="Bytes-361"><a href="#Bytes-361"><span class="linenos">361</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
 </span><span id="Bytes-362"><a href="#Bytes-362"><span class="linenos">362</span></a>            <span class="k">return</span> <span class="p">(</span><span class="mh">0x0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="Bytes-363"><a href="#Bytes-363"><span class="linenos">363</span></a>
@@ -1171,7 +1171,7 @@
 </span><span id="Bytes-366"><a href="#Bytes-366"><span class="linenos">366</span></a>    <span class="c1"># default methods.</span>
 </span><span id="Bytes-367"><a href="#Bytes-367"><span class="linenos">367</span></a>
 </span><span id="Bytes-368"><a href="#Bytes-368"><span class="linenos">368</span></a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-369"><a href="#Bytes-369"><span class="linenos">369</span></a>        <span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
+</span><span id="Bytes-369"><a href="#Bytes-369"><span class="linenos">369</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
 </span><span id="Bytes-370"><a href="#Bytes-370"><span class="linenos">370</span></a>
 </span><span id="Bytes-371"><a href="#Bytes-371"><span class="linenos">371</span></a><span class="sd">        unlike `.put_bytes`, this method appends instead of extending the array</span>
 </span><span id="Bytes-372"><a href="#Bytes-372"><span class="linenos">372</span></a><span class="sd">        which is faster if you&#39;re putting a single byte in a single call.</span>
@@ -1203,7 +1203,7 @@
 </span><span id="Bytes-398"><a href="#Bytes-398"><span class="linenos">398</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
 </span><span id="Bytes-399"><a href="#Bytes-399"><span class="linenos">399</span></a>
 </span><span id="Bytes-400"><a href="#Bytes-400"><span class="linenos">400</span></a>    <span class="k">def</span> <span class="nf">put_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-401"><a href="#Bytes-401"><span class="linenos">401</span></a>        <span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
+</span><span id="Bytes-401"><a href="#Bytes-401"><span class="linenos">401</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
 </span><span id="Bytes-402"><a href="#Bytes-402"><span class="linenos">402</span></a>
 </span><span id="Bytes-403"><a href="#Bytes-403"><span class="linenos">403</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-404"><a href="#Bytes-404"><span class="linenos">404</span></a><span class="sd">        -------</span>
@@ -1236,7 +1236,7 @@
 </span><span id="Bytes-431"><a href="#Bytes-431"><span class="linenos">431</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">unwrap_bytes</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
 </span><span id="Bytes-432"><a href="#Bytes-432"><span class="linenos">432</span></a>
 </span><span id="Bytes-433"><a href="#Bytes-433"><span class="linenos">433</span></a>    <span class="k">def</span> <span class="nf">put_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-434"><a href="#Bytes-434"><span class="linenos">434</span></a>        <span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
+</span><span id="Bytes-434"><a href="#Bytes-434"><span class="linenos">434</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
 </span><span id="Bytes-435"><a href="#Bytes-435"><span class="linenos">435</span></a>
 </span><span id="Bytes-436"><a href="#Bytes-436"><span class="linenos">436</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-437"><a href="#Bytes-437"><span class="linenos">437</span></a><span class="sd">        -------</span>
@@ -1263,7 +1263,7 @@
 </span><span id="Bytes-458"><a href="#Bytes-458"><span class="linenos">458</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
 </span><span id="Bytes-459"><a href="#Bytes-459"><span class="linenos">459</span></a>
 </span><span id="Bytes-460"><a href="#Bytes-460"><span class="linenos">460</span></a>    <span class="k">def</span> <span class="nf">put_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-461"><a href="#Bytes-461"><span class="linenos">461</span></a>        <span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
+</span><span id="Bytes-461"><a href="#Bytes-461"><span class="linenos">461</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
 </span><span id="Bytes-462"><a href="#Bytes-462"><span class="linenos">462</span></a>
 </span><span id="Bytes-463"><a href="#Bytes-463"><span class="linenos">463</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-464"><a href="#Bytes-464"><span class="linenos">464</span></a><span class="sd">        -------</span>
@@ -1282,7 +1282,7 @@
 </span><span id="Bytes-477"><a href="#Bytes-477"><span class="linenos">477</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">put_bytes</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">ENCODING</span><span class="p">))</span>
 </span><span id="Bytes-478"><a href="#Bytes-478"><span class="linenos">478</span></a>
 </span><span id="Bytes-479"><a href="#Bytes-479"><span class="linenos">479</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes-480"><a href="#Bytes-480"><span class="linenos">480</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
+</span><span id="Bytes-480"><a href="#Bytes-480"><span class="linenos">480</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
 </span><span id="Bytes-481"><a href="#Bytes-481"><span class="linenos">481</span></a>
 </span><span id="Bytes-482"><a href="#Bytes-482"><span class="linenos">482</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-483"><a href="#Bytes-483"><span class="linenos">483</span></a><span class="sd">        -------</span>
@@ -1295,7 +1295,7 @@
 </span><span id="Bytes-490"><a href="#Bytes-490"><span class="linenos">490</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
 </span><span id="Bytes-491"><a href="#Bytes-491"><span class="linenos">491</span></a>
 </span><span id="Bytes-492"><a href="#Bytes-492"><span class="linenos">492</span></a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes-493"><a href="#Bytes-493"><span class="linenos">493</span></a>        <span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
+</span><span id="Bytes-493"><a href="#Bytes-493"><span class="linenos">493</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
 </span><span id="Bytes-494"><a href="#Bytes-494"><span class="linenos">494</span></a>
 </span><span id="Bytes-495"><a href="#Bytes-495"><span class="linenos">495</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-496"><a href="#Bytes-496"><span class="linenos">496</span></a><span class="sd">        -------</span>
@@ -1309,7 +1309,7 @@
 </span><span id="Bytes-504"><a href="#Bytes-504"><span class="linenos">504</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">itemsize</span>
 </span><span id="Bytes-505"><a href="#Bytes-505"><span class="linenos">505</span></a>
 </span><span id="Bytes-506"><a href="#Bytes-506"><span class="linenos">506</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes-507"><a href="#Bytes-507"><span class="linenos">507</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
+</span><span id="Bytes-507"><a href="#Bytes-507"><span class="linenos">507</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
 </span><span id="Bytes-508"><a href="#Bytes-508"><span class="linenos">508</span></a>
 </span><span id="Bytes-509"><a href="#Bytes-509"><span class="linenos">509</span></a><span class="sd">        This iterator yields all `int`s from start to end.</span>
 </span><span id="Bytes-510"><a href="#Bytes-510"><span class="linenos">510</span></a>
@@ -1330,7 +1330,7 @@
 </span><span id="Bytes-525"><a href="#Bytes-525"><span class="linenos">525</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="Bytes-526"><a href="#Bytes-526"><span class="linenos">526</span></a>
 </span><span id="Bytes-527"><a href="#Bytes-527"><span class="linenos">527</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Bytes-528"><a href="#Bytes-528"><span class="linenos">528</span></a>        <span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
+</span><span id="Bytes-528"><a href="#Bytes-528"><span class="linenos">528</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
 </span><span id="Bytes-529"><a href="#Bytes-529"><span class="linenos">529</span></a>
 </span><span id="Bytes-530"><a href="#Bytes-530"><span class="linenos">530</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-531"><a href="#Bytes-531"><span class="linenos">531</span></a><span class="sd">        -------</span>
@@ -1344,7 +1344,7 @@
 </span><span id="Bytes-539"><a href="#Bytes-539"><span class="linenos">539</span></a>    <span class="c1"># layout methods.</span>
 </span><span id="Bytes-540"><a href="#Bytes-540"><span class="linenos">540</span></a>
 </span><span id="Bytes-541"><a href="#Bytes-541"><span class="linenos">541</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes-542"><a href="#Bytes-542"><span class="linenos">542</span></a>        <span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
+</span><span id="Bytes-542"><a href="#Bytes-542"><span class="linenos">542</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
 </span><span id="Bytes-543"><a href="#Bytes-543"><span class="linenos">543</span></a>
 </span><span id="Bytes-544"><a href="#Bytes-544"><span class="linenos">544</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-545"><a href="#Bytes-545"><span class="linenos">545</span></a><span class="sd">        -------</span>
@@ -1359,7 +1359,7 @@
 </span><span id="Bytes-554"><a href="#Bytes-554"><span class="linenos">554</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_static</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[:])</span>
 </span><span id="Bytes-555"><a href="#Bytes-555"><span class="linenos">555</span></a>
 </span><span id="Bytes-556"><a href="#Bytes-556"><span class="linenos">556</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-557"><a href="#Bytes-557"><span class="linenos">557</span></a>        <span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
+</span><span id="Bytes-557"><a href="#Bytes-557"><span class="linenos">557</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
 </span><span id="Bytes-558"><a href="#Bytes-558"><span class="linenos">558</span></a>
 </span><span id="Bytes-559"><a href="#Bytes-559"><span class="linenos">559</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-560"><a href="#Bytes-560"><span class="linenos">560</span></a><span class="sd">        -------</span>
@@ -1376,19 +1376,19 @@
 </span><span id="Bytes-571"><a href="#Bytes-571"><span class="linenos">571</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 </span><span id="Bytes-572"><a href="#Bytes-572"><span class="linenos">572</span></a>
 </span><span id="Bytes-573"><a href="#Bytes-573"><span class="linenos">573</span></a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes-574"><a href="#Bytes-574"><span class="linenos">574</span></a>        <span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
+</span><span id="Bytes-574"><a href="#Bytes-574"><span class="linenos">574</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
 </span><span id="Bytes-575"><a href="#Bytes-575"><span class="linenos">575</span></a><span class="sd">        first occurrence of `v` in the buffer.</span>
 </span><span id="Bytes-576"><a href="#Bytes-576"><span class="linenos">576</span></a>
 </span><span id="Bytes-577"><a href="#Bytes-577"><span class="linenos">577</span></a><span class="sd">        The optional arguments start and stop can be specified to search for x within a</span>
 </span><span id="Bytes-578"><a href="#Bytes-578"><span class="linenos">578</span></a><span class="sd">        subsection of the array. Raise ValueError if x is not found</span>
 </span><span id="Bytes-579"><a href="#Bytes-579"><span class="linenos">579</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Bytes-580"><a href="#Bytes-580"><span class="linenos">580</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
-</span><span id="Bytes-581"><a href="#Bytes-581"><span class="linenos">581</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Bytes-581"><a href="#Bytes-581"><span class="linenos">581</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Bytes-582"><a href="#Bytes-582"><span class="linenos">582</span></a>
 </span><span id="Bytes-583"><a href="#Bytes-583"><span class="linenos">583</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
 </span><span id="Bytes-584"><a href="#Bytes-584"><span class="linenos">584</span></a>
 </span><span id="Bytes-585"><a href="#Bytes-585"><span class="linenos">585</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes-586"><a href="#Bytes-586"><span class="linenos">586</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
+</span><span id="Bytes-586"><a href="#Bytes-586"><span class="linenos">586</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
 </span><span id="Bytes-587"><a href="#Bytes-587"><span class="linenos">587</span></a>
 </span><span id="Bytes-588"><a href="#Bytes-588"><span class="linenos">588</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-589"><a href="#Bytes-589"><span class="linenos">589</span></a><span class="sd">        --------</span>
@@ -1403,7 +1403,7 @@
 </span><span id="Bytes-598"><a href="#Bytes-598"><span class="linenos">598</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span><span id="Bytes-599"><a href="#Bytes-599"><span class="linenos">599</span></a>
 </span><span id="Bytes-600"><a href="#Bytes-600"><span class="linenos">600</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes-601"><a href="#Bytes-601"><span class="linenos">601</span></a>        <span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
+</span><span id="Bytes-601"><a href="#Bytes-601"><span class="linenos">601</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
 </span><span id="Bytes-602"><a href="#Bytes-602"><span class="linenos">602</span></a>
 </span><span id="Bytes-603"><a href="#Bytes-603"><span class="linenos">603</span></a><span class="sd">        Negative values are treated as being relative to the end of the buffer.</span>
 </span><span id="Bytes-604"><a href="#Bytes-604"><span class="linenos">604</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1413,7 +1413,7 @@
 </span><span id="Bytes-608"><a href="#Bytes-608"><span class="linenos">608</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </span><span id="Bytes-609"><a href="#Bytes-609"><span class="linenos">609</span></a>
 </span><span id="Bytes-610"><a href="#Bytes-610"><span class="linenos">610</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes-611"><a href="#Bytes-611"><span class="linenos">611</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
+</span><span id="Bytes-611"><a href="#Bytes-611"><span class="linenos">611</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
 </span><span id="Bytes-612"><a href="#Bytes-612"><span class="linenos">612</span></a>
 </span><span id="Bytes-613"><a href="#Bytes-613"><span class="linenos">613</span></a><span class="sd">        Example</span>
 </span><span id="Bytes-614"><a href="#Bytes-614"><span class="linenos">614</span></a><span class="sd">        -------</span>
@@ -1512,7 +1512,7 @@
 </span><span id="Bytes-707"><a href="#Bytes-707"><span class="linenos">707</span></a>
 </span><span id="Bytes-708"><a href="#Bytes-708"><span class="linenos">708</span></a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 </span><span id="Bytes-709"><a href="#Bytes-709"><span class="linenos">709</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
-</span><span id="Bytes-710"><a href="#Bytes-710"><span class="linenos">710</span></a>            <span class="k">raise</span> <span class="ne">IndexError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Bytes-710"><a href="#Bytes-710"><span class="linenos">710</span></a>            <span class="k">raise</span> <span class="ne">IndexError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Bytes-711"><a href="#Bytes-711"><span class="linenos">711</span></a>
 </span><span id="Bytes-712"><a href="#Bytes-712"><span class="linenos">712</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="Bytes-713"><a href="#Bytes-713"><span class="linenos">713</span></a>
@@ -1586,7 +1586,7 @@ elsewhere as well.</p>
     </div>
     <a class="headerlink" href="#Bytes.__init__"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.__init__-125"><a href="#Bytes.__init__-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.__init__-126"><a href="#Bytes.__init__-126"><span class="linenos">126</span></a>        <span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
+</span><span id="Bytes.__init__-126"><a href="#Bytes.__init__-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new empty `Bytes`.</span>
 </span><span id="Bytes.__init__-127"><a href="#Bytes.__init__-127"><span class="linenos">127</span></a>
 </span><span id="Bytes.__init__-128"><a href="#Bytes.__init__-128"><span class="linenos">128</span></a><span class="sd">        This won&#39;t allocate the array and the returned `Bytes` will be empty.</span>
 </span><span id="Bytes.__init__-129"><a href="#Bytes.__init__-129"><span class="linenos">129</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1607,7 +1607,7 @@ elsewhere as well.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_str</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">s</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_str</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">s</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.from_str-view-source"><span>View Source</span></label>
 
@@ -1615,7 +1615,7 @@ elsewhere as well.</p>
     <a class="headerlink" href="#Bytes.from_str"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.from_str-134"><a href="#Bytes.from_str-134"><span class="linenos">134</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes.from_str-135"><a href="#Bytes.from_str-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.from_str-136"><a href="#Bytes.from_str-136"><span class="linenos">136</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
+</span><span id="Bytes.from_str-136"><a href="#Bytes.from_str-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from a string with the given encoding.</span>
 </span><span id="Bytes.from_str-137"><a href="#Bytes.from_str-137"><span class="linenos">137</span></a>
 </span><span id="Bytes.from_str-138"><a href="#Bytes.from_str-138"><span class="linenos">138</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.from_str-139"><a href="#Bytes.from_str-139"><span class="linenos">139</span></a><span class="sd">        -------</span>
@@ -1649,7 +1649,7 @@ elsewhere as well.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_static</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">arr</span><span class="p">:</span> <span class="s1">&#39;array.array[int]&#39;</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_static</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">arr</span><span class="p">:</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.from_static-view-source"><span>View Source</span></label>
 
@@ -1657,7 +1657,7 @@ elsewhere as well.</p>
     <a class="headerlink" href="#Bytes.from_static"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.from_static-149"><a href="#Bytes.from_static-149"><span class="linenos">149</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes.from_static-150"><a href="#Bytes.from_static-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">from_static</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.from_static-151"><a href="#Bytes.from_static-151"><span class="linenos">151</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
+</span><span id="Bytes.from_static-151"><a href="#Bytes.from_static-151"><span class="linenos">151</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an array.</span>
 </span><span id="Bytes.from_static-152"><a href="#Bytes.from_static-152"><span class="linenos">152</span></a>
 </span><span id="Bytes.from_static-153"><a href="#Bytes.from_static-153"><span class="linenos">153</span></a><span class="sd">        The returned `Bytes` will directly point to `arr` without copying.</span>
 </span><span id="Bytes.from_static-154"><a href="#Bytes.from_static-154"><span class="linenos">154</span></a>
@@ -1695,7 +1695,7 @@ elsewhere as well.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_bytes</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">buf</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_bytes</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">buf</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.from_bytes-view-source"><span>View Source</span></label>
 
@@ -1703,7 +1703,7 @@ elsewhere as well.</p>
     <a class="headerlink" href="#Bytes.from_bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.from_bytes-166"><a href="#Bytes.from_bytes-166"><span class="linenos">166</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes.from_bytes-167"><a href="#Bytes.from_bytes-167"><span class="linenos">167</span></a>    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buf</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.from_bytes-168"><a href="#Bytes.from_bytes-168"><span class="linenos">168</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
+</span><span id="Bytes.from_bytes-168"><a href="#Bytes.from_bytes-168"><span class="linenos">168</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `Bytes` from an initial bytes.</span>
 </span><span id="Bytes.from_bytes-169"><a href="#Bytes.from_bytes-169"><span class="linenos">169</span></a>
 </span><span id="Bytes.from_bytes-170"><a href="#Bytes.from_bytes-170"><span class="linenos">170</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.from_bytes-171"><a href="#Bytes.from_bytes-171"><span class="linenos">171</span></a><span class="sd">        -------</span>
@@ -1737,7 +1737,7 @@ elsewhere as well.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_raw</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">raw</span><span class="p">:</span> <span class="n">_io</span><span class="o">.</span><span class="n">StringIO</span> <span class="o">|</span> <span class="n">_io</span><span class="o">.</span><span class="n">BytesIO</span> <span class="o">|</span> <span class="n">_io</span><span class="o">.</span><span class="n">BufferedReader</span> <span class="o">|</span> <span class="nb">memoryview</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_raw</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">raw</span><span class="p">:</span> <span class="n">_io</span><span class="o">.</span><span class="n">StringIO</span> <span class="o">|</span> <span class="n">_io</span><span class="o">.</span><span class="n">BytesIO</span> <span class="o">|</span> <span class="n">_io</span><span class="o">.</span><span class="n">BufferedReader</span> <span class="o">|</span> <span class="nb">memoryview</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.from_raw-view-source"><span>View Source</span></label>
 
@@ -1745,7 +1745,7 @@ elsewhere as well.</p>
     <a class="headerlink" href="#Bytes.from_raw"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.from_raw-181"><a href="#Bytes.from_raw-181"><span class="linenos">181</span></a>    <span class="nd">@classmethod</span>
 </span><span id="Bytes.from_raw-182"><a href="#Bytes.from_raw-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">from_raw</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.from_raw-183"><a href="#Bytes.from_raw-183"><span class="linenos">183</span></a>        <span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
+</span><span id="Bytes.from_raw-183"><a href="#Bytes.from_raw-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new `Bytes` in-place from a valid raw data type.</span>
 </span><span id="Bytes.from_raw-184"><a href="#Bytes.from_raw-184"><span class="linenos">184</span></a>
 </span><span id="Bytes.from_raw-185"><a href="#Bytes.from_raw-185"><span class="linenos">185</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.from_raw-186"><a href="#Bytes.from_raw-186"><span class="linenos">186</span></a><span class="sd">        -------</span>
@@ -1810,7 +1810,7 @@ elsewhere as well.</p>
     </div>
     <a class="headerlink" href="#Bytes.try_to_str"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.try_to_str-208"><a href="#Bytes.try_to_str-208"><span class="linenos">208</span></a>    <span class="k">def</span> <span class="nf">try_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]:</span>
-</span><span id="Bytes.try_to_str-209"><a href="#Bytes.try_to_str-209"><span class="linenos">209</span></a>        <span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
+</span><span id="Bytes.try_to_str-209"><a href="#Bytes.try_to_str-209"><span class="linenos">209</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A safe method to convert `self` into a string.</span>
 </span><span id="Bytes.try_to_str-210"><a href="#Bytes.try_to_str-210"><span class="linenos">210</span></a>
 </span><span id="Bytes.try_to_str-211"><a href="#Bytes.try_to_str-211"><span class="linenos">211</span></a><span class="sd">        This may fail if the `self` contains invalid bytes. strings</span>
 </span><span id="Bytes.try_to_str-212"><a href="#Bytes.try_to_str-212"><span class="linenos">212</span></a><span class="sd">        needs to be valid utf-8.</span>
@@ -1891,7 +1891,7 @@ to get decoded.</li>
     </div>
     <a class="headerlink" href="#Bytes.to_str"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.to_str-242"><a href="#Bytes.to_str-242"><span class="linenos">242</span></a>    <span class="k">def</span> <span class="nf">to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Bytes.to_str-243"><a href="#Bytes.to_str-243"><span class="linenos">243</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
+</span><span id="Bytes.to_str-243"><a href="#Bytes.to_str-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` to a utf-8 string. which may or may not be expensive.</span>
 </span><span id="Bytes.to_str-244"><a href="#Bytes.to_str-244"><span class="linenos">244</span></a>
 </span><span id="Bytes.to_str-245"><a href="#Bytes.to_str-245"><span class="linenos">245</span></a><span class="sd">        During the conversion process, any invalid bytes will get converted to</span>
 </span><span id="Bytes.to_str-246"><a href="#Bytes.to_str-246"><span class="linenos">246</span></a><span class="sd">        [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))</span>
@@ -1986,14 +1986,14 @@ invalid bytes that cannot be decoded.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">leak</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[array.array[int]]&#39;</span>:</span></span>
+        <span class="name">leak</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="../option.html#Some">sain.option.Some</a></span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.leak-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Bytes.leak"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.leak-292"><a href="#Bytes.leak-292"><span class="linenos">292</span></a>    <span class="k">def</span> <span class="nf">leak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-</span><span id="Bytes.leak-293"><a href="#Bytes.leak-293"><span class="linenos">293</span></a>        <span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
+</span><span id="Bytes.leak-293"><a href="#Bytes.leak-293"><span class="linenos">293</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.</span>
 </span><span id="Bytes.leak-294"><a href="#Bytes.leak-294"><span class="linenos">294</span></a>
 </span><span id="Bytes.leak-295"><a href="#Bytes.leak-295"><span class="linenos">295</span></a><span class="sd">        `None` is returned if it was already `None`.</span>
 </span><span id="Bytes.leak-296"><a href="#Bytes.leak-296"><span class="linenos">296</span></a>
@@ -2046,7 +2046,7 @@ invalid bytes that cannot be decoded.</p>
     </div>
     <a class="headerlink" href="#Bytes.as_bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.as_bytes-314"><a href="#Bytes.as_bytes-314"><span class="linenos">314</span></a>    <span class="k">def</span> <span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-</span><span id="Bytes.as_bytes-315"><a href="#Bytes.as_bytes-315"><span class="linenos">315</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
+</span><span id="Bytes.as_bytes-315"><a href="#Bytes.as_bytes-315"><span class="linenos">315</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into `bytes`.</span>
 </span><span id="Bytes.as_bytes-316"><a href="#Bytes.as_bytes-316"><span class="linenos">316</span></a>
 </span><span id="Bytes.as_bytes-317"><a href="#Bytes.as_bytes-317"><span class="linenos">317</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.as_bytes-318"><a href="#Bytes.as_bytes-318"><span class="linenos">318</span></a><span class="sd">        -------</span>
@@ -2087,7 +2087,7 @@ invalid bytes that cannot be decoded.</p>
     </div>
     <a class="headerlink" href="#Bytes.as_ref"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.as_ref-329"><a href="#Bytes.as_ref-329"><span class="linenos">329</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes.as_ref-330"><a href="#Bytes.as_ref-330"><span class="linenos">330</span></a>        <span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
+</span><span id="Bytes.as_ref-330"><a href="#Bytes.as_ref-330"><span class="linenos">330</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `self` into an immutable sequence.</span>
 </span><span id="Bytes.as_ref-331"><a href="#Bytes.as_ref-331"><span class="linenos">331</span></a>
 </span><span id="Bytes.as_ref-332"><a href="#Bytes.as_ref-332"><span class="linenos">332</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="Bytes.as_ref-333"><a href="#Bytes.as_ref-333"><span class="linenos">333</span></a>
@@ -2129,7 +2129,7 @@ invalid bytes that cannot be decoded.</p>
     </div>
     <a class="headerlink" href="#Bytes.as_mut"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.as_mut-343"><a href="#Bytes.as_mut-343"><span class="linenos">343</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">MutableSequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes.as_mut-344"><a href="#Bytes.as_mut-344"><span class="linenos">344</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
+</span><span id="Bytes.as_mut-344"><a href="#Bytes.as_mut-344"><span class="linenos">344</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as a mutable sequence without copying.</span>
 </span><span id="Bytes.as_mut-345"><a href="#Bytes.as_mut-345"><span class="linenos">345</span></a>
 </span><span id="Bytes.as_mut-346"><a href="#Bytes.as_mut-346"><span class="linenos">346</span></a><span class="sd">        An empty sequence is returned if `self` hasn&#39;t been initialized.</span>
 </span><span id="Bytes.as_mut-347"><a href="#Bytes.as_mut-347"><span class="linenos">347</span></a>
@@ -2173,7 +2173,7 @@ invalid bytes that cannot be decoded.</p>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.raw_parts-357"><a href="#Bytes.raw_parts-357"><span class="linenos">357</span></a>    <span class="k">def</span> <span class="nf">raw_parts</span><span class="p">(</span>
 </span><span id="Bytes.raw_parts-358"><a href="#Bytes.raw_parts-358"><span class="linenos">358</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Bytes.raw_parts-359"><a href="#Bytes.raw_parts-359"><span class="linenos">359</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;address&quot;</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;len&quot;</span><span class="p">]]:</span>
-</span><span id="Bytes.raw_parts-360"><a href="#Bytes.raw_parts-360"><span class="linenos">360</span></a>        <span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
+</span><span id="Bytes.raw_parts-360"><a href="#Bytes.raw_parts-360"><span class="linenos">360</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains&quot;&quot;&quot;</span>
 </span><span id="Bytes.raw_parts-361"><a href="#Bytes.raw_parts-361"><span class="linenos">361</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
 </span><span id="Bytes.raw_parts-362"><a href="#Bytes.raw_parts-362"><span class="linenos">362</span></a>            <span class="k">return</span> <span class="p">(</span><span class="mh">0x0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="Bytes.raw_parts-363"><a href="#Bytes.raw_parts-363"><span class="linenos">363</span></a>
@@ -2198,7 +2198,7 @@ invalid bytes that cannot be decoded.</p>
     </div>
     <a class="headerlink" href="#Bytes.put"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.put-368"><a href="#Bytes.put-368"><span class="linenos">368</span></a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.put-369"><a href="#Bytes.put-369"><span class="linenos">369</span></a>        <span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
+</span><span id="Bytes.put-369"><a href="#Bytes.put-369"><span class="linenos">369</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a byte at the end of the array.</span>
 </span><span id="Bytes.put-370"><a href="#Bytes.put-370"><span class="linenos">370</span></a>
 </span><span id="Bytes.put-371"><a href="#Bytes.put-371"><span class="linenos">371</span></a><span class="sd">        unlike `.put_bytes`, this method appends instead of extending the array</span>
 </span><span id="Bytes.put-372"><a href="#Bytes.put-372"><span class="linenos">372</span></a><span class="sd">        which is faster if you&#39;re putting a single byte in a single call.</span>
@@ -2275,7 +2275,7 @@ An unsigned integer, also known as <code>u8</code> to put.</li>
     </div>
     <a class="headerlink" href="#Bytes.put_raw"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.put_raw-400"><a href="#Bytes.put_raw-400"><span class="linenos">400</span></a>    <span class="k">def</span> <span class="nf">put_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Rawish</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.put_raw-401"><a href="#Bytes.put_raw-401"><span class="linenos">401</span></a>        <span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
+</span><span id="Bytes.put_raw-401"><a href="#Bytes.put_raw-401"><span class="linenos">401</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend `self` from a raw data type source.</span>
 </span><span id="Bytes.put_raw-402"><a href="#Bytes.put_raw-402"><span class="linenos">402</span></a>
 </span><span id="Bytes.put_raw-403"><a href="#Bytes.put_raw-403"><span class="linenos">403</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.put_raw-404"><a href="#Bytes.put_raw-404"><span class="linenos">404</span></a><span class="sd">        -------</span>
@@ -2354,7 +2354,7 @@ A valid raw data type. See <code><a href="#Rawish">Rawish</a></code> for more de
     </div>
     <a class="headerlink" href="#Bytes.put_bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.put_bytes-433"><a href="#Bytes.put_bytes-433"><span class="linenos">433</span></a>    <span class="k">def</span> <span class="nf">put_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.put_bytes-434"><a href="#Bytes.put_bytes-434"><span class="linenos">434</span></a>        <span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
+</span><span id="Bytes.put_bytes-434"><a href="#Bytes.put_bytes-434"><span class="linenos">434</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put `bytes` into `self`.</span>
 </span><span id="Bytes.put_bytes-435"><a href="#Bytes.put_bytes-435"><span class="linenos">435</span></a>
 </span><span id="Bytes.put_bytes-436"><a href="#Bytes.put_bytes-436"><span class="linenos">436</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.put_bytes-437"><a href="#Bytes.put_bytes-437"><span class="linenos">437</span></a><span class="sd">        -------</span>
@@ -2421,7 +2421,7 @@ Can be one of <code><a href="#Bytes">Bytes</a></code>, <code>bytes</code>, <code
     </div>
     <a class="headerlink" href="#Bytes.put_str"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.put_str-460"><a href="#Bytes.put_str-460"><span class="linenos">460</span></a>    <span class="k">def</span> <span class="nf">put_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.put_str-461"><a href="#Bytes.put_str-461"><span class="linenos">461</span></a>        <span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
+</span><span id="Bytes.put_str-461"><a href="#Bytes.put_str-461"><span class="linenos">461</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Put bytes into `self` from an encoded string.</span>
 </span><span id="Bytes.put_str-462"><a href="#Bytes.put_str-462"><span class="linenos">462</span></a>
 </span><span id="Bytes.put_str-463"><a href="#Bytes.put_str-463"><span class="linenos">463</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.put_str-464"><a href="#Bytes.put_str-464"><span class="linenos">464</span></a><span class="sd">        -------</span>
@@ -2475,7 +2475,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.len"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.len-479"><a href="#Bytes.len-479"><span class="linenos">479</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes.len-480"><a href="#Bytes.len-480"><span class="linenos">480</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
+</span><span id="Bytes.len-480"><a href="#Bytes.len-480"><span class="linenos">480</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of elements in this buffer.</span>
 </span><span id="Bytes.len-481"><a href="#Bytes.len-481"><span class="linenos">481</span></a>
 </span><span id="Bytes.len-482"><a href="#Bytes.len-482"><span class="linenos">482</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.len-483"><a href="#Bytes.len-483"><span class="linenos">483</span></a><span class="sd">        -------</span>
@@ -2515,7 +2515,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.size"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.size-492"><a href="#Bytes.size-492"><span class="linenos">492</span></a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes.size-493"><a href="#Bytes.size-493"><span class="linenos">493</span></a>        <span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
+</span><span id="Bytes.size-493"><a href="#Bytes.size-493"><span class="linenos">493</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;The length in bytes of one array item in the internal representation.</span>
 </span><span id="Bytes.size-494"><a href="#Bytes.size-494"><span class="linenos">494</span></a>
 </span><span id="Bytes.size-495"><a href="#Bytes.size-495"><span class="linenos">495</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.size-496"><a href="#Bytes.size-496"><span class="linenos">496</span></a><span class="sd">        -------</span>
@@ -2555,7 +2555,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.iter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.iter-506"><a href="#Bytes.iter-506"><span class="linenos">506</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes.iter-507"><a href="#Bytes.iter-507"><span class="linenos">507</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
+</span><span id="Bytes.iter-507"><a href="#Bytes.iter-507"><span class="linenos">507</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an iterator over the bytes of `self`.</span>
 </span><span id="Bytes.iter-508"><a href="#Bytes.iter-508"><span class="linenos">508</span></a>
 </span><span id="Bytes.iter-509"><a href="#Bytes.iter-509"><span class="linenos">509</span></a><span class="sd">        This iterator yields all `int`s from start to end.</span>
 </span><span id="Bytes.iter-510"><a href="#Bytes.iter-510"><span class="linenos">510</span></a>
@@ -2611,7 +2611,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.is_empty"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.is_empty-527"><a href="#Bytes.is_empty-527"><span class="linenos">527</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Bytes.is_empty-528"><a href="#Bytes.is_empty-528"><span class="linenos">528</span></a>        <span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
+</span><span id="Bytes.is_empty-528"><a href="#Bytes.is_empty-528"><span class="linenos">528</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether `self` contains any bytes or not.</span>
 </span><span id="Bytes.is_empty-529"><a href="#Bytes.is_empty-529"><span class="linenos">529</span></a>
 </span><span id="Bytes.is_empty-530"><a href="#Bytes.is_empty-530"><span class="linenos">530</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.is_empty-531"><a href="#Bytes.is_empty-531"><span class="linenos">531</span></a><span class="sd">        -------</span>
@@ -2642,14 +2642,14 @@ The string</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">copy</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">copy</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Bytes.copy-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Bytes.copy"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.copy-541"><a href="#Bytes.copy-541"><span class="linenos">541</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Bytes.copy-542"><a href="#Bytes.copy-542"><span class="linenos">542</span></a>        <span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
+</span><span id="Bytes.copy-542"><a href="#Bytes.copy-542"><span class="linenos">542</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a copy of the bytes.</span>
 </span><span id="Bytes.copy-543"><a href="#Bytes.copy-543"><span class="linenos">543</span></a>
 </span><span id="Bytes.copy-544"><a href="#Bytes.copy-544"><span class="linenos">544</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.copy-545"><a href="#Bytes.copy-545"><span class="linenos">545</span></a><span class="sd">        -------</span>
@@ -2690,7 +2690,7 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.clear"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.clear-556"><a href="#Bytes.clear-556"><span class="linenos">556</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.clear-557"><a href="#Bytes.clear-557"><span class="linenos">557</span></a>        <span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
+</span><span id="Bytes.clear-557"><a href="#Bytes.clear-557"><span class="linenos">557</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the buffer.</span>
 </span><span id="Bytes.clear-558"><a href="#Bytes.clear-558"><span class="linenos">558</span></a>
 </span><span id="Bytes.clear-559"><a href="#Bytes.clear-559"><span class="linenos">559</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.clear-560"><a href="#Bytes.clear-560"><span class="linenos">560</span></a><span class="sd">        -------</span>
@@ -2735,14 +2735,14 @@ The string</li>
     </div>
     <a class="headerlink" href="#Bytes.index"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.index-573"><a href="#Bytes.index-573"><span class="linenos">573</span></a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes.index-574"><a href="#Bytes.index-574"><span class="linenos">574</span></a>        <span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
+</span><span id="Bytes.index-574"><a href="#Bytes.index-574"><span class="linenos">574</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the smallest `i` such that `i` is the index of the</span>
 </span><span id="Bytes.index-575"><a href="#Bytes.index-575"><span class="linenos">575</span></a><span class="sd">        first occurrence of `v` in the buffer.</span>
 </span><span id="Bytes.index-576"><a href="#Bytes.index-576"><span class="linenos">576</span></a>
 </span><span id="Bytes.index-577"><a href="#Bytes.index-577"><span class="linenos">577</span></a><span class="sd">        The optional arguments start and stop can be specified to search for x within a</span>
 </span><span id="Bytes.index-578"><a href="#Bytes.index-578"><span class="linenos">578</span></a><span class="sd">        subsection of the array. Raise ValueError if x is not found</span>
 </span><span id="Bytes.index-579"><a href="#Bytes.index-579"><span class="linenos">579</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Bytes.index-580"><a href="#Bytes.index-580"><span class="linenos">580</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">:</span>
-</span><span id="Bytes.index-581"><a href="#Bytes.index-581"><span class="linenos">581</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="bp">None</span>
+</span><span id="Bytes.index-581"><a href="#Bytes.index-581"><span class="linenos">581</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span> <span class="kn">from</span> <span class="kc">None</span>
 </span><span id="Bytes.index-582"><a href="#Bytes.index-582"><span class="linenos">582</span></a>
 </span><span id="Bytes.index-583"><a href="#Bytes.index-583"><span class="linenos">583</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
 </span></pre></div>
@@ -2769,7 +2769,7 @@ subsection of the array. Raise ValueError if x is not found</p>
     </div>
     <a class="headerlink" href="#Bytes.count"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.count-585"><a href="#Bytes.count-585"><span class="linenos">585</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Bytes.count-586"><a href="#Bytes.count-586"><span class="linenos">586</span></a>        <span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
+</span><span id="Bytes.count-586"><a href="#Bytes.count-586"><span class="linenos">586</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of occurrences of `x` in the buffer.</span>
 </span><span id="Bytes.count-587"><a href="#Bytes.count-587"><span class="linenos">587</span></a>
 </span><span id="Bytes.count-588"><a href="#Bytes.count-588"><span class="linenos">588</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.count-589"><a href="#Bytes.count-589"><span class="linenos">589</span></a><span class="sd">        --------</span>
@@ -2810,7 +2810,7 @@ subsection of the array. Raise ValueError if x is not found</p>
     </div>
     <a class="headerlink" href="#Bytes.insert"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.insert-600"><a href="#Bytes.insert-600"><span class="linenos">600</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Bytes.insert-601"><a href="#Bytes.insert-601"><span class="linenos">601</span></a>        <span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
+</span><span id="Bytes.insert-601"><a href="#Bytes.insert-601"><span class="linenos">601</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert a new item with `value` in the buffer before position `index`.</span>
 </span><span id="Bytes.insert-602"><a href="#Bytes.insert-602"><span class="linenos">602</span></a>
 </span><span id="Bytes.insert-603"><a href="#Bytes.insert-603"><span class="linenos">603</span></a><span class="sd">        Negative values are treated as being relative to the end of the buffer.</span>
 </span><span id="Bytes.insert-604"><a href="#Bytes.insert-604"><span class="linenos">604</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -2840,7 +2840,7 @@ subsection of the array. Raise ValueError if x is not found</p>
     </div>
     <a class="headerlink" href="#Bytes.pop"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bytes.pop-610"><a href="#Bytes.pop-610"><span class="linenos">610</span></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Bytes.pop-611"><a href="#Bytes.pop-611"><span class="linenos">611</span></a>        <span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
+</span><span id="Bytes.pop-611"><a href="#Bytes.pop-611"><span class="linenos">611</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the last element from the buffer and returns it, `Some(None)` if it is empty.</span>
 </span><span id="Bytes.pop-612"><a href="#Bytes.pop-612"><span class="linenos">612</span></a>
 </span><span id="Bytes.pop-613"><a href="#Bytes.pop-613"><span class="linenos">613</span></a><span class="sd">        Example</span>
 </span><span id="Bytes.pop-614"><a href="#Bytes.pop-614"><span class="linenos">614</span></a><span class="sd">        -------</span>

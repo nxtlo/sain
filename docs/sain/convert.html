@@ -278,7 +278,7 @@
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="k">class</span> <span class="nc">From</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="sd">&quot;&quot;&quot;Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.</span>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">    As the Rust documentation says, One should always prefer implementing From over Into</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">    because implementing From automatically provides one with an implementation of Into.</span>
@@ -307,13 +307,13 @@
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
 </span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="k">class</span> <span class="nc">TryFrom</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>    <span class="sd">&quot;&quot;&quot;Simple and safe type conversions that may fail in a controlled way under some circumstances.</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple and safe type conversions that may fail in a controlled way under some circumstances.</span>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">    It is the reciprocal of `TryInto`.</span>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
@@ -347,13 +347,13 @@
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
 </span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="k">class</span> <span class="nc">Into</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_cov</span><span class="p">]):</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>    <span class="sd">&quot;&quot;&quot;Conversion from `self`, which may or may not be expensive.</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Conversion from `self`, which may or may not be expensive.</span>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
 </span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">    Example</span>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">    -------</span>
@@ -370,13 +370,13 @@
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="k">class</span> <span class="nc">TryInto</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="sd">&quot;&quot;&quot;An attempted conversion from `self`, which may or may not be expensive.</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An attempted conversion from `self`, which may or may not be expensive.</span>
 </span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>
@@ -404,7 +404,7 @@
 </span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 </span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
 </span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -424,7 +424,7 @@
     <a class="headerlink" href="#From"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="From-112"><a href="#From-112"><span class="linenos">112</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="From-113"><a href="#From-113"><span class="linenos">113</span></a><span class="k">class</span> <span class="nc">From</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
-</span><span id="From-114"><a href="#From-114"><span class="linenos">114</span></a>    <span class="sd">&quot;&quot;&quot;Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.</span>
+</span><span id="From-114"><a href="#From-114"><span class="linenos">114</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.</span>
 </span><span id="From-115"><a href="#From-115"><span class="linenos">115</span></a>
 </span><span id="From-116"><a href="#From-116"><span class="linenos">116</span></a><span class="sd">    As the Rust documentation says, One should always prefer implementing From over Into</span>
 </span><span id="From-117"><a href="#From-117"><span class="linenos">117</span></a><span class="sd">    because implementing From automatically provides one with an implementation of Into.</span>
@@ -453,7 +453,7 @@
 </span><span id="From-140"><a href="#From-140"><span class="linenos">140</span></a>
 </span><span id="From-141"><a href="#From-141"><span class="linenos">141</span></a>    <span class="nd">@classmethod</span>
 </span><span id="From-142"><a href="#From-142"><span class="linenos">142</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="From-143"><a href="#From-143"><span class="linenos">143</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="From-143"><a href="#From-143"><span class="linenos">143</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="From-144"><a href="#From-144"><span class="linenos">144</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -494,33 +494,33 @@ Or simply, implement both as the same time.</p>
 
     </div>
     <a class="headerlink" href="#From.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="From.__init__-1430"><a href="#From.__init__-1430"><span class="linenos">1430</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="From.__init__-1431"><a href="#From.__init__-1431"><span class="linenos">1431</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="From.__init__-1432"><a href="#From.__init__-1432"><span class="linenos">1432</span></a>
-</span><span id="From.__init__-1433"><a href="#From.__init__-1433"><span class="linenos">1433</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="From.__init__-1434"><a href="#From.__init__-1434"><span class="linenos">1434</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="From.__init__-1435"><a href="#From.__init__-1435"><span class="linenos">1435</span></a>
-</span><span id="From.__init__-1436"><a href="#From.__init__-1436"><span class="linenos">1436</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="From.__init__-1437"><a href="#From.__init__-1437"><span class="linenos">1437</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="From.__init__-1438"><a href="#From.__init__-1438"><span class="linenos">1438</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="From.__init__-1439"><a href="#From.__init__-1439"><span class="linenos">1439</span></a>        <span class="k">return</span>
-</span><span id="From.__init__-1440"><a href="#From.__init__-1440"><span class="linenos">1440</span></a>
-</span><span id="From.__init__-1441"><a href="#From.__init__-1441"><span class="linenos">1441</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="From.__init__-1442"><a href="#From.__init__-1442"><span class="linenos">1442</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="From.__init__-1443"><a href="#From.__init__-1443"><span class="linenos">1443</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="From.__init__-1444"><a href="#From.__init__-1444"><span class="linenos">1444</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="From.__init__-1445"><a href="#From.__init__-1445"><span class="linenos">1445</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="From.__init__-1446"><a href="#From.__init__-1446"><span class="linenos">1446</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="From.__init__-1447"><a href="#From.__init__-1447"><span class="linenos">1447</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="From.__init__-1448"><a href="#From.__init__-1448"><span class="linenos">1448</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="From.__init__-1449"><a href="#From.__init__-1449"><span class="linenos">1449</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="From.__init__-1450"><a href="#From.__init__-1450"><span class="linenos">1450</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="From.__init__-1451"><a href="#From.__init__-1451"><span class="linenos">1451</span></a>            <span class="k">break</span>
-</span><span id="From.__init__-1452"><a href="#From.__init__-1452"><span class="linenos">1452</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="From.__init__-1453"><a href="#From.__init__-1453"><span class="linenos">1453</span></a>        <span class="c1"># should not happen</span>
-</span><span id="From.__init__-1454"><a href="#From.__init__-1454"><span class="linenos">1454</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="From.__init__-1455"><a href="#From.__init__-1455"><span class="linenos">1455</span></a>
-</span><span id="From.__init__-1456"><a href="#From.__init__-1456"><span class="linenos">1456</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="From.__init__-1739"><a href="#From.__init__-1739"><span class="linenos">1739</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="From.__init__-1740"><a href="#From.__init__-1740"><span class="linenos">1740</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="From.__init__-1741"><a href="#From.__init__-1741"><span class="linenos">1741</span></a>
+</span><span id="From.__init__-1742"><a href="#From.__init__-1742"><span class="linenos">1742</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="From.__init__-1743"><a href="#From.__init__-1743"><span class="linenos">1743</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="From.__init__-1744"><a href="#From.__init__-1744"><span class="linenos">1744</span></a>
+</span><span id="From.__init__-1745"><a href="#From.__init__-1745"><span class="linenos">1745</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="From.__init__-1746"><a href="#From.__init__-1746"><span class="linenos">1746</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="From.__init__-1747"><a href="#From.__init__-1747"><span class="linenos">1747</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="From.__init__-1748"><a href="#From.__init__-1748"><span class="linenos">1748</span></a>        <span class="k">return</span>
+</span><span id="From.__init__-1749"><a href="#From.__init__-1749"><span class="linenos">1749</span></a>
+</span><span id="From.__init__-1750"><a href="#From.__init__-1750"><span class="linenos">1750</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="From.__init__-1751"><a href="#From.__init__-1751"><span class="linenos">1751</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="From.__init__-1752"><a href="#From.__init__-1752"><span class="linenos">1752</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="From.__init__-1753"><a href="#From.__init__-1753"><span class="linenos">1753</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="From.__init__-1754"><a href="#From.__init__-1754"><span class="linenos">1754</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="From.__init__-1755"><a href="#From.__init__-1755"><span class="linenos">1755</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="From.__init__-1756"><a href="#From.__init__-1756"><span class="linenos">1756</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="From.__init__-1757"><a href="#From.__init__-1757"><span class="linenos">1757</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="From.__init__-1758"><a href="#From.__init__-1758"><span class="linenos">1758</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="From.__init__-1759"><a href="#From.__init__-1759"><span class="linenos">1759</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="From.__init__-1760"><a href="#From.__init__-1760"><span class="linenos">1760</span></a>            <span class="k">break</span>
+</span><span id="From.__init__-1761"><a href="#From.__init__-1761"><span class="linenos">1761</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="From.__init__-1762"><a href="#From.__init__-1762"><span class="linenos">1762</span></a>        <span class="c1"># should not happen</span>
+</span><span id="From.__init__-1763"><a href="#From.__init__-1763"><span class="linenos">1763</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="From.__init__-1764"><a href="#From.__init__-1764"><span class="linenos">1764</span></a>
+</span><span id="From.__init__-1765"><a href="#From.__init__-1765"><span class="linenos">1765</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -533,7 +533,7 @@ Or simply, implement both as the same time.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_t</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="o">-</span><span class="n">T_co</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
+        <span class="name">from_t</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="o">-</span><span class="n">T_co</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="From.from_t-view-source"><span>View Source</span></label>
 
@@ -541,7 +541,7 @@ Or simply, implement both as the same time.</p>
     <a class="headerlink" href="#From.from_t"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="From.from_t-141"><a href="#From.from_t-141"><span class="linenos">141</span></a>    <span class="nd">@classmethod</span>
 </span><span id="From.from_t-142"><a href="#From.from_t-142"><span class="linenos">142</span></a>    <span class="k">def</span> <span class="nf">from_t</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="From.from_t-143"><a href="#From.from_t-143"><span class="linenos">143</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="From.from_t-143"><a href="#From.from_t-143"><span class="linenos">143</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="From.from_t-144"><a href="#From.from_t-144"><span class="linenos">144</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -566,7 +566,7 @@ Or simply, implement both as the same time.</p>
     <a class="headerlink" href="#TryFrom"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="TryFrom-147"><a href="#TryFrom-147"><span class="linenos">147</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="TryFrom-148"><a href="#TryFrom-148"><span class="linenos">148</span></a><span class="k">class</span> <span class="nc">TryFrom</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_co</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
-</span><span id="TryFrom-149"><a href="#TryFrom-149"><span class="linenos">149</span></a>    <span class="sd">&quot;&quot;&quot;Simple and safe type conversions that may fail in a controlled way under some circumstances.</span>
+</span><span id="TryFrom-149"><a href="#TryFrom-149"><span class="linenos">149</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple and safe type conversions that may fail in a controlled way under some circumstances.</span>
 </span><span id="TryFrom-150"><a href="#TryFrom-150"><span class="linenos">150</span></a><span class="sd">    It is the reciprocal of `TryInto`.</span>
 </span><span id="TryFrom-151"><a href="#TryFrom-151"><span class="linenos">151</span></a>
 </span><span id="TryFrom-152"><a href="#TryFrom-152"><span class="linenos">152</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
@@ -600,7 +600,7 @@ Or simply, implement both as the same time.</p>
 </span><span id="TryFrom-180"><a href="#TryFrom-180"><span class="linenos">180</span></a>
 </span><span id="TryFrom-181"><a href="#TryFrom-181"><span class="linenos">181</span></a>    <span class="nd">@classmethod</span>
 </span><span id="TryFrom-182"><a href="#TryFrom-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="TryFrom-183"><a href="#TryFrom-183"><span class="linenos">183</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="TryFrom-183"><a href="#TryFrom-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="TryFrom-184"><a href="#TryFrom-184"><span class="linenos">184</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -649,33 +649,33 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 
     </div>
     <a class="headerlink" href="#TryFrom.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TryFrom.__init__-1430"><a href="#TryFrom.__init__-1430"><span class="linenos">1430</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="TryFrom.__init__-1431"><a href="#TryFrom.__init__-1431"><span class="linenos">1431</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="TryFrom.__init__-1432"><a href="#TryFrom.__init__-1432"><span class="linenos">1432</span></a>
-</span><span id="TryFrom.__init__-1433"><a href="#TryFrom.__init__-1433"><span class="linenos">1433</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="TryFrom.__init__-1434"><a href="#TryFrom.__init__-1434"><span class="linenos">1434</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="TryFrom.__init__-1435"><a href="#TryFrom.__init__-1435"><span class="linenos">1435</span></a>
-</span><span id="TryFrom.__init__-1436"><a href="#TryFrom.__init__-1436"><span class="linenos">1436</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="TryFrom.__init__-1437"><a href="#TryFrom.__init__-1437"><span class="linenos">1437</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="TryFrom.__init__-1438"><a href="#TryFrom.__init__-1438"><span class="linenos">1438</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="TryFrom.__init__-1439"><a href="#TryFrom.__init__-1439"><span class="linenos">1439</span></a>        <span class="k">return</span>
-</span><span id="TryFrom.__init__-1440"><a href="#TryFrom.__init__-1440"><span class="linenos">1440</span></a>
-</span><span id="TryFrom.__init__-1441"><a href="#TryFrom.__init__-1441"><span class="linenos">1441</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="TryFrom.__init__-1442"><a href="#TryFrom.__init__-1442"><span class="linenos">1442</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="TryFrom.__init__-1443"><a href="#TryFrom.__init__-1443"><span class="linenos">1443</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="TryFrom.__init__-1444"><a href="#TryFrom.__init__-1444"><span class="linenos">1444</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="TryFrom.__init__-1445"><a href="#TryFrom.__init__-1445"><span class="linenos">1445</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="TryFrom.__init__-1446"><a href="#TryFrom.__init__-1446"><span class="linenos">1446</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="TryFrom.__init__-1447"><a href="#TryFrom.__init__-1447"><span class="linenos">1447</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="TryFrom.__init__-1448"><a href="#TryFrom.__init__-1448"><span class="linenos">1448</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="TryFrom.__init__-1449"><a href="#TryFrom.__init__-1449"><span class="linenos">1449</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="TryFrom.__init__-1450"><a href="#TryFrom.__init__-1450"><span class="linenos">1450</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="TryFrom.__init__-1451"><a href="#TryFrom.__init__-1451"><span class="linenos">1451</span></a>            <span class="k">break</span>
-</span><span id="TryFrom.__init__-1452"><a href="#TryFrom.__init__-1452"><span class="linenos">1452</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="TryFrom.__init__-1453"><a href="#TryFrom.__init__-1453"><span class="linenos">1453</span></a>        <span class="c1"># should not happen</span>
-</span><span id="TryFrom.__init__-1454"><a href="#TryFrom.__init__-1454"><span class="linenos">1454</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="TryFrom.__init__-1455"><a href="#TryFrom.__init__-1455"><span class="linenos">1455</span></a>
-</span><span id="TryFrom.__init__-1456"><a href="#TryFrom.__init__-1456"><span class="linenos">1456</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TryFrom.__init__-1739"><a href="#TryFrom.__init__-1739"><span class="linenos">1739</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="TryFrom.__init__-1740"><a href="#TryFrom.__init__-1740"><span class="linenos">1740</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="TryFrom.__init__-1741"><a href="#TryFrom.__init__-1741"><span class="linenos">1741</span></a>
+</span><span id="TryFrom.__init__-1742"><a href="#TryFrom.__init__-1742"><span class="linenos">1742</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="TryFrom.__init__-1743"><a href="#TryFrom.__init__-1743"><span class="linenos">1743</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="TryFrom.__init__-1744"><a href="#TryFrom.__init__-1744"><span class="linenos">1744</span></a>
+</span><span id="TryFrom.__init__-1745"><a href="#TryFrom.__init__-1745"><span class="linenos">1745</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="TryFrom.__init__-1746"><a href="#TryFrom.__init__-1746"><span class="linenos">1746</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="TryFrom.__init__-1747"><a href="#TryFrom.__init__-1747"><span class="linenos">1747</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="TryFrom.__init__-1748"><a href="#TryFrom.__init__-1748"><span class="linenos">1748</span></a>        <span class="k">return</span>
+</span><span id="TryFrom.__init__-1749"><a href="#TryFrom.__init__-1749"><span class="linenos">1749</span></a>
+</span><span id="TryFrom.__init__-1750"><a href="#TryFrom.__init__-1750"><span class="linenos">1750</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="TryFrom.__init__-1751"><a href="#TryFrom.__init__-1751"><span class="linenos">1751</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="TryFrom.__init__-1752"><a href="#TryFrom.__init__-1752"><span class="linenos">1752</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="TryFrom.__init__-1753"><a href="#TryFrom.__init__-1753"><span class="linenos">1753</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="TryFrom.__init__-1754"><a href="#TryFrom.__init__-1754"><span class="linenos">1754</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="TryFrom.__init__-1755"><a href="#TryFrom.__init__-1755"><span class="linenos">1755</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="TryFrom.__init__-1756"><a href="#TryFrom.__init__-1756"><span class="linenos">1756</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="TryFrom.__init__-1757"><a href="#TryFrom.__init__-1757"><span class="linenos">1757</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="TryFrom.__init__-1758"><a href="#TryFrom.__init__-1758"><span class="linenos">1758</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="TryFrom.__init__-1759"><a href="#TryFrom.__init__-1759"><span class="linenos">1759</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="TryFrom.__init__-1760"><a href="#TryFrom.__init__-1760"><span class="linenos">1760</span></a>            <span class="k">break</span>
+</span><span id="TryFrom.__init__-1761"><a href="#TryFrom.__init__-1761"><span class="linenos">1761</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="TryFrom.__init__-1762"><a href="#TryFrom.__init__-1762"><span class="linenos">1762</span></a>        <span class="c1"># should not happen</span>
+</span><span id="TryFrom.__init__-1763"><a href="#TryFrom.__init__-1763"><span class="linenos">1763</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="TryFrom.__init__-1764"><a href="#TryFrom.__init__-1764"><span class="linenos">1764</span></a>
+</span><span id="TryFrom.__init__-1765"><a href="#TryFrom.__init__-1765"><span class="linenos">1765</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -688,7 +688,7 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">try_from</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">value</span><span class="p">:</span> <span class="o">-</span><span class="n">T_co</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="result.html#Ok">sain.result.Ok</a></span><span class="p">[</span><span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span><span class="p">],</span> <span class="n"><a href="result.html#Err">sain.result.Err</a></span><span class="p">[</span><span class="o">~</span><span class="n">E</span><span class="p">]]</span>:</span></span>
+        <span class="name">try_from</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="o">-</span><span class="n">T_co</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="result.html#Ok">sain.result.Ok</a></span><span class="p">[</span><span class="n">Self</span><span class="p">],</span> <span class="n"><a href="result.html#Err">sain.result.Err</a></span><span class="p">[</span><span class="o">~</span><span class="n">E</span><span class="p">]]</span>:</span></span>
 
                 <label class="view-source-button" for="TryFrom.try_from-view-source"><span>View Source</span></label>
 
@@ -696,7 +696,7 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
     <a class="headerlink" href="#TryFrom.try_from"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="TryFrom.try_from-181"><a href="#TryFrom.try_from-181"><span class="linenos">181</span></a>    <span class="nd">@classmethod</span>
 </span><span id="TryFrom.try_from-182"><a href="#TryFrom.try_from-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">try_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T_co</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="TryFrom.try_from-183"><a href="#TryFrom.try_from-183"><span class="linenos">183</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="TryFrom.try_from-183"><a href="#TryFrom.try_from-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="TryFrom.try_from-184"><a href="#TryFrom.try_from-184"><span class="linenos">184</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -721,7 +721,7 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
     <a class="headerlink" href="#Into"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Into-187"><a href="#Into-187"><span class="linenos">187</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="Into-188"><a href="#Into-188"><span class="linenos">188</span></a><span class="k">class</span> <span class="nc">Into</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T_cov</span><span class="p">]):</span>
-</span><span id="Into-189"><a href="#Into-189"><span class="linenos">189</span></a>    <span class="sd">&quot;&quot;&quot;Conversion from `self`, which may or may not be expensive.</span>
+</span><span id="Into-189"><a href="#Into-189"><span class="linenos">189</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Conversion from `self`, which may or may not be expensive.</span>
 </span><span id="Into-190"><a href="#Into-190"><span class="linenos">190</span></a>
 </span><span id="Into-191"><a href="#Into-191"><span class="linenos">191</span></a><span class="sd">    Example</span>
 </span><span id="Into-192"><a href="#Into-192"><span class="linenos">192</span></a><span class="sd">    -------</span>
@@ -738,7 +738,7 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 </span><span id="Into-203"><a href="#Into-203"><span class="linenos">203</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 </span><span id="Into-204"><a href="#Into-204"><span class="linenos">204</span></a>
 </span><span id="Into-205"><a href="#Into-205"><span class="linenos">205</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
-</span><span id="Into-206"><a href="#Into-206"><span class="linenos">206</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="Into-206"><a href="#Into-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="Into-207"><a href="#Into-207"><span class="linenos">207</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -769,33 +769,33 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 
     </div>
     <a class="headerlink" href="#Into.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Into.__init__-1430"><a href="#Into.__init__-1430"><span class="linenos">1430</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="Into.__init__-1431"><a href="#Into.__init__-1431"><span class="linenos">1431</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="Into.__init__-1432"><a href="#Into.__init__-1432"><span class="linenos">1432</span></a>
-</span><span id="Into.__init__-1433"><a href="#Into.__init__-1433"><span class="linenos">1433</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="Into.__init__-1434"><a href="#Into.__init__-1434"><span class="linenos">1434</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="Into.__init__-1435"><a href="#Into.__init__-1435"><span class="linenos">1435</span></a>
-</span><span id="Into.__init__-1436"><a href="#Into.__init__-1436"><span class="linenos">1436</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="Into.__init__-1437"><a href="#Into.__init__-1437"><span class="linenos">1437</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="Into.__init__-1438"><a href="#Into.__init__-1438"><span class="linenos">1438</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="Into.__init__-1439"><a href="#Into.__init__-1439"><span class="linenos">1439</span></a>        <span class="k">return</span>
-</span><span id="Into.__init__-1440"><a href="#Into.__init__-1440"><span class="linenos">1440</span></a>
-</span><span id="Into.__init__-1441"><a href="#Into.__init__-1441"><span class="linenos">1441</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="Into.__init__-1442"><a href="#Into.__init__-1442"><span class="linenos">1442</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="Into.__init__-1443"><a href="#Into.__init__-1443"><span class="linenos">1443</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="Into.__init__-1444"><a href="#Into.__init__-1444"><span class="linenos">1444</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="Into.__init__-1445"><a href="#Into.__init__-1445"><span class="linenos">1445</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="Into.__init__-1446"><a href="#Into.__init__-1446"><span class="linenos">1446</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="Into.__init__-1447"><a href="#Into.__init__-1447"><span class="linenos">1447</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="Into.__init__-1448"><a href="#Into.__init__-1448"><span class="linenos">1448</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="Into.__init__-1449"><a href="#Into.__init__-1449"><span class="linenos">1449</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="Into.__init__-1450"><a href="#Into.__init__-1450"><span class="linenos">1450</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="Into.__init__-1451"><a href="#Into.__init__-1451"><span class="linenos">1451</span></a>            <span class="k">break</span>
-</span><span id="Into.__init__-1452"><a href="#Into.__init__-1452"><span class="linenos">1452</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="Into.__init__-1453"><a href="#Into.__init__-1453"><span class="linenos">1453</span></a>        <span class="c1"># should not happen</span>
-</span><span id="Into.__init__-1454"><a href="#Into.__init__-1454"><span class="linenos">1454</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="Into.__init__-1455"><a href="#Into.__init__-1455"><span class="linenos">1455</span></a>
-</span><span id="Into.__init__-1456"><a href="#Into.__init__-1456"><span class="linenos">1456</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Into.__init__-1739"><a href="#Into.__init__-1739"><span class="linenos">1739</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="Into.__init__-1740"><a href="#Into.__init__-1740"><span class="linenos">1740</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="Into.__init__-1741"><a href="#Into.__init__-1741"><span class="linenos">1741</span></a>
+</span><span id="Into.__init__-1742"><a href="#Into.__init__-1742"><span class="linenos">1742</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="Into.__init__-1743"><a href="#Into.__init__-1743"><span class="linenos">1743</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="Into.__init__-1744"><a href="#Into.__init__-1744"><span class="linenos">1744</span></a>
+</span><span id="Into.__init__-1745"><a href="#Into.__init__-1745"><span class="linenos">1745</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="Into.__init__-1746"><a href="#Into.__init__-1746"><span class="linenos">1746</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="Into.__init__-1747"><a href="#Into.__init__-1747"><span class="linenos">1747</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="Into.__init__-1748"><a href="#Into.__init__-1748"><span class="linenos">1748</span></a>        <span class="k">return</span>
+</span><span id="Into.__init__-1749"><a href="#Into.__init__-1749"><span class="linenos">1749</span></a>
+</span><span id="Into.__init__-1750"><a href="#Into.__init__-1750"><span class="linenos">1750</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="Into.__init__-1751"><a href="#Into.__init__-1751"><span class="linenos">1751</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="Into.__init__-1752"><a href="#Into.__init__-1752"><span class="linenos">1752</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="Into.__init__-1753"><a href="#Into.__init__-1753"><span class="linenos">1753</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="Into.__init__-1754"><a href="#Into.__init__-1754"><span class="linenos">1754</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="Into.__init__-1755"><a href="#Into.__init__-1755"><span class="linenos">1755</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="Into.__init__-1756"><a href="#Into.__init__-1756"><span class="linenos">1756</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="Into.__init__-1757"><a href="#Into.__init__-1757"><span class="linenos">1757</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="Into.__init__-1758"><a href="#Into.__init__-1758"><span class="linenos">1758</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="Into.__init__-1759"><a href="#Into.__init__-1759"><span class="linenos">1759</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="Into.__init__-1760"><a href="#Into.__init__-1760"><span class="linenos">1760</span></a>            <span class="k">break</span>
+</span><span id="Into.__init__-1761"><a href="#Into.__init__-1761"><span class="linenos">1761</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="Into.__init__-1762"><a href="#Into.__init__-1762"><span class="linenos">1762</span></a>        <span class="c1"># should not happen</span>
+</span><span id="Into.__init__-1763"><a href="#Into.__init__-1763"><span class="linenos">1763</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="Into.__init__-1764"><a href="#Into.__init__-1764"><span class="linenos">1764</span></a>
+</span><span id="Into.__init__-1765"><a href="#Into.__init__-1765"><span class="linenos">1765</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -814,7 +814,7 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
     </div>
     <a class="headerlink" href="#Into.into"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Into.into-205"><a href="#Into.into-205"><span class="linenos">205</span></a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_cov</span><span class="p">:</span>
-</span><span id="Into.into-206"><a href="#Into.into-206"><span class="linenos">206</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="Into.into-206"><a href="#Into.into-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="Into.into-207"><a href="#Into.into-207"><span class="linenos">207</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -839,7 +839,7 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
     <a class="headerlink" href="#TryInto"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="TryInto-210"><a href="#TryInto-210"><span class="linenos">210</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
 </span><span id="TryInto-211"><a href="#TryInto-211"><span class="linenos">211</span></a><span class="k">class</span> <span class="nc">TryInto</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]):</span>
-</span><span id="TryInto-212"><a href="#TryInto-212"><span class="linenos">212</span></a>    <span class="sd">&quot;&quot;&quot;An attempted conversion from `self`, which may or may not be expensive.</span>
+</span><span id="TryInto-212"><a href="#TryInto-212"><span class="linenos">212</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An attempted conversion from `self`, which may or may not be expensive.</span>
 </span><span id="TryInto-213"><a href="#TryInto-213"><span class="linenos">213</span></a>
 </span><span id="TryInto-214"><a href="#TryInto-214"><span class="linenos">214</span></a><span class="sd">    It is useful to implement this when you know that the conversion may fail in some way.</span>
 </span><span id="TryInto-215"><a href="#TryInto-215"><span class="linenos">215</span></a>
@@ -867,7 +867,7 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 </span><span id="TryInto-237"><a href="#TryInto-237"><span class="linenos">237</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 </span><span id="TryInto-238"><a href="#TryInto-238"><span class="linenos">238</span></a>
 </span><span id="TryInto-239"><a href="#TryInto-239"><span class="linenos">239</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="TryInto-240"><a href="#TryInto-240"><span class="linenos">240</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="TryInto-240"><a href="#TryInto-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="TryInto-241"><a href="#TryInto-241"><span class="linenos">241</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
@@ -911,33 +911,33 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
 
     </div>
     <a class="headerlink" href="#TryInto.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TryInto.__init__-1430"><a href="#TryInto.__init__-1430"><span class="linenos">1430</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="TryInto.__init__-1431"><a href="#TryInto.__init__-1431"><span class="linenos">1431</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="TryInto.__init__-1432"><a href="#TryInto.__init__-1432"><span class="linenos">1432</span></a>
-</span><span id="TryInto.__init__-1433"><a href="#TryInto.__init__-1433"><span class="linenos">1433</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="TryInto.__init__-1434"><a href="#TryInto.__init__-1434"><span class="linenos">1434</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="TryInto.__init__-1435"><a href="#TryInto.__init__-1435"><span class="linenos">1435</span></a>
-</span><span id="TryInto.__init__-1436"><a href="#TryInto.__init__-1436"><span class="linenos">1436</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="TryInto.__init__-1437"><a href="#TryInto.__init__-1437"><span class="linenos">1437</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="TryInto.__init__-1438"><a href="#TryInto.__init__-1438"><span class="linenos">1438</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="TryInto.__init__-1439"><a href="#TryInto.__init__-1439"><span class="linenos">1439</span></a>        <span class="k">return</span>
-</span><span id="TryInto.__init__-1440"><a href="#TryInto.__init__-1440"><span class="linenos">1440</span></a>
-</span><span id="TryInto.__init__-1441"><a href="#TryInto.__init__-1441"><span class="linenos">1441</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="TryInto.__init__-1442"><a href="#TryInto.__init__-1442"><span class="linenos">1442</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="TryInto.__init__-1443"><a href="#TryInto.__init__-1443"><span class="linenos">1443</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="TryInto.__init__-1444"><a href="#TryInto.__init__-1444"><span class="linenos">1444</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="TryInto.__init__-1445"><a href="#TryInto.__init__-1445"><span class="linenos">1445</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="TryInto.__init__-1446"><a href="#TryInto.__init__-1446"><span class="linenos">1446</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="TryInto.__init__-1447"><a href="#TryInto.__init__-1447"><span class="linenos">1447</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="TryInto.__init__-1448"><a href="#TryInto.__init__-1448"><span class="linenos">1448</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="TryInto.__init__-1449"><a href="#TryInto.__init__-1449"><span class="linenos">1449</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="TryInto.__init__-1450"><a href="#TryInto.__init__-1450"><span class="linenos">1450</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="TryInto.__init__-1451"><a href="#TryInto.__init__-1451"><span class="linenos">1451</span></a>            <span class="k">break</span>
-</span><span id="TryInto.__init__-1452"><a href="#TryInto.__init__-1452"><span class="linenos">1452</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="TryInto.__init__-1453"><a href="#TryInto.__init__-1453"><span class="linenos">1453</span></a>        <span class="c1"># should not happen</span>
-</span><span id="TryInto.__init__-1454"><a href="#TryInto.__init__-1454"><span class="linenos">1454</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="TryInto.__init__-1455"><a href="#TryInto.__init__-1455"><span class="linenos">1455</span></a>
-</span><span id="TryInto.__init__-1456"><a href="#TryInto.__init__-1456"><span class="linenos">1456</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TryInto.__init__-1739"><a href="#TryInto.__init__-1739"><span class="linenos">1739</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="TryInto.__init__-1740"><a href="#TryInto.__init__-1740"><span class="linenos">1740</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="TryInto.__init__-1741"><a href="#TryInto.__init__-1741"><span class="linenos">1741</span></a>
+</span><span id="TryInto.__init__-1742"><a href="#TryInto.__init__-1742"><span class="linenos">1742</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="TryInto.__init__-1743"><a href="#TryInto.__init__-1743"><span class="linenos">1743</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="TryInto.__init__-1744"><a href="#TryInto.__init__-1744"><span class="linenos">1744</span></a>
+</span><span id="TryInto.__init__-1745"><a href="#TryInto.__init__-1745"><span class="linenos">1745</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="TryInto.__init__-1746"><a href="#TryInto.__init__-1746"><span class="linenos">1746</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="TryInto.__init__-1747"><a href="#TryInto.__init__-1747"><span class="linenos">1747</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="TryInto.__init__-1748"><a href="#TryInto.__init__-1748"><span class="linenos">1748</span></a>        <span class="k">return</span>
+</span><span id="TryInto.__init__-1749"><a href="#TryInto.__init__-1749"><span class="linenos">1749</span></a>
+</span><span id="TryInto.__init__-1750"><a href="#TryInto.__init__-1750"><span class="linenos">1750</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="TryInto.__init__-1751"><a href="#TryInto.__init__-1751"><span class="linenos">1751</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="TryInto.__init__-1752"><a href="#TryInto.__init__-1752"><span class="linenos">1752</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="TryInto.__init__-1753"><a href="#TryInto.__init__-1753"><span class="linenos">1753</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="TryInto.__init__-1754"><a href="#TryInto.__init__-1754"><span class="linenos">1754</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="TryInto.__init__-1755"><a href="#TryInto.__init__-1755"><span class="linenos">1755</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="TryInto.__init__-1756"><a href="#TryInto.__init__-1756"><span class="linenos">1756</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="TryInto.__init__-1757"><a href="#TryInto.__init__-1757"><span class="linenos">1757</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="TryInto.__init__-1758"><a href="#TryInto.__init__-1758"><span class="linenos">1758</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="TryInto.__init__-1759"><a href="#TryInto.__init__-1759"><span class="linenos">1759</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="TryInto.__init__-1760"><a href="#TryInto.__init__-1760"><span class="linenos">1760</span></a>            <span class="k">break</span>
+</span><span id="TryInto.__init__-1761"><a href="#TryInto.__init__-1761"><span class="linenos">1761</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="TryInto.__init__-1762"><a href="#TryInto.__init__-1762"><span class="linenos">1762</span></a>        <span class="c1"># should not happen</span>
+</span><span id="TryInto.__init__-1763"><a href="#TryInto.__init__-1763"><span class="linenos">1763</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="TryInto.__init__-1764"><a href="#TryInto.__init__-1764"><span class="linenos">1764</span></a>
+</span><span id="TryInto.__init__-1765"><a href="#TryInto.__init__-1765"><span class="linenos">1765</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -956,7 +956,7 @@ It is the reciprocal of <code><a href="#TryInto">TryInto</a></code>.</p>
     </div>
     <a class="headerlink" href="#TryInto.try_into"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="TryInto.try_into-239"><a href="#TryInto.try_into-239"><span class="linenos">239</span></a>    <span class="k">def</span> <span class="nf">try_into</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">]:</span>
-</span><span id="TryInto.try_into-240"><a href="#TryInto.try_into-240"><span class="linenos">240</span></a>        <span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
+</span><span id="TryInto.try_into-240"><a href="#TryInto.try_into-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the conversion.&quot;&quot;&quot;</span>
 </span><span id="TryInto.try_into-241"><a href="#TryInto.try_into-241"><span class="linenos">241</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 

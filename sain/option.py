@@ -187,7 +187,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
     @macros.unsafe
     def unwrap_unchecked(self) -> T:
-        """Unwrap the inner value immediately returning it.
+        """Returns the contained Some value without checking that the value is not None.
 
         Example
         -------

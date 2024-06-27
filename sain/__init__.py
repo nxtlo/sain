@@ -118,7 +118,7 @@ from .result import Err
 from .result import Ok
 from .result import Result
 
-__version__: str = "1.0.0"
+__version__: str = "1.1.0"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
 __about__: str = (

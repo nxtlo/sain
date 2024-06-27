@@ -143,7 +143,7 @@ def unstable(
         else:
             wrapper.__doc__ = m
 
-        return wrapper  # pyright: ignore
+        return wrapper
 
     return decorator
 
