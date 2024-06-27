@@ -325,7 +325,7 @@
 </span><span id="L-63"><a href="#L-63"><span class="linenos">  63</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">futures</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos">  64</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">option</span> <span class="k">as</span> <span class="n">_option</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">  65</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">result</span> <span class="k">as</span> <span class="n">_result</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">  66</span></a><span class="kn">from</span> <span class="nn">.dyn</span> <span class="kn">import</span> <span class="n">vec</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">  66</span></a><span class="kn">from</span> <span class="nn">.collections</span> <span class="kn">import</span> <span class="n">vec</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos">  67</span></a>
 </span><span id="L-68"><a href="#L-68"><span class="linenos">  68</span></a><span class="n">Item</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;Item&quot;</span><span class="p">)</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos">  69</span></a><span class="sd">&quot;&quot;&quot;The type of the item that is being yielded.&quot;&quot;&quot;</span>
@@ -344,7 +344,7 @@
 </span><span id="L-82"><a href="#L-82"><span class="linenos">  82</span></a><span class="k">def</span> <span class="nf">unreachable</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-83"><a href="#L-83"><span class="linenos">  83</span></a>    <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">(</span>
 </span><span id="L-84"><a href="#L-84"><span class="linenos">  84</span></a>        <span class="s2">&quot;No more items exist in this iterator. It has been exhausted.&quot;</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">  85</span></a>    <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">  85</span></a>    <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="L-86"><a href="#L-86"><span class="linenos">  86</span></a>
 </span><span id="L-87"><a href="#L-87"><span class="linenos">  87</span></a>
 </span><span id="L-88"><a href="#L-88"><span class="linenos">  88</span></a><span class="k">def</span> <span class="nf">diagnostic</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">AnyIter</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">AnyIter</span><span class="p">]:</span>
@@ -360,7 +360,7 @@
 </span><span id="L-98"><a href="#L-98"><span class="linenos">  98</span></a>    <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">,</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos">  99</span></a>    <span class="n">_default</span><span class="o">.</span><span class="n">Default</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos"> 100</span></a><span class="p">):</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos"> 101</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An abstract interface for dealing with iterators.</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos"> 101</span></a>    <span class="sd">&quot;&quot;&quot;An abstract interface for dealing with iterators.</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos"> 102</span></a>
 </span><span id="L-103"><a href="#L-103"><span class="linenos"> 103</span></a><span class="sd">    This is exactly the same trait as `core::iter::Iterator` trait from Rust.</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos"> 104</span></a>
@@ -412,7 +412,7 @@
 </span><span id="L-150"><a href="#L-150"><span class="linenos"> 150</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="L-151"><a href="#L-151"><span class="linenos"> 151</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-152"><a href="#L-152"><span class="linenos"> 152</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Empty</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos"> 153</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default iterator for this type. It returns an empty iterator.</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos"> 153</span></a>        <span class="sd">&quot;&quot;&quot;Return the default iterator for this type. It returns an empty iterator.</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos"> 154</span></a>
 </span><span id="L-155"><a href="#L-155"><span class="linenos"> 155</span></a><span class="sd">        Example</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos"> 156</span></a><span class="sd">        -------</span>
@@ -437,7 +437,7 @@
 </span><span id="L-175"><a href="#L-175"><span class="linenos"> 175</span></a>    <span class="k">def</span> <span class="nf">collect</span><span class="p">(</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos"> 176</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cast</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">OtherItem</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-177"><a href="#L-177"><span class="linenos"> 177</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">]:</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos"> 178</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Collects all items in the iterator into an immutable sequence.</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos"> 178</span></a>        <span class="sd">&quot;&quot;&quot;Collects all items in the iterator into an immutable sequence.</span>
 </span><span id="L-179"><a href="#L-179"><span class="linenos"> 179</span></a>
 </span><span id="L-180"><a href="#L-180"><span class="linenos"> 180</span></a><span class="sd">        Example</span>
 </span><span id="L-181"><a href="#L-181"><span class="linenos"> 181</span></a><span class="sd">        -------</span>
@@ -462,7 +462,7 @@
 </span><span id="L-200"><a href="#L-200"><span class="linenos"> 200</span></a>
 </span><span id="L-201"><a href="#L-201"><span class="linenos"> 201</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos"> 202</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos"> 203</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos"> 203</span></a>        <span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos"> 204</span></a>
 </span><span id="L-205"><a href="#L-205"><span class="linenos"> 205</span></a><span class="sd">        Example</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos"> 206</span></a><span class="sd">        -------</span>
@@ -477,7 +477,7 @@
 </span><span id="L-215"><a href="#L-215"><span class="linenos"> 215</span></a>
 </span><span id="L-216"><a href="#L-216"><span class="linenos"> 216</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-217"><a href="#L-217"><span class="linenos"> 217</span></a>    <span class="k">def</span> <span class="nf">sink</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos"> 218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consume all elements from this iterator, flushing it into the sink.</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos"> 218</span></a>        <span class="sd">&quot;&quot;&quot;Consume all elements from this iterator, flushing it into the sink.</span>
 </span><span id="L-219"><a href="#L-219"><span class="linenos"> 219</span></a>
 </span><span id="L-220"><a href="#L-220"><span class="linenos"> 220</span></a><span class="sd">        Example</span>
 </span><span id="L-221"><a href="#L-221"><span class="linenos"> 221</span></a><span class="sd">        -------</span>
@@ -492,7 +492,7 @@
 </span><span id="L-230"><a href="#L-230"><span class="linenos"> 230</span></a>
 </span><span id="L-231"><a href="#L-231"><span class="linenos"> 231</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-232"><a href="#L-232"><span class="linenos"> 232</span></a>    <span class="k">def</span> <span class="nf">raw_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Generator</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-</span><span id="L-233"><a href="#L-233"><span class="linenos"> 233</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Decompose all elements from this iterator, yielding it one by one</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos"> 233</span></a>        <span class="sd">&quot;&quot;&quot;Decompose all elements from this iterator, yielding it one by one</span>
 </span><span id="L-234"><a href="#L-234"><span class="linenos"> 234</span></a><span class="sd">        as a normal generator.</span>
 </span><span id="L-235"><a href="#L-235"><span class="linenos"> 235</span></a>
 </span><span id="L-236"><a href="#L-236"><span class="linenos"> 236</span></a><span class="sd">        This mainly used for objects that needs to satisfy its exact type.</span>
@@ -513,7 +513,7 @@
 </span><span id="L-251"><a href="#L-251"><span class="linenos"> 251</span></a>    <span class="c1">##################</span>
 </span><span id="L-252"><a href="#L-252"><span class="linenos"> 252</span></a>
 </span><span id="L-253"><a href="#L-253"><span class="linenos"> 253</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos"> 254</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Advance the iterator, Returning the next item, `Some(None)` if all items yielded.</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos"> 254</span></a>        <span class="sd">&quot;&quot;&quot;Advance the iterator, Returning the next item, `Some(None)` if all items yielded.</span>
 </span><span id="L-255"><a href="#L-255"><span class="linenos"> 255</span></a>
 </span><span id="L-256"><a href="#L-256"><span class="linenos"> 256</span></a><span class="sd">        Example</span>
 </span><span id="L-257"><a href="#L-257"><span class="linenos"> 257</span></a><span class="sd">        -------</span>
@@ -530,7 +530,7 @@
 </span><span id="L-268"><a href="#L-268"><span class="linenos"> 268</span></a>            <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="L-269"><a href="#L-269"><span class="linenos"> 269</span></a>
 </span><span id="L-270"><a href="#L-270"><span class="linenos"> 270</span></a>    <span class="k">def</span> <span class="nf">cloned</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cloned</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-271"><a href="#L-271"><span class="linenos"> 271</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an iterator which shallow copies its elements by reference.</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos"> 271</span></a>        <span class="sd">&quot;&quot;&quot;Creates an iterator which shallow copies its elements by reference.</span>
 </span><span id="L-272"><a href="#L-272"><span class="linenos"> 272</span></a>
 </span><span id="L-273"><a href="#L-273"><span class="linenos"> 273</span></a><span class="sd">        If you need a copy of the actual iterator and not the elements.</span>
 </span><span id="L-274"><a href="#L-274"><span class="linenos"> 274</span></a><span class="sd">        use `Iter.clone()`</span>
@@ -561,7 +561,7 @@
 </span><span id="L-299"><a href="#L-299"><span class="linenos"> 299</span></a>        <span class="k">return</span> <span class="n">Cloned</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="L-300"><a href="#L-300"><span class="linenos"> 300</span></a>
 </span><span id="L-301"><a href="#L-301"><span class="linenos"> 301</span></a>    <span class="k">def</span> <span class="nf">copied</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Copied</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-302"><a href="#L-302"><span class="linenos"> 302</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an iterator which copies all of its elements by value.</span>
+</span><span id="L-302"><a href="#L-302"><span class="linenos"> 302</span></a>        <span class="sd">&quot;&quot;&quot;Creates an iterator which copies all of its elements by value.</span>
 </span><span id="L-303"><a href="#L-303"><span class="linenos"> 303</span></a>
 </span><span id="L-304"><a href="#L-304"><span class="linenos"> 304</span></a><span class="sd">        If you only need a copy of the item reference, Use `.cloned()` instead.</span>
 </span><span id="L-305"><a href="#L-305"><span class="linenos"> 305</span></a>
@@ -591,7 +591,7 @@
 </span><span id="L-329"><a href="#L-329"><span class="linenos"> 329</span></a>        <span class="k">return</span> <span class="n">Copied</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="L-330"><a href="#L-330"><span class="linenos"> 330</span></a>
 </span><span id="L-331"><a href="#L-331"><span class="linenos"> 331</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">OtherItem</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Map</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]:</span>
-</span><span id="L-332"><a href="#L-332"><span class="linenos"> 332</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps each item in the iterator to another type.</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos"> 332</span></a>        <span class="sd">&quot;&quot;&quot;Maps each item in the iterator to another type.</span>
 </span><span id="L-333"><a href="#L-333"><span class="linenos"> 333</span></a>
 </span><span id="L-334"><a href="#L-334"><span class="linenos"> 334</span></a><span class="sd">        Example</span>
 </span><span id="L-335"><a href="#L-335"><span class="linenos"> 335</span></a><span class="sd">        -------</span>
@@ -610,7 +610,7 @@
 </span><span id="L-348"><a href="#L-348"><span class="linenos"> 348</span></a>        <span class="k">return</span> <span class="n">Map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
 </span><span id="L-349"><a href="#L-349"><span class="linenos"> 349</span></a>
 </span><span id="L-350"><a href="#L-350"><span class="linenos"> 350</span></a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Filter</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-351"><a href="#L-351"><span class="linenos"> 351</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters the iterator to only yield items that match the predicate.</span>
+</span><span id="L-351"><a href="#L-351"><span class="linenos"> 351</span></a>        <span class="sd">&quot;&quot;&quot;Filters the iterator to only yield items that match the predicate.</span>
 </span><span id="L-352"><a href="#L-352"><span class="linenos"> 352</span></a>
 </span><span id="L-353"><a href="#L-353"><span class="linenos"> 353</span></a><span class="sd">        Example</span>
 </span><span id="L-354"><a href="#L-354"><span class="linenos"> 354</span></a><span class="sd">        -------</span>
@@ -626,7 +626,7 @@
 </span><span id="L-364"><a href="#L-364"><span class="linenos"> 364</span></a>        <span class="k">return</span> <span class="n">Filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">)</span>
 </span><span id="L-365"><a href="#L-365"><span class="linenos"> 365</span></a>
 </span><span id="L-366"><a href="#L-366"><span class="linenos"> 366</span></a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Take</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-367"><a href="#L-367"><span class="linenos"> 367</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the first number of items until the number of items</span>
+</span><span id="L-367"><a href="#L-367"><span class="linenos"> 367</span></a>        <span class="sd">&quot;&quot;&quot;Take the first number of items until the number of items</span>
 </span><span id="L-368"><a href="#L-368"><span class="linenos"> 368</span></a><span class="sd">        are yielded or the end of the iterator is exhausted.</span>
 </span><span id="L-369"><a href="#L-369"><span class="linenos"> 369</span></a>
 </span><span id="L-370"><a href="#L-370"><span class="linenos"> 370</span></a><span class="sd">        Example</span>
@@ -643,7 +643,7 @@
 </span><span id="L-381"><a href="#L-381"><span class="linenos"> 381</span></a>        <span class="k">return</span> <span class="n">Take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
 </span><span id="L-382"><a href="#L-382"><span class="linenos"> 382</span></a>
 </span><span id="L-383"><a href="#L-383"><span class="linenos"> 383</span></a>    <span class="k">def</span> <span class="nf">skip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Skip</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-384"><a href="#L-384"><span class="linenos"> 384</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Skips the first number of items in the iterator.</span>
+</span><span id="L-384"><a href="#L-384"><span class="linenos"> 384</span></a>        <span class="sd">&quot;&quot;&quot;Skips the first number of items in the iterator.</span>
 </span><span id="L-385"><a href="#L-385"><span class="linenos"> 385</span></a>
 </span><span id="L-386"><a href="#L-386"><span class="linenos"> 386</span></a><span class="sd">        Example</span>
 </span><span id="L-387"><a href="#L-387"><span class="linenos"> 387</span></a><span class="sd">        -------</span>
@@ -659,7 +659,7 @@
 </span><span id="L-397"><a href="#L-397"><span class="linenos"> 397</span></a>        <span class="k">return</span> <span class="n">Skip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
 </span><span id="L-398"><a href="#L-398"><span class="linenos"> 398</span></a>
 </span><span id="L-399"><a href="#L-399"><span class="linenos"> 399</span></a>    <span class="k">def</span> <span class="nf">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Enumerate</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-400"><a href="#L-400"><span class="linenos"> 400</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new iterator that yields a tuple of the index and item.</span>
+</span><span id="L-400"><a href="#L-400"><span class="linenos"> 400</span></a>        <span class="sd">&quot;&quot;&quot;Create a new iterator that yields a tuple of the index and item.</span>
 </span><span id="L-401"><a href="#L-401"><span class="linenos"> 401</span></a>
 </span><span id="L-402"><a href="#L-402"><span class="linenos"> 402</span></a><span class="sd">        Example</span>
 </span><span id="L-403"><a href="#L-403"><span class="linenos"> 403</span></a><span class="sd">        -------</span>
@@ -676,7 +676,7 @@
 </span><span id="L-414"><a href="#L-414"><span class="linenos"> 414</span></a>        <span class="k">return</span> <span class="n">Enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
 </span><span id="L-415"><a href="#L-415"><span class="linenos"> 415</span></a>
 </span><span id="L-416"><a href="#L-416"><span class="linenos"> 416</span></a>    <span class="k">def</span> <span class="nf">take_while</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TakeWhile</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-417"><a href="#L-417"><span class="linenos"> 417</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;yields items from the iterator while predicate returns `True`.</span>
+</span><span id="L-417"><a href="#L-417"><span class="linenos"> 417</span></a>        <span class="sd">&quot;&quot;&quot;yields items from the iterator while predicate returns `True`.</span>
 </span><span id="L-418"><a href="#L-418"><span class="linenos"> 418</span></a>
 </span><span id="L-419"><a href="#L-419"><span class="linenos"> 419</span></a><span class="sd">        The rest of the items are discarded as soon as the predicate returns `False`</span>
 </span><span id="L-420"><a href="#L-420"><span class="linenos"> 420</span></a>
@@ -699,7 +699,7 @@
 </span><span id="L-437"><a href="#L-437"><span class="linenos"> 437</span></a>        <span class="k">return</span> <span class="n">TakeWhile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 </span><span id="L-438"><a href="#L-438"><span class="linenos"> 438</span></a>
 </span><span id="L-439"><a href="#L-439"><span class="linenos"> 439</span></a>    <span class="k">def</span> <span class="nf">drop_while</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DropWhile</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-440"><a href="#L-440"><span class="linenos"> 440</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Yields items from the iterator while predicate returns `False`.</span>
+</span><span id="L-440"><a href="#L-440"><span class="linenos"> 440</span></a>        <span class="sd">&quot;&quot;&quot;Yields items from the iterator while predicate returns `False`.</span>
 </span><span id="L-441"><a href="#L-441"><span class="linenos"> 441</span></a>
 </span><span id="L-442"><a href="#L-442"><span class="linenos"> 442</span></a><span class="sd">        Example</span>
 </span><span id="L-443"><a href="#L-443"><span class="linenos"> 443</span></a><span class="sd">        -------</span>
@@ -720,7 +720,7 @@
 </span><span id="L-458"><a href="#L-458"><span class="linenos"> 458</span></a>        <span class="k">return</span> <span class="n">DropWhile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 </span><span id="L-459"><a href="#L-459"><span class="linenos"> 459</span></a>
 </span><span id="L-460"><a href="#L-460"><span class="linenos"> 460</span></a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-461"><a href="#L-461"><span class="linenos"> 461</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `True` if all items in the iterator match the predicate.</span>
+</span><span id="L-461"><a href="#L-461"><span class="linenos"> 461</span></a>        <span class="sd">&quot;&quot;&quot;Return `True` if all items in the iterator match the predicate.</span>
 </span><span id="L-462"><a href="#L-462"><span class="linenos"> 462</span></a>
 </span><span id="L-463"><a href="#L-463"><span class="linenos"> 463</span></a><span class="sd">        Example</span>
 </span><span id="L-464"><a href="#L-464"><span class="linenos"> 464</span></a><span class="sd">        -------</span>
@@ -740,7 +740,7 @@
 </span><span id="L-478"><a href="#L-478"><span class="linenos"> 478</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">predicate</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
 </span><span id="L-479"><a href="#L-479"><span class="linenos"> 479</span></a>
 </span><span id="L-480"><a href="#L-480"><span class="linenos"> 480</span></a>    <span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-481"><a href="#L-481"><span class="linenos"> 481</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;`True` if any items in the iterator match the predicate.</span>
+</span><span id="L-481"><a href="#L-481"><span class="linenos"> 481</span></a>        <span class="sd">&quot;&quot;&quot;`True` if any items in the iterator match the predicate.</span>
 </span><span id="L-482"><a href="#L-482"><span class="linenos"> 482</span></a>
 </span><span id="L-483"><a href="#L-483"><span class="linenos"> 483</span></a><span class="sd">        Example</span>
 </span><span id="L-484"><a href="#L-484"><span class="linenos"> 484</span></a><span class="sd">        -------</span>
@@ -761,7 +761,7 @@
 </span><span id="L-499"><a href="#L-499"><span class="linenos"> 499</span></a>    <span class="k">def</span> <span class="nf">zip</span><span class="p">(</span>
 </span><span id="L-500"><a href="#L-500"><span class="linenos"> 500</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">]</span>
 </span><span id="L-501"><a href="#L-501"><span class="linenos"> 501</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]]:</span>
-</span><span id="L-502"><a href="#L-502"><span class="linenos"> 502</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Zips the iterator with another iterable.</span>
+</span><span id="L-502"><a href="#L-502"><span class="linenos"> 502</span></a>        <span class="sd">&quot;&quot;&quot;Zips the iterator with another iterable.</span>
 </span><span id="L-503"><a href="#L-503"><span class="linenos"> 503</span></a>
 </span><span id="L-504"><a href="#L-504"><span class="linenos"> 504</span></a><span class="sd">        Example</span>
 </span><span id="L-505"><a href="#L-505"><span class="linenos"> 505</span></a><span class="sd">        -------</span>
@@ -791,7 +791,7 @@
 </span><span id="L-529"><a href="#L-529"><span class="linenos"> 529</span></a>        <span class="n">key</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">_typeshed</span><span class="o">.</span><span class="n">SupportsRichComparison</span><span class="p">],</span>
 </span><span id="L-530"><a href="#L-530"><span class="linenos"> 530</span></a>        <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-531"><a href="#L-531"><span class="linenos"> 531</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-532"><a href="#L-532"><span class="linenos"> 532</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sorts the iterator.</span>
+</span><span id="L-532"><a href="#L-532"><span class="linenos"> 532</span></a>        <span class="sd">&quot;&quot;&quot;Sorts the iterator.</span>
 </span><span id="L-533"><a href="#L-533"><span class="linenos"> 533</span></a>
 </span><span id="L-534"><a href="#L-534"><span class="linenos"> 534</span></a><span class="sd">        Example</span>
 </span><span id="L-535"><a href="#L-535"><span class="linenos"> 535</span></a><span class="sd">        -------</span>
@@ -816,7 +816,7 @@
 </span><span id="L-554"><a href="#L-554"><span class="linenos"> 554</span></a>        <span class="k">return</span> <span class="n">Iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_parts</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">))</span>
 </span><span id="L-555"><a href="#L-555"><span class="linenos"> 555</span></a>
 </span><span id="L-556"><a href="#L-556"><span class="linenos"> 556</span></a>    <span class="k">def</span> <span class="nf">reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-557"><a href="#L-557"><span class="linenos"> 557</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a new iterator that yields the items in the iterator in reverse order.</span>
+</span><span id="L-557"><a href="#L-557"><span class="linenos"> 557</span></a>        <span class="sd">&quot;&quot;&quot;Returns a new iterator that yields the items in the iterator in reverse order.</span>
 </span><span id="L-558"><a href="#L-558"><span class="linenos"> 558</span></a>
 </span><span id="L-559"><a href="#L-559"><span class="linenos"> 559</span></a><span class="sd">        Example</span>
 </span><span id="L-560"><a href="#L-560"><span class="linenos"> 560</span></a><span class="sd">        -------</span>
@@ -835,7 +835,7 @@
 </span><span id="L-573"><a href="#L-573"><span class="linenos"> 573</span></a>        <span class="k">return</span> <span class="n">Iter</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collect</span><span class="p">()))</span>
 </span><span id="L-574"><a href="#L-574"><span class="linenos"> 574</span></a>
 </span><span id="L-575"><a href="#L-575"><span class="linenos"> 575</span></a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Item</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-576"><a href="#L-576"><span class="linenos"> 576</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a new iterator that yields all items from both iterators.</span>
+</span><span id="L-576"><a href="#L-576"><span class="linenos"> 576</span></a>        <span class="sd">&quot;&quot;&quot;Returns a new iterator that yields all items from both iterators.</span>
 </span><span id="L-577"><a href="#L-577"><span class="linenos"> 577</span></a>
 </span><span id="L-578"><a href="#L-578"><span class="linenos"> 578</span></a><span class="sd">        Example</span>
 </span><span id="L-579"><a href="#L-579"><span class="linenos"> 579</span></a><span class="sd">        -------</span>
@@ -861,7 +861,7 @@
 </span><span id="L-599"><a href="#L-599"><span class="linenos"> 599</span></a>        <span class="k">return</span> <span class="n">Iter</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_parts</span><span class="p">(),</span> <span class="n">other</span><span class="p">))</span>
 </span><span id="L-600"><a href="#L-600"><span class="linenos"> 600</span></a>
 </span><span id="L-601"><a href="#L-601"><span class="linenos"> 601</span></a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-602"><a href="#L-602"><span class="linenos"> 602</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the first item in the iterator.</span>
+</span><span id="L-602"><a href="#L-602"><span class="linenos"> 602</span></a>        <span class="sd">&quot;&quot;&quot;Returns the first item in the iterator.</span>
 </span><span id="L-603"><a href="#L-603"><span class="linenos"> 603</span></a>
 </span><span id="L-604"><a href="#L-604"><span class="linenos"> 604</span></a><span class="sd">        Example</span>
 </span><span id="L-605"><a href="#L-605"><span class="linenos"> 605</span></a><span class="sd">        -------</span>
@@ -873,7 +873,7 @@
 </span><span id="L-611"><a href="#L-611"><span class="linenos"> 611</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 </span><span id="L-612"><a href="#L-612"><span class="linenos"> 612</span></a>
 </span><span id="L-613"><a href="#L-613"><span class="linenos"> 613</span></a>    <span class="k">def</span> <span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-614"><a href="#L-614"><span class="linenos"> 614</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the last item in the iterator.</span>
+</span><span id="L-614"><a href="#L-614"><span class="linenos"> 614</span></a>        <span class="sd">&quot;&quot;&quot;Returns the last item in the iterator.</span>
 </span><span id="L-615"><a href="#L-615"><span class="linenos"> 615</span></a>
 </span><span id="L-616"><a href="#L-616"><span class="linenos"> 616</span></a><span class="sd">        Example</span>
 </span><span id="L-617"><a href="#L-617"><span class="linenos"> 617</span></a><span class="sd">        -------</span>
@@ -885,7 +885,7 @@
 </span><span id="L-623"><a href="#L-623"><span class="linenos"> 623</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reversed</span><span class="p">()</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
 </span><span id="L-624"><a href="#L-624"><span class="linenos"> 624</span></a>
 </span><span id="L-625"><a href="#L-625"><span class="linenos"> 625</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-626"><a href="#L-626"><span class="linenos"> 626</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the count of elements in memory this iterator has.</span>
+</span><span id="L-626"><a href="#L-626"><span class="linenos"> 626</span></a>        <span class="sd">&quot;&quot;&quot;Return the count of elements in memory this iterator has.</span>
 </span><span id="L-627"><a href="#L-627"><span class="linenos"> 627</span></a>
 </span><span id="L-628"><a href="#L-628"><span class="linenos"> 628</span></a><span class="sd">        Example</span>
 </span><span id="L-629"><a href="#L-629"><span class="linenos"> 629</span></a><span class="sd">        -------</span>
@@ -901,7 +901,7 @@
 </span><span id="L-639"><a href="#L-639"><span class="linenos"> 639</span></a>        <span class="k">return</span> <span class="n">count</span>
 </span><span id="L-640"><a href="#L-640"><span class="linenos"> 640</span></a>
 </span><span id="L-641"><a href="#L-641"><span class="linenos"> 641</span></a>    <span class="k">def</span> <span class="nf">for_each</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-642"><a href="#L-642"><span class="linenos"> 642</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calls `func` on each item in the iterator.</span>
+</span><span id="L-642"><a href="#L-642"><span class="linenos"> 642</span></a>        <span class="sd">&quot;&quot;&quot;Calls `func` on each item in the iterator.</span>
 </span><span id="L-643"><a href="#L-643"><span class="linenos"> 643</span></a>
 </span><span id="L-644"><a href="#L-644"><span class="linenos"> 644</span></a><span class="sd">        Example</span>
 </span><span id="L-645"><a href="#L-645"><span class="linenos"> 645</span></a><span class="sd">        -------</span>
@@ -927,7 +927,7 @@
 </span><span id="L-665"><a href="#L-665"><span class="linenos"> 665</span></a>            <span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]</span>
 </span><span id="L-666"><a href="#L-666"><span class="linenos"> 666</span></a>        <span class="p">],</span>
 </span><span id="L-667"><a href="#L-667"><span class="linenos"> 667</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">],</span> <span class="n">futures</span><span class="o">.</span><span class="n">SpawnError</span><span class="p">]:</span>
-</span><span id="L-668"><a href="#L-668"><span class="linenos"> 668</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calls the async function on each item in the iterator concurrently.</span>
+</span><span id="L-668"><a href="#L-668"><span class="linenos"> 668</span></a>        <span class="sd">&quot;&quot;&quot;Calls the async function on each item in the iterator concurrently.</span>
 </span><span id="L-669"><a href="#L-669"><span class="linenos"> 669</span></a>
 </span><span id="L-670"><a href="#L-670"><span class="linenos"> 670</span></a><span class="sd">        Example</span>
 </span><span id="L-671"><a href="#L-671"><span class="linenos"> 671</span></a><span class="sd">        -------</span>
@@ -956,7 +956,7 @@
 </span><span id="L-694"><a href="#L-694"><span class="linenos"> 694</span></a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">__</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-695"><a href="#L-695"><span class="linenos"> 695</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
 </span><span id="L-696"><a href="#L-696"><span class="linenos"> 696</span></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> doesn&#39;t support item assignment.&quot;</span>
-</span><span id="L-697"><a href="#L-697"><span class="linenos"> 697</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="L-697"><a href="#L-697"><span class="linenos"> 697</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="L-698"><a href="#L-698"><span class="linenos"> 698</span></a>
 </span><span id="L-699"><a href="#L-699"><span class="linenos"> 699</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="L-700"><a href="#L-700"><span class="linenos"> 700</span></a>        <span class="k">return</span> <span class="s2">&quot;&lt;Iterator&gt;&quot;</span>
@@ -977,7 +977,7 @@
 </span><span id="L-715"><a href="#L-715"><span class="linenos"> 715</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-716"><a href="#L-716"><span class="linenos"> 716</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-717"><a href="#L-717"><span class="linenos"> 717</span></a><span class="k">class</span> <span class="nc">Iter</span><span class="p">(</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-718"><a href="#L-718"><span class="linenos"> 718</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;a lazy iterator that has its items ready in-memory.</span>
+</span><span id="L-718"><a href="#L-718"><span class="linenos"> 718</span></a>    <span class="sd">&quot;&quot;&quot;a lazy iterator that has its items ready in-memory.</span>
 </span><span id="L-719"><a href="#L-719"><span class="linenos"> 719</span></a>
 </span><span id="L-720"><a href="#L-720"><span class="linenos"> 720</span></a><span class="sd">    This is similar to Rust `std::slice::Iter&lt;T&gt;` item which iterables can build</span>
 </span><span id="L-721"><a href="#L-721"><span class="linenos"> 721</span></a><span class="sd">    from this via `.iter()` method.</span>
@@ -1017,7 +1017,7 @@
 </span><span id="L-755"><a href="#L-755"><span class="linenos"> 755</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
 </span><span id="L-756"><a href="#L-756"><span class="linenos"> 756</span></a>
 </span><span id="L-757"><a href="#L-757"><span class="linenos"> 757</span></a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Self</span><span class="p">:</span>
-</span><span id="L-758"><a href="#L-758"><span class="linenos"> 758</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of this iterator.</span>
+</span><span id="L-758"><a href="#L-758"><span class="linenos"> 758</span></a>        <span class="sd">&quot;&quot;&quot;Return a copy of this iterator.</span>
 </span><span id="L-759"><a href="#L-759"><span class="linenos"> 759</span></a>
 </span><span id="L-760"><a href="#L-760"><span class="linenos"> 760</span></a><span class="sd">        ```py</span>
 </span><span id="L-761"><a href="#L-761"><span class="linenos"> 761</span></a><span class="sd">        it = Iterator([1, 2, 3])</span>
@@ -1049,7 +1049,7 @@
 </span><span id="L-787"><a href="#L-787"><span class="linenos"> 787</span></a>
 </span><span id="L-788"><a href="#L-788"><span class="linenos"> 788</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-789"><a href="#L-789"><span class="linenos"> 789</span></a><span class="k">class</span> <span class="nc">Cloned</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-790"><a href="#L-790"><span class="linenos"> 790</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that copies the elements from an underlying iterator.</span>
+</span><span id="L-790"><a href="#L-790"><span class="linenos"> 790</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that copies the elements from an underlying iterator.</span>
 </span><span id="L-791"><a href="#L-791"><span class="linenos"> 791</span></a>
 </span><span id="L-792"><a href="#L-792"><span class="linenos"> 792</span></a><span class="sd">    This iterator is created by the `Iterator.cloned` method.</span>
 </span><span id="L-793"><a href="#L-793"><span class="linenos"> 793</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1072,7 +1072,7 @@
 </span><span id="L-810"><a href="#L-810"><span class="linenos"> 810</span></a>
 </span><span id="L-811"><a href="#L-811"><span class="linenos"> 811</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-812"><a href="#L-812"><span class="linenos"> 812</span></a><span class="k">class</span> <span class="nc">Copied</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-813"><a href="#L-813"><span class="linenos"> 813</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that deeply-copies the elements from an underlying iterator.</span>
+</span><span id="L-813"><a href="#L-813"><span class="linenos"> 813</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that deeply-copies the elements from an underlying iterator.</span>
 </span><span id="L-814"><a href="#L-814"><span class="linenos"> 814</span></a>
 </span><span id="L-815"><a href="#L-815"><span class="linenos"> 815</span></a><span class="sd">    This iterator is created by the `Iterator.copied` method.</span>
 </span><span id="L-816"><a href="#L-816"><span class="linenos"> 816</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1088,7 +1088,7 @@
 </span><span id="L-826"><a href="#L-826"><span class="linenos"> 826</span></a>
 </span><span id="L-827"><a href="#L-827"><span class="linenos"> 827</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-828"><a href="#L-828"><span class="linenos"> 828</span></a><span class="k">class</span> <span class="nc">Map</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-829"><a href="#L-829"><span class="linenos"> 829</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that maps the elements to a callable.</span>
+</span><span id="L-829"><a href="#L-829"><span class="linenos"> 829</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that maps the elements to a callable.</span>
 </span><span id="L-830"><a href="#L-830"><span class="linenos"> 830</span></a>
 </span><span id="L-831"><a href="#L-831"><span class="linenos"> 831</span></a><span class="sd">    This iterator is created by the `Iterator.map` method.</span>
 </span><span id="L-832"><a href="#L-832"><span class="linenos"> 832</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1107,7 +1107,7 @@
 </span><span id="L-845"><a href="#L-845"><span class="linenos"> 845</span></a>
 </span><span id="L-846"><a href="#L-846"><span class="linenos"> 846</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-847"><a href="#L-847"><span class="linenos"> 847</span></a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-848"><a href="#L-848"><span class="linenos"> 848</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that filters the elements to a `predicate`.</span>
+</span><span id="L-848"><a href="#L-848"><span class="linenos"> 848</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that filters the elements to a `predicate`.</span>
 </span><span id="L-849"><a href="#L-849"><span class="linenos"> 849</span></a>
 </span><span id="L-850"><a href="#L-850"><span class="linenos"> 850</span></a><span class="sd">    This iterator is created by the `Iterator.filter` method.</span>
 </span><span id="L-851"><a href="#L-851"><span class="linenos"> 851</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1130,7 +1130,7 @@
 </span><span id="L-868"><a href="#L-868"><span class="linenos"> 868</span></a>
 </span><span id="L-869"><a href="#L-869"><span class="linenos"> 869</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-870"><a href="#L-870"><span class="linenos"> 870</span></a><span class="k">class</span> <span class="nc">Take</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-871"><a href="#L-871"><span class="linenos"> 871</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields the first `number` of elements and drops the rest.</span>
+</span><span id="L-871"><a href="#L-871"><span class="linenos"> 871</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields the first `number` of elements and drops the rest.</span>
 </span><span id="L-872"><a href="#L-872"><span class="linenos"> 872</span></a>
 </span><span id="L-873"><a href="#L-873"><span class="linenos"> 873</span></a><span class="sd">    This iterator is created by the `Iterator.take` method.</span>
 </span><span id="L-874"><a href="#L-874"><span class="linenos"> 874</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1156,7 +1156,7 @@
 </span><span id="L-894"><a href="#L-894"><span class="linenos"> 894</span></a>
 </span><span id="L-895"><a href="#L-895"><span class="linenos"> 895</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-896"><a href="#L-896"><span class="linenos"> 896</span></a><span class="k">class</span> <span class="nc">Skip</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-897"><a href="#L-897"><span class="linenos"> 897</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that skips the first `number` of elements and yields the rest.</span>
+</span><span id="L-897"><a href="#L-897"><span class="linenos"> 897</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that skips the first `number` of elements and yields the rest.</span>
 </span><span id="L-898"><a href="#L-898"><span class="linenos"> 898</span></a>
 </span><span id="L-899"><a href="#L-899"><span class="linenos"> 899</span></a><span class="sd">    This iterator is created by the `Iterator.skip` method.</span>
 </span><span id="L-900"><a href="#L-900"><span class="linenos"> 900</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1181,7 +1181,7 @@
 </span><span id="L-919"><a href="#L-919"><span class="linenos"> 919</span></a>
 </span><span id="L-920"><a href="#L-920"><span class="linenos"> 920</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-921"><a href="#L-921"><span class="linenos"> 921</span></a><span class="k">class</span> <span class="nc">Enumerate</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Item</span><span class="p">]]):</span>
-</span><span id="L-922"><a href="#L-922"><span class="linenos"> 922</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields the current count and the element during iteration.</span>
+</span><span id="L-922"><a href="#L-922"><span class="linenos"> 922</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields the current count and the element during iteration.</span>
 </span><span id="L-923"><a href="#L-923"><span class="linenos"> 923</span></a>
 </span><span id="L-924"><a href="#L-924"><span class="linenos"> 924</span></a><span class="sd">    This iterator is created by the `Iterator.enumerate` method.</span>
 </span><span id="L-925"><a href="#L-925"><span class="linenos"> 925</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1204,7 +1204,7 @@
 </span><span id="L-942"><a href="#L-942"><span class="linenos"> 942</span></a>
 </span><span id="L-943"><a href="#L-943"><span class="linenos"> 943</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-944"><a href="#L-944"><span class="linenos"> 944</span></a><span class="k">class</span> <span class="nc">TakeWhile</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-945"><a href="#L-945"><span class="linenos"> 945</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields elements while `predicate` returns `True`.</span>
+</span><span id="L-945"><a href="#L-945"><span class="linenos"> 945</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields elements while `predicate` returns `True`.</span>
 </span><span id="L-946"><a href="#L-946"><span class="linenos"> 946</span></a>
 </span><span id="L-947"><a href="#L-947"><span class="linenos"> 947</span></a><span class="sd">    This iterator is created by the `Iterator.take_while` method.</span>
 </span><span id="L-948"><a href="#L-948"><span class="linenos"> 948</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1228,7 +1228,7 @@
 </span><span id="L-966"><a href="#L-966"><span class="linenos"> 966</span></a>
 </span><span id="L-967"><a href="#L-967"><span class="linenos"> 967</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-968"><a href="#L-968"><span class="linenos"> 968</span></a><span class="k">class</span> <span class="nc">DropWhile</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-969"><a href="#L-969"><span class="linenos"> 969</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields elements while `predicate` returns `False`.</span>
+</span><span id="L-969"><a href="#L-969"><span class="linenos"> 969</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields elements while `predicate` returns `False`.</span>
 </span><span id="L-970"><a href="#L-970"><span class="linenos"> 970</span></a>
 </span><span id="L-971"><a href="#L-971"><span class="linenos"> 971</span></a><span class="sd">    This iterator is created by the `Iterator.drop_while` method.</span>
 </span><span id="L-972"><a href="#L-972"><span class="linenos"> 972</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1255,7 +1255,7 @@
 </span><span id="L-993"><a href="#L-993"><span class="linenos"> 993</span></a>
 </span><span id="L-994"><a href="#L-994"><span class="linenos"> 994</span></a><span class="nd">@diagnostic</span>
 </span><span id="L-995"><a href="#L-995"><span class="linenos"> 995</span></a><span class="k">class</span> <span class="nc">Empty</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="L-996"><a href="#L-996"><span class="linenos"> 996</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields literally nothing.</span>
+</span><span id="L-996"><a href="#L-996"><span class="linenos"> 996</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields literally nothing.</span>
 </span><span id="L-997"><a href="#L-997"><span class="linenos"> 997</span></a>
 </span><span id="L-998"><a href="#L-998"><span class="linenos"> 998</span></a><span class="sd">    This is the default iterator that is created by `Iterator.default()` or `empty()`</span>
 </span><span id="L-999"><a href="#L-999"><span class="linenos"> 999</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1288,7 +1288,7 @@
 </span><span id="L-1026"><a href="#L-1026"><span class="linenos">1026</span></a>
 </span><span id="L-1027"><a href="#L-1027"><span class="linenos">1027</span></a>
 </span><span id="L-1028"><a href="#L-1028"><span class="linenos">1028</span></a><span class="k">def</span> <span class="nf">empty</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Empty</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>  <span class="c1"># pyright: ignore</span>
-</span><span id="L-1029"><a href="#L-1029"><span class="linenos">1029</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an iterator that yields nothing.</span>
+</span><span id="L-1029"><a href="#L-1029"><span class="linenos">1029</span></a>    <span class="sd">&quot;&quot;&quot;Create an iterator that yields nothing.</span>
 </span><span id="L-1030"><a href="#L-1030"><span class="linenos">1030</span></a>
 </span><span id="L-1031"><a href="#L-1031"><span class="linenos">1031</span></a><span class="sd">    Example</span>
 </span><span id="L-1032"><a href="#L-1032"><span class="linenos">1032</span></a><span class="sd">    -------</span>
@@ -1301,7 +1301,7 @@
 </span><span id="L-1039"><a href="#L-1039"><span class="linenos">1039</span></a>
 </span><span id="L-1040"><a href="#L-1040"><span class="linenos">1040</span></a>
 </span><span id="L-1041"><a href="#L-1041"><span class="linenos">1041</span></a><span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-1042"><a href="#L-1042"><span class="linenos">1042</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an iterator that yields the same `element` number of `count` times.</span>
+</span><span id="L-1042"><a href="#L-1042"><span class="linenos">1042</span></a>    <span class="sd">&quot;&quot;&quot;Returns an iterator that yields the same `element` number of `count` times.</span>
 </span><span id="L-1043"><a href="#L-1043"><span class="linenos">1043</span></a>
 </span><span id="L-1044"><a href="#L-1044"><span class="linenos">1044</span></a><span class="sd">    Example</span>
 </span><span id="L-1045"><a href="#L-1045"><span class="linenos">1045</span></a><span class="sd">    -------</span>
@@ -1317,7 +1317,7 @@
 </span><span id="L-1055"><a href="#L-1055"><span class="linenos">1055</span></a>
 </span><span id="L-1056"><a href="#L-1056"><span class="linenos">1056</span></a>
 </span><span id="L-1057"><a href="#L-1057"><span class="linenos">1057</span></a><span class="k">def</span> <span class="nf">once</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-1058"><a href="#L-1058"><span class="linenos">1058</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an iterator that yields exactly a single item.</span>
+</span><span id="L-1058"><a href="#L-1058"><span class="linenos">1058</span></a>    <span class="sd">&quot;&quot;&quot;Returns an iterator that yields exactly a single item.</span>
 </span><span id="L-1059"><a href="#L-1059"><span class="linenos">1059</span></a>
 </span><span id="L-1060"><a href="#L-1060"><span class="linenos">1060</span></a><span class="sd">    Example</span>
 </span><span id="L-1061"><a href="#L-1061"><span class="linenos">1061</span></a><span class="sd">    -------</span>
@@ -1333,7 +1333,7 @@
 </span><span id="L-1071"><a href="#L-1071"><span class="linenos">1071</span></a><span class="k">def</span> <span class="nf">into_iter</span><span class="p">(</span>
 </span><span id="L-1072"><a href="#L-1072"><span class="linenos">1072</span></a>    <span class="n">iterable</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span>
 </span><span id="L-1073"><a href="#L-1073"><span class="linenos">1073</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="L-1074"><a href="#L-1074"><span class="linenos">1074</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert any iterable into `Iterator[Item]`.</span>
+</span><span id="L-1074"><a href="#L-1074"><span class="linenos">1074</span></a>    <span class="sd">&quot;&quot;&quot;Convert any iterable into `Iterator[Item]`.</span>
 </span><span id="L-1075"><a href="#L-1075"><span class="linenos">1075</span></a>
 </span><span id="L-1076"><a href="#L-1076"><span class="linenos">1076</span></a><span class="sd">    Example</span>
 </span><span id="L-1077"><a href="#L-1077"><span class="linenos">1077</span></a><span class="sd">    -------</span>
@@ -1372,7 +1372,7 @@
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iter-716"><a href="#Iter-716"><span class="linenos">716</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iter-717"><a href="#Iter-717"><span class="linenos">717</span></a><span class="nd">@diagnostic</span>
 </span><span id="Iter-718"><a href="#Iter-718"><span class="linenos">718</span></a><span class="k">class</span> <span class="nc">Iter</span><span class="p">(</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="Iter-719"><a href="#Iter-719"><span class="linenos">719</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;a lazy iterator that has its items ready in-memory.</span>
+</span><span id="Iter-719"><a href="#Iter-719"><span class="linenos">719</span></a>    <span class="sd">&quot;&quot;&quot;a lazy iterator that has its items ready in-memory.</span>
 </span><span id="Iter-720"><a href="#Iter-720"><span class="linenos">720</span></a>
 </span><span id="Iter-721"><a href="#Iter-721"><span class="linenos">721</span></a><span class="sd">    This is similar to Rust `std::slice::Iter&lt;T&gt;` item which iterables can build</span>
 </span><span id="Iter-722"><a href="#Iter-722"><span class="linenos">722</span></a><span class="sd">    from this via `.iter()` method.</span>
@@ -1412,7 +1412,7 @@
 </span><span id="Iter-756"><a href="#Iter-756"><span class="linenos">756</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
 </span><span id="Iter-757"><a href="#Iter-757"><span class="linenos">757</span></a>
 </span><span id="Iter-758"><a href="#Iter-758"><span class="linenos">758</span></a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Self</span><span class="p">:</span>
-</span><span id="Iter-759"><a href="#Iter-759"><span class="linenos">759</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of this iterator.</span>
+</span><span id="Iter-759"><a href="#Iter-759"><span class="linenos">759</span></a>        <span class="sd">&quot;&quot;&quot;Return a copy of this iterator.</span>
 </span><span id="Iter-760"><a href="#Iter-760"><span class="linenos">760</span></a>
 </span><span id="Iter-761"><a href="#Iter-761"><span class="linenos">761</span></a><span class="sd">        ```py</span>
 </span><span id="Iter-762"><a href="#Iter-762"><span class="linenos">762</span></a><span class="sd">        it = Iterator([1, 2, 3])</span>
@@ -1504,14 +1504,14 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">clone</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">clone</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;typing.Self&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Iter.clone-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Iter.clone"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iter.clone-758"><a href="#Iter.clone-758"><span class="linenos">758</span></a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Self</span><span class="p">:</span>
-</span><span id="Iter.clone-759"><a href="#Iter.clone-759"><span class="linenos">759</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of this iterator.</span>
+</span><span id="Iter.clone-759"><a href="#Iter.clone-759"><span class="linenos">759</span></a>        <span class="sd">&quot;&quot;&quot;Return a copy of this iterator.</span>
 </span><span id="Iter.clone-760"><a href="#Iter.clone-760"><span class="linenos">760</span></a>
 </span><span id="Iter.clone-761"><a href="#Iter.clone-761"><span class="linenos">761</span></a><span class="sd">        ```py</span>
 </span><span id="Iter.clone-762"><a href="#Iter.clone-762"><span class="linenos">762</span></a><span class="sd">        it = Iterator([1, 2, 3])</span>
@@ -1594,7 +1594,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-99"><a href="#Iterator-99"><span class="linenos"> 99</span></a>    <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">,</span>
 </span><span id="Iterator-100"><a href="#Iterator-100"><span class="linenos">100</span></a>    <span class="n">_default</span><span class="o">.</span><span class="n">Default</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span>
 </span><span id="Iterator-101"><a href="#Iterator-101"><span class="linenos">101</span></a><span class="p">):</span>
-</span><span id="Iterator-102"><a href="#Iterator-102"><span class="linenos">102</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An abstract interface for dealing with iterators.</span>
+</span><span id="Iterator-102"><a href="#Iterator-102"><span class="linenos">102</span></a>    <span class="sd">&quot;&quot;&quot;An abstract interface for dealing with iterators.</span>
 </span><span id="Iterator-103"><a href="#Iterator-103"><span class="linenos">103</span></a>
 </span><span id="Iterator-104"><a href="#Iterator-104"><span class="linenos">104</span></a><span class="sd">    This is exactly the same trait as `core::iter::Iterator` trait from Rust.</span>
 </span><span id="Iterator-105"><a href="#Iterator-105"><span class="linenos">105</span></a>
@@ -1646,7 +1646,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-151"><a href="#Iterator-151"><span class="linenos">151</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="Iterator-152"><a href="#Iterator-152"><span class="linenos">152</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator-153"><a href="#Iterator-153"><span class="linenos">153</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Empty</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-154"><a href="#Iterator-154"><span class="linenos">154</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default iterator for this type. It returns an empty iterator.</span>
+</span><span id="Iterator-154"><a href="#Iterator-154"><span class="linenos">154</span></a>        <span class="sd">&quot;&quot;&quot;Return the default iterator for this type. It returns an empty iterator.</span>
 </span><span id="Iterator-155"><a href="#Iterator-155"><span class="linenos">155</span></a>
 </span><span id="Iterator-156"><a href="#Iterator-156"><span class="linenos">156</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-157"><a href="#Iterator-157"><span class="linenos">157</span></a><span class="sd">        -------</span>
@@ -1671,7 +1671,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-176"><a href="#Iterator-176"><span class="linenos">176</span></a>    <span class="k">def</span> <span class="nf">collect</span><span class="p">(</span>
 </span><span id="Iterator-177"><a href="#Iterator-177"><span class="linenos">177</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cast</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">OtherItem</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Iterator-178"><a href="#Iterator-178"><span class="linenos">178</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">]:</span>
-</span><span id="Iterator-179"><a href="#Iterator-179"><span class="linenos">179</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Collects all items in the iterator into an immutable sequence.</span>
+</span><span id="Iterator-179"><a href="#Iterator-179"><span class="linenos">179</span></a>        <span class="sd">&quot;&quot;&quot;Collects all items in the iterator into an immutable sequence.</span>
 </span><span id="Iterator-180"><a href="#Iterator-180"><span class="linenos">180</span></a>
 </span><span id="Iterator-181"><a href="#Iterator-181"><span class="linenos">181</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-182"><a href="#Iterator-182"><span class="linenos">182</span></a><span class="sd">        -------</span>
@@ -1696,7 +1696,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-201"><a href="#Iterator-201"><span class="linenos">201</span></a>
 </span><span id="Iterator-202"><a href="#Iterator-202"><span class="linenos">202</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator-203"><a href="#Iterator-203"><span class="linenos">203</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-204"><a href="#Iterator-204"><span class="linenos">204</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
+</span><span id="Iterator-204"><a href="#Iterator-204"><span class="linenos">204</span></a>        <span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
 </span><span id="Iterator-205"><a href="#Iterator-205"><span class="linenos">205</span></a>
 </span><span id="Iterator-206"><a href="#Iterator-206"><span class="linenos">206</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-207"><a href="#Iterator-207"><span class="linenos">207</span></a><span class="sd">        -------</span>
@@ -1711,7 +1711,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-216"><a href="#Iterator-216"><span class="linenos">216</span></a>
 </span><span id="Iterator-217"><a href="#Iterator-217"><span class="linenos">217</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator-218"><a href="#Iterator-218"><span class="linenos">218</span></a>    <span class="k">def</span> <span class="nf">sink</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Iterator-219"><a href="#Iterator-219"><span class="linenos">219</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consume all elements from this iterator, flushing it into the sink.</span>
+</span><span id="Iterator-219"><a href="#Iterator-219"><span class="linenos">219</span></a>        <span class="sd">&quot;&quot;&quot;Consume all elements from this iterator, flushing it into the sink.</span>
 </span><span id="Iterator-220"><a href="#Iterator-220"><span class="linenos">220</span></a>
 </span><span id="Iterator-221"><a href="#Iterator-221"><span class="linenos">221</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-222"><a href="#Iterator-222"><span class="linenos">222</span></a><span class="sd">        -------</span>
@@ -1726,7 +1726,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-231"><a href="#Iterator-231"><span class="linenos">231</span></a>
 </span><span id="Iterator-232"><a href="#Iterator-232"><span class="linenos">232</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator-233"><a href="#Iterator-233"><span class="linenos">233</span></a>    <span class="k">def</span> <span class="nf">raw_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Generator</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-</span><span id="Iterator-234"><a href="#Iterator-234"><span class="linenos">234</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Decompose all elements from this iterator, yielding it one by one</span>
+</span><span id="Iterator-234"><a href="#Iterator-234"><span class="linenos">234</span></a>        <span class="sd">&quot;&quot;&quot;Decompose all elements from this iterator, yielding it one by one</span>
 </span><span id="Iterator-235"><a href="#Iterator-235"><span class="linenos">235</span></a><span class="sd">        as a normal generator.</span>
 </span><span id="Iterator-236"><a href="#Iterator-236"><span class="linenos">236</span></a>
 </span><span id="Iterator-237"><a href="#Iterator-237"><span class="linenos">237</span></a><span class="sd">        This mainly used for objects that needs to satisfy its exact type.</span>
@@ -1747,7 +1747,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-252"><a href="#Iterator-252"><span class="linenos">252</span></a>    <span class="c1">##################</span>
 </span><span id="Iterator-253"><a href="#Iterator-253"><span class="linenos">253</span></a>
 </span><span id="Iterator-254"><a href="#Iterator-254"><span class="linenos">254</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-255"><a href="#Iterator-255"><span class="linenos">255</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Advance the iterator, Returning the next item, `Some(None)` if all items yielded.</span>
+</span><span id="Iterator-255"><a href="#Iterator-255"><span class="linenos">255</span></a>        <span class="sd">&quot;&quot;&quot;Advance the iterator, Returning the next item, `Some(None)` if all items yielded.</span>
 </span><span id="Iterator-256"><a href="#Iterator-256"><span class="linenos">256</span></a>
 </span><span id="Iterator-257"><a href="#Iterator-257"><span class="linenos">257</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-258"><a href="#Iterator-258"><span class="linenos">258</span></a><span class="sd">        -------</span>
@@ -1764,7 +1764,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-269"><a href="#Iterator-269"><span class="linenos">269</span></a>            <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="Iterator-270"><a href="#Iterator-270"><span class="linenos">270</span></a>
 </span><span id="Iterator-271"><a href="#Iterator-271"><span class="linenos">271</span></a>    <span class="k">def</span> <span class="nf">cloned</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cloned</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-272"><a href="#Iterator-272"><span class="linenos">272</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an iterator which shallow copies its elements by reference.</span>
+</span><span id="Iterator-272"><a href="#Iterator-272"><span class="linenos">272</span></a>        <span class="sd">&quot;&quot;&quot;Creates an iterator which shallow copies its elements by reference.</span>
 </span><span id="Iterator-273"><a href="#Iterator-273"><span class="linenos">273</span></a>
 </span><span id="Iterator-274"><a href="#Iterator-274"><span class="linenos">274</span></a><span class="sd">        If you need a copy of the actual iterator and not the elements.</span>
 </span><span id="Iterator-275"><a href="#Iterator-275"><span class="linenos">275</span></a><span class="sd">        use `Iter.clone()`</span>
@@ -1795,7 +1795,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-300"><a href="#Iterator-300"><span class="linenos">300</span></a>        <span class="k">return</span> <span class="n">Cloned</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="Iterator-301"><a href="#Iterator-301"><span class="linenos">301</span></a>
 </span><span id="Iterator-302"><a href="#Iterator-302"><span class="linenos">302</span></a>    <span class="k">def</span> <span class="nf">copied</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Copied</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-303"><a href="#Iterator-303"><span class="linenos">303</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an iterator which copies all of its elements by value.</span>
+</span><span id="Iterator-303"><a href="#Iterator-303"><span class="linenos">303</span></a>        <span class="sd">&quot;&quot;&quot;Creates an iterator which copies all of its elements by value.</span>
 </span><span id="Iterator-304"><a href="#Iterator-304"><span class="linenos">304</span></a>
 </span><span id="Iterator-305"><a href="#Iterator-305"><span class="linenos">305</span></a><span class="sd">        If you only need a copy of the item reference, Use `.cloned()` instead.</span>
 </span><span id="Iterator-306"><a href="#Iterator-306"><span class="linenos">306</span></a>
@@ -1825,7 +1825,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-330"><a href="#Iterator-330"><span class="linenos">330</span></a>        <span class="k">return</span> <span class="n">Copied</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </span><span id="Iterator-331"><a href="#Iterator-331"><span class="linenos">331</span></a>
 </span><span id="Iterator-332"><a href="#Iterator-332"><span class="linenos">332</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">OtherItem</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Map</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]:</span>
-</span><span id="Iterator-333"><a href="#Iterator-333"><span class="linenos">333</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps each item in the iterator to another type.</span>
+</span><span id="Iterator-333"><a href="#Iterator-333"><span class="linenos">333</span></a>        <span class="sd">&quot;&quot;&quot;Maps each item in the iterator to another type.</span>
 </span><span id="Iterator-334"><a href="#Iterator-334"><span class="linenos">334</span></a>
 </span><span id="Iterator-335"><a href="#Iterator-335"><span class="linenos">335</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-336"><a href="#Iterator-336"><span class="linenos">336</span></a><span class="sd">        -------</span>
@@ -1844,7 +1844,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-349"><a href="#Iterator-349"><span class="linenos">349</span></a>        <span class="k">return</span> <span class="n">Map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
 </span><span id="Iterator-350"><a href="#Iterator-350"><span class="linenos">350</span></a>
 </span><span id="Iterator-351"><a href="#Iterator-351"><span class="linenos">351</span></a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Filter</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-352"><a href="#Iterator-352"><span class="linenos">352</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters the iterator to only yield items that match the predicate.</span>
+</span><span id="Iterator-352"><a href="#Iterator-352"><span class="linenos">352</span></a>        <span class="sd">&quot;&quot;&quot;Filters the iterator to only yield items that match the predicate.</span>
 </span><span id="Iterator-353"><a href="#Iterator-353"><span class="linenos">353</span></a>
 </span><span id="Iterator-354"><a href="#Iterator-354"><span class="linenos">354</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-355"><a href="#Iterator-355"><span class="linenos">355</span></a><span class="sd">        -------</span>
@@ -1860,7 +1860,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-365"><a href="#Iterator-365"><span class="linenos">365</span></a>        <span class="k">return</span> <span class="n">Filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">)</span>
 </span><span id="Iterator-366"><a href="#Iterator-366"><span class="linenos">366</span></a>
 </span><span id="Iterator-367"><a href="#Iterator-367"><span class="linenos">367</span></a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Take</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-368"><a href="#Iterator-368"><span class="linenos">368</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the first number of items until the number of items</span>
+</span><span id="Iterator-368"><a href="#Iterator-368"><span class="linenos">368</span></a>        <span class="sd">&quot;&quot;&quot;Take the first number of items until the number of items</span>
 </span><span id="Iterator-369"><a href="#Iterator-369"><span class="linenos">369</span></a><span class="sd">        are yielded or the end of the iterator is exhausted.</span>
 </span><span id="Iterator-370"><a href="#Iterator-370"><span class="linenos">370</span></a>
 </span><span id="Iterator-371"><a href="#Iterator-371"><span class="linenos">371</span></a><span class="sd">        Example</span>
@@ -1877,7 +1877,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-382"><a href="#Iterator-382"><span class="linenos">382</span></a>        <span class="k">return</span> <span class="n">Take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
 </span><span id="Iterator-383"><a href="#Iterator-383"><span class="linenos">383</span></a>
 </span><span id="Iterator-384"><a href="#Iterator-384"><span class="linenos">384</span></a>    <span class="k">def</span> <span class="nf">skip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Skip</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-385"><a href="#Iterator-385"><span class="linenos">385</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Skips the first number of items in the iterator.</span>
+</span><span id="Iterator-385"><a href="#Iterator-385"><span class="linenos">385</span></a>        <span class="sd">&quot;&quot;&quot;Skips the first number of items in the iterator.</span>
 </span><span id="Iterator-386"><a href="#Iterator-386"><span class="linenos">386</span></a>
 </span><span id="Iterator-387"><a href="#Iterator-387"><span class="linenos">387</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-388"><a href="#Iterator-388"><span class="linenos">388</span></a><span class="sd">        -------</span>
@@ -1893,7 +1893,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-398"><a href="#Iterator-398"><span class="linenos">398</span></a>        <span class="k">return</span> <span class="n">Skip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
 </span><span id="Iterator-399"><a href="#Iterator-399"><span class="linenos">399</span></a>
 </span><span id="Iterator-400"><a href="#Iterator-400"><span class="linenos">400</span></a>    <span class="k">def</span> <span class="nf">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Enumerate</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-401"><a href="#Iterator-401"><span class="linenos">401</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new iterator that yields a tuple of the index and item.</span>
+</span><span id="Iterator-401"><a href="#Iterator-401"><span class="linenos">401</span></a>        <span class="sd">&quot;&quot;&quot;Create a new iterator that yields a tuple of the index and item.</span>
 </span><span id="Iterator-402"><a href="#Iterator-402"><span class="linenos">402</span></a>
 </span><span id="Iterator-403"><a href="#Iterator-403"><span class="linenos">403</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-404"><a href="#Iterator-404"><span class="linenos">404</span></a><span class="sd">        -------</span>
@@ -1910,7 +1910,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-415"><a href="#Iterator-415"><span class="linenos">415</span></a>        <span class="k">return</span> <span class="n">Enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
 </span><span id="Iterator-416"><a href="#Iterator-416"><span class="linenos">416</span></a>
 </span><span id="Iterator-417"><a href="#Iterator-417"><span class="linenos">417</span></a>    <span class="k">def</span> <span class="nf">take_while</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TakeWhile</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-418"><a href="#Iterator-418"><span class="linenos">418</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;yields items from the iterator while predicate returns `True`.</span>
+</span><span id="Iterator-418"><a href="#Iterator-418"><span class="linenos">418</span></a>        <span class="sd">&quot;&quot;&quot;yields items from the iterator while predicate returns `True`.</span>
 </span><span id="Iterator-419"><a href="#Iterator-419"><span class="linenos">419</span></a>
 </span><span id="Iterator-420"><a href="#Iterator-420"><span class="linenos">420</span></a><span class="sd">        The rest of the items are discarded as soon as the predicate returns `False`</span>
 </span><span id="Iterator-421"><a href="#Iterator-421"><span class="linenos">421</span></a>
@@ -1933,7 +1933,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-438"><a href="#Iterator-438"><span class="linenos">438</span></a>        <span class="k">return</span> <span class="n">TakeWhile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 </span><span id="Iterator-439"><a href="#Iterator-439"><span class="linenos">439</span></a>
 </span><span id="Iterator-440"><a href="#Iterator-440"><span class="linenos">440</span></a>    <span class="k">def</span> <span class="nf">drop_while</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DropWhile</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-441"><a href="#Iterator-441"><span class="linenos">441</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Yields items from the iterator while predicate returns `False`.</span>
+</span><span id="Iterator-441"><a href="#Iterator-441"><span class="linenos">441</span></a>        <span class="sd">&quot;&quot;&quot;Yields items from the iterator while predicate returns `False`.</span>
 </span><span id="Iterator-442"><a href="#Iterator-442"><span class="linenos">442</span></a>
 </span><span id="Iterator-443"><a href="#Iterator-443"><span class="linenos">443</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-444"><a href="#Iterator-444"><span class="linenos">444</span></a><span class="sd">        -------</span>
@@ -1954,7 +1954,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-459"><a href="#Iterator-459"><span class="linenos">459</span></a>        <span class="k">return</span> <span class="n">DropWhile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 </span><span id="Iterator-460"><a href="#Iterator-460"><span class="linenos">460</span></a>
 </span><span id="Iterator-461"><a href="#Iterator-461"><span class="linenos">461</span></a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Iterator-462"><a href="#Iterator-462"><span class="linenos">462</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `True` if all items in the iterator match the predicate.</span>
+</span><span id="Iterator-462"><a href="#Iterator-462"><span class="linenos">462</span></a>        <span class="sd">&quot;&quot;&quot;Return `True` if all items in the iterator match the predicate.</span>
 </span><span id="Iterator-463"><a href="#Iterator-463"><span class="linenos">463</span></a>
 </span><span id="Iterator-464"><a href="#Iterator-464"><span class="linenos">464</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-465"><a href="#Iterator-465"><span class="linenos">465</span></a><span class="sd">        -------</span>
@@ -1974,7 +1974,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-479"><a href="#Iterator-479"><span class="linenos">479</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">predicate</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
 </span><span id="Iterator-480"><a href="#Iterator-480"><span class="linenos">480</span></a>
 </span><span id="Iterator-481"><a href="#Iterator-481"><span class="linenos">481</span></a>    <span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Iterator-482"><a href="#Iterator-482"><span class="linenos">482</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;`True` if any items in the iterator match the predicate.</span>
+</span><span id="Iterator-482"><a href="#Iterator-482"><span class="linenos">482</span></a>        <span class="sd">&quot;&quot;&quot;`True` if any items in the iterator match the predicate.</span>
 </span><span id="Iterator-483"><a href="#Iterator-483"><span class="linenos">483</span></a>
 </span><span id="Iterator-484"><a href="#Iterator-484"><span class="linenos">484</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-485"><a href="#Iterator-485"><span class="linenos">485</span></a><span class="sd">        -------</span>
@@ -1995,7 +1995,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-500"><a href="#Iterator-500"><span class="linenos">500</span></a>    <span class="k">def</span> <span class="nf">zip</span><span class="p">(</span>
 </span><span id="Iterator-501"><a href="#Iterator-501"><span class="linenos">501</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">]</span>
 </span><span id="Iterator-502"><a href="#Iterator-502"><span class="linenos">502</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]]:</span>
-</span><span id="Iterator-503"><a href="#Iterator-503"><span class="linenos">503</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Zips the iterator with another iterable.</span>
+</span><span id="Iterator-503"><a href="#Iterator-503"><span class="linenos">503</span></a>        <span class="sd">&quot;&quot;&quot;Zips the iterator with another iterable.</span>
 </span><span id="Iterator-504"><a href="#Iterator-504"><span class="linenos">504</span></a>
 </span><span id="Iterator-505"><a href="#Iterator-505"><span class="linenos">505</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-506"><a href="#Iterator-506"><span class="linenos">506</span></a><span class="sd">        -------</span>
@@ -2025,7 +2025,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-530"><a href="#Iterator-530"><span class="linenos">530</span></a>        <span class="n">key</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">_typeshed</span><span class="o">.</span><span class="n">SupportsRichComparison</span><span class="p">],</span>
 </span><span id="Iterator-531"><a href="#Iterator-531"><span class="linenos">531</span></a>        <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="Iterator-532"><a href="#Iterator-532"><span class="linenos">532</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-533"><a href="#Iterator-533"><span class="linenos">533</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sorts the iterator.</span>
+</span><span id="Iterator-533"><a href="#Iterator-533"><span class="linenos">533</span></a>        <span class="sd">&quot;&quot;&quot;Sorts the iterator.</span>
 </span><span id="Iterator-534"><a href="#Iterator-534"><span class="linenos">534</span></a>
 </span><span id="Iterator-535"><a href="#Iterator-535"><span class="linenos">535</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-536"><a href="#Iterator-536"><span class="linenos">536</span></a><span class="sd">        -------</span>
@@ -2050,7 +2050,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-555"><a href="#Iterator-555"><span class="linenos">555</span></a>        <span class="k">return</span> <span class="n">Iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_parts</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">))</span>
 </span><span id="Iterator-556"><a href="#Iterator-556"><span class="linenos">556</span></a>
 </span><span id="Iterator-557"><a href="#Iterator-557"><span class="linenos">557</span></a>    <span class="k">def</span> <span class="nf">reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-558"><a href="#Iterator-558"><span class="linenos">558</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a new iterator that yields the items in the iterator in reverse order.</span>
+</span><span id="Iterator-558"><a href="#Iterator-558"><span class="linenos">558</span></a>        <span class="sd">&quot;&quot;&quot;Returns a new iterator that yields the items in the iterator in reverse order.</span>
 </span><span id="Iterator-559"><a href="#Iterator-559"><span class="linenos">559</span></a>
 </span><span id="Iterator-560"><a href="#Iterator-560"><span class="linenos">560</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-561"><a href="#Iterator-561"><span class="linenos">561</span></a><span class="sd">        -------</span>
@@ -2069,7 +2069,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-574"><a href="#Iterator-574"><span class="linenos">574</span></a>        <span class="k">return</span> <span class="n">Iter</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collect</span><span class="p">()))</span>
 </span><span id="Iterator-575"><a href="#Iterator-575"><span class="linenos">575</span></a>
 </span><span id="Iterator-576"><a href="#Iterator-576"><span class="linenos">576</span></a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Item</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-577"><a href="#Iterator-577"><span class="linenos">577</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a new iterator that yields all items from both iterators.</span>
+</span><span id="Iterator-577"><a href="#Iterator-577"><span class="linenos">577</span></a>        <span class="sd">&quot;&quot;&quot;Returns a new iterator that yields all items from both iterators.</span>
 </span><span id="Iterator-578"><a href="#Iterator-578"><span class="linenos">578</span></a>
 </span><span id="Iterator-579"><a href="#Iterator-579"><span class="linenos">579</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-580"><a href="#Iterator-580"><span class="linenos">580</span></a><span class="sd">        -------</span>
@@ -2095,7 +2095,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-600"><a href="#Iterator-600"><span class="linenos">600</span></a>        <span class="k">return</span> <span class="n">Iter</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_parts</span><span class="p">(),</span> <span class="n">other</span><span class="p">))</span>
 </span><span id="Iterator-601"><a href="#Iterator-601"><span class="linenos">601</span></a>
 </span><span id="Iterator-602"><a href="#Iterator-602"><span class="linenos">602</span></a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-603"><a href="#Iterator-603"><span class="linenos">603</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the first item in the iterator.</span>
+</span><span id="Iterator-603"><a href="#Iterator-603"><span class="linenos">603</span></a>        <span class="sd">&quot;&quot;&quot;Returns the first item in the iterator.</span>
 </span><span id="Iterator-604"><a href="#Iterator-604"><span class="linenos">604</span></a>
 </span><span id="Iterator-605"><a href="#Iterator-605"><span class="linenos">605</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-606"><a href="#Iterator-606"><span class="linenos">606</span></a><span class="sd">        -------</span>
@@ -2107,7 +2107,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-612"><a href="#Iterator-612"><span class="linenos">612</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 </span><span id="Iterator-613"><a href="#Iterator-613"><span class="linenos">613</span></a>
 </span><span id="Iterator-614"><a href="#Iterator-614"><span class="linenos">614</span></a>    <span class="k">def</span> <span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator-615"><a href="#Iterator-615"><span class="linenos">615</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the last item in the iterator.</span>
+</span><span id="Iterator-615"><a href="#Iterator-615"><span class="linenos">615</span></a>        <span class="sd">&quot;&quot;&quot;Returns the last item in the iterator.</span>
 </span><span id="Iterator-616"><a href="#Iterator-616"><span class="linenos">616</span></a>
 </span><span id="Iterator-617"><a href="#Iterator-617"><span class="linenos">617</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-618"><a href="#Iterator-618"><span class="linenos">618</span></a><span class="sd">        -------</span>
@@ -2119,7 +2119,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-624"><a href="#Iterator-624"><span class="linenos">624</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reversed</span><span class="p">()</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
 </span><span id="Iterator-625"><a href="#Iterator-625"><span class="linenos">625</span></a>
 </span><span id="Iterator-626"><a href="#Iterator-626"><span class="linenos">626</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Iterator-627"><a href="#Iterator-627"><span class="linenos">627</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the count of elements in memory this iterator has.</span>
+</span><span id="Iterator-627"><a href="#Iterator-627"><span class="linenos">627</span></a>        <span class="sd">&quot;&quot;&quot;Return the count of elements in memory this iterator has.</span>
 </span><span id="Iterator-628"><a href="#Iterator-628"><span class="linenos">628</span></a>
 </span><span id="Iterator-629"><a href="#Iterator-629"><span class="linenos">629</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-630"><a href="#Iterator-630"><span class="linenos">630</span></a><span class="sd">        -------</span>
@@ -2135,7 +2135,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-640"><a href="#Iterator-640"><span class="linenos">640</span></a>        <span class="k">return</span> <span class="n">count</span>
 </span><span id="Iterator-641"><a href="#Iterator-641"><span class="linenos">641</span></a>
 </span><span id="Iterator-642"><a href="#Iterator-642"><span class="linenos">642</span></a>    <span class="k">def</span> <span class="nf">for_each</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Iterator-643"><a href="#Iterator-643"><span class="linenos">643</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calls `func` on each item in the iterator.</span>
+</span><span id="Iterator-643"><a href="#Iterator-643"><span class="linenos">643</span></a>        <span class="sd">&quot;&quot;&quot;Calls `func` on each item in the iterator.</span>
 </span><span id="Iterator-644"><a href="#Iterator-644"><span class="linenos">644</span></a>
 </span><span id="Iterator-645"><a href="#Iterator-645"><span class="linenos">645</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-646"><a href="#Iterator-646"><span class="linenos">646</span></a><span class="sd">        -------</span>
@@ -2161,7 +2161,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-666"><a href="#Iterator-666"><span class="linenos">666</span></a>            <span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]</span>
 </span><span id="Iterator-667"><a href="#Iterator-667"><span class="linenos">667</span></a>        <span class="p">],</span>
 </span><span id="Iterator-668"><a href="#Iterator-668"><span class="linenos">668</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">],</span> <span class="n">futures</span><span class="o">.</span><span class="n">SpawnError</span><span class="p">]:</span>
-</span><span id="Iterator-669"><a href="#Iterator-669"><span class="linenos">669</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calls the async function on each item in the iterator concurrently.</span>
+</span><span id="Iterator-669"><a href="#Iterator-669"><span class="linenos">669</span></a>        <span class="sd">&quot;&quot;&quot;Calls the async function on each item in the iterator concurrently.</span>
 </span><span id="Iterator-670"><a href="#Iterator-670"><span class="linenos">670</span></a>
 </span><span id="Iterator-671"><a href="#Iterator-671"><span class="linenos">671</span></a><span class="sd">        Example</span>
 </span><span id="Iterator-672"><a href="#Iterator-672"><span class="linenos">672</span></a><span class="sd">        -------</span>
@@ -2190,7 +2190,7 @@ The items to iterate over. This can be anything that implements <code>__iter__</
 </span><span id="Iterator-695"><a href="#Iterator-695"><span class="linenos">695</span></a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">__</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="Iterator-696"><a href="#Iterator-696"><span class="linenos">696</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
 </span><span id="Iterator-697"><a href="#Iterator-697"><span class="linenos">697</span></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> doesn&#39;t support item assignment.&quot;</span>
-</span><span id="Iterator-698"><a href="#Iterator-698"><span class="linenos">698</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="Iterator-698"><a href="#Iterator-698"><span class="linenos">698</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="Iterator-699"><a href="#Iterator-699"><span class="linenos">699</span></a>
 </span><span id="Iterator-700"><a href="#Iterator-700"><span class="linenos">700</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="Iterator-701"><a href="#Iterator-701"><span class="linenos">701</span></a>        <span class="k">return</span> <span class="s2">&quot;&lt;Iterator&gt;&quot;</span>
@@ -2268,7 +2268,7 @@ and type hints.</p>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.default-151"><a href="#Iterator.default-151"><span class="linenos">151</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="Iterator.default-152"><a href="#Iterator.default-152"><span class="linenos">152</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator.default-153"><a href="#Iterator.default-153"><span class="linenos">153</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Empty</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.default-154"><a href="#Iterator.default-154"><span class="linenos">154</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default iterator for this type. It returns an empty iterator.</span>
+</span><span id="Iterator.default-154"><a href="#Iterator.default-154"><span class="linenos">154</span></a>        <span class="sd">&quot;&quot;&quot;Return the default iterator for this type. It returns an empty iterator.</span>
 </span><span id="Iterator.default-155"><a href="#Iterator.default-155"><span class="linenos">155</span></a>
 </span><span id="Iterator.default-156"><a href="#Iterator.default-156"><span class="linenos">156</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.default-157"><a href="#Iterator.default-157"><span class="linenos">157</span></a><span class="sd">        -------</span>
@@ -2310,7 +2310,7 @@ and type hints.</p>
 </span><span id="Iterator.collect-176"><a href="#Iterator.collect-176"><span class="linenos">176</span></a>    <span class="k">def</span> <span class="nf">collect</span><span class="p">(</span>
 </span><span id="Iterator.collect-177"><a href="#Iterator.collect-177"><span class="linenos">177</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cast</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">OtherItem</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Iterator.collect-178"><a href="#Iterator.collect-178"><span class="linenos">178</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">]:</span>
-</span><span id="Iterator.collect-179"><a href="#Iterator.collect-179"><span class="linenos">179</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Collects all items in the iterator into an immutable sequence.</span>
+</span><span id="Iterator.collect-179"><a href="#Iterator.collect-179"><span class="linenos">179</span></a>        <span class="sd">&quot;&quot;&quot;Collects all items in the iterator into an immutable sequence.</span>
 </span><span id="Iterator.collect-180"><a href="#Iterator.collect-180"><span class="linenos">180</span></a>
 </span><span id="Iterator.collect-181"><a href="#Iterator.collect-181"><span class="linenos">181</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.collect-182"><a href="#Iterator.collect-182"><span class="linenos">182</span></a><span class="sd">        -------</span>
@@ -2365,7 +2365,7 @@ If not provided the items will be returned as it's original type.</li>
                     <div class="decorator">@typing.final</div>
 
         <span class="def">def</span>
-        <span class="name">to_vec</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">sain</span><span class="o">.</span><span class="n">dyn</span><span class="o">.</span><span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">[</span><span class="o">~</span><span class="n">Item</span><span class="p">]</span>:</span></span>
+        <span class="name">to_vec</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="collections/vec.html#Vec">sain.collections.vec.Vec</a></span><span class="p">[</span><span class="o">~</span><span class="n">Item</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Iterator.to_vec-view-source"><span>View Source</span></label>
 
@@ -2373,7 +2373,7 @@ If not provided the items will be returned as it's original type.</li>
     <a class="headerlink" href="#Iterator.to_vec"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.to_vec-202"><a href="#Iterator.to_vec-202"><span class="linenos">202</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator.to_vec-203"><a href="#Iterator.to_vec-203"><span class="linenos">203</span></a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">vec</span><span class="o">.</span><span class="n">Vec</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.to_vec-204"><a href="#Iterator.to_vec-204"><span class="linenos">204</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
+</span><span id="Iterator.to_vec-204"><a href="#Iterator.to_vec-204"><span class="linenos">204</span></a>        <span class="sd">&quot;&quot;&quot;Convert this iterator into `Vec[T]`.</span>
 </span><span id="Iterator.to_vec-205"><a href="#Iterator.to_vec-205"><span class="linenos">205</span></a>
 </span><span id="Iterator.to_vec-206"><a href="#Iterator.to_vec-206"><span class="linenos">206</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.to_vec-207"><a href="#Iterator.to_vec-207"><span class="linenos">207</span></a><span class="sd">        -------</span>
@@ -2417,7 +2417,7 @@ If not provided the items will be returned as it's original type.</li>
     <a class="headerlink" href="#Iterator.sink"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.sink-217"><a href="#Iterator.sink-217"><span class="linenos">217</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator.sink-218"><a href="#Iterator.sink-218"><span class="linenos">218</span></a>    <span class="k">def</span> <span class="nf">sink</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Iterator.sink-219"><a href="#Iterator.sink-219"><span class="linenos">219</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consume all elements from this iterator, flushing it into the sink.</span>
+</span><span id="Iterator.sink-219"><a href="#Iterator.sink-219"><span class="linenos">219</span></a>        <span class="sd">&quot;&quot;&quot;Consume all elements from this iterator, flushing it into the sink.</span>
 </span><span id="Iterator.sink-220"><a href="#Iterator.sink-220"><span class="linenos">220</span></a>
 </span><span id="Iterator.sink-221"><a href="#Iterator.sink-221"><span class="linenos">221</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.sink-222"><a href="#Iterator.sink-222"><span class="linenos">222</span></a><span class="sd">        -------</span>
@@ -2460,7 +2460,7 @@ If not provided the items will be returned as it's original type.</li>
     <a class="headerlink" href="#Iterator.raw_parts"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.raw_parts-232"><a href="#Iterator.raw_parts-232"><span class="linenos">232</span></a>    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Iterator.raw_parts-233"><a href="#Iterator.raw_parts-233"><span class="linenos">233</span></a>    <span class="k">def</span> <span class="nf">raw_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Generator</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-</span><span id="Iterator.raw_parts-234"><a href="#Iterator.raw_parts-234"><span class="linenos">234</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Decompose all elements from this iterator, yielding it one by one</span>
+</span><span id="Iterator.raw_parts-234"><a href="#Iterator.raw_parts-234"><span class="linenos">234</span></a>        <span class="sd">&quot;&quot;&quot;Decompose all elements from this iterator, yielding it one by one</span>
 </span><span id="Iterator.raw_parts-235"><a href="#Iterator.raw_parts-235"><span class="linenos">235</span></a><span class="sd">        as a normal generator.</span>
 </span><span id="Iterator.raw_parts-236"><a href="#Iterator.raw_parts-236"><span class="linenos">236</span></a>
 </span><span id="Iterator.raw_parts-237"><a href="#Iterator.raw_parts-237"><span class="linenos">237</span></a><span class="sd">        This mainly used for objects that needs to satisfy its exact type.</span>
@@ -2507,7 +2507,7 @@ as a normal generator.</p>
     </div>
     <a class="headerlink" href="#Iterator.next"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.next-254"><a href="#Iterator.next-254"><span class="linenos">254</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.next-255"><a href="#Iterator.next-255"><span class="linenos">255</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Advance the iterator, Returning the next item, `Some(None)` if all items yielded.</span>
+</span><span id="Iterator.next-255"><a href="#Iterator.next-255"><span class="linenos">255</span></a>        <span class="sd">&quot;&quot;&quot;Advance the iterator, Returning the next item, `Some(None)` if all items yielded.</span>
 </span><span id="Iterator.next-256"><a href="#Iterator.next-256"><span class="linenos">256</span></a>
 </span><span id="Iterator.next-257"><a href="#Iterator.next-257"><span class="linenos">257</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.next-258"><a href="#Iterator.next-258"><span class="linenos">258</span></a><span class="sd">        -------</span>
@@ -2552,7 +2552,7 @@ as a normal generator.</p>
     </div>
     <a class="headerlink" href="#Iterator.cloned"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.cloned-271"><a href="#Iterator.cloned-271"><span class="linenos">271</span></a>    <span class="k">def</span> <span class="nf">cloned</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cloned</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.cloned-272"><a href="#Iterator.cloned-272"><span class="linenos">272</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an iterator which shallow copies its elements by reference.</span>
+</span><span id="Iterator.cloned-272"><a href="#Iterator.cloned-272"><span class="linenos">272</span></a>        <span class="sd">&quot;&quot;&quot;Creates an iterator which shallow copies its elements by reference.</span>
 </span><span id="Iterator.cloned-273"><a href="#Iterator.cloned-273"><span class="linenos">273</span></a>
 </span><span id="Iterator.cloned-274"><a href="#Iterator.cloned-274"><span class="linenos">274</span></a><span class="sd">        If you need a copy of the actual iterator and not the elements.</span>
 </span><span id="Iterator.cloned-275"><a href="#Iterator.cloned-275"><span class="linenos">275</span></a><span class="sd">        use `Iter.clone()`</span>
@@ -2631,7 +2631,7 @@ on each item that is being yielded.</p>
     </div>
     <a class="headerlink" href="#Iterator.copied"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.copied-302"><a href="#Iterator.copied-302"><span class="linenos">302</span></a>    <span class="k">def</span> <span class="nf">copied</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Copied</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.copied-303"><a href="#Iterator.copied-303"><span class="linenos">303</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an iterator which copies all of its elements by value.</span>
+</span><span id="Iterator.copied-303"><a href="#Iterator.copied-303"><span class="linenos">303</span></a>        <span class="sd">&quot;&quot;&quot;Creates an iterator which copies all of its elements by value.</span>
 </span><span id="Iterator.copied-304"><a href="#Iterator.copied-304"><span class="linenos">304</span></a>
 </span><span id="Iterator.copied-305"><a href="#Iterator.copied-305"><span class="linenos">305</span></a><span class="sd">        If you only need a copy of the item reference, Use `.cloned()` instead.</span>
 </span><span id="Iterator.copied-306"><a href="#Iterator.copied-306"><span class="linenos">306</span></a>
@@ -2708,7 +2708,7 @@ on each item that is being yielded.</p>
     </div>
     <a class="headerlink" href="#Iterator.map"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.map-332"><a href="#Iterator.map-332"><span class="linenos">332</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">OtherItem</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Map</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]:</span>
-</span><span id="Iterator.map-333"><a href="#Iterator.map-333"><span class="linenos">333</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps each item in the iterator to another type.</span>
+</span><span id="Iterator.map-333"><a href="#Iterator.map-333"><span class="linenos">333</span></a>        <span class="sd">&quot;&quot;&quot;Maps each item in the iterator to another type.</span>
 </span><span id="Iterator.map-334"><a href="#Iterator.map-334"><span class="linenos">334</span></a>
 </span><span id="Iterator.map-335"><a href="#Iterator.map-335"><span class="linenos">335</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.map-336"><a href="#Iterator.map-336"><span class="linenos">336</span></a><span class="sd">        -------</span>
@@ -2762,7 +2762,7 @@ The function to map each item in the iterator to the other type.</li>
     </div>
     <a class="headerlink" href="#Iterator.filter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.filter-351"><a href="#Iterator.filter-351"><span class="linenos">351</span></a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Filter</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.filter-352"><a href="#Iterator.filter-352"><span class="linenos">352</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters the iterator to only yield items that match the predicate.</span>
+</span><span id="Iterator.filter-352"><a href="#Iterator.filter-352"><span class="linenos">352</span></a>        <span class="sd">&quot;&quot;&quot;Filters the iterator to only yield items that match the predicate.</span>
 </span><span id="Iterator.filter-353"><a href="#Iterator.filter-353"><span class="linenos">353</span></a>
 </span><span id="Iterator.filter-354"><a href="#Iterator.filter-354"><span class="linenos">354</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.filter-355"><a href="#Iterator.filter-355"><span class="linenos">355</span></a><span class="sd">        -------</span>
@@ -2808,7 +2808,7 @@ The function to map each item in the iterator to the other type.</li>
     </div>
     <a class="headerlink" href="#Iterator.take"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.take-367"><a href="#Iterator.take-367"><span class="linenos">367</span></a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Take</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.take-368"><a href="#Iterator.take-368"><span class="linenos">368</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the first number of items until the number of items</span>
+</span><span id="Iterator.take-368"><a href="#Iterator.take-368"><span class="linenos">368</span></a>        <span class="sd">&quot;&quot;&quot;Take the first number of items until the number of items</span>
 </span><span id="Iterator.take-369"><a href="#Iterator.take-369"><span class="linenos">369</span></a><span class="sd">        are yielded or the end of the iterator is exhausted.</span>
 </span><span id="Iterator.take-370"><a href="#Iterator.take-370"><span class="linenos">370</span></a>
 </span><span id="Iterator.take-371"><a href="#Iterator.take-371"><span class="linenos">371</span></a><span class="sd">        Example</span>
@@ -2856,7 +2856,7 @@ are yielded or the end of the iterator is exhausted.</p>
     </div>
     <a class="headerlink" href="#Iterator.skip"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.skip-384"><a href="#Iterator.skip-384"><span class="linenos">384</span></a>    <span class="k">def</span> <span class="nf">skip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Skip</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.skip-385"><a href="#Iterator.skip-385"><span class="linenos">385</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Skips the first number of items in the iterator.</span>
+</span><span id="Iterator.skip-385"><a href="#Iterator.skip-385"><span class="linenos">385</span></a>        <span class="sd">&quot;&quot;&quot;Skips the first number of items in the iterator.</span>
 </span><span id="Iterator.skip-386"><a href="#Iterator.skip-386"><span class="linenos">386</span></a>
 </span><span id="Iterator.skip-387"><a href="#Iterator.skip-387"><span class="linenos">387</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.skip-388"><a href="#Iterator.skip-388"><span class="linenos">388</span></a><span class="sd">        -------</span>
@@ -2902,7 +2902,7 @@ are yielded or the end of the iterator is exhausted.</p>
     </div>
     <a class="headerlink" href="#Iterator.enumerate"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.enumerate-400"><a href="#Iterator.enumerate-400"><span class="linenos">400</span></a>    <span class="k">def</span> <span class="nf">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Enumerate</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.enumerate-401"><a href="#Iterator.enumerate-401"><span class="linenos">401</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new iterator that yields a tuple of the index and item.</span>
+</span><span id="Iterator.enumerate-401"><a href="#Iterator.enumerate-401"><span class="linenos">401</span></a>        <span class="sd">&quot;&quot;&quot;Create a new iterator that yields a tuple of the index and item.</span>
 </span><span id="Iterator.enumerate-402"><a href="#Iterator.enumerate-402"><span class="linenos">402</span></a>
 </span><span id="Iterator.enumerate-403"><a href="#Iterator.enumerate-403"><span class="linenos">403</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.enumerate-404"><a href="#Iterator.enumerate-404"><span class="linenos">404</span></a><span class="sd">        -------</span>
@@ -2950,7 +2950,7 @@ are yielded or the end of the iterator is exhausted.</p>
     </div>
     <a class="headerlink" href="#Iterator.take_while"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.take_while-417"><a href="#Iterator.take_while-417"><span class="linenos">417</span></a>    <span class="k">def</span> <span class="nf">take_while</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TakeWhile</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.take_while-418"><a href="#Iterator.take_while-418"><span class="linenos">418</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;yields items from the iterator while predicate returns `True`.</span>
+</span><span id="Iterator.take_while-418"><a href="#Iterator.take_while-418"><span class="linenos">418</span></a>        <span class="sd">&quot;&quot;&quot;yields items from the iterator while predicate returns `True`.</span>
 </span><span id="Iterator.take_while-419"><a href="#Iterator.take_while-419"><span class="linenos">419</span></a>
 </span><span id="Iterator.take_while-420"><a href="#Iterator.take_while-420"><span class="linenos">420</span></a><span class="sd">        The rest of the items are discarded as soon as the predicate returns `False`</span>
 </span><span id="Iterator.take_while-421"><a href="#Iterator.take_while-421"><span class="linenos">421</span></a>
@@ -3012,7 +3012,7 @@ The function to predicate each item in the iterator.</li>
     </div>
     <a class="headerlink" href="#Iterator.drop_while"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.drop_while-440"><a href="#Iterator.drop_while-440"><span class="linenos">440</span></a>    <span class="k">def</span> <span class="nf">drop_while</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DropWhile</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.drop_while-441"><a href="#Iterator.drop_while-441"><span class="linenos">441</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Yields items from the iterator while predicate returns `False`.</span>
+</span><span id="Iterator.drop_while-441"><a href="#Iterator.drop_while-441"><span class="linenos">441</span></a>        <span class="sd">&quot;&quot;&quot;Yields items from the iterator while predicate returns `False`.</span>
 </span><span id="Iterator.drop_while-442"><a href="#Iterator.drop_while-442"><span class="linenos">442</span></a>
 </span><span id="Iterator.drop_while-443"><a href="#Iterator.drop_while-443"><span class="linenos">443</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.drop_while-444"><a href="#Iterator.drop_while-444"><span class="linenos">444</span></a><span class="sd">        -------</span>
@@ -3070,7 +3070,7 @@ The function to predicate each item in the iterator.</li>
     </div>
     <a class="headerlink" href="#Iterator.all"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.all-461"><a href="#Iterator.all-461"><span class="linenos">461</span></a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Iterator.all-462"><a href="#Iterator.all-462"><span class="linenos">462</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return `True` if all items in the iterator match the predicate.</span>
+</span><span id="Iterator.all-462"><a href="#Iterator.all-462"><span class="linenos">462</span></a>        <span class="sd">&quot;&quot;&quot;Return `True` if all items in the iterator match the predicate.</span>
 </span><span id="Iterator.all-463"><a href="#Iterator.all-463"><span class="linenos">463</span></a>
 </span><span id="Iterator.all-464"><a href="#Iterator.all-464"><span class="linenos">464</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.all-465"><a href="#Iterator.all-465"><span class="linenos">465</span></a><span class="sd">        -------</span>
@@ -3126,7 +3126,7 @@ The function to test each item in the iterator.</li>
     </div>
     <a class="headerlink" href="#Iterator.any"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.any-481"><a href="#Iterator.any-481"><span class="linenos">481</span></a>    <span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Iterator.any-482"><a href="#Iterator.any-482"><span class="linenos">482</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;`True` if any items in the iterator match the predicate.</span>
+</span><span id="Iterator.any-482"><a href="#Iterator.any-482"><span class="linenos">482</span></a>        <span class="sd">&quot;&quot;&quot;`True` if any items in the iterator match the predicate.</span>
 </span><span id="Iterator.any-483"><a href="#Iterator.any-483"><span class="linenos">483</span></a>
 </span><span id="Iterator.any-484"><a href="#Iterator.any-484"><span class="linenos">484</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.any-485"><a href="#Iterator.any-485"><span class="linenos">485</span></a><span class="sd">        -------</span>
@@ -3182,7 +3182,7 @@ The function to test each item in the iterator.</li>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.zip-500"><a href="#Iterator.zip-500"><span class="linenos">500</span></a>    <span class="k">def</span> <span class="nf">zip</span><span class="p">(</span>
 </span><span id="Iterator.zip-501"><a href="#Iterator.zip-501"><span class="linenos">501</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">]</span>
 </span><span id="Iterator.zip-502"><a href="#Iterator.zip-502"><span class="linenos">502</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]]:</span>
-</span><span id="Iterator.zip-503"><a href="#Iterator.zip-503"><span class="linenos">503</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Zips the iterator with another iterable.</span>
+</span><span id="Iterator.zip-503"><a href="#Iterator.zip-503"><span class="linenos">503</span></a>        <span class="sd">&quot;&quot;&quot;Zips the iterator with another iterable.</span>
 </span><span id="Iterator.zip-504"><a href="#Iterator.zip-504"><span class="linenos">504</span></a>
 </span><span id="Iterator.zip-505"><a href="#Iterator.zip-505"><span class="linenos">505</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.zip-506"><a href="#Iterator.zip-506"><span class="linenos">506</span></a><span class="sd">        -------</span>
@@ -3253,7 +3253,7 @@ The iterable to zip with.</li>
 </span><span id="Iterator.sort-530"><a href="#Iterator.sort-530"><span class="linenos">530</span></a>        <span class="n">key</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">_typeshed</span><span class="o">.</span><span class="n">SupportsRichComparison</span><span class="p">],</span>
 </span><span id="Iterator.sort-531"><a href="#Iterator.sort-531"><span class="linenos">531</span></a>        <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="Iterator.sort-532"><a href="#Iterator.sort-532"><span class="linenos">532</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.sort-533"><a href="#Iterator.sort-533"><span class="linenos">533</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sorts the iterator.</span>
+</span><span id="Iterator.sort-533"><a href="#Iterator.sort-533"><span class="linenos">533</span></a>        <span class="sd">&quot;&quot;&quot;Sorts the iterator.</span>
 </span><span id="Iterator.sort-534"><a href="#Iterator.sort-534"><span class="linenos">534</span></a>
 </span><span id="Iterator.sort-535"><a href="#Iterator.sort-535"><span class="linenos">535</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.sort-536"><a href="#Iterator.sort-536"><span class="linenos">536</span></a><span class="sd">        -------</span>
@@ -3318,7 +3318,7 @@ Whether to reverse the sort.</li>
     </div>
     <a class="headerlink" href="#Iterator.reversed"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.reversed-557"><a href="#Iterator.reversed-557"><span class="linenos">557</span></a>    <span class="k">def</span> <span class="nf">reversed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.reversed-558"><a href="#Iterator.reversed-558"><span class="linenos">558</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a new iterator that yields the items in the iterator in reverse order.</span>
+</span><span id="Iterator.reversed-558"><a href="#Iterator.reversed-558"><span class="linenos">558</span></a>        <span class="sd">&quot;&quot;&quot;Returns a new iterator that yields the items in the iterator in reverse order.</span>
 </span><span id="Iterator.reversed-559"><a href="#Iterator.reversed-559"><span class="linenos">559</span></a>
 </span><span id="Iterator.reversed-560"><a href="#Iterator.reversed-560"><span class="linenos">560</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.reversed-561"><a href="#Iterator.reversed-561"><span class="linenos">561</span></a><span class="sd">        -------</span>
@@ -3368,7 +3368,7 @@ Whether to reverse the sort.</li>
     </div>
     <a class="headerlink" href="#Iterator.union"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.union-576"><a href="#Iterator.union-576"><span class="linenos">576</span></a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Item</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.union-577"><a href="#Iterator.union-577"><span class="linenos">577</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a new iterator that yields all items from both iterators.</span>
+</span><span id="Iterator.union-577"><a href="#Iterator.union-577"><span class="linenos">577</span></a>        <span class="sd">&quot;&quot;&quot;Returns a new iterator that yields all items from both iterators.</span>
 </span><span id="Iterator.union-578"><a href="#Iterator.union-578"><span class="linenos">578</span></a>
 </span><span id="Iterator.union-579"><a href="#Iterator.union-579"><span class="linenos">579</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.union-580"><a href="#Iterator.union-580"><span class="linenos">580</span></a><span class="sd">        -------</span>
@@ -3436,7 +3436,7 @@ The iterable to union with.</li>
     </div>
     <a class="headerlink" href="#Iterator.first"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.first-602"><a href="#Iterator.first-602"><span class="linenos">602</span></a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.first-603"><a href="#Iterator.first-603"><span class="linenos">603</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the first item in the iterator.</span>
+</span><span id="Iterator.first-603"><a href="#Iterator.first-603"><span class="linenos">603</span></a>        <span class="sd">&quot;&quot;&quot;Returns the first item in the iterator.</span>
 </span><span id="Iterator.first-604"><a href="#Iterator.first-604"><span class="linenos">604</span></a>
 </span><span id="Iterator.first-605"><a href="#Iterator.first-605"><span class="linenos">605</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.first-606"><a href="#Iterator.first-606"><span class="linenos">606</span></a><span class="sd">        -------</span>
@@ -3474,7 +3474,7 @@ The iterable to union with.</li>
     </div>
     <a class="headerlink" href="#Iterator.last"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.last-614"><a href="#Iterator.last-614"><span class="linenos">614</span></a>    <span class="k">def</span> <span class="nf">last</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="Iterator.last-615"><a href="#Iterator.last-615"><span class="linenos">615</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the last item in the iterator.</span>
+</span><span id="Iterator.last-615"><a href="#Iterator.last-615"><span class="linenos">615</span></a>        <span class="sd">&quot;&quot;&quot;Returns the last item in the iterator.</span>
 </span><span id="Iterator.last-616"><a href="#Iterator.last-616"><span class="linenos">616</span></a>
 </span><span id="Iterator.last-617"><a href="#Iterator.last-617"><span class="linenos">617</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.last-618"><a href="#Iterator.last-618"><span class="linenos">618</span></a><span class="sd">        -------</span>
@@ -3512,7 +3512,7 @@ The iterable to union with.</li>
     </div>
     <a class="headerlink" href="#Iterator.count"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.count-626"><a href="#Iterator.count-626"><span class="linenos">626</span></a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Iterator.count-627"><a href="#Iterator.count-627"><span class="linenos">627</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the count of elements in memory this iterator has.</span>
+</span><span id="Iterator.count-627"><a href="#Iterator.count-627"><span class="linenos">627</span></a>        <span class="sd">&quot;&quot;&quot;Return the count of elements in memory this iterator has.</span>
 </span><span id="Iterator.count-628"><a href="#Iterator.count-628"><span class="linenos">628</span></a>
 </span><span id="Iterator.count-629"><a href="#Iterator.count-629"><span class="linenos">629</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.count-630"><a href="#Iterator.count-630"><span class="linenos">630</span></a><span class="sd">        -------</span>
@@ -3554,7 +3554,7 @@ The iterable to union with.</li>
     </div>
     <a class="headerlink" href="#Iterator.for_each"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Iterator.for_each-642"><a href="#Iterator.for_each-642"><span class="linenos">642</span></a>    <span class="k">def</span> <span class="nf">for_each</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Item</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Iterator.for_each-643"><a href="#Iterator.for_each-643"><span class="linenos">643</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calls `func` on each item in the iterator.</span>
+</span><span id="Iterator.for_each-643"><a href="#Iterator.for_each-643"><span class="linenos">643</span></a>        <span class="sd">&quot;&quot;&quot;Calls `func` on each item in the iterator.</span>
 </span><span id="Iterator.for_each-644"><a href="#Iterator.for_each-644"><span class="linenos">644</span></a>
 </span><span id="Iterator.for_each-645"><a href="#Iterator.for_each-645"><span class="linenos">645</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.for_each-646"><a href="#Iterator.for_each-646"><span class="linenos">646</span></a><span class="sd">        -------</span>
@@ -3616,7 +3616,7 @@ The function to call on each item in the iterator.</li>
 </span><span id="Iterator.async_for_each-666"><a href="#Iterator.async_for_each-666"><span class="linenos">666</span></a>            <span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">]</span>
 </span><span id="Iterator.async_for_each-667"><a href="#Iterator.async_for_each-667"><span class="linenos">667</span></a>        <span class="p">],</span>
 </span><span id="Iterator.async_for_each-668"><a href="#Iterator.async_for_each-668"><span class="linenos">668</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">OtherItem</span><span class="p">],</span> <span class="n">futures</span><span class="o">.</span><span class="n">SpawnError</span><span class="p">]:</span>
-</span><span id="Iterator.async_for_each-669"><a href="#Iterator.async_for_each-669"><span class="linenos">669</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calls the async function on each item in the iterator concurrently.</span>
+</span><span id="Iterator.async_for_each-669"><a href="#Iterator.async_for_each-669"><span class="linenos">669</span></a>        <span class="sd">&quot;&quot;&quot;Calls the async function on each item in the iterator concurrently.</span>
 </span><span id="Iterator.async_for_each-670"><a href="#Iterator.async_for_each-670"><span class="linenos">670</span></a>
 </span><span id="Iterator.async_for_each-671"><a href="#Iterator.async_for_each-671"><span class="linenos">671</span></a><span class="sd">        Example</span>
 </span><span id="Iterator.async_for_each-672"><a href="#Iterator.async_for_each-672"><span class="linenos">672</span></a><span class="sd">        -------</span>
@@ -3683,7 +3683,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#Cloned"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Cloned-789"><a href="#Cloned-789"><span class="linenos">789</span></a><span class="nd">@diagnostic</span>
 </span><span id="Cloned-790"><a href="#Cloned-790"><span class="linenos">790</span></a><span class="k">class</span> <span class="nc">Cloned</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="Cloned-791"><a href="#Cloned-791"><span class="linenos">791</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that copies the elements from an underlying iterator.</span>
+</span><span id="Cloned-791"><a href="#Cloned-791"><span class="linenos">791</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that copies the elements from an underlying iterator.</span>
 </span><span id="Cloned-792"><a href="#Cloned-792"><span class="linenos">792</span></a>
 </span><span id="Cloned-793"><a href="#Cloned-793"><span class="linenos">793</span></a><span class="sd">    This iterator is created by the `Iterator.cloned` method.</span>
 </span><span id="Cloned-794"><a href="#Cloned-794"><span class="linenos">794</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -3778,7 +3778,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#Copied"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Copied-812"><a href="#Copied-812"><span class="linenos">812</span></a><span class="nd">@diagnostic</span>
 </span><span id="Copied-813"><a href="#Copied-813"><span class="linenos">813</span></a><span class="k">class</span> <span class="nc">Copied</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="Copied-814"><a href="#Copied-814"><span class="linenos">814</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that deeply-copies the elements from an underlying iterator.</span>
+</span><span id="Copied-814"><a href="#Copied-814"><span class="linenos">814</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that deeply-copies the elements from an underlying iterator.</span>
 </span><span id="Copied-815"><a href="#Copied-815"><span class="linenos">815</span></a>
 </span><span id="Copied-816"><a href="#Copied-816"><span class="linenos">816</span></a><span class="sd">    This iterator is created by the `Iterator.copied` method.</span>
 </span><span id="Copied-817"><a href="#Copied-817"><span class="linenos">817</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -3866,7 +3866,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#Take"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Take-870"><a href="#Take-870"><span class="linenos">870</span></a><span class="nd">@diagnostic</span>
 </span><span id="Take-871"><a href="#Take-871"><span class="linenos">871</span></a><span class="k">class</span> <span class="nc">Take</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="Take-872"><a href="#Take-872"><span class="linenos">872</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields the first `number` of elements and drops the rest.</span>
+</span><span id="Take-872"><a href="#Take-872"><span class="linenos">872</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields the first `number` of elements and drops the rest.</span>
 </span><span id="Take-873"><a href="#Take-873"><span class="linenos">873</span></a>
 </span><span id="Take-874"><a href="#Take-874"><span class="linenos">874</span></a><span class="sd">    This iterator is created by the `Iterator.take` method.</span>
 </span><span id="Take-875"><a href="#Take-875"><span class="linenos">875</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -3969,7 +3969,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#Filter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Filter-847"><a href="#Filter-847"><span class="linenos">847</span></a><span class="nd">@diagnostic</span>
 </span><span id="Filter-848"><a href="#Filter-848"><span class="linenos">848</span></a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="Filter-849"><a href="#Filter-849"><span class="linenos">849</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that filters the elements to a `predicate`.</span>
+</span><span id="Filter-849"><a href="#Filter-849"><span class="linenos">849</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that filters the elements to a `predicate`.</span>
 </span><span id="Filter-850"><a href="#Filter-850"><span class="linenos">850</span></a>
 </span><span id="Filter-851"><a href="#Filter-851"><span class="linenos">851</span></a><span class="sd">    This iterator is created by the `Iterator.filter` method.</span>
 </span><span id="Filter-852"><a href="#Filter-852"><span class="linenos">852</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -4067,7 +4067,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#Map"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Map-828"><a href="#Map-828"><span class="linenos">828</span></a><span class="nd">@diagnostic</span>
 </span><span id="Map-829"><a href="#Map-829"><span class="linenos">829</span></a><span class="k">class</span> <span class="nc">Map</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">,</span> <span class="n">OtherItem</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="Map-830"><a href="#Map-830"><span class="linenos">830</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that maps the elements to a callable.</span>
+</span><span id="Map-830"><a href="#Map-830"><span class="linenos">830</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that maps the elements to a callable.</span>
 </span><span id="Map-831"><a href="#Map-831"><span class="linenos">831</span></a>
 </span><span id="Map-832"><a href="#Map-832"><span class="linenos">832</span></a><span class="sd">    This iterator is created by the `Iterator.map` method.</span>
 </span><span id="Map-833"><a href="#Map-833"><span class="linenos">833</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -4161,7 +4161,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#Skip"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Skip-896"><a href="#Skip-896"><span class="linenos">896</span></a><span class="nd">@diagnostic</span>
 </span><span id="Skip-897"><a href="#Skip-897"><span class="linenos">897</span></a><span class="k">class</span> <span class="nc">Skip</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="Skip-898"><a href="#Skip-898"><span class="linenos">898</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that skips the first `number` of elements and yields the rest.</span>
+</span><span id="Skip-898"><a href="#Skip-898"><span class="linenos">898</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that skips the first `number` of elements and yields the rest.</span>
 </span><span id="Skip-899"><a href="#Skip-899"><span class="linenos">899</span></a>
 </span><span id="Skip-900"><a href="#Skip-900"><span class="linenos">900</span></a><span class="sd">    This iterator is created by the `Iterator.skip` method.</span>
 </span><span id="Skip-901"><a href="#Skip-901"><span class="linenos">901</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -4263,7 +4263,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#Enumerate"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Enumerate-921"><a href="#Enumerate-921"><span class="linenos">921</span></a><span class="nd">@diagnostic</span>
 </span><span id="Enumerate-922"><a href="#Enumerate-922"><span class="linenos">922</span></a><span class="k">class</span> <span class="nc">Enumerate</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Item</span><span class="p">]]):</span>
-</span><span id="Enumerate-923"><a href="#Enumerate-923"><span class="linenos">923</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields the current count and the element during iteration.</span>
+</span><span id="Enumerate-923"><a href="#Enumerate-923"><span class="linenos">923</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields the current count and the element during iteration.</span>
 </span><span id="Enumerate-924"><a href="#Enumerate-924"><span class="linenos">924</span></a>
 </span><span id="Enumerate-925"><a href="#Enumerate-925"><span class="linenos">925</span></a><span class="sd">    This iterator is created by the `Iterator.enumerate` method.</span>
 </span><span id="Enumerate-926"><a href="#Enumerate-926"><span class="linenos">926</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -4362,7 +4362,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#TakeWhile"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="TakeWhile-944"><a href="#TakeWhile-944"><span class="linenos">944</span></a><span class="nd">@diagnostic</span>
 </span><span id="TakeWhile-945"><a href="#TakeWhile-945"><span class="linenos">945</span></a><span class="k">class</span> <span class="nc">TakeWhile</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="TakeWhile-946"><a href="#TakeWhile-946"><span class="linenos">946</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields elements while `predicate` returns `True`.</span>
+</span><span id="TakeWhile-946"><a href="#TakeWhile-946"><span class="linenos">946</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields elements while `predicate` returns `True`.</span>
 </span><span id="TakeWhile-947"><a href="#TakeWhile-947"><span class="linenos">947</span></a>
 </span><span id="TakeWhile-948"><a href="#TakeWhile-948"><span class="linenos">948</span></a><span class="sd">    This iterator is created by the `Iterator.take_while` method.</span>
 </span><span id="TakeWhile-949"><a href="#TakeWhile-949"><span class="linenos">949</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -4461,7 +4461,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#DropWhile"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="DropWhile-968"><a href="#DropWhile-968"><span class="linenos">968</span></a><span class="nd">@diagnostic</span>
 </span><span id="DropWhile-969"><a href="#DropWhile-969"><span class="linenos">969</span></a><span class="k">class</span> <span class="nc">DropWhile</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="DropWhile-970"><a href="#DropWhile-970"><span class="linenos">970</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields elements while `predicate` returns `False`.</span>
+</span><span id="DropWhile-970"><a href="#DropWhile-970"><span class="linenos">970</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields elements while `predicate` returns `False`.</span>
 </span><span id="DropWhile-971"><a href="#DropWhile-971"><span class="linenos">971</span></a>
 </span><span id="DropWhile-972"><a href="#DropWhile-972"><span class="linenos">972</span></a><span class="sd">    This iterator is created by the `Iterator.drop_while` method.</span>
 </span><span id="DropWhile-973"><a href="#DropWhile-973"><span class="linenos">973</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -4564,7 +4564,7 @@ The async function to call on each item in the iterator.</li>
     <a class="headerlink" href="#Empty"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Empty-995"><a href="#Empty-995"><span class="linenos"> 995</span></a><span class="nd">@diagnostic</span>
 </span><span id="Empty-996"><a href="#Empty-996"><span class="linenos"> 996</span></a><span class="k">class</span> <span class="nc">Empty</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]):</span>
-</span><span id="Empty-997"><a href="#Empty-997"><span class="linenos"> 997</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An iterator that yields literally nothing.</span>
+</span><span id="Empty-997"><a href="#Empty-997"><span class="linenos"> 997</span></a>    <span class="sd">&quot;&quot;&quot;An iterator that yields literally nothing.</span>
 </span><span id="Empty-998"><a href="#Empty-998"><span class="linenos"> 998</span></a>
 </span><span id="Empty-999"><a href="#Empty-999"><span class="linenos"> 999</span></a><span class="sd">    This is the default iterator that is created by `Iterator.default()` or `empty()`</span>
 </span><span id="Empty-1000"><a href="#Empty-1000"><span class="linenos">1000</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -4791,7 +4791,7 @@ The function to test each item in the iterator.</li>
             <div class="pdoc-code codehilite"><pre><span></span><span id="into_iter-1072"><a href="#into_iter-1072"><span class="linenos">1072</span></a><span class="k">def</span> <span class="nf">into_iter</span><span class="p">(</span>
 </span><span id="into_iter-1073"><a href="#into_iter-1073"><span class="linenos">1073</span></a>    <span class="n">iterable</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span>
 </span><span id="into_iter-1074"><a href="#into_iter-1074"><span class="linenos">1074</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="into_iter-1075"><a href="#into_iter-1075"><span class="linenos">1075</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert any iterable into `Iterator[Item]`.</span>
+</span><span id="into_iter-1075"><a href="#into_iter-1075"><span class="linenos">1075</span></a>    <span class="sd">&quot;&quot;&quot;Convert any iterable into `Iterator[Item]`.</span>
 </span><span id="into_iter-1076"><a href="#into_iter-1076"><span class="linenos">1076</span></a>
 </span><span id="into_iter-1077"><a href="#into_iter-1077"><span class="linenos">1077</span></a><span class="sd">    Example</span>
 </span><span id="into_iter-1078"><a href="#into_iter-1078"><span class="linenos">1078</span></a><span class="sd">    -------</span>
@@ -4849,7 +4849,7 @@ The iterable to convert.</li>
     </div>
     <a class="headerlink" href="#empty"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="empty-1029"><a href="#empty-1029"><span class="linenos">1029</span></a><span class="k">def</span> <span class="nf">empty</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Empty</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>  <span class="c1"># pyright: ignore</span>
-</span><span id="empty-1030"><a href="#empty-1030"><span class="linenos">1030</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an iterator that yields nothing.</span>
+</span><span id="empty-1030"><a href="#empty-1030"><span class="linenos">1030</span></a>    <span class="sd">&quot;&quot;&quot;Create an iterator that yields nothing.</span>
 </span><span id="empty-1031"><a href="#empty-1031"><span class="linenos">1031</span></a>
 </span><span id="empty-1032"><a href="#empty-1032"><span class="linenos">1032</span></a><span class="sd">    Example</span>
 </span><span id="empty-1033"><a href="#empty-1033"><span class="linenos">1033</span></a><span class="sd">    -------</span>
@@ -4887,7 +4887,7 @@ The iterable to convert.</li>
     </div>
     <a class="headerlink" href="#once"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="once-1058"><a href="#once-1058"><span class="linenos">1058</span></a><span class="k">def</span> <span class="nf">once</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="once-1059"><a href="#once-1059"><span class="linenos">1059</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an iterator that yields exactly a single item.</span>
+</span><span id="once-1059"><a href="#once-1059"><span class="linenos">1059</span></a>    <span class="sd">&quot;&quot;&quot;Returns an iterator that yields exactly a single item.</span>
 </span><span id="once-1060"><a href="#once-1060"><span class="linenos">1060</span></a>
 </span><span id="once-1061"><a href="#once-1061"><span class="linenos">1061</span></a><span class="sd">    Example</span>
 </span><span id="once-1062"><a href="#once-1062"><span class="linenos">1062</span></a><span class="sd">    -------</span>
@@ -4927,7 +4927,7 @@ The iterable to convert.</li>
     </div>
     <a class="headerlink" href="#repeat"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="repeat-1042"><a href="#repeat-1042"><span class="linenos">1042</span></a><span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
-</span><span id="repeat-1043"><a href="#repeat-1043"><span class="linenos">1043</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an iterator that yields the same `element` number of `count` times.</span>
+</span><span id="repeat-1043"><a href="#repeat-1043"><span class="linenos">1043</span></a>    <span class="sd">&quot;&quot;&quot;Returns an iterator that yields the same `element` number of `count` times.</span>
 </span><span id="repeat-1044"><a href="#repeat-1044"><span class="linenos">1044</span></a>
 </span><span id="repeat-1045"><a href="#repeat-1045"><span class="linenos">1045</span></a><span class="sd">    Example</span>
 </span><span id="repeat-1046"><a href="#repeat-1046"><span class="linenos">1046</span></a><span class="sd">    -------</span>

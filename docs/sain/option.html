@@ -173,7 +173,7 @@
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">cell</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">default</span> <span class="k">as</span> <span class="n">_default</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="nb">iter</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="nb">iter</span> <span class="k">as</span> <span class="n">_iter</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">macros</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="n">T</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
@@ -189,7 +189,7 @@
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="k">class</span> <span class="nc">Some</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">_default</span><span class="o">.</span><span class="n">Default</span><span class="p">[</span><span class="s2">&quot;Option[None]&quot;</span><span class="p">]):</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The `Option` type. An object that might be `T` or `None`.</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="sd">&quot;&quot;&quot;The `Option` type. An object that might be `T` or `None`.</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">    It is a drop-in replacement for `typing.Optional[T]`, But has proper methods to handle the contained value.</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
@@ -223,7 +223,7 @@
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Default value for `Some`. Returns `None` wrapped in `Some`.</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="sd">&quot;&quot;&quot;Default value for `Some`. Returns `None` wrapped in `Some`.</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        Example</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">        -------</span>
@@ -236,7 +236,7 @@
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>    <span class="c1"># *- Reading the value -*</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>    <span class="k">def</span> <span class="nf">into_inner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consume `Self`, returning the wrapped value as `T | None`.</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="sd">&quot;&quot;&quot;Consume `Self`, returning the wrapped value as `T | None`.</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        Examples</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">        --------</span>
@@ -252,7 +252,7 @@
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or raising a `RuntimeError`.</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or raising a `RuntimeError`.</span>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        It&#39;s usually not recommended to use this method in production code, since it raises.</span>
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
@@ -276,12 +276,12 @@
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>                <span class="sa">f</span><span class="s2">&quot;Called `Option.unwrap()` on </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 </span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or returning `default`.</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or returning `default`.</span>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">        Example</span>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        -------</span>
@@ -302,7 +302,7 @@
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 </span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">FnOnce</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or calling `f` to get a default value.</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or calling `f` to get a default value.</span>
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>
 </span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">        Example</span>
 </span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">        -------</span>
@@ -323,7 +323,7 @@
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>    <span class="k">def</span> <span class="nf">unwrap_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value immediately returning it.</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value immediately returning it.</span>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">        Example</span>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">        -------</span>
@@ -339,7 +339,7 @@
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>  <span class="c1"># type: ignore</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>        <span class="sd">&quot;&quot;&quot;Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.</span>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">        Example</span>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">        -------</span>
@@ -361,7 +361,7 @@
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>    <span class="c1"># *- Functional operations -*</span>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type. Returning `Some(None)` if `T` is `None`.</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type. Returning `Some(None)` if `T` is `None`.</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">        Example</span>
 </span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">        -------</span>
@@ -382,7 +382,7 @@
 </span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>        <span class="k">return</span> <span class="n">Some</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">))</span>
 </span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>
 </span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type or return `default` if its `None`.</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type or return `default` if its `None`.</span>
 </span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>
 </span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">        Example</span>
 </span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="sd">        -------</span>
@@ -404,7 +404,7 @@
 </span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>
 </span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">FnOnce</span><span class="p">[</span><span class="n">U</span><span class="p">],</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type, or return `default()` if its `None`.</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type, or return `default()` if its `None`.</span>
 </span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>
 </span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="sd">        Example</span>
 </span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a><span class="sd">        -------</span>
@@ -429,7 +429,7 @@
 </span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a>
 </span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`,</span>
+</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`,</span>
 </span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>
 </span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a><span class="sd">        otherwise calls the predicate and returns `Some(T)` if the predicate returns `True`.</span>
 </span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>
@@ -455,7 +455,7 @@
 </span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>    <span class="c1"># *- Inner operations *-</span>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None`.</span>
+</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a>        <span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None`.</span>
 </span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>
 </span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a><span class="sd">        Example</span>
 </span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a><span class="sd">        -------</span>
@@ -475,7 +475,7 @@
 </span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a>        <span class="k">return</span> <span class="n">Some</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
 </span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>
 </span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a>    <span class="k">def</span> <span class="nf">take_if</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None` only if predicate returns `True`.</span>
+</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>        <span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None` only if predicate returns `True`.</span>
 </span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>
 </span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a><span class="sd">        Example</span>
 </span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a><span class="sd">        -------</span>
@@ -499,7 +499,7 @@
 </span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a>        <span class="k">return</span> <span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>
 </span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Replace the contained value with another value.</span>
+</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a>        <span class="sd">&quot;&quot;&quot;Replace the contained value with another value.</span>
 </span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>
 </span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="sd">        Example</span>
 </span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a><span class="sd">        -------</span>
@@ -513,7 +513,7 @@
 </span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>
 </span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>    <span class="k">def</span> <span class="nf">and_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optb</span><span class="p">:</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if either contained value is `None`,</span>
+</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if either contained value is `None`,</span>
 </span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a>
 </span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a><span class="sd">        Otherwise return `optb`.</span>
 </span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>
@@ -535,7 +535,7 @@
 </span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a>        <span class="k">return</span> <span class="n">optb</span>
 </span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a>
 </span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a>    <span class="k">def</span> <span class="nf">and_then</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`, otherwise call `f()`</span>
+</span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`, otherwise call `f()`</span>
 </span><span id="L-403"><a href="#L-403"><span class="linenos">403</span></a><span class="sd">        on `T` and return `Option[T]` if it&#39;s value not `None`.</span>
 </span><span id="L-404"><a href="#L-404"><span class="linenos">404</span></a>
 </span><span id="L-405"><a href="#L-405"><span class="linenos">405</span></a><span class="sd">        Example</span>
@@ -557,8 +557,8 @@
 </span><span id="L-421"><a href="#L-421"><span class="linenos">421</span></a>
 </span><span id="L-422"><a href="#L-422"><span class="linenos">422</span></a>    <span class="c1"># *- Builder methods *-</span>
 </span><span id="L-423"><a href="#L-423"><span class="linenos">423</span></a>
-</span><span id="L-424"><a href="#L-424"><span class="linenos">424</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
+</span><span id="L-424"><a href="#L-424"><span class="linenos">424</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
 </span><span id="L-426"><a href="#L-426"><span class="linenos">426</span></a>
 </span><span id="L-427"><a href="#L-427"><span class="linenos">427</span></a><span class="sd">        Example</span>
 </span><span id="L-428"><a href="#L-428"><span class="linenos">428</span></a><span class="sd">        -------</span>
@@ -573,12 +573,12 @@
 </span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-438"><a href="#L-438"><span class="linenos">438</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-439"><a href="#L-439"><span class="linenos">439</span></a>            <span class="c1">#! SAFETY: We know the value is None here.</span>
-</span><span id="L-440"><a href="#L-440"><span class="linenos">440</span></a>            <span class="k">return</span> <span class="nb">iter</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>  <span class="c1"># pyright: ignore</span>
+</span><span id="L-440"><a href="#L-440"><span class="linenos">440</span></a>            <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 </span><span id="L-441"><a href="#L-441"><span class="linenos">441</span></a>
-</span><span id="L-442"><a href="#L-442"><span class="linenos">442</span></a>        <span class="k">return</span> <span class="nb">iter</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+</span><span id="L-442"><a href="#L-442"><span class="linenos">442</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="L-443"><a href="#L-443"><span class="linenos">443</span></a>
 </span><span id="L-444"><a href="#L-444"><span class="linenos">444</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">Cell</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-</span><span id="L-445"><a href="#L-445"><span class="linenos">445</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,</span>
+</span><span id="L-445"><a href="#L-445"><span class="linenos">445</span></a>        <span class="sd">&quot;&quot;&quot;Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,</span>
 </span><span id="L-446"><a href="#L-446"><span class="linenos">446</span></a>
 </span><span id="L-447"><a href="#L-447"><span class="linenos">447</span></a><span class="sd">        Otherwise returns `Some(None)`.</span>
 </span><span id="L-448"><a href="#L-448"><span class="linenos">448</span></a>
@@ -616,7 +616,7 @@
 </span><span id="L-480"><a href="#L-480"><span class="linenos">480</span></a>        <span class="k">return</span> <span class="n">NOTHING</span>  <span class="c1"># pyright: ignore</span>
 </span><span id="L-481"><a href="#L-481"><span class="linenos">481</span></a>
 </span><span id="L-482"><a href="#L-482"><span class="linenos">482</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">RefCell</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-</span><span id="L-483"><a href="#L-483"><span class="linenos">483</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns mutable `Some[sain.cell.RefCell[T]]` if the contained value is not `None`,</span>
+</span><span id="L-483"><a href="#L-483"><span class="linenos">483</span></a>        <span class="sd">&quot;&quot;&quot;Returns mutable `Some[sain.cell.RefCell[T]]` if the contained value is not `None`,</span>
 </span><span id="L-484"><a href="#L-484"><span class="linenos">484</span></a>
 </span><span id="L-485"><a href="#L-485"><span class="linenos">485</span></a><span class="sd">        Otherwise returns `Some(None)`.</span>
 </span><span id="L-486"><a href="#L-486"><span class="linenos">486</span></a>
@@ -642,7 +642,7 @@
 </span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a>    <span class="c1"># *- Boolean checks *-</span>
 </span><span id="L-507"><a href="#L-507"><span class="linenos">507</span></a>
 </span><span id="L-508"><a href="#L-508"><span class="linenos">508</span></a>    <span class="k">def</span> <span class="nf">is_some</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-509"><a href="#L-509"><span class="linenos">509</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None`, otherwise returns `False`.</span>
+</span><span id="L-509"><a href="#L-509"><span class="linenos">509</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None`, otherwise returns `False`.</span>
 </span><span id="L-510"><a href="#L-510"><span class="linenos">510</span></a>
 </span><span id="L-511"><a href="#L-511"><span class="linenos">511</span></a><span class="sd">        Example</span>
 </span><span id="L-512"><a href="#L-512"><span class="linenos">512</span></a><span class="sd">        -------</span>
@@ -659,7 +659,7 @@
 </span><span id="L-523"><a href="#L-523"><span class="linenos">523</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="L-524"><a href="#L-524"><span class="linenos">524</span></a>
 </span><span id="L-525"><a href="#L-525"><span class="linenos">525</span></a>    <span class="k">def</span> <span class="nf">is_some_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-526"><a href="#L-526"><span class="linenos">526</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None` and</span>
+</span><span id="L-526"><a href="#L-526"><span class="linenos">526</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None` and</span>
 </span><span id="L-527"><a href="#L-527"><span class="linenos">527</span></a><span class="sd">        the predicate returns `True`, otherwise returns `False`.</span>
 </span><span id="L-528"><a href="#L-528"><span class="linenos">528</span></a>
 </span><span id="L-529"><a href="#L-529"><span class="linenos">529</span></a><span class="sd">        Example</span>
@@ -677,7 +677,7 @@
 </span><span id="L-541"><a href="#L-541"><span class="linenos">541</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">predicate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="L-542"><a href="#L-542"><span class="linenos">542</span></a>
 </span><span id="L-543"><a href="#L-543"><span class="linenos">543</span></a>    <span class="k">def</span> <span class="nf">is_none</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-544"><a href="#L-544"><span class="linenos">544</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `None`, otherwise returns `False`.</span>
+</span><span id="L-544"><a href="#L-544"><span class="linenos">544</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `None`, otherwise returns `False`.</span>
 </span><span id="L-545"><a href="#L-545"><span class="linenos">545</span></a>
 </span><span id="L-546"><a href="#L-546"><span class="linenos">546</span></a><span class="sd">        Example</span>
 </span><span id="L-547"><a href="#L-547"><span class="linenos">547</span></a><span class="sd">        -------</span>
@@ -757,7 +757,7 @@
 </span><span id="L-621"><a href="#L-621"><span class="linenos">621</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">no_type_check</span>
 </span><span id="L-622"><a href="#L-622"><span class="linenos">622</span></a><span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="L-623"><a href="#L-623"><span class="linenos">623</span></a><span class="k">def</span> <span class="nf">nothing_unchecked</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-624"><a href="#L-624"><span class="linenos">624</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A placeholder that always returns `sain.NOTHING` but acts like it returns `Option[T]`.</span>
+</span><span id="L-624"><a href="#L-624"><span class="linenos">624</span></a>    <span class="sd">&quot;&quot;&quot;A placeholder that always returns `sain.NOTHING` but acts like it returns `Option[T]`.</span>
 </span><span id="L-625"><a href="#L-625"><span class="linenos">625</span></a>
 </span><span id="L-626"><a href="#L-626"><span class="linenos">626</span></a><span class="sd">    This is useful to avoid constructing new `Some(None)` and want to return `T` in the future.</span>
 </span><span id="L-627"><a href="#L-627"><span class="linenos">627</span></a>
@@ -796,7 +796,7 @@
     <a class="headerlink" href="#Some"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some-55"><a href="#Some-55"><span class="linenos"> 55</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Some-56"><a href="#Some-56"><span class="linenos"> 56</span></a><span class="k">class</span> <span class="nc">Some</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">_default</span><span class="o">.</span><span class="n">Default</span><span class="p">[</span><span class="s2">&quot;Option[None]&quot;</span><span class="p">]):</span>
-</span><span id="Some-57"><a href="#Some-57"><span class="linenos"> 57</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The `Option` type. An object that might be `T` or `None`.</span>
+</span><span id="Some-57"><a href="#Some-57"><span class="linenos"> 57</span></a>    <span class="sd">&quot;&quot;&quot;The `Option` type. An object that might be `T` or `None`.</span>
 </span><span id="Some-58"><a href="#Some-58"><span class="linenos"> 58</span></a>
 </span><span id="Some-59"><a href="#Some-59"><span class="linenos"> 59</span></a><span class="sd">    It is a drop-in replacement for `typing.Optional[T]`, But has proper methods to handle the contained value.</span>
 </span><span id="Some-60"><a href="#Some-60"><span class="linenos"> 60</span></a>
@@ -830,7 +830,7 @@
 </span><span id="Some-88"><a href="#Some-88"><span class="linenos"> 88</span></a>
 </span><span id="Some-89"><a href="#Some-89"><span class="linenos"> 89</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="Some-90"><a href="#Some-90"><span class="linenos"> 90</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
-</span><span id="Some-91"><a href="#Some-91"><span class="linenos"> 91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Default value for `Some`. Returns `None` wrapped in `Some`.</span>
+</span><span id="Some-91"><a href="#Some-91"><span class="linenos"> 91</span></a>        <span class="sd">&quot;&quot;&quot;Default value for `Some`. Returns `None` wrapped in `Some`.</span>
 </span><span id="Some-92"><a href="#Some-92"><span class="linenos"> 92</span></a>
 </span><span id="Some-93"><a href="#Some-93"><span class="linenos"> 93</span></a><span class="sd">        Example</span>
 </span><span id="Some-94"><a href="#Some-94"><span class="linenos"> 94</span></a><span class="sd">        -------</span>
@@ -843,7 +843,7 @@
 </span><span id="Some-101"><a href="#Some-101"><span class="linenos">101</span></a>    <span class="c1"># *- Reading the value -*</span>
 </span><span id="Some-102"><a href="#Some-102"><span class="linenos">102</span></a>
 </span><span id="Some-103"><a href="#Some-103"><span class="linenos">103</span></a>    <span class="k">def</span> <span class="nf">into_inner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Some-104"><a href="#Some-104"><span class="linenos">104</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consume `Self`, returning the wrapped value as `T | None`.</span>
+</span><span id="Some-104"><a href="#Some-104"><span class="linenos">104</span></a>        <span class="sd">&quot;&quot;&quot;Consume `Self`, returning the wrapped value as `T | None`.</span>
 </span><span id="Some-105"><a href="#Some-105"><span class="linenos">105</span></a>
 </span><span id="Some-106"><a href="#Some-106"><span class="linenos">106</span></a><span class="sd">        Examples</span>
 </span><span id="Some-107"><a href="#Some-107"><span class="linenos">107</span></a><span class="sd">        --------</span>
@@ -859,7 +859,7 @@
 </span><span id="Some-117"><a href="#Some-117"><span class="linenos">117</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 </span><span id="Some-118"><a href="#Some-118"><span class="linenos">118</span></a>
 </span><span id="Some-119"><a href="#Some-119"><span class="linenos">119</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some-120"><a href="#Some-120"><span class="linenos">120</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or raising a `RuntimeError`.</span>
+</span><span id="Some-120"><a href="#Some-120"><span class="linenos">120</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or raising a `RuntimeError`.</span>
 </span><span id="Some-121"><a href="#Some-121"><span class="linenos">121</span></a>
 </span><span id="Some-122"><a href="#Some-122"><span class="linenos">122</span></a><span class="sd">        It&#39;s usually not recommended to use this method in production code, since it raises.</span>
 </span><span id="Some-123"><a href="#Some-123"><span class="linenos">123</span></a>
@@ -883,12 +883,12 @@
 </span><span id="Some-141"><a href="#Some-141"><span class="linenos">141</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Some-142"><a href="#Some-142"><span class="linenos">142</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="Some-143"><a href="#Some-143"><span class="linenos">143</span></a>                <span class="sa">f</span><span class="s2">&quot;Called `Option.unwrap()` on </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
-</span><span id="Some-144"><a href="#Some-144"><span class="linenos">144</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="Some-144"><a href="#Some-144"><span class="linenos">144</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="Some-145"><a href="#Some-145"><span class="linenos">145</span></a>
 </span><span id="Some-146"><a href="#Some-146"><span class="linenos">146</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 </span><span id="Some-147"><a href="#Some-147"><span class="linenos">147</span></a>
 </span><span id="Some-148"><a href="#Some-148"><span class="linenos">148</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some-149"><a href="#Some-149"><span class="linenos">149</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or returning `default`.</span>
+</span><span id="Some-149"><a href="#Some-149"><span class="linenos">149</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or returning `default`.</span>
 </span><span id="Some-150"><a href="#Some-150"><span class="linenos">150</span></a>
 </span><span id="Some-151"><a href="#Some-151"><span class="linenos">151</span></a><span class="sd">        Example</span>
 </span><span id="Some-152"><a href="#Some-152"><span class="linenos">152</span></a><span class="sd">        -------</span>
@@ -909,7 +909,7 @@
 </span><span id="Some-167"><a href="#Some-167"><span class="linenos">167</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 </span><span id="Some-168"><a href="#Some-168"><span class="linenos">168</span></a>
 </span><span id="Some-169"><a href="#Some-169"><span class="linenos">169</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">FnOnce</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some-170"><a href="#Some-170"><span class="linenos">170</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or calling `f` to get a default value.</span>
+</span><span id="Some-170"><a href="#Some-170"><span class="linenos">170</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or calling `f` to get a default value.</span>
 </span><span id="Some-171"><a href="#Some-171"><span class="linenos">171</span></a>
 </span><span id="Some-172"><a href="#Some-172"><span class="linenos">172</span></a><span class="sd">        Example</span>
 </span><span id="Some-173"><a href="#Some-173"><span class="linenos">173</span></a><span class="sd">        -------</span>
@@ -930,7 +930,7 @@
 </span><span id="Some-188"><a href="#Some-188"><span class="linenos">188</span></a>
 </span><span id="Some-189"><a href="#Some-189"><span class="linenos">189</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="Some-190"><a href="#Some-190"><span class="linenos">190</span></a>    <span class="k">def</span> <span class="nf">unwrap_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some-191"><a href="#Some-191"><span class="linenos">191</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value immediately returning it.</span>
+</span><span id="Some-191"><a href="#Some-191"><span class="linenos">191</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value immediately returning it.</span>
 </span><span id="Some-192"><a href="#Some-192"><span class="linenos">192</span></a>
 </span><span id="Some-193"><a href="#Some-193"><span class="linenos">193</span></a><span class="sd">        Example</span>
 </span><span id="Some-194"><a href="#Some-194"><span class="linenos">194</span></a><span class="sd">        -------</span>
@@ -946,7 +946,7 @@
 </span><span id="Some-204"><a href="#Some-204"><span class="linenos">204</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>  <span class="c1"># type: ignore</span>
 </span><span id="Some-205"><a href="#Some-205"><span class="linenos">205</span></a>
 </span><span id="Some-206"><a href="#Some-206"><span class="linenos">206</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some-207"><a href="#Some-207"><span class="linenos">207</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.</span>
+</span><span id="Some-207"><a href="#Some-207"><span class="linenos">207</span></a>        <span class="sd">&quot;&quot;&quot;Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.</span>
 </span><span id="Some-208"><a href="#Some-208"><span class="linenos">208</span></a>
 </span><span id="Some-209"><a href="#Some-209"><span class="linenos">209</span></a><span class="sd">        Example</span>
 </span><span id="Some-210"><a href="#Some-210"><span class="linenos">210</span></a><span class="sd">        -------</span>
@@ -968,7 +968,7 @@
 </span><span id="Some-226"><a href="#Some-226"><span class="linenos">226</span></a>
 </span><span id="Some-227"><a href="#Some-227"><span class="linenos">227</span></a>    <span class="c1"># *- Functional operations -*</span>
 </span><span id="Some-228"><a href="#Some-228"><span class="linenos">228</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="Some-229"><a href="#Some-229"><span class="linenos">229</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type. Returning `Some(None)` if `T` is `None`.</span>
+</span><span id="Some-229"><a href="#Some-229"><span class="linenos">229</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type. Returning `Some(None)` if `T` is `None`.</span>
 </span><span id="Some-230"><a href="#Some-230"><span class="linenos">230</span></a>
 </span><span id="Some-231"><a href="#Some-231"><span class="linenos">231</span></a><span class="sd">        Example</span>
 </span><span id="Some-232"><a href="#Some-232"><span class="linenos">232</span></a><span class="sd">        -------</span>
@@ -989,7 +989,7 @@
 </span><span id="Some-247"><a href="#Some-247"><span class="linenos">247</span></a>        <span class="k">return</span> <span class="n">Some</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">))</span>
 </span><span id="Some-248"><a href="#Some-248"><span class="linenos">248</span></a>
 </span><span id="Some-249"><a href="#Some-249"><span class="linenos">249</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Some-250"><a href="#Some-250"><span class="linenos">250</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type or return `default` if its `None`.</span>
+</span><span id="Some-250"><a href="#Some-250"><span class="linenos">250</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type or return `default` if its `None`.</span>
 </span><span id="Some-251"><a href="#Some-251"><span class="linenos">251</span></a>
 </span><span id="Some-252"><a href="#Some-252"><span class="linenos">252</span></a><span class="sd">        Example</span>
 </span><span id="Some-253"><a href="#Some-253"><span class="linenos">253</span></a><span class="sd">        -------</span>
@@ -1011,7 +1011,7 @@
 </span><span id="Some-269"><a href="#Some-269"><span class="linenos">269</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="Some-270"><a href="#Some-270"><span class="linenos">270</span></a>
 </span><span id="Some-271"><a href="#Some-271"><span class="linenos">271</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">FnOnce</span><span class="p">[</span><span class="n">U</span><span class="p">],</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Some-272"><a href="#Some-272"><span class="linenos">272</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type, or return `default()` if its `None`.</span>
+</span><span id="Some-272"><a href="#Some-272"><span class="linenos">272</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type, or return `default()` if its `None`.</span>
 </span><span id="Some-273"><a href="#Some-273"><span class="linenos">273</span></a>
 </span><span id="Some-274"><a href="#Some-274"><span class="linenos">274</span></a><span class="sd">        Example</span>
 </span><span id="Some-275"><a href="#Some-275"><span class="linenos">275</span></a><span class="sd">        -------</span>
@@ -1036,7 +1036,7 @@
 </span><span id="Some-294"><a href="#Some-294"><span class="linenos">294</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="Some-295"><a href="#Some-295"><span class="linenos">295</span></a>
 </span><span id="Some-296"><a href="#Some-296"><span class="linenos">296</span></a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some-297"><a href="#Some-297"><span class="linenos">297</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`,</span>
+</span><span id="Some-297"><a href="#Some-297"><span class="linenos">297</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`,</span>
 </span><span id="Some-298"><a href="#Some-298"><span class="linenos">298</span></a>
 </span><span id="Some-299"><a href="#Some-299"><span class="linenos">299</span></a><span class="sd">        otherwise calls the predicate and returns `Some(T)` if the predicate returns `True`.</span>
 </span><span id="Some-300"><a href="#Some-300"><span class="linenos">300</span></a>
@@ -1062,7 +1062,7 @@
 </span><span id="Some-320"><a href="#Some-320"><span class="linenos">320</span></a>    <span class="c1"># *- Inner operations *-</span>
 </span><span id="Some-321"><a href="#Some-321"><span class="linenos">321</span></a>
 </span><span id="Some-322"><a href="#Some-322"><span class="linenos">322</span></a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some-323"><a href="#Some-323"><span class="linenos">323</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None`.</span>
+</span><span id="Some-323"><a href="#Some-323"><span class="linenos">323</span></a>        <span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None`.</span>
 </span><span id="Some-324"><a href="#Some-324"><span class="linenos">324</span></a>
 </span><span id="Some-325"><a href="#Some-325"><span class="linenos">325</span></a><span class="sd">        Example</span>
 </span><span id="Some-326"><a href="#Some-326"><span class="linenos">326</span></a><span class="sd">        -------</span>
@@ -1082,7 +1082,7 @@
 </span><span id="Some-340"><a href="#Some-340"><span class="linenos">340</span></a>        <span class="k">return</span> <span class="n">Some</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
 </span><span id="Some-341"><a href="#Some-341"><span class="linenos">341</span></a>
 </span><span id="Some-342"><a href="#Some-342"><span class="linenos">342</span></a>    <span class="k">def</span> <span class="nf">take_if</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some-343"><a href="#Some-343"><span class="linenos">343</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None` only if predicate returns `True`.</span>
+</span><span id="Some-343"><a href="#Some-343"><span class="linenos">343</span></a>        <span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None` only if predicate returns `True`.</span>
 </span><span id="Some-344"><a href="#Some-344"><span class="linenos">344</span></a>
 </span><span id="Some-345"><a href="#Some-345"><span class="linenos">345</span></a><span class="sd">        Example</span>
 </span><span id="Some-346"><a href="#Some-346"><span class="linenos">346</span></a><span class="sd">        -------</span>
@@ -1106,7 +1106,7 @@
 </span><span id="Some-364"><a href="#Some-364"><span class="linenos">364</span></a>        <span class="k">return</span> <span class="n">nothing_unchecked</span><span class="p">()</span>
 </span><span id="Some-365"><a href="#Some-365"><span class="linenos">365</span></a>
 </span><span id="Some-366"><a href="#Some-366"><span class="linenos">366</span></a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some-367"><a href="#Some-367"><span class="linenos">367</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Replace the contained value with another value.</span>
+</span><span id="Some-367"><a href="#Some-367"><span class="linenos">367</span></a>        <span class="sd">&quot;&quot;&quot;Replace the contained value with another value.</span>
 </span><span id="Some-368"><a href="#Some-368"><span class="linenos">368</span></a>
 </span><span id="Some-369"><a href="#Some-369"><span class="linenos">369</span></a><span class="sd">        Example</span>
 </span><span id="Some-370"><a href="#Some-370"><span class="linenos">370</span></a><span class="sd">        -------</span>
@@ -1120,7 +1120,7 @@
 </span><span id="Some-378"><a href="#Some-378"><span class="linenos">378</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="Some-379"><a href="#Some-379"><span class="linenos">379</span></a>
 </span><span id="Some-380"><a href="#Some-380"><span class="linenos">380</span></a>    <span class="k">def</span> <span class="nf">and_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optb</span><span class="p">:</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some-381"><a href="#Some-381"><span class="linenos">381</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if either contained value is `None`,</span>
+</span><span id="Some-381"><a href="#Some-381"><span class="linenos">381</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if either contained value is `None`,</span>
 </span><span id="Some-382"><a href="#Some-382"><span class="linenos">382</span></a>
 </span><span id="Some-383"><a href="#Some-383"><span class="linenos">383</span></a><span class="sd">        Otherwise return `optb`.</span>
 </span><span id="Some-384"><a href="#Some-384"><span class="linenos">384</span></a>
@@ -1142,7 +1142,7 @@
 </span><span id="Some-400"><a href="#Some-400"><span class="linenos">400</span></a>        <span class="k">return</span> <span class="n">optb</span>
 </span><span id="Some-401"><a href="#Some-401"><span class="linenos">401</span></a>
 </span><span id="Some-402"><a href="#Some-402"><span class="linenos">402</span></a>    <span class="k">def</span> <span class="nf">and_then</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some-403"><a href="#Some-403"><span class="linenos">403</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`, otherwise call `f()`</span>
+</span><span id="Some-403"><a href="#Some-403"><span class="linenos">403</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`, otherwise call `f()`</span>
 </span><span id="Some-404"><a href="#Some-404"><span class="linenos">404</span></a><span class="sd">        on `T` and return `Option[T]` if it&#39;s value not `None`.</span>
 </span><span id="Some-405"><a href="#Some-405"><span class="linenos">405</span></a>
 </span><span id="Some-406"><a href="#Some-406"><span class="linenos">406</span></a><span class="sd">        Example</span>
@@ -1164,8 +1164,8 @@
 </span><span id="Some-422"><a href="#Some-422"><span class="linenos">422</span></a>
 </span><span id="Some-423"><a href="#Some-423"><span class="linenos">423</span></a>    <span class="c1"># *- Builder methods *-</span>
 </span><span id="Some-424"><a href="#Some-424"><span class="linenos">424</span></a>
-</span><span id="Some-425"><a href="#Some-425"><span class="linenos">425</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some-426"><a href="#Some-426"><span class="linenos">426</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
+</span><span id="Some-425"><a href="#Some-425"><span class="linenos">425</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="Some-426"><a href="#Some-426"><span class="linenos">426</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
 </span><span id="Some-427"><a href="#Some-427"><span class="linenos">427</span></a>
 </span><span id="Some-428"><a href="#Some-428"><span class="linenos">428</span></a><span class="sd">        Example</span>
 </span><span id="Some-429"><a href="#Some-429"><span class="linenos">429</span></a><span class="sd">        -------</span>
@@ -1180,12 +1180,12 @@
 </span><span id="Some-438"><a href="#Some-438"><span class="linenos">438</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Some-439"><a href="#Some-439"><span class="linenos">439</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Some-440"><a href="#Some-440"><span class="linenos">440</span></a>            <span class="c1">#! SAFETY: We know the value is None here.</span>
-</span><span id="Some-441"><a href="#Some-441"><span class="linenos">441</span></a>            <span class="k">return</span> <span class="nb">iter</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>  <span class="c1"># pyright: ignore</span>
+</span><span id="Some-441"><a href="#Some-441"><span class="linenos">441</span></a>            <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 </span><span id="Some-442"><a href="#Some-442"><span class="linenos">442</span></a>
-</span><span id="Some-443"><a href="#Some-443"><span class="linenos">443</span></a>        <span class="k">return</span> <span class="nb">iter</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+</span><span id="Some-443"><a href="#Some-443"><span class="linenos">443</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="Some-444"><a href="#Some-444"><span class="linenos">444</span></a>
 </span><span id="Some-445"><a href="#Some-445"><span class="linenos">445</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">Cell</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-</span><span id="Some-446"><a href="#Some-446"><span class="linenos">446</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,</span>
+</span><span id="Some-446"><a href="#Some-446"><span class="linenos">446</span></a>        <span class="sd">&quot;&quot;&quot;Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,</span>
 </span><span id="Some-447"><a href="#Some-447"><span class="linenos">447</span></a>
 </span><span id="Some-448"><a href="#Some-448"><span class="linenos">448</span></a><span class="sd">        Otherwise returns `Some(None)`.</span>
 </span><span id="Some-449"><a href="#Some-449"><span class="linenos">449</span></a>
@@ -1223,7 +1223,7 @@
 </span><span id="Some-481"><a href="#Some-481"><span class="linenos">481</span></a>        <span class="k">return</span> <span class="n">NOTHING</span>  <span class="c1"># pyright: ignore</span>
 </span><span id="Some-482"><a href="#Some-482"><span class="linenos">482</span></a>
 </span><span id="Some-483"><a href="#Some-483"><span class="linenos">483</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">RefCell</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-</span><span id="Some-484"><a href="#Some-484"><span class="linenos">484</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns mutable `Some[sain.cell.RefCell[T]]` if the contained value is not `None`,</span>
+</span><span id="Some-484"><a href="#Some-484"><span class="linenos">484</span></a>        <span class="sd">&quot;&quot;&quot;Returns mutable `Some[sain.cell.RefCell[T]]` if the contained value is not `None`,</span>
 </span><span id="Some-485"><a href="#Some-485"><span class="linenos">485</span></a>
 </span><span id="Some-486"><a href="#Some-486"><span class="linenos">486</span></a><span class="sd">        Otherwise returns `Some(None)`.</span>
 </span><span id="Some-487"><a href="#Some-487"><span class="linenos">487</span></a>
@@ -1249,7 +1249,7 @@
 </span><span id="Some-507"><a href="#Some-507"><span class="linenos">507</span></a>    <span class="c1"># *- Boolean checks *-</span>
 </span><span id="Some-508"><a href="#Some-508"><span class="linenos">508</span></a>
 </span><span id="Some-509"><a href="#Some-509"><span class="linenos">509</span></a>    <span class="k">def</span> <span class="nf">is_some</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Some-510"><a href="#Some-510"><span class="linenos">510</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None`, otherwise returns `False`.</span>
+</span><span id="Some-510"><a href="#Some-510"><span class="linenos">510</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None`, otherwise returns `False`.</span>
 </span><span id="Some-511"><a href="#Some-511"><span class="linenos">511</span></a>
 </span><span id="Some-512"><a href="#Some-512"><span class="linenos">512</span></a><span class="sd">        Example</span>
 </span><span id="Some-513"><a href="#Some-513"><span class="linenos">513</span></a><span class="sd">        -------</span>
@@ -1266,7 +1266,7 @@
 </span><span id="Some-524"><a href="#Some-524"><span class="linenos">524</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="Some-525"><a href="#Some-525"><span class="linenos">525</span></a>
 </span><span id="Some-526"><a href="#Some-526"><span class="linenos">526</span></a>    <span class="k">def</span> <span class="nf">is_some_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Some-527"><a href="#Some-527"><span class="linenos">527</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None` and</span>
+</span><span id="Some-527"><a href="#Some-527"><span class="linenos">527</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None` and</span>
 </span><span id="Some-528"><a href="#Some-528"><span class="linenos">528</span></a><span class="sd">        the predicate returns `True`, otherwise returns `False`.</span>
 </span><span id="Some-529"><a href="#Some-529"><span class="linenos">529</span></a>
 </span><span id="Some-530"><a href="#Some-530"><span class="linenos">530</span></a><span class="sd">        Example</span>
@@ -1284,7 +1284,7 @@
 </span><span id="Some-542"><a href="#Some-542"><span class="linenos">542</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">predicate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="Some-543"><a href="#Some-543"><span class="linenos">543</span></a>
 </span><span id="Some-544"><a href="#Some-544"><span class="linenos">544</span></a>    <span class="k">def</span> <span class="nf">is_none</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Some-545"><a href="#Some-545"><span class="linenos">545</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `None`, otherwise returns `False`.</span>
+</span><span id="Some-545"><a href="#Some-545"><span class="linenos">545</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `None`, otherwise returns `False`.</span>
 </span><span id="Some-546"><a href="#Some-546"><span class="linenos">546</span></a>
 </span><span id="Some-547"><a href="#Some-547"><span class="linenos">547</span></a><span class="sd">        Example</span>
 </span><span id="Some-548"><a href="#Some-548"><span class="linenos">548</span></a><span class="sd">        -------</span>
@@ -1330,23 +1330,29 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>An interface for an object that has a default value.</p>
+            <div class="docstring"><p>The <code><a href="#Option">Option</a></code> type. An object that might be <code>T</code> or <code>None</code>.</p>
+
+<p>It is a drop-in replacement for <code>typing.Optional[T]</code>, But has proper methods to handle the contained value.</p>
 
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn">sain</span> <span class="kn">import</span> <span class="n">Default</span>
+<pre><span></span><code><span class="n">value</span> <span class="o">=</span> <span class="n">Some</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="c1"># Some(&quot;Hello&quot;)</span>
 
-<span class="k">class</span> <span class="nc">Cache</span><span class="p">(</span><span class="n">Default</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
+<span class="c1"># This will unwrap the contained value as long as</span>
+<span class="c1"># it is not `None` otherwise this will raise an error.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">unwrap</span><span class="p">())</span>
+<span class="c1"># &quot;Hello&quot;</span>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="p">{}</span>
+<span class="n">none_value</span> <span class="o">=</span> <span class="n">Some</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">none_value</span><span class="o">.</span><span class="n">unwrap</span><span class="p">():</span>
+    <span class="c1"># Never unreachable!</span>
 
-<span class="n">cache</span> <span class="o">=</span> <span class="n">Cache</span><span class="o">.</span><span class="n">default</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cache</span><span class="p">)</span>
-<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">Default</span><span class="p">)</span>
-<span class="c1"># {}</span>
+<span class="c1"># Solving it with `unwrap_or` method to unwrap the value or return a default value.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">none_value</span><span class="o">.</span><span class="n">unwrap_or</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="c1"># 10</span>
 </code></pre>
 </div>
 </div>
@@ -1356,7 +1362,7 @@
                                         <input id="Some.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">Some</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">value</span><span class="p">:</span> <span class="s1">&#39;T | None&#39;</span>, </span><span class="param"><span class="o">/</span></span>)</span>
+        <span class="name">Some</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span>)</span>
 
                 <label class="view-source-button" for="Some.__init__-view-source"><span>View Source</span></label>
 
@@ -1376,7 +1382,7 @@
                     <div class="decorator">@staticmethod</div>
 
         <span class="def">def</span>
-        <span class="name">default</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="n">Option</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span>:</span></span>
+        <span class="name">default</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="n">NoneType</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.default-view-source"><span>View Source</span></label>
 
@@ -1384,7 +1390,7 @@
     <a class="headerlink" href="#Some.default"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.default-89"><a href="#Some.default-89"><span class="linenos">89</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="Some.default-90"><a href="#Some.default-90"><span class="linenos">90</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
-</span><span id="Some.default-91"><a href="#Some.default-91"><span class="linenos">91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Default value for `Some`. Returns `None` wrapped in `Some`.</span>
+</span><span id="Some.default-91"><a href="#Some.default-91"><span class="linenos">91</span></a>        <span class="sd">&quot;&quot;&quot;Default value for `Some`. Returns `None` wrapped in `Some`.</span>
 </span><span id="Some.default-92"><a href="#Some.default-92"><span class="linenos">92</span></a>
 </span><span id="Some.default-93"><a href="#Some.default-93"><span class="linenos">93</span></a><span class="sd">        Example</span>
 </span><span id="Some.default-94"><a href="#Some.default-94"><span class="linenos">94</span></a><span class="sd">        -------</span>
@@ -1396,7 +1402,14 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>Return the default value of the object.</p>
+            <div class="docstring"><p>Default value for <code><a href="#Some">Some</a></code>. Returns <code>None</code> wrapped in <code><a href="#Some">Some</a></code>.</p>
+
+<h6 id="example">Example</h6>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">assert</span> <span class="n"><a href="#Some.default">Some.default</a></span><span class="p">()</span> <span class="o">==</span> <span class="n">NOTHING</span>
+</code></pre>
+</div>
 </div>
 
 
@@ -1406,14 +1419,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">into_inner</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;T | None&#39;</span>:</span></span>
+        <span class="name">into_inner</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">Optional</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.into_inner-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.into_inner"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.into_inner-103"><a href="#Some.into_inner-103"><span class="linenos">103</span></a>    <span class="k">def</span> <span class="nf">into_inner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Some.into_inner-104"><a href="#Some.into_inner-104"><span class="linenos">104</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Consume `Self`, returning the wrapped value as `T | None`.</span>
+</span><span id="Some.into_inner-104"><a href="#Some.into_inner-104"><span class="linenos">104</span></a>        <span class="sd">&quot;&quot;&quot;Consume `Self`, returning the wrapped value as `T | None`.</span>
 </span><span id="Some.into_inner-105"><a href="#Some.into_inner-105"><span class="linenos">105</span></a>
 </span><span id="Some.into_inner-106"><a href="#Some.into_inner-106"><span class="linenos">106</span></a><span class="sd">        Examples</span>
 </span><span id="Some.into_inner-107"><a href="#Some.into_inner-107"><span class="linenos">107</span></a><span class="sd">        --------</span>
@@ -1452,14 +1465,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">unwrap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="s1">&#39;T | _typing.NoReturn&#39;</span>:</span></span>
+        <span class="name">unwrap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
 
                 <label class="view-source-button" for="Some.unwrap-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.unwrap"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.unwrap-119"><a href="#Some.unwrap-119"><span class="linenos">119</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some.unwrap-120"><a href="#Some.unwrap-120"><span class="linenos">120</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or raising a `RuntimeError`.</span>
+</span><span id="Some.unwrap-120"><a href="#Some.unwrap-120"><span class="linenos">120</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or raising a `RuntimeError`.</span>
 </span><span id="Some.unwrap-121"><a href="#Some.unwrap-121"><span class="linenos">121</span></a>
 </span><span id="Some.unwrap-122"><a href="#Some.unwrap-122"><span class="linenos">122</span></a><span class="sd">        It&#39;s usually not recommended to use this method in production code, since it raises.</span>
 </span><span id="Some.unwrap-123"><a href="#Some.unwrap-123"><span class="linenos">123</span></a>
@@ -1483,7 +1496,7 @@
 </span><span id="Some.unwrap-141"><a href="#Some.unwrap-141"><span class="linenos">141</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Some.unwrap-142"><a href="#Some.unwrap-142"><span class="linenos">142</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="Some.unwrap-143"><a href="#Some.unwrap-143"><span class="linenos">143</span></a>                <span class="sa">f</span><span class="s2">&quot;Called `Option.unwrap()` on </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
-</span><span id="Some.unwrap-144"><a href="#Some.unwrap-144"><span class="linenos">144</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="Some.unwrap-144"><a href="#Some.unwrap-144"><span class="linenos">144</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="Some.unwrap-145"><a href="#Some.unwrap-145"><span class="linenos">145</span></a>
 </span><span id="Some.unwrap-146"><a href="#Some.unwrap-146"><span class="linenos">146</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 </span></pre></div>
@@ -1520,14 +1533,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">unwrap_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="s1">&#39;T&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;T&#39;</span>:</span></span>
+        <span class="name">unwrap_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
 
                 <label class="view-source-button" for="Some.unwrap_or-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.unwrap_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.unwrap_or-148"><a href="#Some.unwrap_or-148"><span class="linenos">148</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some.unwrap_or-149"><a href="#Some.unwrap_or-149"><span class="linenos">149</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or returning `default`.</span>
+</span><span id="Some.unwrap_or-149"><a href="#Some.unwrap_or-149"><span class="linenos">149</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or returning `default`.</span>
 </span><span id="Some.unwrap_or-150"><a href="#Some.unwrap_or-150"><span class="linenos">150</span></a>
 </span><span id="Some.unwrap_or-151"><a href="#Some.unwrap_or-151"><span class="linenos">151</span></a><span class="sd">        Example</span>
 </span><span id="Some.unwrap_or-152"><a href="#Some.unwrap_or-152"><span class="linenos">152</span></a><span class="sd">        -------</span>
@@ -1573,14 +1586,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">unwrap_or_else</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="s1">&#39;FnOnce[T]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;T&#39;</span>:</span></span>
+        <span class="name">unwrap_or_else</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
 
                 <label class="view-source-button" for="Some.unwrap_or_else-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.unwrap_or_else"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.unwrap_or_else-169"><a href="#Some.unwrap_or_else-169"><span class="linenos">169</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">FnOnce</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some.unwrap_or_else-170"><a href="#Some.unwrap_or_else-170"><span class="linenos">170</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or calling `f` to get a default value.</span>
+</span><span id="Some.unwrap_or_else-170"><a href="#Some.unwrap_or_else-170"><span class="linenos">170</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value either returning if its not `None` or calling `f` to get a default value.</span>
 </span><span id="Some.unwrap_or_else-171"><a href="#Some.unwrap_or_else-171"><span class="linenos">171</span></a>
 </span><span id="Some.unwrap_or_else-172"><a href="#Some.unwrap_or_else-172"><span class="linenos">172</span></a><span class="sd">        Example</span>
 </span><span id="Some.unwrap_or_else-173"><a href="#Some.unwrap_or_else-173"><span class="linenos">173</span></a><span class="sd">        -------</span>
@@ -1625,7 +1638,7 @@
                     <div class="decorator">@macros.unsafe</div>
 
         <span class="def">def</span>
-        <span class="name">unwrap_unchecked</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;T&#39;</span>:</span></span>
+        <span class="name">unwrap_unchecked</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
 
                 <label class="view-source-button" for="Some.unwrap_unchecked-view-source"><span>View Source</span></label>
 
@@ -1633,7 +1646,7 @@
     <a class="headerlink" href="#Some.unwrap_unchecked"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.unwrap_unchecked-189"><a href="#Some.unwrap_unchecked-189"><span class="linenos">189</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="Some.unwrap_unchecked-190"><a href="#Some.unwrap_unchecked-190"><span class="linenos">190</span></a>    <span class="k">def</span> <span class="nf">unwrap_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some.unwrap_unchecked-191"><a href="#Some.unwrap_unchecked-191"><span class="linenos">191</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap the inner value immediately returning it.</span>
+</span><span id="Some.unwrap_unchecked-191"><a href="#Some.unwrap_unchecked-191"><span class="linenos">191</span></a>        <span class="sd">&quot;&quot;&quot;Unwrap the inner value immediately returning it.</span>
 </span><span id="Some.unwrap_unchecked-192"><a href="#Some.unwrap_unchecked-192"><span class="linenos">192</span></a>
 </span><span id="Some.unwrap_unchecked-193"><a href="#Some.unwrap_unchecked-193"><span class="linenos">193</span></a><span class="sd">        Example</span>
 </span><span id="Some.unwrap_unchecked-194"><a href="#Some.unwrap_unchecked-194"><span class="linenos">194</span></a><span class="sd">        -------</span>
@@ -1675,14 +1688,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">expect</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">message</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="s1">&#39;T&#39;</span>:</span></span>
+        <span class="name">expect</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">message</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
 
                 <label class="view-source-button" for="Some.expect-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.expect"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.expect-206"><a href="#Some.expect-206"><span class="linenos">206</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Some.expect-207"><a href="#Some.expect-207"><span class="linenos">207</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.</span>
+</span><span id="Some.expect-207"><a href="#Some.expect-207"><span class="linenos">207</span></a>        <span class="sd">&quot;&quot;&quot;Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.</span>
 </span><span id="Some.expect-208"><a href="#Some.expect-208"><span class="linenos">208</span></a>
 </span><span id="Some.expect-209"><a href="#Some.expect-209"><span class="linenos">209</span></a><span class="sd">        Example</span>
 </span><span id="Some.expect-210"><a href="#Some.expect-210"><span class="linenos">210</span></a><span class="sd">        -------</span>
@@ -1728,14 +1741,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="s1">&#39;Fn[T, U]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[U]&#39;</span>:</span></span>
+        <span class="name">map</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">U</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.map-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.map"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.map-228"><a href="#Some.map-228"><span class="linenos">228</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="Some.map-229"><a href="#Some.map-229"><span class="linenos">229</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type. Returning `Some(None)` if `T` is `None`.</span>
+</span><span id="Some.map-229"><a href="#Some.map-229"><span class="linenos">229</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type. Returning `Some(None)` if `T` is `None`.</span>
 </span><span id="Some.map-230"><a href="#Some.map-230"><span class="linenos">230</span></a>
 </span><span id="Some.map-231"><a href="#Some.map-231"><span class="linenos">231</span></a><span class="sd">        Example</span>
 </span><span id="Some.map-232"><a href="#Some.map-232"><span class="linenos">232</span></a><span class="sd">        -------</span>
@@ -1781,14 +1794,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="s1">&#39;U&#39;</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="s1">&#39;Fn[T, U]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;U&#39;</span>:</span></span>
+        <span class="name">map_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="o">~</span><span class="n">U</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">U</span>:</span></span>
 
                 <label class="view-source-button" for="Some.map_or-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.map_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.map_or-249"><a href="#Some.map_or-249"><span class="linenos">249</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Some.map_or-250"><a href="#Some.map_or-250"><span class="linenos">250</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type or return `default` if its `None`.</span>
+</span><span id="Some.map_or-250"><a href="#Some.map_or-250"><span class="linenos">250</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type or return `default` if its `None`.</span>
 </span><span id="Some.map_or-251"><a href="#Some.map_or-251"><span class="linenos">251</span></a>
 </span><span id="Some.map_or-252"><a href="#Some.map_or-252"><span class="linenos">252</span></a><span class="sd">        Example</span>
 </span><span id="Some.map_or-253"><a href="#Some.map_or-253"><span class="linenos">253</span></a><span class="sd">        -------</span>
@@ -1836,14 +1849,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map_or_else</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">default</span><span class="p">:</span> <span class="s1">&#39;FnOnce[U]&#39;</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="s1">&#39;Fn[T, U]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;U&#39;</span>:</span></span>
+        <span class="name">map_or_else</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">default</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span>,</span><span class="param">	<span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span>,</span><span class="param">	<span class="o">/</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">U</span>:</span></span>
 
                 <label class="view-source-button" for="Some.map_or_else-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.map_or_else"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.map_or_else-271"><a href="#Some.map_or_else-271"><span class="linenos">271</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">FnOnce</span><span class="p">[</span><span class="n">U</span><span class="p">],</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Some.map_or_else-272"><a href="#Some.map_or_else-272"><span class="linenos">272</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map the inner value to another type, or return `default()` if its `None`.</span>
+</span><span id="Some.map_or_else-272"><a href="#Some.map_or_else-272"><span class="linenos">272</span></a>        <span class="sd">&quot;&quot;&quot;Map the inner value to another type, or return `default()` if its `None`.</span>
 </span><span id="Some.map_or_else-273"><a href="#Some.map_or_else-273"><span class="linenos">273</span></a>
 </span><span id="Some.map_or_else-274"><a href="#Some.map_or_else-274"><span class="linenos">274</span></a><span class="sd">        Example</span>
 </span><span id="Some.map_or_else-275"><a href="#Some.map_or_else-275"><span class="linenos">275</span></a><span class="sd">        -------</span>
@@ -1897,14 +1910,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">filter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">predicate</span><span class="p">:</span> <span class="s1">&#39;Fn[T, bool]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
+        <span class="name">filter</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.filter-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.filter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.filter-296"><a href="#Some.filter-296"><span class="linenos">296</span></a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some.filter-297"><a href="#Some.filter-297"><span class="linenos">297</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`,</span>
+</span><span id="Some.filter-297"><a href="#Some.filter-297"><span class="linenos">297</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`,</span>
 </span><span id="Some.filter-298"><a href="#Some.filter-298"><span class="linenos">298</span></a>
 </span><span id="Some.filter-299"><a href="#Some.filter-299"><span class="linenos">299</span></a><span class="sd">        otherwise calls the predicate and returns `Some(T)` if the predicate returns `True`.</span>
 </span><span id="Some.filter-300"><a href="#Some.filter-300"><span class="linenos">300</span></a>
@@ -1955,14 +1968,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">take</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
+        <span class="name">take</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.take-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.take"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.take-322"><a href="#Some.take-322"><span class="linenos">322</span></a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some.take-323"><a href="#Some.take-323"><span class="linenos">323</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None`.</span>
+</span><span id="Some.take-323"><a href="#Some.take-323"><span class="linenos">323</span></a>        <span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None`.</span>
 </span><span id="Some.take-324"><a href="#Some.take-324"><span class="linenos">324</span></a>
 </span><span id="Some.take-325"><a href="#Some.take-325"><span class="linenos">325</span></a><span class="sd">        Example</span>
 </span><span id="Some.take-326"><a href="#Some.take-326"><span class="linenos">326</span></a><span class="sd">        -------</span>
@@ -2004,14 +2017,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">take_if</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">predicate</span><span class="p">:</span> <span class="s1">&#39;Fn[T, bool]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
+        <span class="name">take_if</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.take_if-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.take_if"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.take_if-342"><a href="#Some.take_if-342"><span class="linenos">342</span></a>    <span class="k">def</span> <span class="nf">take_if</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some.take_if-343"><a href="#Some.take_if-343"><span class="linenos">343</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None` only if predicate returns `True`.</span>
+</span><span id="Some.take_if-343"><a href="#Some.take_if-343"><span class="linenos">343</span></a>        <span class="sd">&quot;&quot;&quot;Take the value from `Self`, Setting it to `None` only if predicate returns `True`.</span>
 </span><span id="Some.take_if-344"><a href="#Some.take_if-344"><span class="linenos">344</span></a>
 </span><span id="Some.take_if-345"><a href="#Some.take_if-345"><span class="linenos">345</span></a><span class="sd">        Example</span>
 </span><span id="Some.take_if-346"><a href="#Some.take_if-346"><span class="linenos">346</span></a><span class="sd">        -------</span>
@@ -2063,14 +2076,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">replace</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="s1">&#39;T&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
+        <span class="name">replace</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.replace-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.replace"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.replace-366"><a href="#Some.replace-366"><span class="linenos">366</span></a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some.replace-367"><a href="#Some.replace-367"><span class="linenos">367</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Replace the contained value with another value.</span>
+</span><span id="Some.replace-367"><a href="#Some.replace-367"><span class="linenos">367</span></a>        <span class="sd">&quot;&quot;&quot;Replace the contained value with another value.</span>
 </span><span id="Some.replace-368"><a href="#Some.replace-368"><span class="linenos">368</span></a>
 </span><span id="Some.replace-369"><a href="#Some.replace-369"><span class="linenos">369</span></a><span class="sd">        Example</span>
 </span><span id="Some.replace-370"><a href="#Some.replace-370"><span class="linenos">370</span></a><span class="sd">        -------</span>
@@ -2104,14 +2117,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">and_ok</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">optb</span><span class="p">:</span> <span class="s1">&#39;Option[T]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[U]&#39;</span>:</span></span>
+        <span class="name">and_ok</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">optb</span><span class="p">:</span> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.and_ok-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.and_ok"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.and_ok-380"><a href="#Some.and_ok-380"><span class="linenos">380</span></a>    <span class="k">def</span> <span class="nf">and_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optb</span><span class="p">:</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some.and_ok-381"><a href="#Some.and_ok-381"><span class="linenos">381</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if either contained value is `None`,</span>
+</span><span id="Some.and_ok-381"><a href="#Some.and_ok-381"><span class="linenos">381</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if either contained value is `None`,</span>
 </span><span id="Some.and_ok-382"><a href="#Some.and_ok-382"><span class="linenos">382</span></a>
 </span><span id="Some.and_ok-383"><a href="#Some.and_ok-383"><span class="linenos">383</span></a><span class="sd">        Otherwise return `optb`.</span>
 </span><span id="Some.and_ok-384"><a href="#Some.and_ok-384"><span class="linenos">384</span></a>
@@ -2159,14 +2172,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">and_then</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="s1">&#39;Fn[T, Option[U]]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[U]&#39;</span>:</span></span>
+        <span class="name">and_then</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.and_then-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.and_then"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.and_then-402"><a href="#Some.and_then-402"><span class="linenos">402</span></a>    <span class="k">def</span> <span class="nf">and_then</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some.and_then-403"><a href="#Some.and_then-403"><span class="linenos">403</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`, otherwise call `f()`</span>
+</span><span id="Some.and_then-403"><a href="#Some.and_then-403"><span class="linenos">403</span></a>        <span class="sd">&quot;&quot;&quot;Returns `Some(None)` if the contained value is `None`, otherwise call `f()`</span>
 </span><span id="Some.and_then-404"><a href="#Some.and_then-404"><span class="linenos">404</span></a><span class="sd">        on `T` and return `Option[T]` if it&#39;s value not `None`.</span>
 </span><span id="Some.and_then-405"><a href="#Some.and_then-405"><span class="linenos">405</span></a>
 </span><span id="Some.and_then-406"><a href="#Some.and_then-406"><span class="linenos">406</span></a><span class="sd">        Example</span>
@@ -2212,14 +2225,14 @@ on <code>T</code> and return <code>Option[T]</code> if it's value not <code>None
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;Iter[T]&#39;</span>:</span></span>
+        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="iter.html#Iterator">sain.iter.Iterator</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.iter-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.iter"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Some.iter-425"><a href="#Some.iter-425"><span class="linenos">425</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Some.iter-426"><a href="#Some.iter-426"><span class="linenos">426</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Some.iter-425"><a href="#Some.iter-425"><span class="linenos">425</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="Some.iter-426"><a href="#Some.iter-426"><span class="linenos">426</span></a>        <span class="sd">&quot;&quot;&quot;Returns an iterator over the contained value.</span>
 </span><span id="Some.iter-427"><a href="#Some.iter-427"><span class="linenos">427</span></a>
 </span><span id="Some.iter-428"><a href="#Some.iter-428"><span class="linenos">428</span></a><span class="sd">        Example</span>
 </span><span id="Some.iter-429"><a href="#Some.iter-429"><span class="linenos">429</span></a><span class="sd">        -------</span>
@@ -2234,9 +2247,9 @@ on <code>T</code> and return <code>Option[T]</code> if it's value not <code>None
 </span><span id="Some.iter-438"><a href="#Some.iter-438"><span class="linenos">438</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Some.iter-439"><a href="#Some.iter-439"><span class="linenos">439</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Some.iter-440"><a href="#Some.iter-440"><span class="linenos">440</span></a>            <span class="c1">#! SAFETY: We know the value is None here.</span>
-</span><span id="Some.iter-441"><a href="#Some.iter-441"><span class="linenos">441</span></a>            <span class="k">return</span> <span class="nb">iter</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>  <span class="c1"># pyright: ignore</span>
+</span><span id="Some.iter-441"><a href="#Some.iter-441"><span class="linenos">441</span></a>            <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 </span><span id="Some.iter-442"><a href="#Some.iter-442"><span class="linenos">442</span></a>
-</span><span id="Some.iter-443"><a href="#Some.iter-443"><span class="linenos">443</span></a>        <span class="k">return</span> <span class="nb">iter</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+</span><span id="Some.iter-443"><a href="#Some.iter-443"><span class="linenos">443</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -2262,14 +2275,14 @@ on <code>T</code> and return <code>Option[T]</code> if it's value not <code>None
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">as_ref</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[_ref.Cell[T]]&#39;</span>:</span></span>
+        <span class="name">as_ref</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="n">sain</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">Cell</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.as_ref-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.as_ref"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.as_ref-445"><a href="#Some.as_ref-445"><span class="linenos">445</span></a>    <span class="k">def</span> <span class="nf">as_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">Cell</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-</span><span id="Some.as_ref-446"><a href="#Some.as_ref-446"><span class="linenos">446</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,</span>
+</span><span id="Some.as_ref-446"><a href="#Some.as_ref-446"><span class="linenos">446</span></a>        <span class="sd">&quot;&quot;&quot;Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,</span>
 </span><span id="Some.as_ref-447"><a href="#Some.as_ref-447"><span class="linenos">447</span></a>
 </span><span id="Some.as_ref-448"><a href="#Some.as_ref-448"><span class="linenos">448</span></a><span class="sd">        Otherwise returns `Some(None)`.</span>
 </span><span id="Some.as_ref-449"><a href="#Some.as_ref-449"><span class="linenos">449</span></a>
@@ -2349,14 +2362,14 @@ on <code>T</code> and return <code>Option[T]</code> if it's value not <code>None
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">as_mut</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[_ref.RefCell[T]]&#39;</span>:</span></span>
+        <span class="name">as_mut</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="n">sain</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">RefCell</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span>:</span></span>
 
                 <label class="view-source-button" for="Some.as_mut-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.as_mut"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.as_mut-483"><a href="#Some.as_mut-483"><span class="linenos">483</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Some</span><span class="p">[</span><span class="n">cell</span><span class="o">.</span><span class="n">RefCell</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-</span><span id="Some.as_mut-484"><a href="#Some.as_mut-484"><span class="linenos">484</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns mutable `Some[sain.cell.RefCell[T]]` if the contained value is not `None`,</span>
+</span><span id="Some.as_mut-484"><a href="#Some.as_mut-484"><span class="linenos">484</span></a>        <span class="sd">&quot;&quot;&quot;Returns mutable `Some[sain.cell.RefCell[T]]` if the contained value is not `None`,</span>
 </span><span id="Some.as_mut-485"><a href="#Some.as_mut-485"><span class="linenos">485</span></a>
 </span><span id="Some.as_mut-486"><a href="#Some.as_mut-486"><span class="linenos">486</span></a><span class="sd">        Otherwise returns `Some(None)`.</span>
 </span><span id="Some.as_mut-487"><a href="#Some.as_mut-487"><span class="linenos">487</span></a>
@@ -2414,7 +2427,7 @@ on <code>T</code> and return <code>Option[T]</code> if it's value not <code>None
     </div>
     <a class="headerlink" href="#Some.is_some"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.is_some-509"><a href="#Some.is_some-509"><span class="linenos">509</span></a>    <span class="k">def</span> <span class="nf">is_some</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Some.is_some-510"><a href="#Some.is_some-510"><span class="linenos">510</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None`, otherwise returns `False`.</span>
+</span><span id="Some.is_some-510"><a href="#Some.is_some-510"><span class="linenos">510</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None`, otherwise returns `False`.</span>
 </span><span id="Some.is_some-511"><a href="#Some.is_some-511"><span class="linenos">511</span></a>
 </span><span id="Some.is_some-512"><a href="#Some.is_some-512"><span class="linenos">512</span></a><span class="sd">        Example</span>
 </span><span id="Some.is_some-513"><a href="#Some.is_some-513"><span class="linenos">513</span></a><span class="sd">        -------</span>
@@ -2455,14 +2468,14 @@ on <code>T</code> and return <code>Option[T]</code> if it's value not <code>None
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">is_some_and</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">predicate</span><span class="p">:</span> <span class="s1">&#39;Fn[T, bool]&#39;</span></span><span class="return-annotation">) -> <span class="nb">bool</span>:</span></span>
+        <span class="name">is_some_and</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="nb">bool</span>:</span></span>
 
                 <label class="view-source-button" for="Some.is_some_and-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Some.is_some_and"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.is_some_and-526"><a href="#Some.is_some_and-526"><span class="linenos">526</span></a>    <span class="k">def</span> <span class="nf">is_some_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Fn</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Some.is_some_and-527"><a href="#Some.is_some_and-527"><span class="linenos">527</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None` and</span>
+</span><span id="Some.is_some_and-527"><a href="#Some.is_some_and-527"><span class="linenos">527</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is not `None` and</span>
 </span><span id="Some.is_some_and-528"><a href="#Some.is_some_and-528"><span class="linenos">528</span></a><span class="sd">        the predicate returns `True`, otherwise returns `False`.</span>
 </span><span id="Some.is_some_and-529"><a href="#Some.is_some_and-529"><span class="linenos">529</span></a>
 </span><span id="Some.is_some_and-530"><a href="#Some.is_some_and-530"><span class="linenos">530</span></a><span class="sd">        Example</span>
@@ -2512,7 +2525,7 @@ the predicate returns <code>True</code>, otherwise returns <code>False</code>.</
     </div>
     <a class="headerlink" href="#Some.is_none"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Some.is_none-544"><a href="#Some.is_none-544"><span class="linenos">544</span></a>    <span class="k">def</span> <span class="nf">is_none</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Some.is_none-545"><a href="#Some.is_none-545"><span class="linenos">545</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `None`, otherwise returns `False`.</span>
+</span><span id="Some.is_none-545"><a href="#Some.is_none-545"><span class="linenos">545</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `None`, otherwise returns `False`.</span>
 </span><span id="Some.is_none-546"><a href="#Some.is_none-546"><span class="linenos">546</span></a>
 </span><span id="Some.is_none-547"><a href="#Some.is_none-547"><span class="linenos">547</span></a><span class="sd">        Example</span>
 </span><span id="Some.is_none-548"><a href="#Some.is_none-548"><span class="linenos">548</span></a><span class="sd">        -------</span>
@@ -2551,7 +2564,7 @@ the predicate returns <code>True</code>, otherwise returns <code>False</code>.</
                 </section>
                 <section id="Option">
                     <div class="attr variable">
-            <span class="name">Option</span>        =
+            <span class="name">Option</span><span class="annotation">: TypeAlias</span>        =
 <span class="default_value"><a href="#Some">Some</a>[~T]</span>
 
         
@@ -2580,7 +2593,7 @@ the predicate returns <code>True</code>, otherwise returns <code>False</code>.</
                 </section>
                 <section id="NOTHING">
                     <div class="attr variable">
-            <span class="name">NOTHING</span><span class="annotation">: Option[None]</span>        =
+            <span class="name">NOTHING</span><span class="annotation">: Final[<a href="#Some">Some</a>[NoneType]]</span>        =
 <span class="default_value">None</span>
 
         

@@ -37,7 +37,7 @@ import typing
 
 from . import cell
 from . import default as _default
-from . import iter
+from . import iter as _iter
 from . import macros
 
 T = typing.TypeVar("T")
@@ -421,7 +421,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
     # *- Builder methods *-
 
-    def iter(self) -> iter.Iterator[T]:
+    def iter(self) -> _iter.Iterator[T]:
         """Returns an iterator over the contained value.
 
         Example
@@ -437,9 +437,9 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         """
         if self._value is None:
             #! SAFETY: We know the value is None here.
-            return iter.empty()  # pyright: ignore
+            return _iter.empty()
 
-        return iter.once(self._value)
+        return _iter.once(self._value)
 
     def as_ref(self) -> Some[cell.Cell[T]]:
         """Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,
