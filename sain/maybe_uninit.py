@@ -66,7 +66,7 @@ class MaybeUninit(typing.Generic[T]):
     --------
     ```py
     # Create a list of 3 uninitialized strings preallocated.
-    pool: list[MaybeUninit[str]] = MaybeUninit.uninit_array(3)
+    pool = MaybeUninit[str].uninit_array(3)
     chars = ['a', 'b', 'c']
 
     for index, uninit in enumerate(pool):

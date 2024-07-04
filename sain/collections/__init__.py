@@ -38,13 +38,16 @@ This question's answer should be pretty straightforward.
 * Use `Vec` when you want to replace `list`
 * Use `Bytes` when you want to replace `bytearray` or `bytes` or in general, you want to store bytes in memory,
 then perform conversions into other types.
+* Use `HashMap` when you want to replace `dict`
 """
 
 from __future__ import annotations
 
-__all__ = ("Vec", "Bytes", "vec", "buf")
+__all__ = ("Vec", "Bytes", "vec", "buf", "hash_map", "HashMap")
 
 from . import buf
 from . import vec
+from . import hash_map
+from .hash_map import HashMap
 from .buf import Bytes
 from .vec import Vec
