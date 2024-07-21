@@ -189,7 +189,7 @@ class _RawMap(collections.Mapping[K, V]):
 
     def __setitem__(self, _key: Never, _value: Never) -> typing.NoReturn:
         raise NotImplementedError(
-            "`HashMap` is immutable, use `.as_mut()` to make mutable instead"
+            "`HashMap` is immutable, use `.as_mut()` to make it mutable instead"
         )
 
     def __delitem__(self, _key: Never) -> typing.NoReturn:
@@ -270,7 +270,7 @@ class HashMap(_RawMap[K, V]):
 
 
 @typing.final
-class RefMut[K, V](_RawMap[K, V], collections.MutableMapping[K, V]):
+class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, V]):
     """A reference to a mutable dictionary / hashmap.
 
     This is built from the `HashMap.as_mut()` method.
