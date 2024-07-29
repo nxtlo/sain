@@ -3,7 +3,7 @@ nox~=2024.4.15
 pytest~=8.3.2
 
 # Documentation.
-pdoc~=14.5.1
+pdoc~=14.6.0
 
 # Format - Type checking.
 ruff~=0.5.5
