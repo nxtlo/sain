@@ -63,7 +63,6 @@ __all__ = (
     "Result",
     # collections
     "collections",
-    "vec",
     "Vec",
     # error.py
     "error",
@@ -73,7 +72,8 @@ __all__ = (
     "Box",
     # sync
     "sync",
-    "MaybeUninit",
+    # maybe_uninit.py
+    "maybe_uninit",
     # convert
     "convert",
     "From",
@@ -90,6 +90,7 @@ from . import error
 from . import futures
 from . import iter
 from . import macros
+from . import maybe_uninit
 from . import option
 from . import result
 from . import sync
@@ -97,7 +98,6 @@ from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr
 from .collections import Vec
-from .collections import vec
 from .convert import From
 from .convert import Into
 from .convert import TryFrom
@@ -110,7 +110,6 @@ from .macros import deprecated
 from .macros import doc
 from .macros import todo
 from .macros import unimplemented
-from .maybe_uninit import MaybeUninit
 from .option import NOTHING
 from .option import Option
 from .option import Some

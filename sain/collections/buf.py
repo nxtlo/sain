@@ -35,6 +35,7 @@ from __future__ import annotations
 __all__ = ("Bytes", "Rawish", "Buffer")
 
 import array
+import ctypes as _ctypes
 import io as _io
 import sys as _sys
 import typing
@@ -114,8 +115,8 @@ class Bytes:
     buffer.put_bytes(b"Hello")
     print(buffer) # [72, 101, 108, 108, 111]
 
-    buf.put(1234)
-    assert buffer.as_bytes() == b"Hello\x04\xd2"
+    buf.put(32) # space
+    assert buffer.as_bytes() == b"Hello "
     ```
     """
 
@@ -132,7 +133,7 @@ class Bytes:
 
     @classmethod
     def from_str(cls, s: str) -> Self:
-        """Create a new `Bytes` from a string with the given encoding.
+        """Create a new `Bytes` from a utf-8 string.
 
         Example
         -------
@@ -169,7 +170,6 @@ class Bytes:
         Example
         -------
         ```py
-        arr = array.array("B")
         buffer = Bytes.from_bytes(b"SIGNATURE")
         ```
         """
@@ -223,7 +223,7 @@ class Bytes:
         Incorrect bytes
         ---------------
         ```py
-        invalid_bytes = Bytes.from_raw([0, 159, 146, 150])
+        invalid_bytes = Bytes.from_bytes([0, 159, 146, 150])
         invalid_bytes.try_to_str().is_err()
         ```
 
@@ -260,7 +260,7 @@ class Bytes:
         Incorrect bytes
         ---------------
         ```py
-        invalid_bytes = Bytes.from_raw(b"Hello \xf0\x90\x80World")
+        invalid_bytes = Bytes.from_bytes(b"Hello \xf0\x90\x80World")
         assert invalid_bytes.to_str() == "Hello �World"
         ```
 
@@ -270,7 +270,7 @@ class Bytes:
         invalid bytes that cannot be decoded.
 
         ```py
-        invalid_bytes = Bytes.from_raw([0, 159, 146, 150])
+        invalid_bytes = Bytes.from_bytes([0, 159, 146, 150])
         invalid_bytes.to_str() # ERROR
         ```
         """
@@ -291,7 +291,7 @@ class Bytes:
     def leak(self) -> Option[array.array[int]]:
         """Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.
 
-        `None` is returned if it was already `None`.
+        `None` is returned if `self` isn't initialized.
 
         Example
         -------
@@ -340,7 +340,7 @@ class Bytes:
         return tuple(self._buf) if self._buf is not None else ()
 
     def as_mut(self) -> collections.MutableSequence[int]:
-        """Return `self` as a mutable sequence without copying.
+        """Convert `self` into a mutable sequence.
 
         An empty sequence is returned if `self` hasn't been initialized.
 
@@ -476,7 +476,7 @@ class Bytes:
         self.put_bytes(s.encode(ENCODING))
 
     def len(self) -> int:
-        """Return the number of elements in this buffer.
+        """Return the number of bytes in this buffer.
 
         Example
         -------
@@ -494,7 +494,7 @@ class Bytes:
         Example
         -------
         ```py
-        buf = Bytes.from_raw([240, 159, 146, 150])
+        buf = Bytes.from_bytes([240, 159, 146, 150])
         assert buf.size() == 1
         ```
         """
@@ -510,7 +510,7 @@ class Bytes:
         Example
         -------
         ```py
-        buf = Bytes.from_raw((1, 2, 3))
+        buf = Bytes.from_bytes((1, 2, 3))
         iterator = buf.iter()
 
         # map each byte to a character
@@ -522,6 +522,27 @@ class Bytes:
         ```
         """
         return _iter.Iter(self)
+
+    def chars(self) -> _iter.Iterator[_ctypes.c_char]:
+        """Returns an iterator over the characters of `Bytes`.
+
+        This iterator yields all `int`s from start to end as a `ctypes.c_char`.
+
+        Example
+        -------
+        ```py
+        b = Bytes.from_str("Hello")
+        for char in b.chars():
+            print(char)
+
+        # c_char(b'H')
+        # c_char(b'e')
+        # c_char(b'l')
+        # c_char(b'l')
+        # c_char(b'o')
+        ```
+        """
+        return self.iter().map(_ctypes.c_char)  # pyright: ignore - this is fine but pyright is trolling.
 
     def is_empty(self) -> bool:
         """Check whether `self` contains any bytes or not.
@@ -543,7 +564,7 @@ class Bytes:
         Example
         -------
         ```py
-        original = Bytes.from_raw([255, 255, 255, 0])
+        original = Bytes.from_bytes([255, 255, 255, 0])
         copy = original.copy()
         ```
         """
@@ -558,7 +579,7 @@ class Bytes:
         Example
         -------
         ```py
-        buf = Bytes([255])
+        buf = Bytes.from_bytes([255])
         buf.clear()
 
         assert buf.is_empty()

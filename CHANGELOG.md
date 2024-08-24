@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `HashMap`
+- `Bytes.chars`
+
 
 ## 1.1.0 - 27/06/2024
 

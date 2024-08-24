@@ -46,8 +46,8 @@ from __future__ import annotations
 __all__ = ("Vec", "Bytes", "vec", "buf", "hash_map", "HashMap")
 
 from . import buf
-from . import vec
 from . import hash_map
-from .hash_map import HashMap
+from . import vec
 from .buf import Bytes
+from .hash_map import HashMap
 from .vec import Vec

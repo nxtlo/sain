@@ -34,11 +34,11 @@ This contains Rust's `std::collections::HashMap` methods.
 
 from __future__ import annotations
 
-import typing
 import collections.abc as collections
+import typing
 
-from sain import option as _option
 from sain import iter as _iter
+from sain import option as _option
 
 K = typing.TypeVar("K")
 V = typing.TypeVar("V")
@@ -47,6 +47,7 @@ T = typing.TypeVar("T")
 if typing.TYPE_CHECKING:
     from typing_extensions import Never
     from typing_extensions import Self
+
     from sain.option import Option
 
 

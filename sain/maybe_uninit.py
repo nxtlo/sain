@@ -66,10 +66,10 @@ class MaybeUninit(typing.Generic[T]):
     --------
     ```py
     # Create a list of 3 uninitialized strings preallocated.
-    pool = MaybeUninit[str].uninit_array(3)
+    array = MaybeUninit[str].uninit_array(3)
     chars = ['a', 'b', 'c']
 
-    for index, uninit in enumerate(pool):
+    for index, uninit in enumerate(array):
         uninit.write(chars[index])
 
     assert all(obj.assume_init() for obj in pool)
@@ -98,7 +98,7 @@ class MaybeUninit(typing.Generic[T]):
         Example
         -------
         ```py
-        v: MaybeUninit[str] = MaybeUninit().uninit() # or just MaybeUninit()
+        v: MaybeUninit[str] = MaybeUninit.uninit() # or just MaybeUninit()
         ```
         """
         return cls()
@@ -106,8 +106,6 @@ class MaybeUninit(typing.Generic[T]):
     @classmethod
     def uninit_array(cls, n: int) -> collections.Sequence[Self]:
         """Creates an immutable sequence of `MaybeUninit<T>` in an uninitialized state.
-
-        Note that `inner` value doesn't exist in this state until you call `.write` to set it.
 
         Example
         -------
@@ -138,17 +136,9 @@ class MaybeUninit(typing.Generic[T]):
         uninit.write(0)
         val = uninit.assume_init() # This is safe to access.
         ```
-
-        Raises
-        ------
-        `LookupError`
-            If the `self` is not initialized.
         """
         # SAFETY: the caller must guarantee that `self` is initialized.
-        try:
-            return self.__value
-        except AttributeError:
-            raise LookupError("Invalid access to uninitialized value.") from None
+        return self.__value
 
     def write(self, value: T) -> T:
         """Sets the value of the `MaybeUninit[T]`.
@@ -158,17 +148,15 @@ class MaybeUninit(typing.Generic[T]):
         Example
         -------
         ```py
-        def scoped(value: MaybeUninit[bytes]) -> MaybeUninit[bytes]:
+        def initialize(value: MaybeUninit[bytes]) -> None:
             response = requests.get("...")
             if response.ok:
                 # If ok, initialize.
                 value.write(response.content)
 
-            return value
-
         buffer: MaybeUninit[bytes] = MaybeUninit()
-        data = scoped(buffer) # buffer is initialized now.
-        print(data.assume_init())
+        data = initialize(buffer) # buffer is initialized now.
+        print(buffer.assume_init())
         ```
         """
         self.__write_mangling(value)

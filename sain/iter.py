@@ -1025,6 +1025,7 @@ class Empty(typing.Generic[Item], Iterator[Item]):
         unreachable()
 
 
+# a hack to trick the type-checker into thinking that this iterator yield `Item`.
 def empty() -> Empty[Item]:  # pyright: ignore
     """Create an iterator that yields nothing.
 

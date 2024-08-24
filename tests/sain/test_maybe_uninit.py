@@ -33,7 +33,7 @@ from __future__ import annotations
 import pytest
 import collections.abc
 
-from sain import MaybeUninit
+from sain.maybe_uninit import MaybeUninit
 
 
 @pytest.fixture()
@@ -58,7 +58,7 @@ class TestMaybeUninit:
         assert all(uninit.assume_init() is None for uninit in uninit_array)
 
     def test_uninit_is_uninitialized(self, uninit: MaybeUninit[None]) -> None:
-        with pytest.raises(LookupError):
+        with pytest.raises(AttributeError):
             uninit.assume_init()
 
     def test_write(self, uninit: MaybeUninit[None]) -> None:
