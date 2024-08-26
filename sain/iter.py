@@ -78,6 +78,8 @@ if typing.TYPE_CHECKING:
 
     from .option import Option
 
+    Collector = collections.MutableSequence[Item] | set[Item]
+
 
 def unreachable() -> typing.NoReturn:
     raise StopIteration(
@@ -197,6 +199,29 @@ class Iterator(
             return tuple(cast(i) for i in self)
 
         return tuple(_ for _ in self)
+
+    @typing.final
+    def collect_into(self, collection: Collector[Item]) -> None:
+        """Consume this iterator, extending all items in the iterator into a mutable `collection`.
+
+        Example
+        -------
+        ```py
+        iterator = Iter([1, 1, 2, 3, 4, 2, 6])
+        uniques = set()
+        iterator.collect_into(uniques)
+        # (1, 2, 3, 4, 6)
+        ```
+
+        Parameters
+        ----------
+        collection: `MutableSequence[T]` | `set[T]`
+            The collection to extend the items in this iterator with.
+        """
+        if isinstance(collection, collections.MutableSequence):
+            collection.extend(_ for _ in self)
+        else:
+            collection.update(_ for _ in self)
 
     @typing.final
     def to_vec(self) -> vec.Vec[Item]:
@@ -927,9 +952,6 @@ class Enumerate(typing.Generic[Item], Iterator[tuple[int, Item]]):
     __slots__ = ("_it", "_count")
 
     def __init__(self, it: Iterator[Item], start: int) -> None:
-        if start <= 0:
-            raise ValueError("`count` must be non-zero")
-
         self._it = it
         self._count = start
 

@@ -252,7 +252,7 @@ class Bytes:
         ```py
         buff = Bytes()
         sparkles_heart = [240, 159, 146, 150]
-        buff.put(sparkles_heart)
+        buff.put_bytes(sparkles_heart)
 
         assert buf.to_str() == "💖"
         ```

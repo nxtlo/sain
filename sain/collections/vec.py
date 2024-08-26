@@ -277,17 +277,18 @@ class Vec(typing.Generic[T]):
         return not self._ptr
 
     def split_off(self, at: int) -> Vec[T]:
-        """Split the vector off at the specified position.
+        """Split the vector off at the specified position, returning a new
+        vec at the range of `[at : len]`, leaving `self` at `[at : vec_len]`.
 
         if this vec is empty, `self` is returned unchanged.
 
         Example
         -------
         ```py
-        vec = Vec((1, 2, 3))
-        split = vec.split_off(1)
+        origin = Vec((1, 2, 3, 4))
+        split = vec.split_off(2)
 
-        print(split, vec)  # [1], [2, 3]
+        print(origin, split)  # [1, 2], [3, 4]
         ```
 
         Raises
@@ -304,8 +305,8 @@ class Vec(typing.Generic[T]):
         if not self._ptr:
             return self
 
-        split = self[at : self.len()]
-        self._ptr = self._ptr[0:at]
+        split = self[at : self.len()]  # split the items into a new vec.
+        del self._ptr[at : self.len()]  # remove the items from the original list.
         return split
 
     def split_first(self) -> _option.Option[tuple[T, collections.Sequence[T]]]:
@@ -356,10 +357,10 @@ class Vec(typing.Generic[T]):
         if not self._ptr:
             return
 
-        self._ptr = self._ptr[:size]
+        del self._ptr[size:]
 
     def retain(self, f: collections.Callable[[T], bool]) -> None:
-        """Remove elements from this vec while `f()` returns `True`.
+        """Remove elements from this vec in-place while `f()` returns `True`.
 
         In other words, filter this vector based on `f()`.
 
@@ -375,7 +376,9 @@ class Vec(typing.Generic[T]):
         if not self._ptr:
             return
 
-        self._ptr = [e for e in self._ptr if f(e)]
+        for idx, e in self.iter().enumerate():
+            if f(e):
+                del self._ptr[idx]
 
     def swap_remove(self, item: T) -> T:
         """Remove the first appearance of `item` from this vector and return it.
@@ -575,8 +578,6 @@ class Vec(typing.Generic[T]):
     def copy(self) -> Vec[T]:
         """Create a vector that copies all of its elements and place it into the new one.
 
-        If the vector hasn't been allocated, `self` is returned.
-
         Example
         -------
         ```py
@@ -587,7 +588,7 @@ class Vec(typing.Generic[T]):
         print(original) # [1, 2, 3]
         ```
         """
-        return Vec(self._ptr[:]) if self._ptr is not None else self
+        return Vec(self._ptr[:]) if self._ptr else Vec()
 
     def clear(self) -> None:
         """Clear all elements of this vector.
