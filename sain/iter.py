@@ -290,7 +290,8 @@ class Iterator(
         try:
             return _option.Some(self.__next__())
         except StopIteration:
-            return _option.nothing_unchecked()
+            # ! SAFETY: No more items in the iterator.
+            return _option.NOTHING  # type: ignore
 
     def cloned(self) -> Cloned[Item]:
         """Creates an iterator which shallow copies its elements by reference.
@@ -662,6 +663,31 @@ class Iterator(
             count += 1
 
         return count
+
+    def find(self, predicate: collections.Callable[[Item], bool]) -> Option[Item]:
+        """Searches for an element of an iterator that satisfies a predicate.
+
+        `find()` takes a closure that returns true or false. It applies this closure to each element of the iterator,
+        and if any of them return true,
+        then find() returns `Some(element)`. If they all return false, it returns None.
+
+        Example
+        -------
+        ```py
+        it = Iter(range(10))
+        item = it.find(lambda num: num > 5)
+        print(item) # 6
+        ```
+        """
+        while True:
+            try:
+                n = self.__next__()
+                if predicate(n):
+                    return _option.Some(n)
+            except StopIteration:
+                # ! SAFETY: No more items to search.
+                # we also want to avoid function calls.
+                return _option.NOTHING  # type: ignore
 
     def for_each(self, func: collections.Callable[[Item], typing.Any]) -> None:
         """Calls `func` on each item in the iterator.
