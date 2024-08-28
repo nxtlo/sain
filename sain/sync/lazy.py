@@ -104,24 +104,6 @@ class Lazy(typing.Generic[T]):
 
         return option.nothing_unchecked()
 
-    @macros.unsafe
-    def get_unchecked(self) -> T:
-        """Get the contained value without checking if it was initialized.
-
-        Example
-        -------
-        ```py
-        sqrt = Lazy[float]()
-        inner = sqrt.get_unchecked() # Undefined Behavior
-
-        # Initialize it first.
-        sqrt.set(math.sqrt(2.0))
-        inner = sqrt.get()
-        ```
-        """
-        # SAFETY: This caller guarantees that the value is initialized.
-        return self._inner  # type: ignore
-
     def set(self, value: T, /) -> T:
         """Set the contained value to `value`.
 

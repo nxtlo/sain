@@ -79,7 +79,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
     ```
     """
 
-    __slots__ = ("_value", "__default")
+    __slots__ = ("_value",)
     __match_args__ = ("_value",)
 
     def __init__(self, value: T | None, /) -> None:
@@ -138,9 +138,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
             If the inner value is `None`.
         """
         if self._value is None:
-            raise RuntimeError(
-                f"Called `Option.unwrap()` on {type(self._value).__name__}."
-            ) from None
+            raise RuntimeError("Called `Option.unwrap()` on `None`.") from None
 
         return self._value
 
@@ -587,7 +585,9 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
 
 Option: typing.TypeAlias = Some[T]
-"""A type hint for a value that can be `Some<T>`.
+"""A type hint for a value that can be `Some<T>` or `None`.
+
+The reason this exist is to satisfy the UX with Rust's type system.
 
 Example
 -------

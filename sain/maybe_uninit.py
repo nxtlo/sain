@@ -172,16 +172,9 @@ class MaybeUninit(typing.Generic[T]):
         return getattr(self, "_MaybeUninit__value")
 
     def __repr__(self) -> str:
-        # We could technically do an `if self: ...` here but
-        # thats not how bool checks work. for example if an empty str
-        # in the content of this cell it will return `False`
-        # which isn't correct. So we actually need to check
-        # whether the attribute is set or not. Also since 3.11,
-        # exception are zero cost, So this shouldn't be a critically inefficient.
-        try:
-            return f"MaybeUninit(value: {self.__read_mangling()!r})"
-        except AttributeError:
-            return "<uninit>"
+        if self:
+            return f"MaybeUninit(value: {self.__value!r})"
+        return "<uninit>"
 
     __str__ = __repr__
 

@@ -98,7 +98,7 @@ def diagnostic(cls: type[AnyIter]) -> type[AnyIter]:
 class Iterator(
     typing.Generic[Item],
     abc.ABC,
-    _default.Default[Item],
+    _default.Default["Empty[Item]"],
 ):
     """An abstract interface for dealing with iterators.
 
