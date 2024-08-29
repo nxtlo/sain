@@ -46,6 +46,8 @@ from sain import option as _option
 from sain import result as _result
 
 if typing.TYPE_CHECKING:
+    import inspect
+
     from typing_extensions import Self
 
     from sain import Option
@@ -664,6 +666,12 @@ class Bytes:
 
     def __bytes__(self) -> bytes:
         return self.as_bytes()
+
+    def __buffer__(self, flag: int | inspect.BufferFlags) -> memoryview[int]:
+        if not self._buf:
+            raise BufferError("Cannot work with uninitialized bytes.")
+
+        return self._buf.__buffer__(int(flag))
 
     def __contains__(self, byte: int) -> bool:
         return byte in self._buf if self._buf else False
