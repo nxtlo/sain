@@ -182,7 +182,7 @@ class Box(typing.Generic[T]):
             self._inner.take()
             self._mono = None
             # SAFETY: The value is expired, therefore we always return None.
-            return option.nothing_unchecked()
+            return option.NOTHING  # pyright: ignore
 
         if self._mono is None:
             self._mono = time.monotonic()

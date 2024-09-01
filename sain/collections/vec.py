@@ -325,7 +325,7 @@ class Vec(typing.Generic[T]):
         ```
         """
         if not self._ptr:
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
         first, *rest = self._ptr
         return _option.Some((first, rest))
@@ -511,7 +511,7 @@ class Vec(typing.Generic[T]):
         try:
             return _option.Some(self.__getitem__(index))
         except IndexError:
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
     def insert(self, index: int, value: T) -> None:
         """Insert an element at the position `index`.
@@ -538,7 +538,7 @@ class Vec(typing.Generic[T]):
         ```
         """
         if not self._ptr:
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
         return _option.Some(self._ptr.pop(index))
 

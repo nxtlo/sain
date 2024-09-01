@@ -102,7 +102,7 @@ class Lazy(typing.Generic[T]):
                 # inner here is never none.
                 return option.Some(self._inner)
 
-        return option.nothing_unchecked()
+        return option.NOTHING  # pyright: ignore
 
     def set(self, value: T, /) -> T:
         """Set the contained value to `value`.
@@ -199,7 +199,7 @@ class LazyFuture(typing.Generic[T]):
                 # inner here is never none.
                 return option.Some(self._inner)
 
-        return option.nothing_unchecked()
+        return option.NOTHING  # pyright: ignore
 
     def set(self, value: T, /) -> T:
         """Set the contained value to `value`.

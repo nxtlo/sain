@@ -291,7 +291,7 @@ class Iterator(
             return _option.Some(self.__next__())
         except StopIteration:
             # ! SAFETY: No more items in the iterator.
-            return _option.NOTHING  # type: ignore
+            return _option.NOTHING  # pyright: ignore
 
     def cloned(self) -> Cloned[Item]:
         """Creates an iterator which shallow copies its elements by reference.
@@ -687,7 +687,7 @@ class Iterator(
             except StopIteration:
                 # ! SAFETY: No more items to search.
                 # we also want to avoid function calls.
-                return _option.NOTHING  # type: ignore
+                return _option.NOTHING  # pyright: ignore
 
     def for_each(self, func: collections.Callable[[Item], typing.Any]) -> None:
         """Calls `func` on each item in the iterator.
@@ -1054,7 +1054,7 @@ class Empty(typing.Generic[Item], Iterator[Item]):
     def next(self) -> Option[Item]:
         # SAFETY: an empty iterator always returns None.
         # also we avoid calling `nothing_unchecked()` here for fast returns.
-        return _option.NOTHING  # type: ignore
+        return _option.NOTHING  # pyright: ignore
 
     def count(self) -> typing.Literal[0]:
         return 0

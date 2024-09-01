@@ -35,10 +35,10 @@ __all__ = ("Some", "Option", "NOTHING")
 
 import typing
 
-from . import cell
 from . import default as _default
 from . import iter as _iter
 from . import macros
+from . import result as _result
 
 T = typing.TypeVar("T")
 T_co = typing.TypeVar("T_co", covariant=True)
@@ -99,18 +99,18 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
     # *- Reading the value -*
 
-    def into_inner(self) -> T | None:
-        """Consume `Self`, returning the wrapped value as `T | None`.
+    def transpose(self) -> T | None:
+        """Convert `Option[T]` into `T | None`.
 
         Examples
         --------
         ```py
         opt = Some('char')
-        x = opt.into_inner()
-        assert x is not None
+        x = opt.transpose()
+        assert x == 'char'
 
         opt = Some(None)
-        assert opt.into_inner() is None
+        assert opt.transpose() is None
         ```
         """
         return self._value
@@ -198,7 +198,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         ```
         """
         #! SAFETY: The caller guarantees that the value is not None.
-        return self._value  # type: ignore
+        return self._value  # pyright: ignore
 
     def expect(self, message: str, /) -> T:
         """Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.
@@ -221,8 +221,9 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
         return self._value
 
-    # *- Functional operations -*
-    def map(self, f: Fn[T, U], /) -> Some[U]:
+    # *- object transformation -*
+
+    def map(self, f: Fn[T, U], /) -> Option[U]:
         """Map the inner value to another type. Returning `Some(None)` if `T` is `None`.
 
         Example
@@ -239,7 +240,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         ```
         """
         if self._value is None:
-            return nothing_unchecked()
+            return NOTHING  # pyright: ignore
 
         return Some(f(self._value))
 
@@ -290,7 +291,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
         return f(self._value)
 
-    def filter(self, predicate: Fn[T, bool]) -> Some[T]:
+    def filter(self, predicate: Fn[T, bool]) -> Option[T]:
         """Returns `Some(None)` if the contained value is `None`,
 
         otherwise calls the predicate and returns `Some(T)` if the predicate returns `True`.
@@ -312,7 +313,88 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
             if predicate(value):
                 return Some(value)
 
-        return nothing_unchecked()
+        return NOTHING  # pyright: ignore
+
+    def ok_or(self, err: U) -> _result.Result[T, U]:
+        """Transforms the `Option<T>` into a `Result<T, E>`, mapping `Some(v)` to `Ok(v)` and `None` to `Err(err)`.
+
+        Example
+        -------
+        ```py
+        xyz: Option[str] = Some("foo")
+        assert xyz.ok_or(None) == Ok("foo")
+
+        xyz: Option[str] = Some(None)
+        assert xyz.ok_or(None) == Err(None)
+        ```
+        """
+        if self._value is None:
+            return _result.Err(err)
+
+        return _result.Ok(self._value)
+
+    def ok_or_else(self, err: FnOnce[U]) -> _result.Result[T, U]:
+        """Transforms the `Option<T>` into a `Result<T, E>`, mapping `Some(v)` to `Ok(v)` and `None` to `Err(err())`.
+
+        Example
+        -------
+        ```py
+        xyz: Option[str] = Some("foo")
+        assert xyz.ok_or(None) == Ok("foo")
+
+        xyz: Option[str] = Some(None)
+        assert xyz.ok_or(None) == Err(None)
+        ```
+        """
+        if self._value is None:
+            return _result.Err(err())
+
+        return _result.Ok(self._value)
+
+    def zip(self, other: Option[U]) -> Option[tuple[T, U]]:
+        """Zips `self` with `other`.
+
+        if `self` is `Some(s)` and other is `Some(o)`, this returns `Some((s, o))` otherwise `None`.
+
+        Example
+        -------
+        ```py
+        x = Some(1)
+        y = Some("hi")
+        z: Option[str] = Some(None)
+
+        assert x.zip(y) == Some((1, "hi"))
+        assert x.zip(z) == Some(None)
+        ```
+        """
+        if self._value is not None and other._value is not None:
+            return Some((self._value, other._value))
+
+        return NOTHING  # type: ignore
+
+    def zip_with(
+        self, other: Option[U], f: collections.Callable[[T, U], T_co]
+    ) -> Option[T_co]:
+        """Zips `self` with `other` using function `f`.
+
+        if `self` is `Some(s)` and other is `Some(o)`, this returns `Some(f(s, o))` otherwise `None`.
+
+        Example
+        -------
+        ```py
+        @dataclass
+        class Point:
+            x: float
+            y: float
+
+        x, t = Some(32.1), Some(42.4)
+        assert x.zip_with(t, Point) == Some(Point(32.1, 42.4))
+        ```
+        """
+        if self._value is not None and other._value is not None:
+            return Some(f(self._value, other._value))
+
+        return NOTHING  # type: ignore
 
     # *- Inner operations *-
 
@@ -330,7 +412,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         ```
         """
         if self._value is None:
-            return nothing_unchecked()
+            return NOTHING  # pyright: ignore
 
         val = self._value
         self._value = None
@@ -358,47 +440,108 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         if self.map_or(False, predicate):
             return self.take()
 
-        return nothing_unchecked()
+        return NOTHING  # pyright: ignore
 
-    def replace(self, value: T) -> Some[T]:
+    def replace(self, value: T) -> Option[T]:
         """Replace the contained value with another value.
+
+        Use `Option.insert` if you want to return the original value
+        that got inserted instead of `self`
 
         Example
         -------
         ```py
         value: Option[str] = Some(None)
-        value = value.replace("Hello")
+        value.replace("Hello")
         # Some("Hello")
         ```
         """
         self._value = value
         return self
 
-    def and_ok(self, optb: Some[T]) -> Some[T]:
-        """Returns `Some(None)` if either contained value is `None`,
+    def insert(self, value: T) -> T:
+        """Insert a value into the option, and then return a reference to it.
 
-        Otherwise return `optb`.
+        This will overwrite the old value if it was already contained.
 
         Example
         -------
         ```py
-        x: Option[int] = Some(None)
-        y: Option[str] = Some("bye")
-        assert x.and_ok(y).is_none()
-
-        x: Option[int] = Some(10)
-        y: Option[str] = Some("bye")
-        assert value.and_ok(y) == Some("bye")
+        flag: Option[bool] = Some(None)
+        flag_ref = flag.insert(True)
+        assert flag_ref == True
+        assert flag.unwrap() == True
         ```
         """
-        if self._value is None or optb.is_none():
-            return nothing_unchecked()
+        self._value = value
+        return value
 
-        return optb
+    def get_or_insert(self, value: T) -> T:
+        """Insert a value into the option if it was `None`,
+        and then return a reference to it.
 
-    def and_then(self, f: Fn[T, Some[T]]) -> Some[T]:
+        Example
+        -------
+        ```py
+        state: Option[bool] = Some(None)
+        assert state.get_or_insert(True) is True
+        assert state.get_or_insert(False) is True
+        ```
+        """
+        if self._value is not None:
+            return self._value
+
+        self._value = value
+        return value
+
+    def get_or_insert_with(self, f: FnOnce[T]) -> T:
+        """Insert a value into the option computed from `f()` if it was `None`,
+        and then return a reference to it.
+
+        Example
+        -------
+        ```py
+        flag: Option[bool] = Some(None)
+        flag_ref = flag.insert(True)
+        assert flag_ref == True
+        assert flag.unwrap() == True
+        ```
+        """
+        if self._value is not None:
+            return self._value
+
+        v = self._value = f()
+        return v
+
+    def and_ok(self, optb: Option[T]) -> Option[T]:
+        """Returns `None` if `self` or `optb` is `None`, otherwise return `optb`.
+
+        aliases: `Option::and`
+
+        Example
+        -------
+        ```py
+        x = Some(1)
+        y: Option[str] = Some(None)
+        assert x.and_ok(y) == Some(None)
+
+        x: Option[str] = Some(None)
+        y = Some(1)
+        assert x.and_ok(y) == Some(None)
+
+        y: Option[str] = Some("hi")
+        y = Some(100)
+        assert x.and_ok(y) == Some(100)
+        ```
+        """
+        if self._value is None or optb._value is None:
+            return optb
+
+        return NOTHING  # pyright: ignore
+
+    def and_then(self, f: Fn[T, Option[T]]) -> Option[T]:
         """Returns `Some(None)` if the contained value is `None`, otherwise call `f()`
-        on `T` and return `Option[T]` if it's value not `None`.
+        on `T` and return `Option[T]`.
 
         Example
         -------
@@ -407,15 +550,36 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         print(value.and_then(lambda x: Some(x * 2)))
         # Some(10)
 
-        value: Option[int] = Some(10)
-        print(value.and_then(lambda x: Some(None)))
+        value: Option[int] = Some(None)
+        print(value.and_then(lambda x: Some(x * 2)))
         # Some(None)
         ```
         """
         if self._value is None:
-            return nothing_unchecked()
+            return NOTHING  # pyright: ignore
 
         return f(self._value)
+
+    def inspect(self, f: Fn[T, typing.Any]) -> Option[T]:
+        """Calls `f()` on the contained value if it was `Some(v)`, otherwise does nothing.
+
+        Example
+        -------
+        ```py
+        def debug(x: Option[str]) -> None:
+            print("Debugging:", x.into_inner())
+
+        value = Some("foo")
+        inner = value.inspect(debug).expect("no value to debug")
+        # prints: Debugging: "foo"
+
+        value: Option[str] = Some(None)
+        value.inspect(debug) # prints nothing
+        """
+        if self._value is not None:
+            f(self._value)
+
+        return self
 
     # *- Builder methods *-
 
@@ -434,72 +598,9 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         ```
         """
         if self._value is None:
-            #! SAFETY: We know the value is None here.
             return _iter.empty()
 
         return _iter.once(self._value)
-
-    def as_ref(self) -> Some[cell.Cell[T]]:
-        """Returns immutable `Some[sain.cell.Cell[T]]` if the contained value is not `None`,
-
-        Otherwise returns `Some(None)`.
-
-        Example
-        -------
-        ```py
-        value = Some(5).as_ref().unwrap()
-        value.object = 0 # FrozenError!
-
-        owned = value.object
-        print(owned) # 5
-
-        # Create a copy of object.
-        clone = value.copy()
-        clone = 0  # Thats fine.
-        print(clone == owned) # False, 0 != 5
-
-        # None object.
-        value: Option[int] = Some(None)
-        print(value.as_ref())
-        # Some(None)
-        ```
-
-        Raises
-        ------
-        `dataclasses.FrozenInstanceError`
-            When attempting to modify the contained value. Use `sain.AsRef.copy()` method to create a copy.
-
-            Or just use `.as_mut()` if you're dealing with mutable objects.
-        """
-        if self._value is not None:
-            return Some(cell.Cell(self._value))
-
-        # SAFETY: self._value is None.
-        return NOTHING  # pyright: ignore
-
-    def as_mut(self) -> Some[cell.RefCell[T]]:
-        """Returns mutable `Some[sain.cell.RefCell[T]]` if the contained value is not `None`,
-
-        Otherwise returns `Some(None)`.
-
-        Example
-        -------
-        ```py
-        value = Some(5).as_mut().unwrap()
-        value.object = 0
-        print(value) # Some(RefCell(0))
-
-        # None object.
-        value: Option[int] = Some(None)
-        print(value.as_mut())
-        # Some(None)
-        ```
-        """
-        if self._value is not None:
-            return Some(cell.RefCell(self._value))
-
-        # SAFETY: self._value is None.
-        return NOTHING  # pyright: ignore
 
     # *- Boolean checks *-
 
@@ -636,7 +737,7 @@ def nothing_unchecked() -> Option[T]:
                 # even though the type of `NOTHING` is `Option[None]`.
                 # we trick the type checker into thinking
                 # that its an `Option[str]`.
-                return nothing_unchecked()
+                return NOTHING  # pyright: ignore
 
             return Some(self.username.split('@')[0])
     ```

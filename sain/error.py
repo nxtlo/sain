@@ -161,7 +161,7 @@ class Error(typing.Protocol):
 
     def source(self) -> Option[type[Error]]:
         """The source of this error, if any."""
-        return _option.nothing_unchecked()
+        return _option.NOTHING  # pyright: ignore
 
     def description(self) -> str:
         """Context for this error."""

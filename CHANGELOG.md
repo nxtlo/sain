@@ -12,6 +12,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `HashMap`
 - `Bytes.chars`
 - `Iterator.collect_into`
+- `Option.insert`
+- `Option.get_or_insert`
+- `Option.get_or_insert_with`
+- `Option.ok_or`
+- `Option.ok_or_else`
+- `Option.zip`
+- `Option.zip_with`
+- `Option.inspect`
+
+### Changed
+
+- Improved performance by removing `nothing_unchecked` calls from methods that return `Option[T]` by replacing with `NOTHING` constant.
+- `MaybeUninit` no longer exported to top level.
+- `Option.into_inner` renamed to `Option.transpose`
+
+## Removed
+
+- `Option.as_ref`
+- `Option.as_mut`
+- `Cell` and `RefCell`
 
 ## 1.1.0 - 27/06/2024
 

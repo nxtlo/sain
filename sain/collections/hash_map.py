@@ -112,7 +112,7 @@ class _RawMap(collections.Mapping[K, V]):
         ```
         """
         if key not in self:
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
         return _option.Some(self._source[key])
 
@@ -304,7 +304,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         """
         if key not in self:
             self[key] = value
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
         old = self[key]
         self[key] = value
@@ -323,7 +323,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         ```
         """
         if key not in self:
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
         v = self[key]
         del self[key]
@@ -342,7 +342,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         ```
         """
         if key not in self:
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
         v = self[key]
         del self[key]

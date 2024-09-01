@@ -306,7 +306,7 @@ class Bytes:
         ```
         """
         if self._buf is None:
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
         arr = self._buf
         self._buf = None
@@ -640,7 +640,7 @@ class Bytes:
         ```
         """
         if not self._buf:
-            return _option.nothing_unchecked()
+            return _option.NOTHING  # pyright: ignore
 
         return _option.Some(self._buf.pop(i))
 

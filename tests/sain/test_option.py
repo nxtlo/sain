@@ -61,7 +61,7 @@ class TestOption:
         assert opt.default().is_none()
 
     def test_into_inner(self, opt: Option[int]) -> None:
-        assert opt.into_inner() == 1
+        assert opt.transpose() == 1
 
     def test_unwrap_raises(self, opt_none: Option[int]) -> None:
         with pytest.raises(RuntimeError):

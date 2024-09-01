@@ -88,7 +88,7 @@ class Once(typing.Generic[T]):
 
         This method will never block.
         """
-        return _option.Some(self._inner) if self.is_set else _option.nothing_unchecked()
+        return _option.Some(self._inner) if self.is_set else _option.NOTHING  # pyright: ignore
 
     @macros.unsafe
     def get_unchecked(self) -> T:
@@ -209,9 +209,6 @@ class Once(typing.Generic[T]):
             v = f()
             self._inner = v
             return v
-
-    def into_inner(self) -> T | None:
-        return self.get().into_inner()
 
     def __repr__(self) -> str:
         if not self.is_set:
