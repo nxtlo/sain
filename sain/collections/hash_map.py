@@ -283,7 +283,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
     __slots__ = ("_source",)
 
     def __init__(self, source: dict[K, V], /) -> None:
-        super().__init__(source)
+        self._source = source
 
     def insert(self, key: K, value: V) -> _option.Option[V]:
         """Insert a key/value pair into the map.
