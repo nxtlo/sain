@@ -30,6 +30,7 @@
 """A lazy const that gets initialized at runtime."""
 
 from __future__ import annotations
+import inspect
 
 __all__ = ("Lazy", "LazyFuture")
 
@@ -38,104 +39,77 @@ import threading
 import typing
 
 from sain import macros
-from sain import option
 
 if typing.TYPE_CHECKING:
-    from sain import Option
+    from collections import abc as collections
 
 T = typing.TypeVar("T")
 
 
 @typing.final
 class Lazy(typing.Generic[T]):
-    """A thread-safe value that gets lazily initialized at runtime.
+    """A thread-safe value that gets lazily initialized at first access.
 
-    This isn't some sort of magic, the inner value is set to `None` when first initialized,
-    Then this `None` gets replaced at runtime when calling `Lazy.set` method.
-
-    This is a well-known approach used in Python to lazily initialize expensive objects
-    that needs to be `None` until it gets initialized with a function call at runtime.
+    This type is thread-safe and may be called from multiple threads since this value
+    can be initialzied from mutiple threads, however, any calls to `Lazy.get` will block
+    if another thread is initializing it.
 
     Example
     -------
     ```py
-    @dataclass
-    class Config:
-        token: Lazy[str] = Lazy()
+    # some expensive call that returns a `str`
+    def expensive_string() -> str:
+        return "hehehe"
 
-    @dataclass
-    class Application:
-        config: Config
-
-    # application entry point.
-    def run(app: Application) -> None:
-        token = app.config.token.set('token')
-        app.run(token=token)
+    STRING: Lazy[str] = Lazy(expensive_string)
+    print(STRING.get()) # The string is built, stored in the lazy lock and returned.
+    print(STRING.get()) # The string is retrived from the lazy lock.
     ```
     """
 
-    __slots__ = ("_inner", "_lock")
+    __slots__ = ("__inner", "__lock")
 
-    def __init__(self) -> None:
-        self._inner: T | None = None
-        self._lock: threading.Lock | None = None
+    def __init__(self, f: collections.Callable[[], T]) -> None:
+        self.__inner: T | collections.Callable[[], T] = f
+        self.__lock = threading.Lock()
 
-    @property
-    def is_initialized(self) -> bool:
-        """Whether the contained value is initialized or not."""
-        return self._inner is not None
-
-    def get(self) -> Option[T]:
-        """Hold ownership of the contained value and return it.
-
-        This ensures that the value is only generated once and kept
-        acquired until its set again with `Lazy.set`.
-        """
-        if self._inner is not None:
-            return option.Some(self._inner)
-
-        if not self._lock:
-            self._lock = threading.Lock()
-
-        with self._lock:
-            if self._inner is not None:
-                # inner here is never none.
-                return option.Some(self._inner)
-
-        return option.NOTHING  # pyright: ignore
-
-    def set(self, value: T, /) -> T:
-        """Set the contained value to `value`.
-
-        This will clear any ownership of the value until the next `get` call.
+    def get(self) -> T:
+        """Get the value if it was initialized, otherwise initialize it and return it.
 
         Example
         -------
         ```py
-        lazy = Lazy[str]()
-        print(lazy.set("foo"))
+        # some expensive call that returns a `str`
+        def expensive_string() -> str:
+            return "hehehe"
+
+        STRING: Lazy[str] = Lazy(expensive_string)
+        print(STRING.get()) # The string is built, stored in the lazy lock and returned.
+        print(STRING.get()) # The string is retrived from the lazy lock.
         ```
         """
-        self._inner = value
-        self._lock = None
-        return value
+        if not callable(self.__inner):
+            # value is already initialized, no need to make a call.
+            return self.__inner
+
+        with self.__lock:
+            inner = self.__inner = self.__inner()
+            return inner
 
     def __repr__(self) -> str:
-        if self._inner is None:
-            return "<uninit>"
-        return f"Lazy(value: {self._inner!r})"
+        if callable(self.__inner):
+            return "Lazy(uninit)"
+
+        return f"Lazy(value: {self.__inner.__repr__()})"
 
     __str__ = __repr__
 
-    def __bool__(self) -> bool:
-        return self.is_initialized
-
     def __eq__(self, other: object) -> bool:
-        if not self.is_initialized:
+        if not callable(self.__inner):
             return False
 
         if isinstance(other, Lazy):
-            return self._inner == other._inner
+            return self.__inner == other.get()
 
         return NotImplemented
 
@@ -145,90 +119,72 @@ class Lazy(typing.Generic[T]):
 
 @typing.final
 class LazyFuture(typing.Generic[T]):
-    """A thread-safe value that gets lazily initialized at runtime asynchronously.
+    """A thread-safe value that gets lazily initialized asynchronously at first access.
 
-    This isn't some sort of magic, the inner value is set to `None` when first initialized,
-    Then this `None` gets replaced at runtime when calling `LazyFuture.set` method.
-
-    This is a well-known approach used in Python to lazily initialize expensive objects
-    that needs to be `None` until it gets initialized with a function call at runtime.
+    This type is thread-safe and may be called from multiple threads since this value
+    can be initialzied from mutiple threads, however, any calls to `Lazy.get` will block
+    if another thread is initializing it.
 
     Example
     -------
     ```py
-    @dataclass
-    class Config:
-        token: Lazy[str] = Lazy()
+    # some expensive call that returns a `str`
+    async def fetch_expensive_string(filtered: bool) -> str:
+        return "hehehe" if filtered else "whahaha"
 
-    @dataclass
-    class Application:
-        config: Config
-
-    # application entry point.
-    def run(app: Application) -> None:
-        token = app.config.token.set('token')
-        app.run(token=token)
+    STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))
+    print(await STRING.get()) # The string is built, stored in the lazy lock and returned.
+    print(await STRING.get()) # The string is retrived from the lazy lock.
     ```
     """
 
-    __slots__ = ("_inner", "_lock")
+    __slots__ = ("__inner", "__lock")
 
-    def __init__(self) -> None:
-        self._inner: T | None = None
-        self._lock: asyncio.Lock | None = None
-
-    @property
-    def is_initialized(self) -> bool:
-        """Whether the contained value is initialized or not."""
-        return self._inner is not None
+    def __init__(
+        self,
+        f: collections.Callable[[], collections.Coroutine[typing.Any, typing.Any, T]],
+    ) -> None:
+        self.__inner: (
+            T
+            | collections.Callable[[], collections.Coroutine[typing.Any, typing.Any, T]]
+        ) = f
+        self.__lock = asyncio.Lock()
 
     @macros.unsafe
-    async def get(self) -> Option[T]:
-        """Hold ownership of the contained value and return it.
-
-        This ensures that the value is only generated once and kept acquired.
-        """
-        if self._inner is not None:
-            return option.Some(self._inner)
-
-        if not self._lock:
-            self._lock = asyncio.Lock()
-
-        async with self._lock:
-            if self._inner is not None:
-                # inner here is never none.
-                return option.Some(self._inner)
-
-        return option.NOTHING  # pyright: ignore
-
-    def set(self, value: T, /) -> T:
-        """Set the contained value to `value`.
-
-        This will clear any ownership of the value until the next `get` call.
+    async def get(self) -> T:
+        """Get the value if it was initialized, otherwise initialize it and return it.
 
         Example
         -------
         ```py
-        lazy = LazyFuture()
-        print(lazy.set("foo"))
+        # some expensive call that returns a `str`
+        async def fetch_expensive_string(filtered: bool) -> str:
+            return "hehehe" if filtered else "whahaha"
+
+        STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))
+        print(await STRING.get()) # The string is built, stored in the lazy lock and returned.
+        print(await STRING.get()) # The string is retrived from the lazy lock.
         ```
         """
-        self._inner = value
-        self._lock = None
-        return value
+        if not callable(self.__inner):
+            # value is already initialized, no need to make a call.
+            return self.__inner
+
+        async with self.__lock:
+            v = await self.__inner()
+            self.__inner = v
+            return v
 
     def __repr__(self) -> str:
-        if self._inner is None:
+        if not callable(self.__inner):
             return "uninit"
-        return f"LazyFuture(value: {self._inner!r})"
+
+        return f"LazyFuture(value: {self.__inner!r})"
 
     __str__ = __repr__
 
-    def __bool__(self) -> bool:
-        return self.is_initialized
-
     def __eq__(self, other: object) -> bool:
-        if not self.is_initialized:
+        if not inspect.isawaitable(self.__inner):
             return False
 
         if isinstance(other, Lazy):

@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved performance by removing `nothing_unchecked` calls from methods that return `Option[T]` by replacing with `NOTHING` constant.
 - `MaybeUninit` no longer exported to top level.
 - `Option.into_inner` renamed to `Option.transpose`
+- `Lazy` and `LazyFuture` now take a closure that initialize the value at first access
+instaed of calling `.set` manually.
 
 ## Removed
 
