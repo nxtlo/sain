@@ -177,7 +177,7 @@ class LazyFuture(typing.Generic[T]):
 
     def __repr__(self) -> str:
         if not callable(self.__inner):
-            return "uninit"
+            return "LazyFuture(uninit)"
 
         return f"LazyFuture(value: {self.__inner!r})"
 
