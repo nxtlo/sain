@@ -74,7 +74,6 @@ This can be any of:
 """
 
 ENCODING = "utf-8"
-REPLACEMENT_CHARACTER = "�"
 
 
 def unwrap_bytes(data: Rawish) -> bytes:
@@ -206,6 +205,8 @@ class Bytes:
         c._buf = array.array("B", unwrap_bytes(raw))
         return c
 
+    # buffer evolution
+
     def try_to_str(self) -> Result[str, bytes]:
         """A safe method to convert `self` into a string.
 
@@ -236,12 +237,12 @@ class Bytes:
             to get decoded.
         """
         try:
-            return _result.Ok(self.as_bytes().decode(ENCODING))
+            return _result.Ok(self.to_bytes().decode(ENCODING))
         except UnicodeDecodeError as e:
             return _result.Err(e.object)
 
     def to_str(self) -> str:
-        """Convert `self` to a utf-8 string. which may or may not be expensive.
+        """Convert `self` to a utf-8 string.
 
         During the conversion process, any invalid bytes will get converted to
         [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))
@@ -279,16 +280,22 @@ class Bytes:
         if not self._buf:
             return ""
 
-        bytes_ = self._buf.tobytes()
-        try:
-            return bytes_.decode(ENCODING)
-        except UnicodeDecodeError as err:
-            start, end = err.start, err.end
-            # we need to create a new copy of the bytes to replace the invalid bytes.
-            new = bytes_.replace(bytes_[start:end], REPLACEMENT_CHARACTER.encode())
-            return new.decode(ENCODING)
+        return self._buf.tobytes().decode(ENCODING, errors="replace")
 
-    # buffer evolution
+    def to_bytes(self) -> bytes:
+        """Convert `self` into `bytes`, copying the underlying array into a new buffer.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_str("Hello")
+        assert buf.to_bytes() == b'Hello'
+        ```
+        """
+        if not self._buf:
+            return b""
+
+        return self._buf.tobytes()
 
     def leak(self) -> Option[array.array[int]]:
         """Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.
@@ -312,48 +319,58 @@ class Bytes:
         self._buf = None
         return _option.Some(arr)
 
-    def as_bytes(self) -> bytes:
-        """Convert `self` into `bytes`.
+    def as_ptr(self) -> memoryview[int]:
+        """Returns a read-only `memoryview` which's pointing to the array.
 
         Example
         -------
         ```py
-        buf = Bytes.from_str("Hello")
-        assert buf.as_bytes() == b'Hello'
+        buffer = Bytes.from_str("data")
+        ptr = buffer.as_ptr()
+        assert ptr == buffer.as_ref()
         ```
         """
-        if not self._buf:
-            return b""
-
-        return self._buf.tobytes()
+        return self.__buffer__(256)  # 256 == READ
 
     def as_ref(self) -> collections.Sequence[int]:
-        """Convert `self` into an immutable sequence.
+        """Get an immutable reference to the underlying sequence, without copying.
 
-        An empty sequence is returned if `self` hasn't been initialized.
+        A `ReferenceError` is raised if the underlying sequence is not initialized.
 
         Example
         -------
         ```py
-        buff = Bytes.from_str("Hello")
-        assert buff.as_ref() == (72, 101, 108, 108, 111)
+        async def send_multipart(buf: Sequence[int]) -> None:
+            ...
+
+        buffer = Bytes.from_bytes([0, 0, 0, 0])
+        await send_multipart(buffer.as_ref()) # no copy.
         ```
         """
-        return tuple(self._buf) if self._buf is not None else ()
+        if self._buf is not None:
+            return self._buf
+
+        raise ReferenceError("`self` must be initialized first.") from None
 
     def as_mut(self) -> collections.MutableSequence[int]:
-        """Convert `self` into a mutable sequence.
+        """Get a mutable reference to the underlying sequence, without copying.
 
-        An empty sequence is returned if `self` hasn't been initialized.
+        A `ReferenceError` is raised if the underlying sequence is not initialized.
 
         Example
         -------
         ```py
         buff = Bytes.from_str("Hello")
-        assert buff.as_mut() == [72, 101, 108, 108, 111]
+        ref = buff.as_mut()
+        ref.append(32)
+        del ref
+        assert buff.to_str() == "Hello "
         ```
         """
-        return self._buf.tolist() if self._buf is not None else []
+        if self._buf is not None:
+            return self._buf
+
+        raise ReferenceError("`self` must be initialized first.") from None
 
     def raw_parts(
         self,
@@ -665,7 +682,7 @@ class Bytes:
     __str__ = __repr__
 
     def __bytes__(self) -> bytes:
-        return self.as_bytes()
+        return self.to_bytes()
 
     def __buffer__(self, flag: int | inspect.BufferFlags) -> memoryview[int]:
         if not self._buf:

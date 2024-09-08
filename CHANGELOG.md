@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `HashMap`
 - `Bytes.chars`
+- `Bytes.as_ptr`
 - `Iterator.collect_into`
 - `Option.insert`
 - `Option.get_or_insert`
@@ -27,7 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `MaybeUninit` no longer exported to top level.
 - `Option.into_inner` renamed to `Option.transpose`
 - `Lazy` and `LazyFuture` now take a closure that initialize the value at first access
-instaed of calling `.set` manually.
+instead of calling `.set` manually.
+- Renamed `Bytes.as_bytes` to `Bytes.to_bytes`
 
 ## Removed
 

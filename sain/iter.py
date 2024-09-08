@@ -68,7 +68,7 @@ from .collections import vec
 Item = typing.TypeVar("Item")
 """The type of the item that is being yielded."""
 
-OtherItem = typing.TypeVar("OtherItem")
+OtherItem = typing.TypeVar("OtherItem", covariant=True)
 """The type of the item that is being mapped into then yielded."""
 
 AnyIter = typing.TypeVar("AnyIter", bound="Iterator[typing.Any]")

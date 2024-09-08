@@ -208,6 +208,21 @@ class Ok(typing.Generic[T]):
         """
         return self._inner
 
+    def expect_err(self) -> typing.NoReturn:
+        """Return the `Err` value if `self` is an `Err`, panicking otherwise.
+
+        Example
+        -------
+        ```py
+        ok: Result[str, None] = Ok("owo")
+        ok.expect_err()  # RuntimeError("Called expect_err on `Ok`)
+
+        err: Result[str, None] = Err(None)
+        err.expect_err() # None
+        ```
+        """
+        raise RuntimeError("Called `expect_err` on an `Ok` value.")
+
     def unwrap(self) -> T:
         """Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.
 
@@ -288,7 +303,7 @@ class Ok(typing.Generic[T]):
         """
         return _option.Some(self._inner)
 
-    def err(self) -> Option[None]:
+    def err(self) -> Option[T]:
         """Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.
 
         Example
@@ -301,7 +316,7 @@ class Ok(typing.Generic[T]):
         value.err().is_some() # True
         ```
         """
-        return _option.NOTHING
+        return _option.NOTHING  # pyright: ignore
 
     def inspect(self, f: F[T, typing.Any]) -> None:
         """Call a function to the contained value if it was `Ok` and do nothing if it was `Err`
@@ -535,6 +550,19 @@ class Err(typing.Generic[E]):
         raise RuntimeError(msg) from None
 
     def expect_err(self) -> E:
+        """Return the `Err` if it was `Err`, panicking otherwise.
+
+
+        Example
+        -------
+        ```py
+        x: Result[str, None] = Ok("owo")
+        x.expect_err()  # RuntimeError("Called expect_err on `Ok`)
+
+        x: Result[str, None] = Err(None)
+        x.expect_err() # None
+        ```
+        """
         return self._inner
 
     def unwrap(self) -> typing.NoReturn:
