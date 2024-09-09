@@ -1,12 +1,9 @@
 # sain
 
-a dependency-free library which implements a set of minimal abstraction that brings Rust's ecosystem to Python.
-It offers a few of the core Rust features like `Vec<T>` and `Result<T, E>` and more. See the equivalent type section below.
+a dependency-free library which implements a few of Rust's core crates purely in Python.
+It offers a few of the core Rust features such as `Vec<T>`, `Result<T, E>`, `Option<T>` and more. See the equivalent type section below.
 
-This library provides a type-safe mechanism for writing Python code, such as the `Result<T, E>` and `Option<T>` types,
-which provides zero exception handling, where you simply return errors as values.
-
-multiple `core`/`std` types are implemented in Python. Check the [project documentation](https://nxtlo.github.io/sain/sain.html)
+a few `std` types are implemented. Check the [project documentation](https://nxtlo.github.io/sain/sain.html)
 
 ## Install
 
@@ -20,65 +17,83 @@ pip install sain
 
 ## Overview
 
-Advanced examples in [examples](https://github.com/nxtlo/sain/tree/master/examples)
+More examples in [examples](https://github.com/nxtlo/sain/tree/master/examples)
 
 ### no `try/except`
 
-Exceptions suck, `Result` and `Option` is a much better way to avoid runtime exceptions.
+Rust doesn't have exception, But `Option<T>` which handles None's, and `Result<T, E>` for returning and propagating errors.
+we can easily achieve the same results in Python
 
 ```py
 from __future__ import annotations
 
-from sain import Ok, Err
-from sain import Some
-from sain import Vec
+from sain import Option, Result, Ok, Err
+from sain.collections import Vec, Bytes
+from sain.convert import Into
 
-import typing
 from dataclasses import dataclass, field
 
-if typing.TYPE_CHECKING:
-    # These are just type aliases that have no cost at runtime.
-    # __annotations__ needs to be imported.
-    from sain import Result, Option
 
-
+# A chunk of data. the from protocol allows users to convert the chunk into bytes.
+# similar to Rust's Into trait.
 @dataclass
-class Chunk:
+class Chunk(Into[bytes]):
     tag: str
-    data: Option[bytes] = Some(None)
+    data: Bytes
+
+    # convert a chunk into bytes.
+    # in Rust, this consumes `self`, But in Python it copies it.
+    def into(self) -> bytes:
+        return self.data.to_bytes()
 
 
 @dataclass
 class BlobStore:
-    buffer: Vec[Chunk] = field(default_factory=Vec)
-    size: int = 1024
+    pos: int
+    # A buffer that contains chunks of bytes over which we might
+    # lazily load from somewhere. This buffer can hold up to 1024 chunks.
+    buffer: Vec[Chunk] = field(default_factory=lambda: Vec[Chunk].with_capacity(1024))
 
-    def put(self, tag: str) -> Result[Chunk, str]:
-        if self.buffer.len() >= self.size:
-            # The return type of the error doesn't have to be a str.
-            # its much better to have it an opaque type such as enums
-            # or any data type with more context.
-            return Err("Reached maximum capacity sry :3")
+    def put(self, tag: str, data: bytes) -> Result[None, str]:
+        chunk = Chunk(tag, Bytes.from_bytes(data))
+        # push_within_capacity returns `Result[None, Chunk]`.
+        # It returns the chunk that got failed to be pushed,
+        # we try to push if there's space, mapping the error to
+        # a string.
+        return self.buffer.push_within_capacity(chunk).map_err(
+            lambda chunk: "No more capacity to push chunk: " + str(chunk)
+        )
 
-        chunk = Chunk(tag, Some(f"chunk.{tag}".encode("utf-8")))
-        self.buffer.push(chunk)
-        return Ok(chunk)
-
-    def next_chunk(self, filtered: str = "") -> Option[Chunk]:
-        # this code makes you feel right at home.
-        return self
-            .buffer
-            .iter()
-            .take_while(lambda chunk: filtered in chunk.tag)
-            .next()
+    def next_chunk(self) -> Option[Chunk]:
+        chunk = self.buffer.get(self.pos)
+        self.pos += 1
+        return chunk
 
 
-storage = BlobStore()
-match storage.put("first"):
-    case Ok(chunk):
-        print(storage.next_chunk())
-    case Err(why):
-        print(why)
+def main() -> None:
+    blobs = BlobStore(0)
+
+    # upload a blob matching any errors.
+    match blobs.put("c1", b"first chunk"):
+        case Ok(_):
+            print("chunk pushed succefully.")
+        case Err(why):
+            print(why)
+
+    # or just
+    blobs.put("c2", b"second chunk").unwrap()
+
+    # Read back the chunks, and map it to string.
+    # In rust, you would do something similar to
+    # * while let Some(chunk) = option.map(String::from_utf8_lossy) { ... } *
+    while (chunk := blobs.next_chunk()).is_some():
+        print(chunk.map(Chunk.into))
+
+    # use an iterator over the chunks
+    for pos, chunk in blobs.buffer.iter().enumerate():
+        print(pos, chunk.data)
+
+
 ```
 
 ## built-in types
@@ -88,16 +103,16 @@ match storage.put("first"):
 | Option\<T>, Some(T), None     | Option[T], Some(T), Some(None)   | Some(None) has the same layout as `None` in Rust                                                                           |                            |
 | Result\<T, E>, Ok(T), Err(E)  | Result[T, E], Ok(T), Err(E)      |                                                                                                                            |                            |
 | Vec\<T>                       | Vec[T]                           |                                                                                                                            |                            |
-| Cell\<T>                      | Cell[T]                          | this isn't an interior mutability type                                                                                     |                            |
-| RefCell\<T>                   | RefCell[T]                       | this isn't an interior mutability type                                                                                     |                            |
+| HashMap\<K, V>                      | HashMap[K, V]                          |                                                                                      |                            |
+| bytes::Bytes                      |  Bytes                          |                                                                                      |                            |
 | LazyLock\<T>                  | Lazy[T]                          |                                                                                                                            |                            |
 | OnceLock\<T>                  | Once[T]                          |                                                                                                                            |                            |
 | Box\<T>                       | Box[T]                           | this isn't a heap box, [See]([https://nxtlo.github.io/sain/sain/boxed.html](https://nxtlo.github.io/sain/sain/boxed.html)) |                            |
 | MaybeUninit\<T>               | MaybeUninit[T]                   | they serve the same purpose, but slightly different                                                                        |                            |
-| Default                       | Default[T]                       |                                                                                                                            |                            |
+| &dyn Default                       | Default[T]                       |                                                                                                                            |                            |
 | &dyn Error                    | Error                            |                                                                                                                            |                            |
-| Iterator\<T>                  | Iterator[T]                      |                                                                                                                            |                            |
-| Iter\<'a, T>                  | Iter[T]                          | collections called by `.iter` are built from this type                                                                     |                            |
+| &dyn Iterator\<T>                  | Iterator[T]                      |                                                                                                                            |                            |
+| Iter\<'a, T>                  | Iter[T]                          | collections called by `.iter()` are built from this type                                                                     |                            |
 | iter::once::\<T>()            | iter.once[T]                     |                                                                                                                            |                            |
 | iter::empty::\<T>()           | iter.empty[T]                    |                                                                                                                            |                            |
 | iter::repeat::\<T>()          | iter.repeat[T]                   |                                                                                                                            |                            |

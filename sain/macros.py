@@ -150,7 +150,7 @@ def unstable(
 
 def deprecated(
     *,
-    since: typing.LiteralString | None = None,
+    since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
     removed_in: typing.LiteralString | None = None,
     use_instead: typing.LiteralString | None = None,
     hint: typing.LiteralString | None = None,
@@ -182,7 +182,7 @@ def deprecated(
     Parameters
     ----------
     since : `str`
-        The version that the function was deprecated.
+        The version that the function was deprecated. the `CURRENT_VERSION` is used internally only.
     removed_in : `str | None`
         If provided, It will log when will the object will be removed in.
     use_instead : `str | None`
@@ -195,7 +195,12 @@ def deprecated(
         msg = f"{_obj_type(obj)} `{obj.__module__}.{obj.__name__}` is deprecated."
 
         if since is not None:
-            msg += f" since {since}."
+            if since == "CURRENT_VERSION":
+                from sain import __version__ as _version
+
+                msg += " since " + _version
+            else:
+                msg += " since " + since
 
         if removed_in:
             msg += f" Scheduled for removal in `{removed_in}`."
