@@ -34,7 +34,7 @@ from sain.convert import Into
 from dataclasses import dataclass, field
 
 
-# A chunk of data. the from protocol allows users to convert the chunk into bytes.
+# A chunk of data, the Into protocol allows users to convert the chunk into bytes.
 # similar to Rust's Into trait.
 @dataclass
 class Chunk(Into[bytes]):
@@ -83,8 +83,8 @@ def main() -> None:
     # or just
     blobs.put("c2", b"second chunk").unwrap()
 
-    # Read back the chunks, and map it to string.
-    # In rust, you would do something similar to
+    # Read back the chunks, and map it to bytes object.
+    # in Rust, you would do something similar to
     # * while let Some(chunk) = option.map(String::from_utf8_lossy) { ... } *
     while (chunk := blobs.next_chunk()).is_some():
         print(chunk.map(Chunk.into))
