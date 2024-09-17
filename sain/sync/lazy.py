@@ -31,7 +31,6 @@
 
 from __future__ import annotations
 
-import inspect
 
 __all__ = ("Lazy", "LazyFuture")
 
@@ -184,7 +183,7 @@ class LazyFuture(typing.Generic[T]):
     __str__ = __repr__
 
     def __eq__(self, other: object) -> bool:
-        if not inspect.isawaitable(self.__inner):
+        if not callable(self.__inner):
             return False
 
         if isinstance(other, Lazy):
