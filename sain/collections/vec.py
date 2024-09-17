@@ -327,11 +327,36 @@ class Vec(typing.Generic[T]):
         if not self._ptr:
             return _option.NOTHING  # pyright: ignore
 
+        # optimized to only one element in the vector.
+        if self.len() == 1:
+            return _option.Some((self[0], ()))
+
         first, *rest = self._ptr
         return _option.Some((first, rest))
 
+    def split_last(self) -> _option.Option[tuple[T, collections.Sequence[T]]]:
+        """Split the last and rest elements of the vector, If empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        vec = Vec([1, 2, 3])
+        last, rest = vec.split_last().unwrap()
+        assert (last, rest) == [3, [1, 2]]
+        ```
+        """
+        if not self._ptr:
+            return _option.NOTHING  # pyright: ignore
+
+        # optimized to only one element in the vector.
+        if self.len() == 1:
+            return _option.Some((self[0], ()))
+
+        last = self[self.len() - 1 :][0]
+        return _option.Some((last, [*self[: self.len() - 1]]))
+
     def first(self) -> _option.Option[T]:
-        """Get the first element in this vec, returning `Some[None]` if there's none.
+        """Get the first element in this vec, returning `None` if there's none.
 
         Example
         -------
@@ -342,6 +367,19 @@ class Vec(typing.Generic[T]):
         ```
         """
         return self.get(0)
+
+    def last(self) -> _option.Option[T]:
+        """Get the last element in this vec, returning `None` if there's none.
+
+        Example
+        -------
+        ```py
+        vec = Vec([1, 2, 3, 4])
+        first = vec.last()
+        assert ~first == 4
+        ```
+        """
+        return self.get(self.len() - 1)
 
     def truncate(self, size: int) -> None:
         """Shortens the vec, keeping the first `size` elements and dropping the rest.
@@ -541,6 +579,51 @@ class Vec(typing.Generic[T]):
             return _option.NOTHING  # pyright: ignore
 
         return _option.Some(self._ptr.pop(index))
+
+    def pop_if(self, pred: collections.Callable[[T], bool]) -> _option.Option[T]:
+        """Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.
+
+        Example
+        -------
+        ```py
+        vec = Vec((1, 2, 3))
+        assert vec.pop() == Some(3)
+        assert vec == [1, 2]
+        ```
+        """
+        if not self._ptr:
+            return _option.NOTHING  # pyright: ignore
+
+        last = self[::-1][0]
+        if pred(last):
+            return self.pop()
+
+        return _option.NOTHING  # pyright: ignore
+
+    def dedup(self) -> None:
+        """Removes duplicate elements from `self` in-place.
+
+        Example
+        -------
+        ```py
+        vec = Vec([1, 2, 3, 3, 4, 1])
+        vec.dedup()
+        assert vec == [1, 2, 3, 4]
+        """
+
+        if not self._ptr:
+            return
+
+        seen: set[T] = set()
+        write_idx = 0
+
+        for read_idx, _ in enumerate(self._ptr):
+            if self._ptr[read_idx] not in seen:
+                seen.add(self._ptr[read_idx])
+                self._ptr[write_idx] = self._ptr[read_idx]
+                write_idx += 1
+
+        del self._ptr[write_idx:]
 
     def remove(self, item: T) -> None:
         """Remove `item` from this vector.

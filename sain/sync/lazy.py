@@ -30,6 +30,7 @@
 """A lazy const that gets initialized at runtime."""
 
 from __future__ import annotations
+
 import inspect
 
 __all__ = ("Lazy", "LazyFuture")
@@ -38,7 +39,6 @@ import asyncio
 import threading
 import typing
 
-from sain import macros
 
 if typing.TYPE_CHECKING:
     from collections import abc as collections
@@ -51,7 +51,7 @@ class Lazy(typing.Generic[T]):
     """A thread-safe value that gets lazily initialized at first access.
 
     This type is thread-safe and may be called from multiple threads since this value
-    can be initialzied from mutiple threads, however, any calls to `Lazy.get` will block
+    can be initialized from multiple threads, however, any calls to `Lazy.get` will block
     if another thread is initializing it.
 
     Example
@@ -63,7 +63,7 @@ class Lazy(typing.Generic[T]):
 
     STRING: Lazy[str] = Lazy(expensive_string)
     print(STRING.get()) # The string is built, stored in the lazy lock and returned.
-    print(STRING.get()) # The string is retrived from the lazy lock.
+    print(STRING.get()) # The string is retrieved from the lazy lock.
     ```
     """
 
@@ -85,7 +85,7 @@ class Lazy(typing.Generic[T]):
 
         STRING: Lazy[str] = Lazy(expensive_string)
         print(STRING.get()) # The string is built, stored in the lazy lock and returned.
-        print(STRING.get()) # The string is retrived from the lazy lock.
+        print(STRING.get()) # The string is retrieved from the lazy lock.
         ```
         """
         if not callable(self.__inner):
@@ -122,7 +122,7 @@ class LazyFuture(typing.Generic[T]):
     """A thread-safe value that gets lazily initialized asynchronously at first access.
 
     This type is thread-safe and may be called from multiple threads since this value
-    can be initialzied from mutiple threads, however, any calls to `Lazy.get` will block
+    can be initialized from multiple threads, however, any calls to `Lazy.get` will block
     if another thread is initializing it.
 
     Example
@@ -134,7 +134,7 @@ class LazyFuture(typing.Generic[T]):
 
     STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))
     print(await STRING.get()) # The string is built, stored in the lazy lock and returned.
-    print(await STRING.get()) # The string is retrived from the lazy lock.
+    print(await STRING.get()) # The string is retrieved from the lazy lock.
     ```
     """
 
@@ -150,7 +150,6 @@ class LazyFuture(typing.Generic[T]):
         ) = f
         self.__lock = asyncio.Lock()
 
-    @macros.unsafe
     async def get(self) -> T:
         """Get the value if it was initialized, otherwise initialize it and return it.
 
@@ -163,7 +162,7 @@ class LazyFuture(typing.Generic[T]):
 
         STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))
         print(await STRING.get()) # The string is built, stored in the lazy lock and returned.
-        print(await STRING.get()) # The string is retrived from the lazy lock.
+        print(await STRING.get()) # The string is retrieved from the lazy lock.
         ```
         """
         if not callable(self.__inner):
@@ -171,7 +170,8 @@ class LazyFuture(typing.Generic[T]):
             return self.__inner
 
         async with self.__lock:
-            v = await self.__inner()
+            # calling self.__inner will make self.__inner type T
+            v = await self.__inner()  # pyright: ignore
             self.__inner = v
             return v
 
