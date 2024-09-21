@@ -126,7 +126,7 @@
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="ne">RuntimeWarning</span><span class="p">):</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A runtime warning that is used as the category warning for all the markers.&quot;&quot;&quot;</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>    <span class="sd">&quot;&quot;&quot;A runtime warning that is used as the category warning for all the markers.&quot;&quot;&quot;</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">,)</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
@@ -139,7 +139,7 @@
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="k">def</span> <span class="nf">unsafe</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">]:</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Mark a function as unsafe.</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="sd">&quot;&quot;&quot;Mark a function as unsafe.</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">    The caller of the decorated function is responsible for the undefined behavior if occurred.</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -164,7 +164,7 @@
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]],</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">],</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="p">]:</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator that marks an internal object explicitly unstable.</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="sd">&quot;&quot;&quot;A decorator that marks an internal object explicitly unstable.</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">    Unstable objects never run, even inside the standard library.</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
@@ -230,7 +230,7 @@
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">]],</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="p">]:</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator that marks a function as deprecated.</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="sd">&quot;&quot;&quot;A decorator that marks a function as deprecated.</span>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">    An attempt to call the object that&#39;s marked will cause a runtime warn.</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>
@@ -305,7 +305,7 @@
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>
 </span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="k">def</span> <span class="nf">todo</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">LiteralString</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A place holder that indicates unfinished code.</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="sd">&quot;&quot;&quot;A place holder that indicates unfinished code.</span>
 </span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
 </span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="sd">    Example</span>
 </span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="sd">    -------</span>
@@ -333,7 +333,7 @@
 </span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">]],</span>
 </span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span>
 </span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a><span class="p">]:</span>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator that marks an object as unimplemented.</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>    <span class="sd">&quot;&quot;&quot;A decorator that marks an object as unimplemented.</span>
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>
 </span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="sd">    An attempt to call the object that&#39;s marked will cause a runtime warn.</span>
 </span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>
@@ -391,7 +391,7 @@
 </span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>    <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">]],</span>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>    <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a><span class="p">]:</span>
-</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Set `path` to be the object&#39;s documentation.</span>
+</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a>    <span class="sd">&quot;&quot;&quot;Set `path` to be the object&#39;s documentation.</span>
 </span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>
 </span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a><span class="sd">    Example</span>
 </span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a><span class="sd">    -------</span>
@@ -433,7 +433,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">deprecated</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">since</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;CURRENT_VERSION&#39;</span><span class="p">],</span> <span class="n">LiteralString</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">removed_in</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LiteralString</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">use_instead</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LiteralString</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">hint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LiteralString</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="s1">&#39;collections.Callable[[collections.Callable[P, U]], collections.Callable[P, U]]&#39;</span>:</span></span>
+        <span class="name">deprecated</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">since</span><span class="p">:</span> <span class="s2">&quot;typing.Literal[&#39;CURRENT_VERSION&#39;] | typing.LiteralString | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">removed_in</span><span class="p">:</span> <span class="s1">&#39;typing.LiteralString | None&#39;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">use_instead</span><span class="p">:</span> <span class="s1">&#39;typing.LiteralString | None&#39;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">hint</span><span class="p">:</span> <span class="s1">&#39;typing.LiteralString | None&#39;</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="s1">&#39;collections.Callable[[collections.Callable[P, U]], collections.Callable[P, U]]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="deprecated-view-source"><span>View Source</span></label>
 
@@ -449,7 +449,7 @@
 </span><span id="deprecated-159"><a href="#deprecated-159"><span class="linenos">159</span></a>    <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">]],</span>
 </span><span id="deprecated-160"><a href="#deprecated-160"><span class="linenos">160</span></a>    <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span>
 </span><span id="deprecated-161"><a href="#deprecated-161"><span class="linenos">161</span></a><span class="p">]:</span>
-</span><span id="deprecated-162"><a href="#deprecated-162"><span class="linenos">162</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator that marks a function as deprecated.</span>
+</span><span id="deprecated-162"><a href="#deprecated-162"><span class="linenos">162</span></a>    <span class="sd">&quot;&quot;&quot;A decorator that marks a function as deprecated.</span>
 </span><span id="deprecated-163"><a href="#deprecated-163"><span class="linenos">163</span></a>
 </span><span id="deprecated-164"><a href="#deprecated-164"><span class="linenos">164</span></a><span class="sd">    An attempt to call the object that&#39;s marked will cause a runtime warn.</span>
 </span><span id="deprecated-165"><a href="#deprecated-165"><span class="linenos">165</span></a>
@@ -567,7 +567,7 @@ An optional hint for the user.</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">unimplemented</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LiteralString</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">available_in</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LiteralString</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="s1">&#39;collections.Callable[[collections.Callable[P, U]], collections.Callable[P, U]]&#39;</span>:</span></span>
+        <span class="name">unimplemented</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">message</span><span class="p">:</span> <span class="s1">&#39;typing.LiteralString | None&#39;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">available_in</span><span class="p">:</span> <span class="s1">&#39;typing.LiteralString | None&#39;</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="s1">&#39;collections.Callable[[collections.Callable[P, U]], collections.Callable[P, U]]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="unimplemented-view-source"><span>View Source</span></label>
 
@@ -581,7 +581,7 @@ An optional hint for the user.</li>
 </span><span id="unimplemented-262"><a href="#unimplemented-262"><span class="linenos">262</span></a>    <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">]],</span>
 </span><span id="unimplemented-263"><a href="#unimplemented-263"><span class="linenos">263</span></a>    <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span>
 </span><span id="unimplemented-264"><a href="#unimplemented-264"><span class="linenos">264</span></a><span class="p">]:</span>
-</span><span id="unimplemented-265"><a href="#unimplemented-265"><span class="linenos">265</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator that marks an object as unimplemented.</span>
+</span><span id="unimplemented-265"><a href="#unimplemented-265"><span class="linenos">265</span></a>    <span class="sd">&quot;&quot;&quot;A decorator that marks an object as unimplemented.</span>
 </span><span id="unimplemented-266"><a href="#unimplemented-266"><span class="linenos">266</span></a>
 </span><span id="unimplemented-267"><a href="#unimplemented-267"><span class="linenos">267</span></a><span class="sd">    An attempt to call the object that&#39;s marked will cause a runtime warn.</span>
 </span><span id="unimplemented-268"><a href="#unimplemented-268"><span class="linenos">268</span></a>
@@ -666,14 +666,14 @@ If provided, This will be shown as what release this object be implemented.</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">todo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LiteralString</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
+        <span class="name">todo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">message</span><span class="p">:</span> <span class="s1">&#39;typing.LiteralString | None&#39;</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <label class="view-source-button" for="todo-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#todo"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="todo-236"><a href="#todo-236"><span class="linenos">236</span></a><span class="k">def</span> <span class="nf">todo</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">LiteralString</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="todo-237"><a href="#todo-237"><span class="linenos">237</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A place holder that indicates unfinished code.</span>
+</span><span id="todo-237"><a href="#todo-237"><span class="linenos">237</span></a>    <span class="sd">&quot;&quot;&quot;A place holder that indicates unfinished code.</span>
 </span><span id="todo-238"><a href="#todo-238"><span class="linenos">238</span></a>
 </span><span id="todo-239"><a href="#todo-239"><span class="linenos">239</span></a><span class="sd">    Example</span>
 </span><span id="todo-240"><a href="#todo-240"><span class="linenos">240</span></a><span class="sd">    -------</span>
@@ -734,7 +734,7 @@ Multiple optional arguments to pass if the error was raised.</li>
 </span><span id="doc-320"><a href="#doc-320"><span class="linenos">320</span></a>    <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">]],</span>
 </span><span id="doc-321"><a href="#doc-321"><span class="linenos">321</span></a>    <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span>
 </span><span id="doc-322"><a href="#doc-322"><span class="linenos">322</span></a><span class="p">]:</span>
-</span><span id="doc-323"><a href="#doc-323"><span class="linenos">323</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Set `path` to be the object&#39;s documentation.</span>
+</span><span id="doc-323"><a href="#doc-323"><span class="linenos">323</span></a>    <span class="sd">&quot;&quot;&quot;Set `path` to be the object&#39;s documentation.</span>
 </span><span id="doc-324"><a href="#doc-324"><span class="linenos">324</span></a>
 </span><span id="doc-325"><a href="#doc-325"><span class="linenos">325</span></a><span class="sd">    Example</span>
 </span><span id="doc-326"><a href="#doc-326"><span class="linenos">326</span></a><span class="sd">    -------</span>
@@ -809,7 +809,7 @@ The path to read the content from.</li>
     </div>
     <a class="headerlink" href="#unsafe"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="unsafe-70"><a href="#unsafe-70"><span class="linenos">70</span></a><span class="k">def</span> <span class="nf">unsafe</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">U</span><span class="p">]:</span>
-</span><span id="unsafe-71"><a href="#unsafe-71"><span class="linenos">71</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Mark a function as unsafe.</span>
+</span><span id="unsafe-71"><a href="#unsafe-71"><span class="linenos">71</span></a>    <span class="sd">&quot;&quot;&quot;Mark a function as unsafe.</span>
 </span><span id="unsafe-72"><a href="#unsafe-72"><span class="linenos">72</span></a>
 </span><span id="unsafe-73"><a href="#unsafe-73"><span class="linenos">73</span></a><span class="sd">    The caller of the decorated function is responsible for the undefined behavior if occurred.</span>
 </span><span id="unsafe-74"><a href="#unsafe-74"><span class="linenos">74</span></a><span class="sd">    &quot;&quot;&quot;</span>

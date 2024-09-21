@@ -56,7 +56,6 @@ from sain import result as _result
 
 if typing.TYPE_CHECKING:
     from _typeshed import SupportsRichComparison
-    from typing_extensions import Self
 
     from sain import Result
 
@@ -122,23 +121,20 @@ class Vec(typing.Generic[T]):
     ```
 
     ## Comparison operators
-    Comparing different collections with `Vec` have a cost. Depending on what you're comparing it wit.
-
-    Any iterable that is not a `list` or `Vec` that is used to compare with will get copied into a `list`,
-    So be careful what you compare a `Vec` with.
+    A `Vec` may be compared with another `Vec` or a `list`, which is what this type is built on-top of.
+    any other type will return `False`
 
     ```py
-    vec = Vec((1,2,3))
-    # zero-cost
-    vec == [1, 2, 3]
-    # Copies {1, 2, 3} -> [1, 2, 3] which can cost.
-    vec == {1, 2, 3}
+    vec = Vec([1, 2, 3])
+    assert vec == [1, 2, 3] # True
+    assert not vec == (1, 2, 3)
     ```
 
     Zero-Copy
     ---------
     A vec that gets initialized from a `list` will *point* to it and doesn't copy it.
-    So any element that gets appended to the collection will also get pushed into the vec.
+    So any element that gets appended to the list will also get pushed into the vec
+    thats pointing to it.
 
     ```py
     cells: list[str] = []
@@ -152,6 +148,8 @@ class Vec(typing.Generic[T]):
     an iterable or args, or copy the list.
 
     ```py
+    from sain.collections import vec, Vec
+
     # Creates a new vec and extend it with the elements.
     from_args = vec.from_args("foo", "bar")
 
@@ -162,7 +160,7 @@ class Vec(typing.Generic[T]):
     vec = Vec(cells[:])
     cells.append("bar")
 
-    vec[2] # IndexError: "bar" doesn't exist in vec.
+    vec[1] # IndexError: "bar" doesn't exist in vec.
     ```
     """
 
@@ -190,7 +188,7 @@ class Vec(typing.Generic[T]):
         self._capacity: int | None = None
 
     @classmethod
-    def with_capacity(cls, capacity: int) -> Self:
+    def with_capacity(cls, capacity: int) -> Vec[T]:
         """Create a new `Vec` with at least the specified capacity.
         This vec will be able to hold `capacity` elements without pushing further.
 
@@ -218,12 +216,13 @@ class Vec(typing.Generic[T]):
     def as_ref(self) -> collections.Collection[T]:
         """Return an immutable view over this vector elements.
 
+        This will *copy* `self` elements into a new tuple.
+
         Example
         -------
         ```py
         vec = Vec((1,2,3))
-
-        assert vec.as_ref() == (1,2,3)
+        assert vec.as_ref() == (1, 2, 3)
         ```
         """
         return tuple(self)
@@ -251,7 +250,7 @@ class Vec(typing.Generic[T]):
         assert vec_with_cap.capacity().unwrap() == 3
 
         vec = Vec([1, 2, 3])
-        assert vec.capacity().is_none()
+        assert vec.capacity() == 0
         ```
         """
         return 0 if self._capacity is None else self._capacity
@@ -262,11 +261,8 @@ class Vec(typing.Generic[T]):
         Example
         -------
         ```py
-        vec = Vec((1,2,3))
-        iterator = vec.iter()
-
-        # Map each element to a str
-        for element in iterator.map(str):
+        vec = Vec([1 ,2, 3])
+        for element in vec.iter().map(str):
             print(element)
         ```
         """
@@ -296,21 +292,22 @@ class Vec(typing.Generic[T]):
         `RuntimeError`
             This method will raise if `at` > `len(self)`
         """
-        if at > self.len():
+        len_ = self.len()
+        if at > len_:
             raise RuntimeError(
-                f"Index `at` ({at}) should be <= than len of vector ({self.len()}) "
+                f"Index `at` ({at}) should be <= than len of vector ({len_}) "
             ) from None
 
         # Either the list is empty or uninit.
         if not self._ptr:
             return self
 
-        split = self[at : self.len()]  # split the items into a new vec.
-        del self._ptr[at : self.len()]  # remove the items from the original list.
+        split = self[at:len_]  # split the items into a new vec.
+        del self._ptr[at:len_]  # remove the items from the original list.
         return split
 
     def split_first(self) -> _option.Option[tuple[T, collections.Sequence[T]]]:
-        """Split the first and rest elements of the vector, If empty, `Some[None]` is returned.
+        """Split the first and rest elements of the vector, If empty, `None` is returned.
 
         Example
         -------
@@ -321,7 +318,7 @@ class Vec(typing.Generic[T]):
 
         vec: Vec[int] = Vec()
         split = vec.split_first()
-        assert split == Some(None)
+        assert split.is_none()
         ```
         """
         if not self._ptr:
@@ -352,8 +349,51 @@ class Vec(typing.Generic[T]):
         if self.len() == 1:
             return _option.Some((self[0], ()))
 
-        last = self[self.len() - 1 :][0]
-        return _option.Some((last, [*self[: self.len() - 1]]))
+        last = self[-1]
+        return _option.Some((last, [*self[:-1]]))
+
+    def swap(self, a: int, b: int):
+        """Swap two elements in the vec.
+
+        if `a` equals to `b` then it's guaranteed that elements won't change value.
+
+        Example
+        -------
+        ```py
+        buf = Vec([1, 2, 3, 4])
+        buf.swap(0, 3)
+        assert buf == [4, 2, 3, 1]
+        ```
+
+        Raises
+        ------
+        IndexError
+            If the positions of `a` or `b` are out of index.
+        """
+        if self[a] == self[b]:
+            return
+
+        self[a], self[b] = self[b], self[a]
+
+    def swap_unchecked(self, a: int, b: int):
+        """Swap two elements in the vec. without checking if `a` == `b`.
+
+        If you care about `a` and `b` equality, see `Vec.swap`.
+
+        Example
+        -------
+        ```py
+        buf = Vec([1, 2, 3, 1])
+        buf.swap_unchecked(0, 3)
+        assert buf == [1, 2, 3, 1]
+        ```
+
+        Raises
+        ------
+        IndexError
+            If the positions of `a` or `b` are out of index.
+        """
+        self[a], self[b] = self[b], self[a]
 
     def first(self) -> _option.Option[T]:
         """Get the first element in this vec, returning `None` if there's none.
@@ -379,7 +419,7 @@ class Vec(typing.Generic[T]):
         assert ~first == 4
         ```
         """
-        return self.get(self.len() - 1)
+        return self.get(-1)
 
     def truncate(self, size: int) -> None:
         """Shortens the vec, keeping the first `size` elements and dropping the rest.
@@ -414,7 +454,7 @@ class Vec(typing.Generic[T]):
         if not self._ptr:
             return
 
-        for idx, e in self.iter().enumerate():
+        for idx, e in enumerate(self._ptr):
             if f(e):
                 del self._ptr[idx]
 
@@ -429,7 +469,7 @@ class Vec(typing.Generic[T]):
         Example
         -------
         ```py
-        vec = Vector(('a', 'b', 'c'))
+        vec = Vec(('a', 'b', 'c'))
         element = vec.remove('a')
         assert vec == ['b', 'c'] and element == 'a'
         ```
@@ -437,13 +477,25 @@ class Vec(typing.Generic[T]):
         if self._ptr is None:
             raise MemoryError("Vec is unallocated.") from None
 
-        try:
-            i = next(i for i in self._ptr if i == item)
-        except StopIteration:
-            raise ValueError(f"Item `{item}` not in list") from None
+        return self._ptr.pop(self.index(item))
 
-        self.remove(i)
-        return i
+    def fill(self, value: T) -> None:
+        """Fill `self` with the given `value`.
+
+        Nothing happens if the vec is empty or unallocated.
+
+        Example
+        ```py
+        a = Vec([0, 1, 2, 3])
+        a.fill(0)
+        assert a == [0, 0, 0, 0]
+        ```
+        """
+        if not self._ptr:
+            return
+
+        for n, _ in enumerate(self):
+            self[n] = value
 
     def push(self, item: T) -> None:
         """Push an element at the end of the vector.
@@ -481,7 +533,7 @@ class Vec(typing.Generic[T]):
                     print("Reached max cap :< cant push", elem)
         ```
 
-        Or you can also just call `Vec.push` and it will push within capacity if `Vec.capacity()` is not `None`.
+        Or you can also just call `Vec.push` and it will push if theres is sufficient capacity.
         ```py
         vec: Vec[int] = Vec.with_capacity(3)
 
@@ -547,7 +599,7 @@ class Vec(typing.Generic[T]):
         ```
         """
         try:
-            return _option.Some(self.__getitem__(index))
+            return _option.Some(self[index])
         except IndexError:
             return _option.NOTHING  # pyright: ignore
 
@@ -581,21 +633,21 @@ class Vec(typing.Generic[T]):
         return _option.Some(self._ptr.pop(index))
 
     def pop_if(self, pred: collections.Callable[[T], bool]) -> _option.Option[T]:
-        """Removes the last element from a vector and returns it, or `sain.Some(None)` if it is empty.
+        """Removes the last element from a vector and returns it if `f` returns `True`,
+        or `None` if it is empty.
 
         Example
         -------
         ```py
         vec = Vec((1, 2, 3))
-        assert vec.pop() == Some(3)
+        assert vec.pop_if(lambda num: num * 2 == 6) == Some(3)
         assert vec == [1, 2]
         ```
         """
         if not self._ptr:
             return _option.NOTHING  # pyright: ignore
 
-        last = self[::-1][0]
-        if pred(last):
+        if pred(self[-1]):
             return self.pop()
 
         return _option.NOTHING  # pyright: ignore
@@ -626,12 +678,12 @@ class Vec(typing.Generic[T]):
         del self._ptr[write_idx:]
 
     def remove(self, item: T) -> None:
-        """Remove `item` from this vector.
+        """Remove the first appearance of `item` from this vector.
 
         Example
         -------
         ```py
-        vec = Vector(('a', 'b', 'c'))
+        vec = Vec(('a', 'b', 'c'))
         vec.remove('a')
         assert vec == ['b', 'c']
         ```
@@ -767,7 +819,7 @@ class Vec(typing.Generic[T]):
             raise IndexError("Index out of range")
 
         if isinstance(index, slice):
-            return self.__class__(self._ptr[index])
+            return Vec(self._ptr[index])
 
         return self._ptr[index]
 
@@ -790,18 +842,11 @@ class Vec(typing.Generic[T]):
         return _LIST_REPR if not self._ptr else repr(self._ptr)
 
     def __eq__(self, other: object) -> bool:
-        if not self._ptr:
-            return False
-
         if isinstance(other, Vec):
             return self._ptr == other._ptr
 
         elif isinstance(other, list):
             return self._ptr == other
-
-        elif isinstance(other, collections.Iterable):
-            # We have to copy here.
-            return self._ptr == list(other)
 
         return NotImplemented
 

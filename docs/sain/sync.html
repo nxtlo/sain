@@ -186,82 +186,82 @@
 
     </div>
     <a class="headerlink" href="#Lazy"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy-49"><a href="#Lazy-49"><span class="linenos"> 49</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
-</span><span id="Lazy-50"><a href="#Lazy-50"><span class="linenos"> 50</span></a><span class="k">class</span> <span class="nc">Lazy</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="Lazy-51"><a href="#Lazy-51"><span class="linenos"> 51</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A thread-safe value that gets lazily initialized at first access.</span>
-</span><span id="Lazy-52"><a href="#Lazy-52"><span class="linenos"> 52</span></a>
-</span><span id="Lazy-53"><a href="#Lazy-53"><span class="linenos"> 53</span></a><span class="sd">    This type is thread-safe and may be called from multiple threads since this value</span>
-</span><span id="Lazy-54"><a href="#Lazy-54"><span class="linenos"> 54</span></a><span class="sd">    can be initialzied from mutiple threads, however, any calls to `Lazy.get` will block</span>
-</span><span id="Lazy-55"><a href="#Lazy-55"><span class="linenos"> 55</span></a><span class="sd">    if another thread is initializing it.</span>
-</span><span id="Lazy-56"><a href="#Lazy-56"><span class="linenos"> 56</span></a>
-</span><span id="Lazy-57"><a href="#Lazy-57"><span class="linenos"> 57</span></a><span class="sd">    Example</span>
-</span><span id="Lazy-58"><a href="#Lazy-58"><span class="linenos"> 58</span></a><span class="sd">    -------</span>
-</span><span id="Lazy-59"><a href="#Lazy-59"><span class="linenos"> 59</span></a><span class="sd">    ```py</span>
-</span><span id="Lazy-60"><a href="#Lazy-60"><span class="linenos"> 60</span></a><span class="sd">    # some expensive call that returns a `str`</span>
-</span><span id="Lazy-61"><a href="#Lazy-61"><span class="linenos"> 61</span></a><span class="sd">    def expensive_string() -&gt; str:</span>
-</span><span id="Lazy-62"><a href="#Lazy-62"><span class="linenos"> 62</span></a><span class="sd">        return &quot;hehehe&quot;</span>
-</span><span id="Lazy-63"><a href="#Lazy-63"><span class="linenos"> 63</span></a>
-</span><span id="Lazy-64"><a href="#Lazy-64"><span class="linenos"> 64</span></a><span class="sd">    STRING: Lazy[str] = Lazy(expensive_string)</span>
-</span><span id="Lazy-65"><a href="#Lazy-65"><span class="linenos"> 65</span></a><span class="sd">    print(STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
-</span><span id="Lazy-66"><a href="#Lazy-66"><span class="linenos"> 66</span></a><span class="sd">    print(STRING.get()) # The string is retrived from the lazy lock.</span>
-</span><span id="Lazy-67"><a href="#Lazy-67"><span class="linenos"> 67</span></a><span class="sd">    ```</span>
-</span><span id="Lazy-68"><a href="#Lazy-68"><span class="linenos"> 68</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy-47"><a href="#Lazy-47"><span class="linenos"> 47</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
+</span><span id="Lazy-48"><a href="#Lazy-48"><span class="linenos"> 48</span></a><span class="k">class</span> <span class="nc">Lazy</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="Lazy-49"><a href="#Lazy-49"><span class="linenos"> 49</span></a>    <span class="sd">&quot;&quot;&quot;A thread-safe value that gets lazily initialized at first access.</span>
+</span><span id="Lazy-50"><a href="#Lazy-50"><span class="linenos"> 50</span></a>
+</span><span id="Lazy-51"><a href="#Lazy-51"><span class="linenos"> 51</span></a><span class="sd">    This type is thread-safe and may be called from multiple threads since this value</span>
+</span><span id="Lazy-52"><a href="#Lazy-52"><span class="linenos"> 52</span></a><span class="sd">    can be initialized from multiple threads, however, any calls to `Lazy.get` will block</span>
+</span><span id="Lazy-53"><a href="#Lazy-53"><span class="linenos"> 53</span></a><span class="sd">    if another thread is initializing it.</span>
+</span><span id="Lazy-54"><a href="#Lazy-54"><span class="linenos"> 54</span></a>
+</span><span id="Lazy-55"><a href="#Lazy-55"><span class="linenos"> 55</span></a><span class="sd">    Example</span>
+</span><span id="Lazy-56"><a href="#Lazy-56"><span class="linenos"> 56</span></a><span class="sd">    -------</span>
+</span><span id="Lazy-57"><a href="#Lazy-57"><span class="linenos"> 57</span></a><span class="sd">    ```py</span>
+</span><span id="Lazy-58"><a href="#Lazy-58"><span class="linenos"> 58</span></a><span class="sd">    # some expensive call that returns a `str`</span>
+</span><span id="Lazy-59"><a href="#Lazy-59"><span class="linenos"> 59</span></a><span class="sd">    def expensive_string() -&gt; str:</span>
+</span><span id="Lazy-60"><a href="#Lazy-60"><span class="linenos"> 60</span></a><span class="sd">        return &quot;hehehe&quot;</span>
+</span><span id="Lazy-61"><a href="#Lazy-61"><span class="linenos"> 61</span></a>
+</span><span id="Lazy-62"><a href="#Lazy-62"><span class="linenos"> 62</span></a><span class="sd">    STRING: Lazy[str] = Lazy(expensive_string)</span>
+</span><span id="Lazy-63"><a href="#Lazy-63"><span class="linenos"> 63</span></a><span class="sd">    print(STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
+</span><span id="Lazy-64"><a href="#Lazy-64"><span class="linenos"> 64</span></a><span class="sd">    print(STRING.get()) # The string is retrieved from the lazy lock.</span>
+</span><span id="Lazy-65"><a href="#Lazy-65"><span class="linenos"> 65</span></a><span class="sd">    ```</span>
+</span><span id="Lazy-66"><a href="#Lazy-66"><span class="linenos"> 66</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Lazy-67"><a href="#Lazy-67"><span class="linenos"> 67</span></a>
+</span><span id="Lazy-68"><a href="#Lazy-68"><span class="linenos"> 68</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;__inner&quot;</span><span class="p">,</span> <span class="s2">&quot;__lock&quot;</span><span class="p">)</span>
 </span><span id="Lazy-69"><a href="#Lazy-69"><span class="linenos"> 69</span></a>
-</span><span id="Lazy-70"><a href="#Lazy-70"><span class="linenos"> 70</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;__inner&quot;</span><span class="p">,</span> <span class="s2">&quot;__lock&quot;</span><span class="p">)</span>
-</span><span id="Lazy-71"><a href="#Lazy-71"><span class="linenos"> 71</span></a>
-</span><span id="Lazy-72"><a href="#Lazy-72"><span class="linenos"> 72</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Lazy-73"><a href="#Lazy-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
-</span><span id="Lazy-74"><a href="#Lazy-74"><span class="linenos"> 74</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-</span><span id="Lazy-75"><a href="#Lazy-75"><span class="linenos"> 75</span></a>
-</span><span id="Lazy-76"><a href="#Lazy-76"><span class="linenos"> 76</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Lazy-77"><a href="#Lazy-77"><span class="linenos"> 77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value if it was initialized, otherwise initialize it and return it.</span>
-</span><span id="Lazy-78"><a href="#Lazy-78"><span class="linenos"> 78</span></a>
-</span><span id="Lazy-79"><a href="#Lazy-79"><span class="linenos"> 79</span></a><span class="sd">        Example</span>
-</span><span id="Lazy-80"><a href="#Lazy-80"><span class="linenos"> 80</span></a><span class="sd">        -------</span>
-</span><span id="Lazy-81"><a href="#Lazy-81"><span class="linenos"> 81</span></a><span class="sd">        ```py</span>
-</span><span id="Lazy-82"><a href="#Lazy-82"><span class="linenos"> 82</span></a><span class="sd">        # some expensive call that returns a `str`</span>
-</span><span id="Lazy-83"><a href="#Lazy-83"><span class="linenos"> 83</span></a><span class="sd">        def expensive_string() -&gt; str:</span>
-</span><span id="Lazy-84"><a href="#Lazy-84"><span class="linenos"> 84</span></a><span class="sd">            return &quot;hehehe&quot;</span>
-</span><span id="Lazy-85"><a href="#Lazy-85"><span class="linenos"> 85</span></a>
-</span><span id="Lazy-86"><a href="#Lazy-86"><span class="linenos"> 86</span></a><span class="sd">        STRING: Lazy[str] = Lazy(expensive_string)</span>
-</span><span id="Lazy-87"><a href="#Lazy-87"><span class="linenos"> 87</span></a><span class="sd">        print(STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
-</span><span id="Lazy-88"><a href="#Lazy-88"><span class="linenos"> 88</span></a><span class="sd">        print(STRING.get()) # The string is retrived from the lazy lock.</span>
-</span><span id="Lazy-89"><a href="#Lazy-89"><span class="linenos"> 89</span></a><span class="sd">        ```</span>
-</span><span id="Lazy-90"><a href="#Lazy-90"><span class="linenos"> 90</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Lazy-91"><a href="#Lazy-91"><span class="linenos"> 91</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
-</span><span id="Lazy-92"><a href="#Lazy-92"><span class="linenos"> 92</span></a>            <span class="c1"># value is already initialized, no need to make a call.</span>
-</span><span id="Lazy-93"><a href="#Lazy-93"><span class="linenos"> 93</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span>
-</span><span id="Lazy-94"><a href="#Lazy-94"><span class="linenos"> 94</span></a>
-</span><span id="Lazy-95"><a href="#Lazy-95"><span class="linenos"> 95</span></a>        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
-</span><span id="Lazy-96"><a href="#Lazy-96"><span class="linenos"> 96</span></a>            <span class="n">inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">()</span>
-</span><span id="Lazy-97"><a href="#Lazy-97"><span class="linenos"> 97</span></a>            <span class="k">return</span> <span class="n">inner</span>
-</span><span id="Lazy-98"><a href="#Lazy-98"><span class="linenos"> 98</span></a>
-</span><span id="Lazy-99"><a href="#Lazy-99"><span class="linenos"> 99</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Lazy-100"><a href="#Lazy-100"><span class="linenos">100</span></a>        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
-</span><span id="Lazy-101"><a href="#Lazy-101"><span class="linenos">101</span></a>            <span class="k">return</span> <span class="s2">&quot;Lazy(uninit)&quot;</span>
+</span><span id="Lazy-70"><a href="#Lazy-70"><span class="linenos"> 70</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Lazy-71"><a href="#Lazy-71"><span class="linenos"> 71</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
+</span><span id="Lazy-72"><a href="#Lazy-72"><span class="linenos"> 72</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+</span><span id="Lazy-73"><a href="#Lazy-73"><span class="linenos"> 73</span></a>
+</span><span id="Lazy-74"><a href="#Lazy-74"><span class="linenos"> 74</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="Lazy-75"><a href="#Lazy-75"><span class="linenos"> 75</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if it was initialized, otherwise initialize it and return it.</span>
+</span><span id="Lazy-76"><a href="#Lazy-76"><span class="linenos"> 76</span></a>
+</span><span id="Lazy-77"><a href="#Lazy-77"><span class="linenos"> 77</span></a><span class="sd">        Example</span>
+</span><span id="Lazy-78"><a href="#Lazy-78"><span class="linenos"> 78</span></a><span class="sd">        -------</span>
+</span><span id="Lazy-79"><a href="#Lazy-79"><span class="linenos"> 79</span></a><span class="sd">        ```py</span>
+</span><span id="Lazy-80"><a href="#Lazy-80"><span class="linenos"> 80</span></a><span class="sd">        # some expensive call that returns a `str`</span>
+</span><span id="Lazy-81"><a href="#Lazy-81"><span class="linenos"> 81</span></a><span class="sd">        def expensive_string() -&gt; str:</span>
+</span><span id="Lazy-82"><a href="#Lazy-82"><span class="linenos"> 82</span></a><span class="sd">            return &quot;hehehe&quot;</span>
+</span><span id="Lazy-83"><a href="#Lazy-83"><span class="linenos"> 83</span></a>
+</span><span id="Lazy-84"><a href="#Lazy-84"><span class="linenos"> 84</span></a><span class="sd">        STRING: Lazy[str] = Lazy(expensive_string)</span>
+</span><span id="Lazy-85"><a href="#Lazy-85"><span class="linenos"> 85</span></a><span class="sd">        print(STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
+</span><span id="Lazy-86"><a href="#Lazy-86"><span class="linenos"> 86</span></a><span class="sd">        print(STRING.get()) # The string is retrieved from the lazy lock.</span>
+</span><span id="Lazy-87"><a href="#Lazy-87"><span class="linenos"> 87</span></a><span class="sd">        ```</span>
+</span><span id="Lazy-88"><a href="#Lazy-88"><span class="linenos"> 88</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Lazy-89"><a href="#Lazy-89"><span class="linenos"> 89</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
+</span><span id="Lazy-90"><a href="#Lazy-90"><span class="linenos"> 90</span></a>            <span class="c1"># value is already initialized, no need to make a call.</span>
+</span><span id="Lazy-91"><a href="#Lazy-91"><span class="linenos"> 91</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span>
+</span><span id="Lazy-92"><a href="#Lazy-92"><span class="linenos"> 92</span></a>
+</span><span id="Lazy-93"><a href="#Lazy-93"><span class="linenos"> 93</span></a>        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
+</span><span id="Lazy-94"><a href="#Lazy-94"><span class="linenos"> 94</span></a>            <span class="n">inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">()</span>
+</span><span id="Lazy-95"><a href="#Lazy-95"><span class="linenos"> 95</span></a>            <span class="k">return</span> <span class="n">inner</span>
+</span><span id="Lazy-96"><a href="#Lazy-96"><span class="linenos"> 96</span></a>
+</span><span id="Lazy-97"><a href="#Lazy-97"><span class="linenos"> 97</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="Lazy-98"><a href="#Lazy-98"><span class="linenos"> 98</span></a>        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
+</span><span id="Lazy-99"><a href="#Lazy-99"><span class="linenos"> 99</span></a>            <span class="k">return</span> <span class="s2">&quot;Lazy(uninit)&quot;</span>
+</span><span id="Lazy-100"><a href="#Lazy-100"><span class="linenos">100</span></a>
+</span><span id="Lazy-101"><a href="#Lazy-101"><span class="linenos">101</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Lazy(value: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
 </span><span id="Lazy-102"><a href="#Lazy-102"><span class="linenos">102</span></a>
-</span><span id="Lazy-103"><a href="#Lazy-103"><span class="linenos">103</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Lazy(value: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="Lazy-103"><a href="#Lazy-103"><span class="linenos">103</span></a>    <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span>
 </span><span id="Lazy-104"><a href="#Lazy-104"><span class="linenos">104</span></a>
-</span><span id="Lazy-105"><a href="#Lazy-105"><span class="linenos">105</span></a>    <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span>
-</span><span id="Lazy-106"><a href="#Lazy-106"><span class="linenos">106</span></a>
-</span><span id="Lazy-107"><a href="#Lazy-107"><span class="linenos">107</span></a>    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Lazy-108"><a href="#Lazy-108"><span class="linenos">108</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
-</span><span id="Lazy-109"><a href="#Lazy-109"><span class="linenos">109</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="Lazy-110"><a href="#Lazy-110"><span class="linenos">110</span></a>
-</span><span id="Lazy-111"><a href="#Lazy-111"><span class="linenos">111</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Lazy</span><span class="p">):</span>
-</span><span id="Lazy-112"><a href="#Lazy-112"><span class="linenos">112</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</span><span id="Lazy-105"><a href="#Lazy-105"><span class="linenos">105</span></a>    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Lazy-106"><a href="#Lazy-106"><span class="linenos">106</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
+</span><span id="Lazy-107"><a href="#Lazy-107"><span class="linenos">107</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="Lazy-108"><a href="#Lazy-108"><span class="linenos">108</span></a>
+</span><span id="Lazy-109"><a href="#Lazy-109"><span class="linenos">109</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Lazy</span><span class="p">):</span>
+</span><span id="Lazy-110"><a href="#Lazy-110"><span class="linenos">110</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</span><span id="Lazy-111"><a href="#Lazy-111"><span class="linenos">111</span></a>
+</span><span id="Lazy-112"><a href="#Lazy-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="bp">NotImplemented</span>
 </span><span id="Lazy-113"><a href="#Lazy-113"><span class="linenos">113</span></a>
-</span><span id="Lazy-114"><a href="#Lazy-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="bp">NotImplemented</span>
-</span><span id="Lazy-115"><a href="#Lazy-115"><span class="linenos">115</span></a>
-</span><span id="Lazy-116"><a href="#Lazy-116"><span class="linenos">116</span></a>    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Lazy-117"><a href="#Lazy-117"><span class="linenos">117</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+</span><span id="Lazy-114"><a href="#Lazy-114"><span class="linenos">114</span></a>    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Lazy-115"><a href="#Lazy-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>A thread-safe value that gets lazily initialized at first access.</p>
 
 <p>This type is thread-safe and may be called from multiple threads since this value
-can be initialzied from mutiple threads, however, any calls to <code><a href="#Lazy.get">Lazy.get</a></code> will block
+can be initialized from multiple threads, however, any calls to <code><a href="#Lazy.get">Lazy.get</a></code> will block
 if another thread is initializing it.</p>
 
 <h6 id="example">Example</h6>
@@ -273,7 +273,7 @@ if another thread is initializing it.</p>
 
 <span class="n">STRING</span><span class="p">:</span> <span class="n">Lazy</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lazy</span><span class="p">(</span><span class="n">expensive_string</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is built, stored in the lazy lock and returned.</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is retrived from the lazy lock.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is retrieved from the lazy lock.</span>
 </code></pre>
 </div>
 </div>
@@ -289,9 +289,9 @@ if another thread is initializing it.</p>
 
     </div>
     <a class="headerlink" href="#Lazy.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy.__init__-72"><a href="#Lazy.__init__-72"><span class="linenos">72</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Lazy.__init__-73"><a href="#Lazy.__init__-73"><span class="linenos">73</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
-</span><span id="Lazy.__init__-74"><a href="#Lazy.__init__-74"><span class="linenos">74</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy.__init__-70"><a href="#Lazy.__init__-70"><span class="linenos">70</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Lazy.__init__-71"><a href="#Lazy.__init__-71"><span class="linenos">71</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
+</span><span id="Lazy.__init__-72"><a href="#Lazy.__init__-72"><span class="linenos">72</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -309,28 +309,28 @@ if another thread is initializing it.</p>
 
     </div>
     <a class="headerlink" href="#Lazy.get"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy.get-76"><a href="#Lazy.get-76"><span class="linenos">76</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Lazy.get-77"><a href="#Lazy.get-77"><span class="linenos">77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value if it was initialized, otherwise initialize it and return it.</span>
-</span><span id="Lazy.get-78"><a href="#Lazy.get-78"><span class="linenos">78</span></a>
-</span><span id="Lazy.get-79"><a href="#Lazy.get-79"><span class="linenos">79</span></a><span class="sd">        Example</span>
-</span><span id="Lazy.get-80"><a href="#Lazy.get-80"><span class="linenos">80</span></a><span class="sd">        -------</span>
-</span><span id="Lazy.get-81"><a href="#Lazy.get-81"><span class="linenos">81</span></a><span class="sd">        ```py</span>
-</span><span id="Lazy.get-82"><a href="#Lazy.get-82"><span class="linenos">82</span></a><span class="sd">        # some expensive call that returns a `str`</span>
-</span><span id="Lazy.get-83"><a href="#Lazy.get-83"><span class="linenos">83</span></a><span class="sd">        def expensive_string() -&gt; str:</span>
-</span><span id="Lazy.get-84"><a href="#Lazy.get-84"><span class="linenos">84</span></a><span class="sd">            return &quot;hehehe&quot;</span>
-</span><span id="Lazy.get-85"><a href="#Lazy.get-85"><span class="linenos">85</span></a>
-</span><span id="Lazy.get-86"><a href="#Lazy.get-86"><span class="linenos">86</span></a><span class="sd">        STRING: Lazy[str] = Lazy(expensive_string)</span>
-</span><span id="Lazy.get-87"><a href="#Lazy.get-87"><span class="linenos">87</span></a><span class="sd">        print(STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
-</span><span id="Lazy.get-88"><a href="#Lazy.get-88"><span class="linenos">88</span></a><span class="sd">        print(STRING.get()) # The string is retrived from the lazy lock.</span>
-</span><span id="Lazy.get-89"><a href="#Lazy.get-89"><span class="linenos">89</span></a><span class="sd">        ```</span>
-</span><span id="Lazy.get-90"><a href="#Lazy.get-90"><span class="linenos">90</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Lazy.get-91"><a href="#Lazy.get-91"><span class="linenos">91</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
-</span><span id="Lazy.get-92"><a href="#Lazy.get-92"><span class="linenos">92</span></a>            <span class="c1"># value is already initialized, no need to make a call.</span>
-</span><span id="Lazy.get-93"><a href="#Lazy.get-93"><span class="linenos">93</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span>
-</span><span id="Lazy.get-94"><a href="#Lazy.get-94"><span class="linenos">94</span></a>
-</span><span id="Lazy.get-95"><a href="#Lazy.get-95"><span class="linenos">95</span></a>        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
-</span><span id="Lazy.get-96"><a href="#Lazy.get-96"><span class="linenos">96</span></a>            <span class="n">inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">()</span>
-</span><span id="Lazy.get-97"><a href="#Lazy.get-97"><span class="linenos">97</span></a>            <span class="k">return</span> <span class="n">inner</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Lazy.get-74"><a href="#Lazy.get-74"><span class="linenos">74</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="Lazy.get-75"><a href="#Lazy.get-75"><span class="linenos">75</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if it was initialized, otherwise initialize it and return it.</span>
+</span><span id="Lazy.get-76"><a href="#Lazy.get-76"><span class="linenos">76</span></a>
+</span><span id="Lazy.get-77"><a href="#Lazy.get-77"><span class="linenos">77</span></a><span class="sd">        Example</span>
+</span><span id="Lazy.get-78"><a href="#Lazy.get-78"><span class="linenos">78</span></a><span class="sd">        -------</span>
+</span><span id="Lazy.get-79"><a href="#Lazy.get-79"><span class="linenos">79</span></a><span class="sd">        ```py</span>
+</span><span id="Lazy.get-80"><a href="#Lazy.get-80"><span class="linenos">80</span></a><span class="sd">        # some expensive call that returns a `str`</span>
+</span><span id="Lazy.get-81"><a href="#Lazy.get-81"><span class="linenos">81</span></a><span class="sd">        def expensive_string() -&gt; str:</span>
+</span><span id="Lazy.get-82"><a href="#Lazy.get-82"><span class="linenos">82</span></a><span class="sd">            return &quot;hehehe&quot;</span>
+</span><span id="Lazy.get-83"><a href="#Lazy.get-83"><span class="linenos">83</span></a>
+</span><span id="Lazy.get-84"><a href="#Lazy.get-84"><span class="linenos">84</span></a><span class="sd">        STRING: Lazy[str] = Lazy(expensive_string)</span>
+</span><span id="Lazy.get-85"><a href="#Lazy.get-85"><span class="linenos">85</span></a><span class="sd">        print(STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
+</span><span id="Lazy.get-86"><a href="#Lazy.get-86"><span class="linenos">86</span></a><span class="sd">        print(STRING.get()) # The string is retrieved from the lazy lock.</span>
+</span><span id="Lazy.get-87"><a href="#Lazy.get-87"><span class="linenos">87</span></a><span class="sd">        ```</span>
+</span><span id="Lazy.get-88"><a href="#Lazy.get-88"><span class="linenos">88</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Lazy.get-89"><a href="#Lazy.get-89"><span class="linenos">89</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
+</span><span id="Lazy.get-90"><a href="#Lazy.get-90"><span class="linenos">90</span></a>            <span class="c1"># value is already initialized, no need to make a call.</span>
+</span><span id="Lazy.get-91"><a href="#Lazy.get-91"><span class="linenos">91</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span>
+</span><span id="Lazy.get-92"><a href="#Lazy.get-92"><span class="linenos">92</span></a>
+</span><span id="Lazy.get-93"><a href="#Lazy.get-93"><span class="linenos">93</span></a>        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
+</span><span id="Lazy.get-94"><a href="#Lazy.get-94"><span class="linenos">94</span></a>            <span class="n">inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">()</span>
+</span><span id="Lazy.get-95"><a href="#Lazy.get-95"><span class="linenos">95</span></a>            <span class="k">return</span> <span class="n">inner</span>
 </span></pre></div>
 
 
@@ -345,7 +345,7 @@ if another thread is initializing it.</p>
 
 <span class="n">STRING</span><span class="p">:</span> <span class="n">Lazy</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lazy</span><span class="p">(</span><span class="n">expensive_string</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is built, stored in the lazy lock and returned.</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is retrived from the lazy lock.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is retrieved from the lazy lock.</span>
 </code></pre>
 </div>
 </div>
@@ -367,7 +367,7 @@ if another thread is initializing it.</p>
     <a class="headerlink" href="#Once"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once-54"><a href="#Once-54"><span class="linenos"> 54</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Once-55"><a href="#Once-55"><span class="linenos"> 55</span></a><span class="k">class</span> <span class="nc">Once</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="Once-56"><a href="#Once-56"><span class="linenos"> 56</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
+</span><span id="Once-56"><a href="#Once-56"><span class="linenos"> 56</span></a>    <span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
 </span><span id="Once-57"><a href="#Once-57"><span class="linenos"> 57</span></a>
 </span><span id="Once-58"><a href="#Once-58"><span class="linenos"> 58</span></a><span class="sd">    Example</span>
 </span><span id="Once-59"><a href="#Once-59"><span class="linenos"> 59</span></a><span class="sd">    -------</span>
@@ -399,7 +399,7 @@ if another thread is initializing it.</p>
 </span><span id="Once-85"><a href="#Once-85"><span class="linenos"> 85</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="Once-86"><a href="#Once-86"><span class="linenos"> 86</span></a>
 </span><span id="Once-87"><a href="#Once-87"><span class="linenos"> 87</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Once-88"><a href="#Once-88"><span class="linenos"> 88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the stored value, returning `None` if not initialized.</span>
+</span><span id="Once-88"><a href="#Once-88"><span class="linenos"> 88</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value, returning `None` if not initialized.</span>
 </span><span id="Once-89"><a href="#Once-89"><span class="linenos"> 89</span></a>
 </span><span id="Once-90"><a href="#Once-90"><span class="linenos"> 90</span></a><span class="sd">        This method will never block.</span>
 </span><span id="Once-91"><a href="#Once-91"><span class="linenos"> 91</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -407,7 +407,7 @@ if another thread is initializing it.</p>
 </span><span id="Once-93"><a href="#Once-93"><span class="linenos"> 93</span></a>
 </span><span id="Once-94"><a href="#Once-94"><span class="linenos"> 94</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="Once-95"><a href="#Once-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once-96"><a href="#Once-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="Once-96"><a href="#Once-96"><span class="linenos"> 96</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="Once-97"><a href="#Once-97"><span class="linenos"> 97</span></a>
 </span><span id="Once-98"><a href="#Once-98"><span class="linenos"> 98</span></a><span class="sd">        Example</span>
 </span><span id="Once-99"><a href="#Once-99"><span class="linenos"> 99</span></a><span class="sd">        -------</span>
@@ -427,7 +427,7 @@ if another thread is initializing it.</p>
 </span><span id="Once-113"><a href="#Once-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">unwrap_unchecked</span><span class="p">()</span>
 </span><span id="Once-114"><a href="#Once-114"><span class="linenos">114</span></a>
 </span><span id="Once-115"><a href="#Once-115"><span class="linenos">115</span></a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="Once-116"><a href="#Once-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="Once-116"><a href="#Once-116"><span class="linenos">116</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
 </span><span id="Once-117"><a href="#Once-117"><span class="linenos">117</span></a>
 </span><span id="Once-118"><a href="#Once-118"><span class="linenos">118</span></a><span class="sd">        This method may block if another thread is trying to initialize the value.</span>
 </span><span id="Once-119"><a href="#Once-119"><span class="linenos">119</span></a><span class="sd">        The value is guaranteed to be set, just not necessarily the one provided.</span>
@@ -456,12 +456,12 @@ if another thread is initializing it.</p>
 </span><span id="Once-142"><a href="#Once-142"><span class="linenos">142</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </span><span id="Once-143"><a href="#Once-143"><span class="linenos">143</span></a>
 </span><span id="Once-144"><a href="#Once-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Once-145"><a href="#Once-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
+</span><span id="Once-145"><a href="#Once-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
 </span><span id="Once-146"><a href="#Once-146"><span class="linenos">146</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Once-147"><a href="#Once-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Once-148"><a href="#Once-148"><span class="linenos">148</span></a>
 </span><span id="Once-149"><a href="#Once-149"><span class="linenos">149</span></a>    <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once-150"><a href="#Once-150"><span class="linenos">150</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value if it was not initialized, Otherwise set `init` value and returning it.</span>
+</span><span id="Once-150"><a href="#Once-150"><span class="linenos">150</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if it was not initialized, Otherwise set `init` value and returning it.</span>
 </span><span id="Once-151"><a href="#Once-151"><span class="linenos">151</span></a>
 </span><span id="Once-152"><a href="#Once-152"><span class="linenos">152</span></a><span class="sd">        Many threads may call `get_or` concurrently with different</span>
 </span><span id="Once-153"><a href="#Once-153"><span class="linenos">153</span></a><span class="sd">        initializing functions, but it is guaranteed that only one function</span>
@@ -495,7 +495,7 @@ if another thread is initializing it.</p>
 </span><span id="Once-181"><a href="#Once-181"><span class="linenos">181</span></a>            <span class="k">return</span> <span class="n">init</span>
 </span><span id="Once-182"><a href="#Once-182"><span class="linenos">182</span></a>
 </span><span id="Once-183"><a href="#Once-183"><span class="linenos">183</span></a>    <span class="k">def</span> <span class="nf">get_or_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once-184"><a href="#Once-184"><span class="linenos">184</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
+</span><span id="Once-184"><a href="#Once-184"><span class="linenos">184</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
 </span><span id="Once-185"><a href="#Once-185"><span class="linenos">185</span></a><span class="sd">        was empty.</span>
 </span><span id="Once-186"><a href="#Once-186"><span class="linenos">186</span></a>
 </span><span id="Once-187"><a href="#Once-187"><span class="linenos">187</span></a><span class="sd">        Many threads may call `get_or_with` concurrently with different</span>
@@ -600,7 +600,7 @@ if another thread is initializing it.</p>
     </div>
     <a class="headerlink" href="#Once.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.get-87"><a href="#Once.get-87"><span class="linenos">87</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Once.get-88"><a href="#Once.get-88"><span class="linenos">88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the stored value, returning `None` if not initialized.</span>
+</span><span id="Once.get-88"><a href="#Once.get-88"><span class="linenos">88</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value, returning `None` if not initialized.</span>
 </span><span id="Once.get-89"><a href="#Once.get-89"><span class="linenos">89</span></a>
 </span><span id="Once.get-90"><a href="#Once.get-90"><span class="linenos">90</span></a><span class="sd">        This method will never block.</span>
 </span><span id="Once.get-91"><a href="#Once.get-91"><span class="linenos">91</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -629,7 +629,7 @@ if another thread is initializing it.</p>
     <a class="headerlink" href="#Once.get_unchecked"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.get_unchecked-94"><a href="#Once.get_unchecked-94"><span class="linenos"> 94</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="Once.get_unchecked-95"><a href="#Once.get_unchecked-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once.get_unchecked-96"><a href="#Once.get_unchecked-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="Once.get_unchecked-96"><a href="#Once.get_unchecked-96"><span class="linenos"> 96</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="Once.get_unchecked-97"><a href="#Once.get_unchecked-97"><span class="linenos"> 97</span></a>
 </span><span id="Once.get_unchecked-98"><a href="#Once.get_unchecked-98"><span class="linenos"> 98</span></a><span class="sd">        Example</span>
 </span><span id="Once.get_unchecked-99"><a href="#Once.get_unchecked-99"><span class="linenos"> 99</span></a><span class="sd">        -------</span>
@@ -686,7 +686,7 @@ if another thread is initializing it.</p>
     </div>
     <a class="headerlink" href="#Once.set"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.set-115"><a href="#Once.set-115"><span class="linenos">115</span></a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="Once.set-116"><a href="#Once.set-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="Once.set-116"><a href="#Once.set-116"><span class="linenos">116</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
 </span><span id="Once.set-117"><a href="#Once.set-117"><span class="linenos">117</span></a>
 </span><span id="Once.set-118"><a href="#Once.set-118"><span class="linenos">118</span></a><span class="sd">        This method may block if another thread is trying to initialize the value.</span>
 </span><span id="Once.set-119"><a href="#Once.set-119"><span class="linenos">119</span></a><span class="sd">        The value is guaranteed to be set, just not necessarily the one provided.</span>
@@ -754,7 +754,7 @@ The value is guaranteed to be set, just not necessarily the one provided.</p>
     </div>
     <a class="headerlink" href="#Once.clear"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.clear-144"><a href="#Once.clear-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Once.clear-145"><a href="#Once.clear-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
+</span><span id="Once.clear-145"><a href="#Once.clear-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
 </span><span id="Once.clear-146"><a href="#Once.clear-146"><span class="linenos">146</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Once.clear-147"><a href="#Once.clear-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
 </span></pre></div>
@@ -777,7 +777,7 @@ The value is guaranteed to be set, just not necessarily the one provided.</p>
     </div>
     <a class="headerlink" href="#Once.get_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.get_or-149"><a href="#Once.get_or-149"><span class="linenos">149</span></a>    <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once.get_or-150"><a href="#Once.get_or-150"><span class="linenos">150</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value if it was not initialized, Otherwise set `init` value and returning it.</span>
+</span><span id="Once.get_or-150"><a href="#Once.get_or-150"><span class="linenos">150</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if it was not initialized, Otherwise set `init` value and returning it.</span>
 </span><span id="Once.get_or-151"><a href="#Once.get_or-151"><span class="linenos">151</span></a>
 </span><span id="Once.get_or-152"><a href="#Once.get_or-152"><span class="linenos">152</span></a><span class="sd">        Many threads may call `get_or` concurrently with different</span>
 </span><span id="Once.get_or-153"><a href="#Once.get_or-153"><span class="linenos">153</span></a><span class="sd">        initializing functions, but it is guaranteed that only one function</span>
@@ -850,7 +850,7 @@ will be executed.</p>
     </div>
     <a class="headerlink" href="#Once.get_or_with"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Once.get_or_with-183"><a href="#Once.get_or_with-183"><span class="linenos">183</span></a>    <span class="k">def</span> <span class="nf">get_or_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Once.get_or_with-184"><a href="#Once.get_or_with-184"><span class="linenos">184</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
+</span><span id="Once.get_or_with-184"><a href="#Once.get_or_with-184"><span class="linenos">184</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
 </span><span id="Once.get_or_with-185"><a href="#Once.get_or_with-185"><span class="linenos">185</span></a><span class="sd">        was empty.</span>
 </span><span id="Once.get_or_with-186"><a href="#Once.get_or_with-186"><span class="linenos">186</span></a>
 </span><span id="Once.get_or_with-187"><a href="#Once.get_or_with-187"><span class="linenos">187</span></a><span class="sd">        Many threads may call `get_or_with` concurrently with different</span>
@@ -917,90 +917,90 @@ will be executed.</p>
 
     </div>
     <a class="headerlink" href="#LazyFuture"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture-120"><a href="#LazyFuture-120"><span class="linenos">120</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
-</span><span id="LazyFuture-121"><a href="#LazyFuture-121"><span class="linenos">121</span></a><span class="k">class</span> <span class="nc">LazyFuture</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="LazyFuture-122"><a href="#LazyFuture-122"><span class="linenos">122</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A thread-safe value that gets lazily initialized asynchronously at first access.</span>
-</span><span id="LazyFuture-123"><a href="#LazyFuture-123"><span class="linenos">123</span></a>
-</span><span id="LazyFuture-124"><a href="#LazyFuture-124"><span class="linenos">124</span></a><span class="sd">    This type is thread-safe and may be called from multiple threads since this value</span>
-</span><span id="LazyFuture-125"><a href="#LazyFuture-125"><span class="linenos">125</span></a><span class="sd">    can be initialzied from mutiple threads, however, any calls to `Lazy.get` will block</span>
-</span><span id="LazyFuture-126"><a href="#LazyFuture-126"><span class="linenos">126</span></a><span class="sd">    if another thread is initializing it.</span>
-</span><span id="LazyFuture-127"><a href="#LazyFuture-127"><span class="linenos">127</span></a>
-</span><span id="LazyFuture-128"><a href="#LazyFuture-128"><span class="linenos">128</span></a><span class="sd">    Example</span>
-</span><span id="LazyFuture-129"><a href="#LazyFuture-129"><span class="linenos">129</span></a><span class="sd">    -------</span>
-</span><span id="LazyFuture-130"><a href="#LazyFuture-130"><span class="linenos">130</span></a><span class="sd">    ```py</span>
-</span><span id="LazyFuture-131"><a href="#LazyFuture-131"><span class="linenos">131</span></a><span class="sd">    # some expensive call that returns a `str`</span>
-</span><span id="LazyFuture-132"><a href="#LazyFuture-132"><span class="linenos">132</span></a><span class="sd">    async def fetch_expensive_string(filtered: bool) -&gt; str:</span>
-</span><span id="LazyFuture-133"><a href="#LazyFuture-133"><span class="linenos">133</span></a><span class="sd">        return &quot;hehehe&quot; if filtered else &quot;whahaha&quot;</span>
-</span><span id="LazyFuture-134"><a href="#LazyFuture-134"><span class="linenos">134</span></a>
-</span><span id="LazyFuture-135"><a href="#LazyFuture-135"><span class="linenos">135</span></a><span class="sd">    STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))</span>
-</span><span id="LazyFuture-136"><a href="#LazyFuture-136"><span class="linenos">136</span></a><span class="sd">    print(await STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
-</span><span id="LazyFuture-137"><a href="#LazyFuture-137"><span class="linenos">137</span></a><span class="sd">    print(await STRING.get()) # The string is retrived from the lazy lock.</span>
-</span><span id="LazyFuture-138"><a href="#LazyFuture-138"><span class="linenos">138</span></a><span class="sd">    ```</span>
-</span><span id="LazyFuture-139"><a href="#LazyFuture-139"><span class="linenos">139</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture-118"><a href="#LazyFuture-118"><span class="linenos">118</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
+</span><span id="LazyFuture-119"><a href="#LazyFuture-119"><span class="linenos">119</span></a><span class="k">class</span> <span class="nc">LazyFuture</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="LazyFuture-120"><a href="#LazyFuture-120"><span class="linenos">120</span></a>    <span class="sd">&quot;&quot;&quot;A thread-safe value that gets lazily initialized asynchronously at first access.</span>
+</span><span id="LazyFuture-121"><a href="#LazyFuture-121"><span class="linenos">121</span></a>
+</span><span id="LazyFuture-122"><a href="#LazyFuture-122"><span class="linenos">122</span></a><span class="sd">    This type is thread-safe and may be called from multiple threads since this value</span>
+</span><span id="LazyFuture-123"><a href="#LazyFuture-123"><span class="linenos">123</span></a><span class="sd">    can be initialized from multiple threads, however, any calls to `Lazy.get` will block</span>
+</span><span id="LazyFuture-124"><a href="#LazyFuture-124"><span class="linenos">124</span></a><span class="sd">    if another thread is initializing it.</span>
+</span><span id="LazyFuture-125"><a href="#LazyFuture-125"><span class="linenos">125</span></a>
+</span><span id="LazyFuture-126"><a href="#LazyFuture-126"><span class="linenos">126</span></a><span class="sd">    Example</span>
+</span><span id="LazyFuture-127"><a href="#LazyFuture-127"><span class="linenos">127</span></a><span class="sd">    -------</span>
+</span><span id="LazyFuture-128"><a href="#LazyFuture-128"><span class="linenos">128</span></a><span class="sd">    ```py</span>
+</span><span id="LazyFuture-129"><a href="#LazyFuture-129"><span class="linenos">129</span></a><span class="sd">    # some expensive call that returns a `str`</span>
+</span><span id="LazyFuture-130"><a href="#LazyFuture-130"><span class="linenos">130</span></a><span class="sd">    async def fetch_expensive_string(filtered: bool) -&gt; str:</span>
+</span><span id="LazyFuture-131"><a href="#LazyFuture-131"><span class="linenos">131</span></a><span class="sd">        return &quot;hehehe&quot; if filtered else &quot;whahaha&quot;</span>
+</span><span id="LazyFuture-132"><a href="#LazyFuture-132"><span class="linenos">132</span></a>
+</span><span id="LazyFuture-133"><a href="#LazyFuture-133"><span class="linenos">133</span></a><span class="sd">    STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))</span>
+</span><span id="LazyFuture-134"><a href="#LazyFuture-134"><span class="linenos">134</span></a><span class="sd">    print(await STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
+</span><span id="LazyFuture-135"><a href="#LazyFuture-135"><span class="linenos">135</span></a><span class="sd">    print(await STRING.get()) # The string is retrieved from the lazy lock.</span>
+</span><span id="LazyFuture-136"><a href="#LazyFuture-136"><span class="linenos">136</span></a><span class="sd">    ```</span>
+</span><span id="LazyFuture-137"><a href="#LazyFuture-137"><span class="linenos">137</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="LazyFuture-138"><a href="#LazyFuture-138"><span class="linenos">138</span></a>
+</span><span id="LazyFuture-139"><a href="#LazyFuture-139"><span class="linenos">139</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;__inner&quot;</span><span class="p">,</span> <span class="s2">&quot;__lock&quot;</span><span class="p">)</span>
 </span><span id="LazyFuture-140"><a href="#LazyFuture-140"><span class="linenos">140</span></a>
-</span><span id="LazyFuture-141"><a href="#LazyFuture-141"><span class="linenos">141</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;__inner&quot;</span><span class="p">,</span> <span class="s2">&quot;__lock&quot;</span><span class="p">)</span>
-</span><span id="LazyFuture-142"><a href="#LazyFuture-142"><span class="linenos">142</span></a>
-</span><span id="LazyFuture-143"><a href="#LazyFuture-143"><span class="linenos">143</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="LazyFuture-144"><a href="#LazyFuture-144"><span class="linenos">144</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="LazyFuture-145"><a href="#LazyFuture-145"><span class="linenos">145</span></a>        <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">T</span><span class="p">]],</span>
-</span><span id="LazyFuture-146"><a href="#LazyFuture-146"><span class="linenos">146</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="LazyFuture-147"><a href="#LazyFuture-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">:</span> <span class="p">(</span>
-</span><span id="LazyFuture-148"><a href="#LazyFuture-148"><span class="linenos">148</span></a>            <span class="n">T</span>
-</span><span id="LazyFuture-149"><a href="#LazyFuture-149"><span class="linenos">149</span></a>            <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">T</span><span class="p">]]</span>
-</span><span id="LazyFuture-150"><a href="#LazyFuture-150"><span class="linenos">150</span></a>        <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
-</span><span id="LazyFuture-151"><a href="#LazyFuture-151"><span class="linenos">151</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-</span><span id="LazyFuture-152"><a href="#LazyFuture-152"><span class="linenos">152</span></a>
-</span><span id="LazyFuture-153"><a href="#LazyFuture-153"><span class="linenos">153</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
-</span><span id="LazyFuture-154"><a href="#LazyFuture-154"><span class="linenos">154</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="LazyFuture-155"><a href="#LazyFuture-155"><span class="linenos">155</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value if it was initialized, otherwise initialize it and return it.</span>
-</span><span id="LazyFuture-156"><a href="#LazyFuture-156"><span class="linenos">156</span></a>
-</span><span id="LazyFuture-157"><a href="#LazyFuture-157"><span class="linenos">157</span></a><span class="sd">        Example</span>
-</span><span id="LazyFuture-158"><a href="#LazyFuture-158"><span class="linenos">158</span></a><span class="sd">        -------</span>
-</span><span id="LazyFuture-159"><a href="#LazyFuture-159"><span class="linenos">159</span></a><span class="sd">        ```py</span>
-</span><span id="LazyFuture-160"><a href="#LazyFuture-160"><span class="linenos">160</span></a><span class="sd">        # some expensive call that returns a `str`</span>
-</span><span id="LazyFuture-161"><a href="#LazyFuture-161"><span class="linenos">161</span></a><span class="sd">        async def fetch_expensive_string(filtered: bool) -&gt; str:</span>
-</span><span id="LazyFuture-162"><a href="#LazyFuture-162"><span class="linenos">162</span></a><span class="sd">            return &quot;hehehe&quot; if filtered else &quot;whahaha&quot;</span>
-</span><span id="LazyFuture-163"><a href="#LazyFuture-163"><span class="linenos">163</span></a>
-</span><span id="LazyFuture-164"><a href="#LazyFuture-164"><span class="linenos">164</span></a><span class="sd">        STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))</span>
-</span><span id="LazyFuture-165"><a href="#LazyFuture-165"><span class="linenos">165</span></a><span class="sd">        print(await STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
-</span><span id="LazyFuture-166"><a href="#LazyFuture-166"><span class="linenos">166</span></a><span class="sd">        print(await STRING.get()) # The string is retrived from the lazy lock.</span>
-</span><span id="LazyFuture-167"><a href="#LazyFuture-167"><span class="linenos">167</span></a><span class="sd">        ```</span>
-</span><span id="LazyFuture-168"><a href="#LazyFuture-168"><span class="linenos">168</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="LazyFuture-169"><a href="#LazyFuture-169"><span class="linenos">169</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
-</span><span id="LazyFuture-170"><a href="#LazyFuture-170"><span class="linenos">170</span></a>            <span class="c1"># value is already initialized, no need to make a call.</span>
-</span><span id="LazyFuture-171"><a href="#LazyFuture-171"><span class="linenos">171</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span>
-</span><span id="LazyFuture-172"><a href="#LazyFuture-172"><span class="linenos">172</span></a>
-</span><span id="LazyFuture-173"><a href="#LazyFuture-173"><span class="linenos">173</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
-</span><span id="LazyFuture-174"><a href="#LazyFuture-174"><span class="linenos">174</span></a>            <span class="n">v</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">()</span>
-</span><span id="LazyFuture-175"><a href="#LazyFuture-175"><span class="linenos">175</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">=</span> <span class="n">v</span>
-</span><span id="LazyFuture-176"><a href="#LazyFuture-176"><span class="linenos">176</span></a>            <span class="k">return</span> <span class="n">v</span>
-</span><span id="LazyFuture-177"><a href="#LazyFuture-177"><span class="linenos">177</span></a>
-</span><span id="LazyFuture-178"><a href="#LazyFuture-178"><span class="linenos">178</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="LazyFuture-179"><a href="#LazyFuture-179"><span class="linenos">179</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
-</span><span id="LazyFuture-180"><a href="#LazyFuture-180"><span class="linenos">180</span></a>            <span class="k">return</span> <span class="s2">&quot;LazyFuture(uninit)&quot;</span>
+</span><span id="LazyFuture-141"><a href="#LazyFuture-141"><span class="linenos">141</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="LazyFuture-142"><a href="#LazyFuture-142"><span class="linenos">142</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="LazyFuture-143"><a href="#LazyFuture-143"><span class="linenos">143</span></a>        <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">T</span><span class="p">]],</span>
+</span><span id="LazyFuture-144"><a href="#LazyFuture-144"><span class="linenos">144</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="LazyFuture-145"><a href="#LazyFuture-145"><span class="linenos">145</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">:</span> <span class="p">(</span>
+</span><span id="LazyFuture-146"><a href="#LazyFuture-146"><span class="linenos">146</span></a>            <span class="n">T</span>
+</span><span id="LazyFuture-147"><a href="#LazyFuture-147"><span class="linenos">147</span></a>            <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">T</span><span class="p">]]</span>
+</span><span id="LazyFuture-148"><a href="#LazyFuture-148"><span class="linenos">148</span></a>        <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
+</span><span id="LazyFuture-149"><a href="#LazyFuture-149"><span class="linenos">149</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+</span><span id="LazyFuture-150"><a href="#LazyFuture-150"><span class="linenos">150</span></a>
+</span><span id="LazyFuture-151"><a href="#LazyFuture-151"><span class="linenos">151</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="LazyFuture-152"><a href="#LazyFuture-152"><span class="linenos">152</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if it was initialized, otherwise initialize it and return it.</span>
+</span><span id="LazyFuture-153"><a href="#LazyFuture-153"><span class="linenos">153</span></a>
+</span><span id="LazyFuture-154"><a href="#LazyFuture-154"><span class="linenos">154</span></a><span class="sd">        Example</span>
+</span><span id="LazyFuture-155"><a href="#LazyFuture-155"><span class="linenos">155</span></a><span class="sd">        -------</span>
+</span><span id="LazyFuture-156"><a href="#LazyFuture-156"><span class="linenos">156</span></a><span class="sd">        ```py</span>
+</span><span id="LazyFuture-157"><a href="#LazyFuture-157"><span class="linenos">157</span></a><span class="sd">        # some expensive call that returns a `str`</span>
+</span><span id="LazyFuture-158"><a href="#LazyFuture-158"><span class="linenos">158</span></a><span class="sd">        async def fetch_expensive_string(filtered: bool) -&gt; str:</span>
+</span><span id="LazyFuture-159"><a href="#LazyFuture-159"><span class="linenos">159</span></a><span class="sd">            return &quot;hehehe&quot; if filtered else &quot;whahaha&quot;</span>
+</span><span id="LazyFuture-160"><a href="#LazyFuture-160"><span class="linenos">160</span></a>
+</span><span id="LazyFuture-161"><a href="#LazyFuture-161"><span class="linenos">161</span></a><span class="sd">        STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))</span>
+</span><span id="LazyFuture-162"><a href="#LazyFuture-162"><span class="linenos">162</span></a><span class="sd">        print(await STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
+</span><span id="LazyFuture-163"><a href="#LazyFuture-163"><span class="linenos">163</span></a><span class="sd">        print(await STRING.get()) # The string is retrieved from the lazy lock.</span>
+</span><span id="LazyFuture-164"><a href="#LazyFuture-164"><span class="linenos">164</span></a><span class="sd">        ```</span>
+</span><span id="LazyFuture-165"><a href="#LazyFuture-165"><span class="linenos">165</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="LazyFuture-166"><a href="#LazyFuture-166"><span class="linenos">166</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
+</span><span id="LazyFuture-167"><a href="#LazyFuture-167"><span class="linenos">167</span></a>            <span class="c1"># value is already initialized, no need to make a call.</span>
+</span><span id="LazyFuture-168"><a href="#LazyFuture-168"><span class="linenos">168</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span>
+</span><span id="LazyFuture-169"><a href="#LazyFuture-169"><span class="linenos">169</span></a>
+</span><span id="LazyFuture-170"><a href="#LazyFuture-170"><span class="linenos">170</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
+</span><span id="LazyFuture-171"><a href="#LazyFuture-171"><span class="linenos">171</span></a>            <span class="c1"># calling self.__inner will make self.__inner type T</span>
+</span><span id="LazyFuture-172"><a href="#LazyFuture-172"><span class="linenos">172</span></a>            <span class="n">v</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">()</span>  <span class="c1"># pyright: ignore</span>
+</span><span id="LazyFuture-173"><a href="#LazyFuture-173"><span class="linenos">173</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="LazyFuture-174"><a href="#LazyFuture-174"><span class="linenos">174</span></a>            <span class="k">return</span> <span class="n">v</span>
+</span><span id="LazyFuture-175"><a href="#LazyFuture-175"><span class="linenos">175</span></a>
+</span><span id="LazyFuture-176"><a href="#LazyFuture-176"><span class="linenos">176</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="LazyFuture-177"><a href="#LazyFuture-177"><span class="linenos">177</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
+</span><span id="LazyFuture-178"><a href="#LazyFuture-178"><span class="linenos">178</span></a>            <span class="k">return</span> <span class="s2">&quot;LazyFuture(uninit)&quot;</span>
+</span><span id="LazyFuture-179"><a href="#LazyFuture-179"><span class="linenos">179</span></a>
+</span><span id="LazyFuture-180"><a href="#LazyFuture-180"><span class="linenos">180</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;LazyFuture(value: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="si">!r}</span><span class="s2">)&quot;</span>
 </span><span id="LazyFuture-181"><a href="#LazyFuture-181"><span class="linenos">181</span></a>
-</span><span id="LazyFuture-182"><a href="#LazyFuture-182"><span class="linenos">182</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;LazyFuture(value: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+</span><span id="LazyFuture-182"><a href="#LazyFuture-182"><span class="linenos">182</span></a>    <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span>
 </span><span id="LazyFuture-183"><a href="#LazyFuture-183"><span class="linenos">183</span></a>
-</span><span id="LazyFuture-184"><a href="#LazyFuture-184"><span class="linenos">184</span></a>    <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span>
-</span><span id="LazyFuture-185"><a href="#LazyFuture-185"><span class="linenos">185</span></a>
-</span><span id="LazyFuture-186"><a href="#LazyFuture-186"><span class="linenos">186</span></a>    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="LazyFuture-187"><a href="#LazyFuture-187"><span class="linenos">187</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
-</span><span id="LazyFuture-188"><a href="#LazyFuture-188"><span class="linenos">188</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="LazyFuture-189"><a href="#LazyFuture-189"><span class="linenos">189</span></a>
-</span><span id="LazyFuture-190"><a href="#LazyFuture-190"><span class="linenos">190</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Lazy</span><span class="p">):</span>
-</span><span id="LazyFuture-191"><a href="#LazyFuture-191"><span class="linenos">191</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_inner</span>  <span class="c1"># pyright: ignore</span>
+</span><span id="LazyFuture-184"><a href="#LazyFuture-184"><span class="linenos">184</span></a>    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="LazyFuture-185"><a href="#LazyFuture-185"><span class="linenos">185</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
+</span><span id="LazyFuture-186"><a href="#LazyFuture-186"><span class="linenos">186</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="LazyFuture-187"><a href="#LazyFuture-187"><span class="linenos">187</span></a>
+</span><span id="LazyFuture-188"><a href="#LazyFuture-188"><span class="linenos">188</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Lazy</span><span class="p">):</span>
+</span><span id="LazyFuture-189"><a href="#LazyFuture-189"><span class="linenos">189</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_inner</span>  <span class="c1"># pyright: ignore</span>
+</span><span id="LazyFuture-190"><a href="#LazyFuture-190"><span class="linenos">190</span></a>
+</span><span id="LazyFuture-191"><a href="#LazyFuture-191"><span class="linenos">191</span></a>        <span class="k">return</span> <span class="bp">NotImplemented</span>
 </span><span id="LazyFuture-192"><a href="#LazyFuture-192"><span class="linenos">192</span></a>
-</span><span id="LazyFuture-193"><a href="#LazyFuture-193"><span class="linenos">193</span></a>        <span class="k">return</span> <span class="bp">NotImplemented</span>
-</span><span id="LazyFuture-194"><a href="#LazyFuture-194"><span class="linenos">194</span></a>
-</span><span id="LazyFuture-195"><a href="#LazyFuture-195"><span class="linenos">195</span></a>    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="LazyFuture-196"><a href="#LazyFuture-196"><span class="linenos">196</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+</span><span id="LazyFuture-193"><a href="#LazyFuture-193"><span class="linenos">193</span></a>    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="LazyFuture-194"><a href="#LazyFuture-194"><span class="linenos">194</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>A thread-safe value that gets lazily initialized asynchronously at first access.</p>
 
 <p>This type is thread-safe and may be called from multiple threads since this value
-can be initialzied from mutiple threads, however, any calls to <code><a href="#Lazy.get">Lazy.get</a></code> will block
+can be initialized from multiple threads, however, any calls to <code><a href="#Lazy.get">Lazy.get</a></code> will block
 if another thread is initializing it.</p>
 
 <h6 id="example">Example</h6>
@@ -1012,7 +1012,7 @@ if another thread is initializing it.</p>
 
 <span class="n">STRING</span><span class="p">:</span> <span class="n">LazyFuture</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">LazyFuture</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">expensive_string</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is built, stored in the lazy lock and returned.</span>
-<span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is retrived from the lazy lock.</span>
+<span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is retrieved from the lazy lock.</span>
 </code></pre>
 </div>
 </div>
@@ -1028,15 +1028,15 @@ if another thread is initializing it.</p>
 
     </div>
     <a class="headerlink" href="#LazyFuture.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture.__init__-143"><a href="#LazyFuture.__init__-143"><span class="linenos">143</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="LazyFuture.__init__-144"><a href="#LazyFuture.__init__-144"><span class="linenos">144</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="LazyFuture.__init__-145"><a href="#LazyFuture.__init__-145"><span class="linenos">145</span></a>        <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">T</span><span class="p">]],</span>
-</span><span id="LazyFuture.__init__-146"><a href="#LazyFuture.__init__-146"><span class="linenos">146</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="LazyFuture.__init__-147"><a href="#LazyFuture.__init__-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">:</span> <span class="p">(</span>
-</span><span id="LazyFuture.__init__-148"><a href="#LazyFuture.__init__-148"><span class="linenos">148</span></a>            <span class="n">T</span>
-</span><span id="LazyFuture.__init__-149"><a href="#LazyFuture.__init__-149"><span class="linenos">149</span></a>            <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">T</span><span class="p">]]</span>
-</span><span id="LazyFuture.__init__-150"><a href="#LazyFuture.__init__-150"><span class="linenos">150</span></a>        <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
-</span><span id="LazyFuture.__init__-151"><a href="#LazyFuture.__init__-151"><span class="linenos">151</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture.__init__-141"><a href="#LazyFuture.__init__-141"><span class="linenos">141</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="LazyFuture.__init__-142"><a href="#LazyFuture.__init__-142"><span class="linenos">142</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="LazyFuture.__init__-143"><a href="#LazyFuture.__init__-143"><span class="linenos">143</span></a>        <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">T</span><span class="p">]],</span>
+</span><span id="LazyFuture.__init__-144"><a href="#LazyFuture.__init__-144"><span class="linenos">144</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="LazyFuture.__init__-145"><a href="#LazyFuture.__init__-145"><span class="linenos">145</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">:</span> <span class="p">(</span>
+</span><span id="LazyFuture.__init__-146"><a href="#LazyFuture.__init__-146"><span class="linenos">146</span></a>            <span class="n">T</span>
+</span><span id="LazyFuture.__init__-147"><a href="#LazyFuture.__init__-147"><span class="linenos">147</span></a>            <span class="o">|</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Coroutine</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">T</span><span class="p">]]</span>
+</span><span id="LazyFuture.__init__-148"><a href="#LazyFuture.__init__-148"><span class="linenos">148</span></a>        <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
+</span><span id="LazyFuture.__init__-149"><a href="#LazyFuture.__init__-149"><span class="linenos">149</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -1046,8 +1046,7 @@ if another thread is initializing it.</p>
                             <div id="LazyFuture.get" class="classattr">
                                         <input id="LazyFuture.get-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
-                    <div class="decorator">@macros.unsafe</div>
-
+            
         <span class="def">async def</span>
         <span class="name">get</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
 
@@ -1055,30 +1054,30 @@ if another thread is initializing it.</p>
 
     </div>
     <a class="headerlink" href="#LazyFuture.get"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture.get-153"><a href="#LazyFuture.get-153"><span class="linenos">153</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
-</span><span id="LazyFuture.get-154"><a href="#LazyFuture.get-154"><span class="linenos">154</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="LazyFuture.get-155"><a href="#LazyFuture.get-155"><span class="linenos">155</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value if it was initialized, otherwise initialize it and return it.</span>
-</span><span id="LazyFuture.get-156"><a href="#LazyFuture.get-156"><span class="linenos">156</span></a>
-</span><span id="LazyFuture.get-157"><a href="#LazyFuture.get-157"><span class="linenos">157</span></a><span class="sd">        Example</span>
-</span><span id="LazyFuture.get-158"><a href="#LazyFuture.get-158"><span class="linenos">158</span></a><span class="sd">        -------</span>
-</span><span id="LazyFuture.get-159"><a href="#LazyFuture.get-159"><span class="linenos">159</span></a><span class="sd">        ```py</span>
-</span><span id="LazyFuture.get-160"><a href="#LazyFuture.get-160"><span class="linenos">160</span></a><span class="sd">        # some expensive call that returns a `str`</span>
-</span><span id="LazyFuture.get-161"><a href="#LazyFuture.get-161"><span class="linenos">161</span></a><span class="sd">        async def fetch_expensive_string(filtered: bool) -&gt; str:</span>
-</span><span id="LazyFuture.get-162"><a href="#LazyFuture.get-162"><span class="linenos">162</span></a><span class="sd">            return &quot;hehehe&quot; if filtered else &quot;whahaha&quot;</span>
-</span><span id="LazyFuture.get-163"><a href="#LazyFuture.get-163"><span class="linenos">163</span></a>
-</span><span id="LazyFuture.get-164"><a href="#LazyFuture.get-164"><span class="linenos">164</span></a><span class="sd">        STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))</span>
-</span><span id="LazyFuture.get-165"><a href="#LazyFuture.get-165"><span class="linenos">165</span></a><span class="sd">        print(await STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
-</span><span id="LazyFuture.get-166"><a href="#LazyFuture.get-166"><span class="linenos">166</span></a><span class="sd">        print(await STRING.get()) # The string is retrived from the lazy lock.</span>
-</span><span id="LazyFuture.get-167"><a href="#LazyFuture.get-167"><span class="linenos">167</span></a><span class="sd">        ```</span>
-</span><span id="LazyFuture.get-168"><a href="#LazyFuture.get-168"><span class="linenos">168</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="LazyFuture.get-169"><a href="#LazyFuture.get-169"><span class="linenos">169</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
-</span><span id="LazyFuture.get-170"><a href="#LazyFuture.get-170"><span class="linenos">170</span></a>            <span class="c1"># value is already initialized, no need to make a call.</span>
-</span><span id="LazyFuture.get-171"><a href="#LazyFuture.get-171"><span class="linenos">171</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span>
-</span><span id="LazyFuture.get-172"><a href="#LazyFuture.get-172"><span class="linenos">172</span></a>
-</span><span id="LazyFuture.get-173"><a href="#LazyFuture.get-173"><span class="linenos">173</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
-</span><span id="LazyFuture.get-174"><a href="#LazyFuture.get-174"><span class="linenos">174</span></a>            <span class="n">v</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">()</span>
-</span><span id="LazyFuture.get-175"><a href="#LazyFuture.get-175"><span class="linenos">175</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">=</span> <span class="n">v</span>
-</span><span id="LazyFuture.get-176"><a href="#LazyFuture.get-176"><span class="linenos">176</span></a>            <span class="k">return</span> <span class="n">v</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="LazyFuture.get-151"><a href="#LazyFuture.get-151"><span class="linenos">151</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="LazyFuture.get-152"><a href="#LazyFuture.get-152"><span class="linenos">152</span></a>        <span class="sd">&quot;&quot;&quot;Get the value if it was initialized, otherwise initialize it and return it.</span>
+</span><span id="LazyFuture.get-153"><a href="#LazyFuture.get-153"><span class="linenos">153</span></a>
+</span><span id="LazyFuture.get-154"><a href="#LazyFuture.get-154"><span class="linenos">154</span></a><span class="sd">        Example</span>
+</span><span id="LazyFuture.get-155"><a href="#LazyFuture.get-155"><span class="linenos">155</span></a><span class="sd">        -------</span>
+</span><span id="LazyFuture.get-156"><a href="#LazyFuture.get-156"><span class="linenos">156</span></a><span class="sd">        ```py</span>
+</span><span id="LazyFuture.get-157"><a href="#LazyFuture.get-157"><span class="linenos">157</span></a><span class="sd">        # some expensive call that returns a `str`</span>
+</span><span id="LazyFuture.get-158"><a href="#LazyFuture.get-158"><span class="linenos">158</span></a><span class="sd">        async def fetch_expensive_string(filtered: bool) -&gt; str:</span>
+</span><span id="LazyFuture.get-159"><a href="#LazyFuture.get-159"><span class="linenos">159</span></a><span class="sd">            return &quot;hehehe&quot; if filtered else &quot;whahaha&quot;</span>
+</span><span id="LazyFuture.get-160"><a href="#LazyFuture.get-160"><span class="linenos">160</span></a>
+</span><span id="LazyFuture.get-161"><a href="#LazyFuture.get-161"><span class="linenos">161</span></a><span class="sd">        STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))</span>
+</span><span id="LazyFuture.get-162"><a href="#LazyFuture.get-162"><span class="linenos">162</span></a><span class="sd">        print(await STRING.get()) # The string is built, stored in the lazy lock and returned.</span>
+</span><span id="LazyFuture.get-163"><a href="#LazyFuture.get-163"><span class="linenos">163</span></a><span class="sd">        print(await STRING.get()) # The string is retrieved from the lazy lock.</span>
+</span><span id="LazyFuture.get-164"><a href="#LazyFuture.get-164"><span class="linenos">164</span></a><span class="sd">        ```</span>
+</span><span id="LazyFuture.get-165"><a href="#LazyFuture.get-165"><span class="linenos">165</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="LazyFuture.get-166"><a href="#LazyFuture.get-166"><span class="linenos">166</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">):</span>
+</span><span id="LazyFuture.get-167"><a href="#LazyFuture.get-167"><span class="linenos">167</span></a>            <span class="c1"># value is already initialized, no need to make a call.</span>
+</span><span id="LazyFuture.get-168"><a href="#LazyFuture.get-168"><span class="linenos">168</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span>
+</span><span id="LazyFuture.get-169"><a href="#LazyFuture.get-169"><span class="linenos">169</span></a>
+</span><span id="LazyFuture.get-170"><a href="#LazyFuture.get-170"><span class="linenos">170</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
+</span><span id="LazyFuture.get-171"><a href="#LazyFuture.get-171"><span class="linenos">171</span></a>            <span class="c1"># calling self.__inner will make self.__inner type T</span>
+</span><span id="LazyFuture.get-172"><a href="#LazyFuture.get-172"><span class="linenos">172</span></a>            <span class="n">v</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span><span class="p">()</span>  <span class="c1"># pyright: ignore</span>
+</span><span id="LazyFuture.get-173"><a href="#LazyFuture.get-173"><span class="linenos">173</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">__inner</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="LazyFuture.get-174"><a href="#LazyFuture.get-174"><span class="linenos">174</span></a>            <span class="k">return</span> <span class="n">v</span>
 </span></pre></div>
 
 
@@ -1093,13 +1092,9 @@ if another thread is initializing it.</p>
 
 <span class="n">STRING</span><span class="p">:</span> <span class="n">LazyFuture</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">LazyFuture</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">expensive_string</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is built, stored in the lazy lock and returned.</span>
-<span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is retrived from the lazy lock.</span>
+<span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">STRING</span><span class="o">.</span><span class="n">get</span><span class="p">())</span> <span class="c1"># The string is retrieved from the lazy lock.</span>
 </code></pre>
 </div>
-
-<h1 id="safety">Safety ⚠️</h1>
-
-<p>Calling this method on <code>None</code> is considered <a href="https://en.wikipedia.org/wiki/Undefined_behavior">undefined behavior</a>.</p>
 </div>
 
 
@@ -1119,7 +1114,7 @@ if another thread is initializing it.</p>
     <a class="headerlink" href="#AsyncOnce"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce-235"><a href="#AsyncOnce-235"><span class="linenos">235</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="AsyncOnce-236"><a href="#AsyncOnce-236"><span class="linenos">236</span></a><span class="k">class</span> <span class="nc">AsyncOnce</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="AsyncOnce-237"><a href="#AsyncOnce-237"><span class="linenos">237</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
+</span><span id="AsyncOnce-237"><a href="#AsyncOnce-237"><span class="linenos">237</span></a>    <span class="sd">&quot;&quot;&quot;A synchronization primitive which can be written to only once.</span>
 </span><span id="AsyncOnce-238"><a href="#AsyncOnce-238"><span class="linenos">238</span></a>
 </span><span id="AsyncOnce-239"><a href="#AsyncOnce-239"><span class="linenos">239</span></a><span class="sd">    This is an `async` version of `Once`.</span>
 </span><span id="AsyncOnce-240"><a href="#AsyncOnce-240"><span class="linenos">240</span></a>
@@ -1149,11 +1144,11 @@ if another thread is initializing it.</p>
 </span><span id="AsyncOnce-264"><a href="#AsyncOnce-264"><span class="linenos">264</span></a>
 </span><span id="AsyncOnce-265"><a href="#AsyncOnce-265"><span class="linenos">265</span></a>    <span class="nd">@property</span>
 </span><span id="AsyncOnce-266"><a href="#AsyncOnce-266"><span class="linenos">266</span></a>    <span class="k">def</span> <span class="nf">is_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="AsyncOnce-267"><a href="#AsyncOnce-267"><span class="linenos">267</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether this inner value has ben initialized or not.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce-267"><a href="#AsyncOnce-267"><span class="linenos">267</span></a>        <span class="sd">&quot;&quot;&quot;Whether this inner value has ben initialized or not.&quot;&quot;&quot;</span>
 </span><span id="AsyncOnce-268"><a href="#AsyncOnce-268"><span class="linenos">268</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="AsyncOnce-269"><a href="#AsyncOnce-269"><span class="linenos">269</span></a>
 </span><span id="AsyncOnce-270"><a href="#AsyncOnce-270"><span class="linenos">270</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="AsyncOnce-271"><a href="#AsyncOnce-271"><span class="linenos">271</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the stored value. `Some(None)` is returned if nothing is stored.</span>
+</span><span id="AsyncOnce-271"><a href="#AsyncOnce-271"><span class="linenos">271</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value. `Some(None)` is returned if nothing is stored.</span>
 </span><span id="AsyncOnce-272"><a href="#AsyncOnce-272"><span class="linenos">272</span></a>
 </span><span id="AsyncOnce-273"><a href="#AsyncOnce-273"><span class="linenos">273</span></a><span class="sd">        This method will never block.</span>
 </span><span id="AsyncOnce-274"><a href="#AsyncOnce-274"><span class="linenos">274</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1161,7 +1156,7 @@ if another thread is initializing it.</p>
 </span><span id="AsyncOnce-276"><a href="#AsyncOnce-276"><span class="linenos">276</span></a>
 </span><span id="AsyncOnce-277"><a href="#AsyncOnce-277"><span class="linenos">277</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="AsyncOnce-278"><a href="#AsyncOnce-278"><span class="linenos">278</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce-279"><a href="#AsyncOnce-279"><span class="linenos">279</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="AsyncOnce-279"><a href="#AsyncOnce-279"><span class="linenos">279</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="AsyncOnce-280"><a href="#AsyncOnce-280"><span class="linenos">280</span></a>
 </span><span id="AsyncOnce-281"><a href="#AsyncOnce-281"><span class="linenos">281</span></a><span class="sd">        Example</span>
 </span><span id="AsyncOnce-282"><a href="#AsyncOnce-282"><span class="linenos">282</span></a><span class="sd">        -------</span>
@@ -1181,7 +1176,7 @@ if another thread is initializing it.</p>
 </span><span id="AsyncOnce-296"><a href="#AsyncOnce-296"><span class="linenos">296</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">unwrap_unchecked</span><span class="p">()</span>
 </span><span id="AsyncOnce-297"><a href="#AsyncOnce-297"><span class="linenos">297</span></a>
 </span><span id="AsyncOnce-298"><a href="#AsyncOnce-298"><span class="linenos">298</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="AsyncOnce-299"><a href="#AsyncOnce-299"><span class="linenos">299</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="AsyncOnce-299"><a href="#AsyncOnce-299"><span class="linenos">299</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
 </span><span id="AsyncOnce-300"><a href="#AsyncOnce-300"><span class="linenos">300</span></a>
 </span><span id="AsyncOnce-301"><a href="#AsyncOnce-301"><span class="linenos">301</span></a><span class="sd">        if another thread is trying to initialize the value, The value is guaranteed to be set,</span>
 </span><span id="AsyncOnce-302"><a href="#AsyncOnce-302"><span class="linenos">302</span></a><span class="sd">        just not necessarily the one provided.</span>
@@ -1209,12 +1204,12 @@ if another thread is initializing it.</p>
 </span><span id="AsyncOnce-324"><a href="#AsyncOnce-324"><span class="linenos">324</span></a>        <span class="k">return</span> <span class="n">_result</span><span class="o">.</span><span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </span><span id="AsyncOnce-325"><a href="#AsyncOnce-325"><span class="linenos">325</span></a>
 </span><span id="AsyncOnce-326"><a href="#AsyncOnce-326"><span class="linenos">326</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AsyncOnce-327"><a href="#AsyncOnce-327"><span class="linenos">327</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce-327"><a href="#AsyncOnce-327"><span class="linenos">327</span></a>        <span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
 </span><span id="AsyncOnce-328"><a href="#AsyncOnce-328"><span class="linenos">328</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="AsyncOnce-329"><a href="#AsyncOnce-329"><span class="linenos">329</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="AsyncOnce-330"><a href="#AsyncOnce-330"><span class="linenos">330</span></a>
 </span><span id="AsyncOnce-331"><a href="#AsyncOnce-331"><span class="linenos">331</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce-332"><a href="#AsyncOnce-332"><span class="linenos">332</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `init` if the cell</span>
+</span><span id="AsyncOnce-332"><a href="#AsyncOnce-332"><span class="linenos">332</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `init` if the cell</span>
 </span><span id="AsyncOnce-333"><a href="#AsyncOnce-333"><span class="linenos">333</span></a><span class="sd">        was empty.</span>
 </span><span id="AsyncOnce-334"><a href="#AsyncOnce-334"><span class="linenos">334</span></a>
 </span><span id="AsyncOnce-335"><a href="#AsyncOnce-335"><span class="linenos">335</span></a><span class="sd">        Many threads may call `get_or` concurrently with different</span>
@@ -1246,7 +1241,7 @@ if another thread is initializing it.</p>
 </span><span id="AsyncOnce-361"><a href="#AsyncOnce-361"><span class="linenos">361</span></a>            <span class="k">return</span> <span class="n">init</span>
 </span><span id="AsyncOnce-362"><a href="#AsyncOnce-362"><span class="linenos">362</span></a>
 </span><span id="AsyncOnce-363"><a href="#AsyncOnce-363"><span class="linenos">363</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce-364"><a href="#AsyncOnce-364"><span class="linenos">364</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
+</span><span id="AsyncOnce-364"><a href="#AsyncOnce-364"><span class="linenos">364</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
 </span><span id="AsyncOnce-365"><a href="#AsyncOnce-365"><span class="linenos">365</span></a><span class="sd">        was empty.</span>
 </span><span id="AsyncOnce-366"><a href="#AsyncOnce-366"><span class="linenos">366</span></a>
 </span><span id="AsyncOnce-367"><a href="#AsyncOnce-367"><span class="linenos">367</span></a><span class="sd">        Many threads may call `get_or_with` concurrently with different</span>
@@ -1334,7 +1329,7 @@ if another thread is initializing it.</p>
     <a class="headerlink" href="#AsyncOnce.is_set"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.is_set-265"><a href="#AsyncOnce.is_set-265"><span class="linenos">265</span></a>    <span class="nd">@property</span>
 </span><span id="AsyncOnce.is_set-266"><a href="#AsyncOnce.is_set-266"><span class="linenos">266</span></a>    <span class="k">def</span> <span class="nf">is_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="AsyncOnce.is_set-267"><a href="#AsyncOnce.is_set-267"><span class="linenos">267</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether this inner value has ben initialized or not.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce.is_set-267"><a href="#AsyncOnce.is_set-267"><span class="linenos">267</span></a>        <span class="sd">&quot;&quot;&quot;Whether this inner value has ben initialized or not.&quot;&quot;&quot;</span>
 </span><span id="AsyncOnce.is_set-268"><a href="#AsyncOnce.is_set-268"><span class="linenos">268</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span></pre></div>
 
@@ -1356,7 +1351,7 @@ if another thread is initializing it.</p>
     </div>
     <a class="headerlink" href="#AsyncOnce.get"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get-270"><a href="#AsyncOnce.get-270"><span class="linenos">270</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="AsyncOnce.get-271"><a href="#AsyncOnce.get-271"><span class="linenos">271</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the stored value. `Some(None)` is returned if nothing is stored.</span>
+</span><span id="AsyncOnce.get-271"><a href="#AsyncOnce.get-271"><span class="linenos">271</span></a>        <span class="sd">&quot;&quot;&quot;Gets the stored value. `Some(None)` is returned if nothing is stored.</span>
 </span><span id="AsyncOnce.get-272"><a href="#AsyncOnce.get-272"><span class="linenos">272</span></a>
 </span><span id="AsyncOnce.get-273"><a href="#AsyncOnce.get-273"><span class="linenos">273</span></a><span class="sd">        This method will never block.</span>
 </span><span id="AsyncOnce.get-274"><a href="#AsyncOnce.get-274"><span class="linenos">274</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1385,7 +1380,7 @@ if another thread is initializing it.</p>
     <a class="headerlink" href="#AsyncOnce.get_unchecked"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get_unchecked-277"><a href="#AsyncOnce.get_unchecked-277"><span class="linenos">277</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="AsyncOnce.get_unchecked-278"><a href="#AsyncOnce.get_unchecked-278"><span class="linenos">278</span></a>    <span class="k">def</span> <span class="nf">get_unchecked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce.get_unchecked-279"><a href="#AsyncOnce.get_unchecked-279"><span class="linenos">279</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
+</span><span id="AsyncOnce.get_unchecked-279"><a href="#AsyncOnce.get_unchecked-279"><span class="linenos">279</span></a>        <span class="sd">&quot;&quot;&quot;Get the contained value without checking if it was initialized.</span>
 </span><span id="AsyncOnce.get_unchecked-280"><a href="#AsyncOnce.get_unchecked-280"><span class="linenos">280</span></a>
 </span><span id="AsyncOnce.get_unchecked-281"><a href="#AsyncOnce.get_unchecked-281"><span class="linenos">281</span></a><span class="sd">        Example</span>
 </span><span id="AsyncOnce.get_unchecked-282"><a href="#AsyncOnce.get_unchecked-282"><span class="linenos">282</span></a><span class="sd">        -------</span>
@@ -1442,7 +1437,7 @@ if another thread is initializing it.</p>
     </div>
     <a class="headerlink" href="#AsyncOnce.set"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.set-298"><a href="#AsyncOnce.set-298"><span class="linenos">298</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_result</span><span class="o">.</span><span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
-</span><span id="AsyncOnce.set-299"><a href="#AsyncOnce.set-299"><span class="linenos">299</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
+</span><span id="AsyncOnce.set-299"><a href="#AsyncOnce.set-299"><span class="linenos">299</span></a>        <span class="sd">&quot;&quot;&quot;Set the const value if its not set. returning `T` if its already set.</span>
 </span><span id="AsyncOnce.set-300"><a href="#AsyncOnce.set-300"><span class="linenos">300</span></a>
 </span><span id="AsyncOnce.set-301"><a href="#AsyncOnce.set-301"><span class="linenos">301</span></a><span class="sd">        if another thread is trying to initialize the value, The value is guaranteed to be set,</span>
 </span><span id="AsyncOnce.set-302"><a href="#AsyncOnce.set-302"><span class="linenos">302</span></a><span class="sd">        just not necessarily the one provided.</span>
@@ -1508,7 +1503,7 @@ just not necessarily the one provided.</p>
     </div>
     <a class="headerlink" href="#AsyncOnce.clear"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.clear-326"><a href="#AsyncOnce.clear-326"><span class="linenos">326</span></a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AsyncOnce.clear-327"><a href="#AsyncOnce.clear-327"><span class="linenos">327</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
+</span><span id="AsyncOnce.clear-327"><a href="#AsyncOnce.clear-327"><span class="linenos">327</span></a>        <span class="sd">&quot;&quot;&quot;Clear the inner value, Setting it to `None`.&quot;&quot;&quot;</span>
 </span><span id="AsyncOnce.clear-328"><a href="#AsyncOnce.clear-328"><span class="linenos">328</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="AsyncOnce.clear-329"><a href="#AsyncOnce.clear-329"><span class="linenos">329</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="kc">None</span>
 </span></pre></div>
@@ -1531,7 +1526,7 @@ just not necessarily the one provided.</p>
     </div>
     <a class="headerlink" href="#AsyncOnce.get_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get_or-331"><a href="#AsyncOnce.get_or-331"><span class="linenos">331</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce.get_or-332"><a href="#AsyncOnce.get_or-332"><span class="linenos">332</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `init` if the cell</span>
+</span><span id="AsyncOnce.get_or-332"><a href="#AsyncOnce.get_or-332"><span class="linenos">332</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `init` if the cell</span>
 </span><span id="AsyncOnce.get_or-333"><a href="#AsyncOnce.get_or-333"><span class="linenos">333</span></a><span class="sd">        was empty.</span>
 </span><span id="AsyncOnce.get_or-334"><a href="#AsyncOnce.get_or-334"><span class="linenos">334</span></a>
 </span><span id="AsyncOnce.get_or-335"><a href="#AsyncOnce.get_or-335"><span class="linenos">335</span></a><span class="sd">        Many threads may call `get_or` concurrently with different</span>
@@ -1600,7 +1595,7 @@ will be executed.</p>
     </div>
     <a class="headerlink" href="#AsyncOnce.get_or_with"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AsyncOnce.get_or_with-363"><a href="#AsyncOnce.get_or_with-363"><span class="linenos">363</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AsyncOnce.get_or_with-364"><a href="#AsyncOnce.get_or_with-364"><span class="linenos">364</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
+</span><span id="AsyncOnce.get_or_with-364"><a href="#AsyncOnce.get_or_with-364"><span class="linenos">364</span></a>        <span class="sd">&quot;&quot;&quot;Gets the contents of the cell, initializing it with `f` if the cell</span>
 </span><span id="AsyncOnce.get_or_with-365"><a href="#AsyncOnce.get_or_with-365"><span class="linenos">365</span></a><span class="sd">        was empty.</span>
 </span><span id="AsyncOnce.get_or_with-366"><a href="#AsyncOnce.get_or_with-366"><span class="linenos">366</span></a>
 </span><span id="AsyncOnce.get_or_with-367"><a href="#AsyncOnce.get_or_with-367"><span class="linenos">367</span></a><span class="sd">        Many threads may call `get_or_with` concurrently with different</span>

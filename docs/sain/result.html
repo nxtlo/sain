@@ -382,7 +382,7 @@ wide variety of different methods.</p>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="k">class</span> <span class="nc">Ok</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains the success value of `Result[T, ...]`.&quot;&quot;&quot;</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="sd">&quot;&quot;&quot;Contains the success value of `Result[T, ...]`.&quot;&quot;&quot;</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
 </span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>    <span class="n">_inner</span><span class="p">:</span> <span class="n">T</span>
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
@@ -391,7 +391,7 @@ wide variety of different methods.</p>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="c1">###############################</span>
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="k">def</span> <span class="nf">is_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]:</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        Example</span>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">        -------</span>
@@ -403,7 +403,7 @@ wide variety of different methods.</p>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="k">def</span> <span class="nf">is_ok_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        Example</span>
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        -------</span>
@@ -418,7 +418,7 @@ wide variety of different methods.</p>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="c1"># These are never truthy in an `Ok` instance.</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="k">def</span> <span class="nf">is_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
 </span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">        Example</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">        -------</span>
@@ -431,7 +431,7 @@ wide variety of different methods.</p>
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>
 </span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="k">def</span> <span class="nf">is_err_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="sd">        Example</span>
 </span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="sd">        -------</span>
@@ -449,7 +449,7 @@ wide variety of different methods.</p>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="c1">###################</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
 </span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="sd">        if it was `Err` with `message` passed to it.</span>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
 </span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="sd">        Example</span>
@@ -465,7 +465,7 @@ wide variety of different methods.</p>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>
 </span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="k">def</span> <span class="nf">expect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the `Err` value if `self` is an `Err`, panicking otherwise.</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>        <span class="sd">&quot;&quot;&quot;Return the `Err` value if `self` is an `Err`, panicking otherwise.</span>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">        Example</span>
 </span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">        -------</span>
@@ -480,7 +480,7 @@ wide variety of different methods.</p>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Called `expect_err` on an `Ok` value.&quot;</span><span class="p">)</span>
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">        Example</span>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">        -------</span>
@@ -495,7 +495,7 @@ wide variety of different methods.</p>
 </span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
 </span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
 </span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>
 </span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="sd">        Example</span>
 </span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">        -------</span>
@@ -510,7 +510,7 @@ wide variety of different methods.</p>
 </span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
 </span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
 </span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">        Example</span>
 </span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="sd">        -------</span>
@@ -525,7 +525,7 @@ wide variety of different methods.</p>
 </span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>
 </span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>    <span class="k">def</span> <span class="nf">unwrap_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
 </span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>
 </span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a><span class="sd">        Example</span>
 </span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a><span class="sd">        -------</span>
@@ -545,7 +545,7 @@ wide variety of different methods.</p>
 </span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a>    <span class="c1">############################</span>
 </span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a>
 </span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a>    <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
+</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
 </span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>
 </span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a><span class="sd">        Example</span>
 </span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a><span class="sd">        -------</span>
@@ -560,7 +560,7 @@ wide variety of different methods.</p>
 </span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>
 </span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>    <span class="k">def</span> <span class="nf">err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
+</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
 </span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>
 </span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a><span class="sd">        Example</span>
 </span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a><span class="sd">        -------</span>
@@ -575,7 +575,7 @@ wide variety of different methods.</p>
 </span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">NOTHING</span>  <span class="c1"># pyright: ignore</span>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a>    <span class="k">def</span> <span class="nf">inspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
+</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
 </span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>
 </span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a><span class="sd">        Example</span>
 </span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a><span class="sd">        -------</span>
@@ -594,7 +594,7 @@ wide variety of different methods.</p>
 </span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a>        <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a>
 </span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>    <span class="k">def</span> <span class="nf">inspect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
+</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
 </span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>
 </span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a><span class="sd">        Example</span>
 </span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a><span class="sd">        -------</span>
@@ -612,7 +612,7 @@ wide variety of different methods.</p>
 </span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a>
 </span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ok</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
+</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>        <span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
 </span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a><span class="sd">        leaving `Err` untouched.</span>
 </span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>
 </span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a><span class="sd">        Example</span>
@@ -628,7 +628,7 @@ wide variety of different methods.</p>
 </span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>        <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">))</span>
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>
 </span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
+</span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a>        <span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
 </span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>
 </span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a><span class="sd">        Otherwise extracts the `Ok` value and maps it to `f()`</span>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>
@@ -645,7 +645,7 @@ wide variety of different methods.</p>
 </span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a>
 </span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
+</span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a>        <span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
 </span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a><span class="sd">        or function `f` to a contained Ok value.</span>
 </span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a>
 </span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a><span class="sd">        Example</span>
@@ -667,7 +667,7 @@ wide variety of different methods.</p>
 </span><span id="L-411"><a href="#L-411"><span class="linenos">411</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-412"><a href="#L-412"><span class="linenos">412</span></a>
 </span><span id="L-413"><a href="#L-413"><span class="linenos">413</span></a>    <span class="k">def</span> <span class="nf">map_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-414"><a href="#L-414"><span class="linenos">414</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
+</span><span id="L-414"><a href="#L-414"><span class="linenos">414</span></a>        <span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
 </span><span id="L-415"><a href="#L-415"><span class="linenos">415</span></a>
 </span><span id="L-416"><a href="#L-416"><span class="linenos">416</span></a><span class="sd">        Example</span>
 </span><span id="L-417"><a href="#L-417"><span class="linenos">417</span></a><span class="sd">        -------</span>
@@ -686,7 +686,7 @@ wide variety of different methods.</p>
 </span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a>    <span class="c1">##############################</span>
 </span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a>
 </span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
+</span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a>        <span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
 </span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a>
 </span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a><span class="sd">        If `self` was `Ok`, then the iterator will yield the Ok `T`. otherwise yields nothing.</span>
 </span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a>
@@ -722,7 +722,7 @@ wide variety of different methods.</p>
 </span><span id="L-466"><a href="#L-466"><span class="linenos">466</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-467"><a href="#L-467"><span class="linenos">467</span></a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span><span id="L-468"><a href="#L-468"><span class="linenos">468</span></a><span class="k">class</span> <span class="nc">Err</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">E</span><span class="p">]):</span>
-</span><span id="L-469"><a href="#L-469"><span class="linenos">469</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains the error value of `Result[..., E]`.&quot;&quot;&quot;</span>
+</span><span id="L-469"><a href="#L-469"><span class="linenos">469</span></a>    <span class="sd">&quot;&quot;&quot;Contains the error value of `Result[..., E]`.&quot;&quot;&quot;</span>
 </span><span id="L-470"><a href="#L-470"><span class="linenos">470</span></a>
 </span><span id="L-471"><a href="#L-471"><span class="linenos">471</span></a>    <span class="n">_inner</span><span class="p">:</span> <span class="n">E</span>
 </span><span id="L-472"><a href="#L-472"><span class="linenos">472</span></a>
@@ -731,7 +731,7 @@ wide variety of different methods.</p>
 </span><span id="L-475"><a href="#L-475"><span class="linenos">475</span></a>    <span class="c1">################################</span>
 </span><span id="L-476"><a href="#L-476"><span class="linenos">476</span></a>
 </span><span id="L-477"><a href="#L-477"><span class="linenos">477</span></a>    <span class="k">def</span> <span class="nf">is_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="L-478"><a href="#L-478"><span class="linenos">478</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
+</span><span id="L-478"><a href="#L-478"><span class="linenos">478</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
 </span><span id="L-479"><a href="#L-479"><span class="linenos">479</span></a>
 </span><span id="L-480"><a href="#L-480"><span class="linenos">480</span></a><span class="sd">        Example</span>
 </span><span id="L-481"><a href="#L-481"><span class="linenos">481</span></a><span class="sd">        -------</span>
@@ -744,7 +744,7 @@ wide variety of different methods.</p>
 </span><span id="L-488"><a href="#L-488"><span class="linenos">488</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-489"><a href="#L-489"><span class="linenos">489</span></a>
 </span><span id="L-490"><a href="#L-490"><span class="linenos">490</span></a>    <span class="k">def</span> <span class="nf">is_ok_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True.</span>
+</span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True.</span>
 </span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a>
 </span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a><span class="sd">        Example</span>
 </span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a><span class="sd">        -------</span>
@@ -759,7 +759,7 @@ wide variety of different methods.</p>
 </span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a>
 </span><span id="L-504"><a href="#L-504"><span class="linenos">504</span></a>    <span class="c1"># These are never truthy in an `Ok` instance.</span>
 </span><span id="L-505"><a href="#L-505"><span class="linenos">505</span></a>    <span class="k">def</span> <span class="nf">is_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]:</span>
-</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
+</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
 </span><span id="L-507"><a href="#L-507"><span class="linenos">507</span></a>
 </span><span id="L-508"><a href="#L-508"><span class="linenos">508</span></a><span class="sd">        Example</span>
 </span><span id="L-509"><a href="#L-509"><span class="linenos">509</span></a><span class="sd">        -------</span>
@@ -772,7 +772,7 @@ wide variety of different methods.</p>
 </span><span id="L-516"><a href="#L-516"><span class="linenos">516</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-517"><a href="#L-517"><span class="linenos">517</span></a>
 </span><span id="L-518"><a href="#L-518"><span class="linenos">518</span></a>    <span class="k">def</span> <span class="nf">is_err_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-519"><a href="#L-519"><span class="linenos">519</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="L-519"><a href="#L-519"><span class="linenos">519</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="L-520"><a href="#L-520"><span class="linenos">520</span></a>
 </span><span id="L-521"><a href="#L-521"><span class="linenos">521</span></a><span class="sd">        Example</span>
 </span><span id="L-522"><a href="#L-522"><span class="linenos">522</span></a><span class="sd">        -------</span>
@@ -790,7 +790,7 @@ wide variety of different methods.</p>
 </span><span id="L-534"><a href="#L-534"><span class="linenos">534</span></a>    <span class="c1">###################</span>
 </span><span id="L-535"><a href="#L-535"><span class="linenos">535</span></a>
 </span><span id="L-536"><a href="#L-536"><span class="linenos">536</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="L-537"><a href="#L-537"><span class="linenos">537</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
+</span><span id="L-537"><a href="#L-537"><span class="linenos">537</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
 </span><span id="L-538"><a href="#L-538"><span class="linenos">538</span></a><span class="sd">        if it was `Err` with `message` passed to it.</span>
 </span><span id="L-539"><a href="#L-539"><span class="linenos">539</span></a>
 </span><span id="L-540"><a href="#L-540"><span class="linenos">540</span></a><span class="sd">        Example</span>
@@ -803,10 +803,10 @@ wide variety of different methods.</p>
 </span><span id="L-547"><a href="#L-547"><span class="linenos">547</span></a><span class="sd">        err.expect(&quot;err&quot;) # RuntimeError(&quot;err&quot;)</span>
 </span><span id="L-548"><a href="#L-548"><span class="linenos">548</span></a><span class="sd">        ```</span>
 </span><span id="L-549"><a href="#L-549"><span class="linenos">549</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-550"><a href="#L-550"><span class="linenos">550</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="L-550"><a href="#L-550"><span class="linenos">550</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="L-551"><a href="#L-551"><span class="linenos">551</span></a>
 </span><span id="L-552"><a href="#L-552"><span class="linenos">552</span></a>    <span class="k">def</span> <span class="nf">expect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">E</span><span class="p">:</span>
-</span><span id="L-553"><a href="#L-553"><span class="linenos">553</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the `Err` if it was `Err`, panicking otherwise.</span>
+</span><span id="L-553"><a href="#L-553"><span class="linenos">553</span></a>        <span class="sd">&quot;&quot;&quot;Return the `Err` if it was `Err`, panicking otherwise.</span>
 </span><span id="L-554"><a href="#L-554"><span class="linenos">554</span></a>
 </span><span id="L-555"><a href="#L-555"><span class="linenos">555</span></a>
 </span><span id="L-556"><a href="#L-556"><span class="linenos">556</span></a><span class="sd">        Example</span>
@@ -822,7 +822,7 @@ wide variety of different methods.</p>
 </span><span id="L-566"><a href="#L-566"><span class="linenos">566</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="L-567"><a href="#L-567"><span class="linenos">567</span></a>
 </span><span id="L-568"><a href="#L-568"><span class="linenos">568</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="L-569"><a href="#L-569"><span class="linenos">569</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
+</span><span id="L-569"><a href="#L-569"><span class="linenos">569</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
 </span><span id="L-570"><a href="#L-570"><span class="linenos">570</span></a>
 </span><span id="L-571"><a href="#L-571"><span class="linenos">571</span></a><span class="sd">        Example</span>
 </span><span id="L-572"><a href="#L-572"><span class="linenos">572</span></a><span class="sd">        -------</span>
@@ -836,10 +836,10 @@ wide variety of different methods.</p>
 </span><span id="L-580"><a href="#L-580"><span class="linenos">580</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-581"><a href="#L-581"><span class="linenos">581</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="L-582"><a href="#L-582"><span class="linenos">582</span></a>            <span class="sa">f</span><span class="s2">&quot;Called `unwrap()` on an `Err` variant: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="si">!r}</span><span class="s2">&quot;</span>
-</span><span id="L-583"><a href="#L-583"><span class="linenos">583</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="L-583"><a href="#L-583"><span class="linenos">583</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="L-584"><a href="#L-584"><span class="linenos">584</span></a>
 </span><span id="L-585"><a href="#L-585"><span class="linenos">585</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-586"><a href="#L-586"><span class="linenos">586</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
+</span><span id="L-586"><a href="#L-586"><span class="linenos">586</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
 </span><span id="L-587"><a href="#L-587"><span class="linenos">587</span></a>
 </span><span id="L-588"><a href="#L-588"><span class="linenos">588</span></a><span class="sd">        Example</span>
 </span><span id="L-589"><a href="#L-589"><span class="linenos">589</span></a><span class="sd">        -------</span>
@@ -854,7 +854,7 @@ wide variety of different methods.</p>
 </span><span id="L-598"><a href="#L-598"><span class="linenos">598</span></a>        <span class="k">return</span> <span class="n">default</span>
 </span><span id="L-599"><a href="#L-599"><span class="linenos">599</span></a>
 </span><span id="L-600"><a href="#L-600"><span class="linenos">600</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-601"><a href="#L-601"><span class="linenos">601</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
+</span><span id="L-601"><a href="#L-601"><span class="linenos">601</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
 </span><span id="L-602"><a href="#L-602"><span class="linenos">602</span></a>
 </span><span id="L-603"><a href="#L-603"><span class="linenos">603</span></a><span class="sd">        Example</span>
 </span><span id="L-604"><a href="#L-604"><span class="linenos">604</span></a><span class="sd">        -------</span>
@@ -869,7 +869,7 @@ wide variety of different methods.</p>
 </span><span id="L-613"><a href="#L-613"><span class="linenos">613</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-614"><a href="#L-614"><span class="linenos">614</span></a>
 </span><span id="L-615"><a href="#L-615"><span class="linenos">615</span></a>    <span class="k">def</span> <span class="nf">unwrap_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">E</span><span class="p">:</span>
-</span><span id="L-616"><a href="#L-616"><span class="linenos">616</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
+</span><span id="L-616"><a href="#L-616"><span class="linenos">616</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
 </span><span id="L-617"><a href="#L-617"><span class="linenos">617</span></a>
 </span><span id="L-618"><a href="#L-618"><span class="linenos">618</span></a><span class="sd">        Example</span>
 </span><span id="L-619"><a href="#L-619"><span class="linenos">619</span></a><span class="sd">        -------</span>
@@ -889,7 +889,7 @@ wide variety of different methods.</p>
 </span><span id="L-633"><a href="#L-633"><span class="linenos">633</span></a>    <span class="c1">############################</span>
 </span><span id="L-634"><a href="#L-634"><span class="linenos">634</span></a>
 </span><span id="L-635"><a href="#L-635"><span class="linenos">635</span></a>    <span class="k">def</span> <span class="nf">inspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-636"><a href="#L-636"><span class="linenos">636</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
+</span><span id="L-636"><a href="#L-636"><span class="linenos">636</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
 </span><span id="L-637"><a href="#L-637"><span class="linenos">637</span></a>
 </span><span id="L-638"><a href="#L-638"><span class="linenos">638</span></a><span class="sd">        Example</span>
 </span><span id="L-639"><a href="#L-639"><span class="linenos">639</span></a><span class="sd">        -------</span>
@@ -908,7 +908,7 @@ wide variety of different methods.</p>
 </span><span id="L-652"><a href="#L-652"><span class="linenos">652</span></a>        <span class="k">return</span> <span class="kc">None</span>
 </span><span id="L-653"><a href="#L-653"><span class="linenos">653</span></a>
 </span><span id="L-654"><a href="#L-654"><span class="linenos">654</span></a>    <span class="k">def</span> <span class="nf">inspect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-655"><a href="#L-655"><span class="linenos">655</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
+</span><span id="L-655"><a href="#L-655"><span class="linenos">655</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
 </span><span id="L-656"><a href="#L-656"><span class="linenos">656</span></a>
 </span><span id="L-657"><a href="#L-657"><span class="linenos">657</span></a><span class="sd">        Example</span>
 </span><span id="L-658"><a href="#L-658"><span class="linenos">658</span></a><span class="sd">        -------</span>
@@ -927,7 +927,7 @@ wide variety of different methods.</p>
 </span><span id="L-671"><a href="#L-671"><span class="linenos">671</span></a>        <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-672"><a href="#L-672"><span class="linenos">672</span></a>
 </span><span id="L-673"><a href="#L-673"><span class="linenos">673</span></a>    <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
-</span><span id="L-674"><a href="#L-674"><span class="linenos">674</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
+</span><span id="L-674"><a href="#L-674"><span class="linenos">674</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
 </span><span id="L-675"><a href="#L-675"><span class="linenos">675</span></a>
 </span><span id="L-676"><a href="#L-676"><span class="linenos">676</span></a><span class="sd">        Example</span>
 </span><span id="L-677"><a href="#L-677"><span class="linenos">677</span></a><span class="sd">        -------</span>
@@ -942,7 +942,7 @@ wide variety of different methods.</p>
 </span><span id="L-686"><a href="#L-686"><span class="linenos">686</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">NOTHING</span>
 </span><span id="L-687"><a href="#L-687"><span class="linenos">687</span></a>
 </span><span id="L-688"><a href="#L-688"><span class="linenos">688</span></a>    <span class="k">def</span> <span class="nf">err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">E</span><span class="p">]:</span>
-</span><span id="L-689"><a href="#L-689"><span class="linenos">689</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
+</span><span id="L-689"><a href="#L-689"><span class="linenos">689</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
 </span><span id="L-690"><a href="#L-690"><span class="linenos">690</span></a>
 </span><span id="L-691"><a href="#L-691"><span class="linenos">691</span></a><span class="sd">        Example</span>
 </span><span id="L-692"><a href="#L-692"><span class="linenos">692</span></a><span class="sd">        -------</span>
@@ -957,7 +957,7 @@ wide variety of different methods.</p>
 </span><span id="L-701"><a href="#L-701"><span class="linenos">701</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-702"><a href="#L-702"><span class="linenos">702</span></a>
 </span><span id="L-703"><a href="#L-703"><span class="linenos">703</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-704"><a href="#L-704"><span class="linenos">704</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
+</span><span id="L-704"><a href="#L-704"><span class="linenos">704</span></a>        <span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
 </span><span id="L-705"><a href="#L-705"><span class="linenos">705</span></a><span class="sd">        leaving `Err` untouched.</span>
 </span><span id="L-706"><a href="#L-706"><span class="linenos">706</span></a>
 </span><span id="L-707"><a href="#L-707"><span class="linenos">707</span></a><span class="sd">        Example</span>
@@ -973,7 +973,7 @@ wide variety of different methods.</p>
 </span><span id="L-717"><a href="#L-717"><span class="linenos">717</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-718"><a href="#L-718"><span class="linenos">718</span></a>
 </span><span id="L-719"><a href="#L-719"><span class="linenos">719</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="L-720"><a href="#L-720"><span class="linenos">720</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
+</span><span id="L-720"><a href="#L-720"><span class="linenos">720</span></a>        <span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
 </span><span id="L-721"><a href="#L-721"><span class="linenos">721</span></a>
 </span><span id="L-722"><a href="#L-722"><span class="linenos">722</span></a><span class="sd">        Otherwise extracts the `Ok` value and maps it to `f()`</span>
 </span><span id="L-723"><a href="#L-723"><span class="linenos">723</span></a>
@@ -990,7 +990,7 @@ wide variety of different methods.</p>
 </span><span id="L-734"><a href="#L-734"><span class="linenos">734</span></a>        <span class="k">return</span> <span class="n">default</span>
 </span><span id="L-735"><a href="#L-735"><span class="linenos">735</span></a>
 </span><span id="L-736"><a href="#L-736"><span class="linenos">736</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="L-737"><a href="#L-737"><span class="linenos">737</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
+</span><span id="L-737"><a href="#L-737"><span class="linenos">737</span></a>        <span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
 </span><span id="L-738"><a href="#L-738"><span class="linenos">738</span></a><span class="sd">        or function `f` to a contained Ok value.</span>
 </span><span id="L-739"><a href="#L-739"><span class="linenos">739</span></a>
 </span><span id="L-740"><a href="#L-740"><span class="linenos">740</span></a><span class="sd">        Example</span>
@@ -1012,7 +1012,7 @@ wide variety of different methods.</p>
 </span><span id="L-756"><a href="#L-756"><span class="linenos">756</span></a>        <span class="k">return</span> <span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="L-757"><a href="#L-757"><span class="linenos">757</span></a>
 </span><span id="L-758"><a href="#L-758"><span class="linenos">758</span></a>    <span class="k">def</span> <span class="nf">map_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Err</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="L-759"><a href="#L-759"><span class="linenos">759</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
+</span><span id="L-759"><a href="#L-759"><span class="linenos">759</span></a>        <span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
 </span><span id="L-760"><a href="#L-760"><span class="linenos">760</span></a>
 </span><span id="L-761"><a href="#L-761"><span class="linenos">761</span></a><span class="sd">        Example</span>
 </span><span id="L-762"><a href="#L-762"><span class="linenos">762</span></a><span class="sd">        -------</span>
@@ -1031,7 +1031,7 @@ wide variety of different methods.</p>
 </span><span id="L-775"><a href="#L-775"><span class="linenos">775</span></a>    <span class="c1">##############################</span>
 </span><span id="L-776"><a href="#L-776"><span class="linenos">776</span></a>
 </span><span id="L-777"><a href="#L-777"><span class="linenos">777</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
-</span><span id="L-778"><a href="#L-778"><span class="linenos">778</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
+</span><span id="L-778"><a href="#L-778"><span class="linenos">778</span></a>        <span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
 </span><span id="L-779"><a href="#L-779"><span class="linenos">779</span></a>
 </span><span id="L-780"><a href="#L-780"><span class="linenos">780</span></a><span class="sd">        If `self` was `Ok`, then the iterator will yield `T`, otherwise yields nothing.</span>
 </span><span id="L-781"><a href="#L-781"><span class="linenos">781</span></a>
@@ -1085,7 +1085,7 @@ wide variety of different methods.</p>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok-127"><a href="#Ok-127"><span class="linenos">127</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Ok-128"><a href="#Ok-128"><span class="linenos">128</span></a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span><span id="Ok-129"><a href="#Ok-129"><span class="linenos">129</span></a><span class="k">class</span> <span class="nc">Ok</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="Ok-130"><a href="#Ok-130"><span class="linenos">130</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains the success value of `Result[T, ...]`.&quot;&quot;&quot;</span>
+</span><span id="Ok-130"><a href="#Ok-130"><span class="linenos">130</span></a>    <span class="sd">&quot;&quot;&quot;Contains the success value of `Result[T, ...]`.&quot;&quot;&quot;</span>
 </span><span id="Ok-131"><a href="#Ok-131"><span class="linenos">131</span></a>
 </span><span id="Ok-132"><a href="#Ok-132"><span class="linenos">132</span></a>    <span class="n">_inner</span><span class="p">:</span> <span class="n">T</span>
 </span><span id="Ok-133"><a href="#Ok-133"><span class="linenos">133</span></a>
@@ -1094,7 +1094,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-136"><a href="#Ok-136"><span class="linenos">136</span></a>    <span class="c1">###############################</span>
 </span><span id="Ok-137"><a href="#Ok-137"><span class="linenos">137</span></a>
 </span><span id="Ok-138"><a href="#Ok-138"><span class="linenos">138</span></a>    <span class="k">def</span> <span class="nf">is_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]:</span>
-</span><span id="Ok-139"><a href="#Ok-139"><span class="linenos">139</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
+</span><span id="Ok-139"><a href="#Ok-139"><span class="linenos">139</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
 </span><span id="Ok-140"><a href="#Ok-140"><span class="linenos">140</span></a>
 </span><span id="Ok-141"><a href="#Ok-141"><span class="linenos">141</span></a><span class="sd">        Example</span>
 </span><span id="Ok-142"><a href="#Ok-142"><span class="linenos">142</span></a><span class="sd">        -------</span>
@@ -1106,7 +1106,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-148"><a href="#Ok-148"><span class="linenos">148</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="Ok-149"><a href="#Ok-149"><span class="linenos">149</span></a>
 </span><span id="Ok-150"><a href="#Ok-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">is_ok_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Ok-151"><a href="#Ok-151"><span class="linenos">151</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="Ok-151"><a href="#Ok-151"><span class="linenos">151</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="Ok-152"><a href="#Ok-152"><span class="linenos">152</span></a>
 </span><span id="Ok-153"><a href="#Ok-153"><span class="linenos">153</span></a><span class="sd">        Example</span>
 </span><span id="Ok-154"><a href="#Ok-154"><span class="linenos">154</span></a><span class="sd">        -------</span>
@@ -1121,7 +1121,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-163"><a href="#Ok-163"><span class="linenos">163</span></a>
 </span><span id="Ok-164"><a href="#Ok-164"><span class="linenos">164</span></a>    <span class="c1"># These are never truthy in an `Ok` instance.</span>
 </span><span id="Ok-165"><a href="#Ok-165"><span class="linenos">165</span></a>    <span class="k">def</span> <span class="nf">is_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="Ok-166"><a href="#Ok-166"><span class="linenos">166</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
+</span><span id="Ok-166"><a href="#Ok-166"><span class="linenos">166</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
 </span><span id="Ok-167"><a href="#Ok-167"><span class="linenos">167</span></a>
 </span><span id="Ok-168"><a href="#Ok-168"><span class="linenos">168</span></a><span class="sd">        Example</span>
 </span><span id="Ok-169"><a href="#Ok-169"><span class="linenos">169</span></a><span class="sd">        -------</span>
@@ -1134,7 +1134,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-176"><a href="#Ok-176"><span class="linenos">176</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="Ok-177"><a href="#Ok-177"><span class="linenos">177</span></a>
 </span><span id="Ok-178"><a href="#Ok-178"><span class="linenos">178</span></a>    <span class="k">def</span> <span class="nf">is_err_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="Ok-179"><a href="#Ok-179"><span class="linenos">179</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="Ok-179"><a href="#Ok-179"><span class="linenos">179</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="Ok-180"><a href="#Ok-180"><span class="linenos">180</span></a>
 </span><span id="Ok-181"><a href="#Ok-181"><span class="linenos">181</span></a><span class="sd">        Example</span>
 </span><span id="Ok-182"><a href="#Ok-182"><span class="linenos">182</span></a><span class="sd">        -------</span>
@@ -1152,7 +1152,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-194"><a href="#Ok-194"><span class="linenos">194</span></a>    <span class="c1">###################</span>
 </span><span id="Ok-195"><a href="#Ok-195"><span class="linenos">195</span></a>
 </span><span id="Ok-196"><a href="#Ok-196"><span class="linenos">196</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Ok-197"><a href="#Ok-197"><span class="linenos">197</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
+</span><span id="Ok-197"><a href="#Ok-197"><span class="linenos">197</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
 </span><span id="Ok-198"><a href="#Ok-198"><span class="linenos">198</span></a><span class="sd">        if it was `Err` with `message` passed to it.</span>
 </span><span id="Ok-199"><a href="#Ok-199"><span class="linenos">199</span></a>
 </span><span id="Ok-200"><a href="#Ok-200"><span class="linenos">200</span></a><span class="sd">        Example</span>
@@ -1168,7 +1168,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-210"><a href="#Ok-210"><span class="linenos">210</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="Ok-211"><a href="#Ok-211"><span class="linenos">211</span></a>
 </span><span id="Ok-212"><a href="#Ok-212"><span class="linenos">212</span></a>    <span class="k">def</span> <span class="nf">expect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="Ok-213"><a href="#Ok-213"><span class="linenos">213</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the `Err` value if `self` is an `Err`, panicking otherwise.</span>
+</span><span id="Ok-213"><a href="#Ok-213"><span class="linenos">213</span></a>        <span class="sd">&quot;&quot;&quot;Return the `Err` value if `self` is an `Err`, panicking otherwise.</span>
 </span><span id="Ok-214"><a href="#Ok-214"><span class="linenos">214</span></a>
 </span><span id="Ok-215"><a href="#Ok-215"><span class="linenos">215</span></a><span class="sd">        Example</span>
 </span><span id="Ok-216"><a href="#Ok-216"><span class="linenos">216</span></a><span class="sd">        -------</span>
@@ -1183,7 +1183,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-225"><a href="#Ok-225"><span class="linenos">225</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Called `expect_err` on an `Ok` value.&quot;</span><span class="p">)</span>
 </span><span id="Ok-226"><a href="#Ok-226"><span class="linenos">226</span></a>
 </span><span id="Ok-227"><a href="#Ok-227"><span class="linenos">227</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Ok-228"><a href="#Ok-228"><span class="linenos">228</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
+</span><span id="Ok-228"><a href="#Ok-228"><span class="linenos">228</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
 </span><span id="Ok-229"><a href="#Ok-229"><span class="linenos">229</span></a>
 </span><span id="Ok-230"><a href="#Ok-230"><span class="linenos">230</span></a><span class="sd">        Example</span>
 </span><span id="Ok-231"><a href="#Ok-231"><span class="linenos">231</span></a><span class="sd">        -------</span>
@@ -1198,7 +1198,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-240"><a href="#Ok-240"><span class="linenos">240</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="Ok-241"><a href="#Ok-241"><span class="linenos">241</span></a>
 </span><span id="Ok-242"><a href="#Ok-242"><span class="linenos">242</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Ok-243"><a href="#Ok-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
+</span><span id="Ok-243"><a href="#Ok-243"><span class="linenos">243</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
 </span><span id="Ok-244"><a href="#Ok-244"><span class="linenos">244</span></a>
 </span><span id="Ok-245"><a href="#Ok-245"><span class="linenos">245</span></a><span class="sd">        Example</span>
 </span><span id="Ok-246"><a href="#Ok-246"><span class="linenos">246</span></a><span class="sd">        -------</span>
@@ -1213,7 +1213,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-255"><a href="#Ok-255"><span class="linenos">255</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="Ok-256"><a href="#Ok-256"><span class="linenos">256</span></a>
 </span><span id="Ok-257"><a href="#Ok-257"><span class="linenos">257</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Ok-258"><a href="#Ok-258"><span class="linenos">258</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
+</span><span id="Ok-258"><a href="#Ok-258"><span class="linenos">258</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
 </span><span id="Ok-259"><a href="#Ok-259"><span class="linenos">259</span></a>
 </span><span id="Ok-260"><a href="#Ok-260"><span class="linenos">260</span></a><span class="sd">        Example</span>
 </span><span id="Ok-261"><a href="#Ok-261"><span class="linenos">261</span></a><span class="sd">        -------</span>
@@ -1228,7 +1228,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-270"><a href="#Ok-270"><span class="linenos">270</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="Ok-271"><a href="#Ok-271"><span class="linenos">271</span></a>
 </span><span id="Ok-272"><a href="#Ok-272"><span class="linenos">272</span></a>    <span class="k">def</span> <span class="nf">unwrap_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="Ok-273"><a href="#Ok-273"><span class="linenos">273</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
+</span><span id="Ok-273"><a href="#Ok-273"><span class="linenos">273</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
 </span><span id="Ok-274"><a href="#Ok-274"><span class="linenos">274</span></a>
 </span><span id="Ok-275"><a href="#Ok-275"><span class="linenos">275</span></a><span class="sd">        Example</span>
 </span><span id="Ok-276"><a href="#Ok-276"><span class="linenos">276</span></a><span class="sd">        -------</span>
@@ -1248,7 +1248,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-290"><a href="#Ok-290"><span class="linenos">290</span></a>    <span class="c1">############################</span>
 </span><span id="Ok-291"><a href="#Ok-291"><span class="linenos">291</span></a>
 </span><span id="Ok-292"><a href="#Ok-292"><span class="linenos">292</span></a>    <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Ok-293"><a href="#Ok-293"><span class="linenos">293</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
+</span><span id="Ok-293"><a href="#Ok-293"><span class="linenos">293</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
 </span><span id="Ok-294"><a href="#Ok-294"><span class="linenos">294</span></a>
 </span><span id="Ok-295"><a href="#Ok-295"><span class="linenos">295</span></a><span class="sd">        Example</span>
 </span><span id="Ok-296"><a href="#Ok-296"><span class="linenos">296</span></a><span class="sd">        -------</span>
@@ -1263,7 +1263,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-305"><a href="#Ok-305"><span class="linenos">305</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Ok-306"><a href="#Ok-306"><span class="linenos">306</span></a>
 </span><span id="Ok-307"><a href="#Ok-307"><span class="linenos">307</span></a>    <span class="k">def</span> <span class="nf">err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Ok-308"><a href="#Ok-308"><span class="linenos">308</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
+</span><span id="Ok-308"><a href="#Ok-308"><span class="linenos">308</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
 </span><span id="Ok-309"><a href="#Ok-309"><span class="linenos">309</span></a>
 </span><span id="Ok-310"><a href="#Ok-310"><span class="linenos">310</span></a><span class="sd">        Example</span>
 </span><span id="Ok-311"><a href="#Ok-311"><span class="linenos">311</span></a><span class="sd">        -------</span>
@@ -1278,7 +1278,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-320"><a href="#Ok-320"><span class="linenos">320</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">NOTHING</span>  <span class="c1"># pyright: ignore</span>
 </span><span id="Ok-321"><a href="#Ok-321"><span class="linenos">321</span></a>
 </span><span id="Ok-322"><a href="#Ok-322"><span class="linenos">322</span></a>    <span class="k">def</span> <span class="nf">inspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Ok-323"><a href="#Ok-323"><span class="linenos">323</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
+</span><span id="Ok-323"><a href="#Ok-323"><span class="linenos">323</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
 </span><span id="Ok-324"><a href="#Ok-324"><span class="linenos">324</span></a>
 </span><span id="Ok-325"><a href="#Ok-325"><span class="linenos">325</span></a><span class="sd">        Example</span>
 </span><span id="Ok-326"><a href="#Ok-326"><span class="linenos">326</span></a><span class="sd">        -------</span>
@@ -1297,7 +1297,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-339"><a href="#Ok-339"><span class="linenos">339</span></a>        <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Ok-340"><a href="#Ok-340"><span class="linenos">340</span></a>
 </span><span id="Ok-341"><a href="#Ok-341"><span class="linenos">341</span></a>    <span class="k">def</span> <span class="nf">inspect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Ok-342"><a href="#Ok-342"><span class="linenos">342</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
+</span><span id="Ok-342"><a href="#Ok-342"><span class="linenos">342</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
 </span><span id="Ok-343"><a href="#Ok-343"><span class="linenos">343</span></a>
 </span><span id="Ok-344"><a href="#Ok-344"><span class="linenos">344</span></a><span class="sd">        Example</span>
 </span><span id="Ok-345"><a href="#Ok-345"><span class="linenos">345</span></a><span class="sd">        -------</span>
@@ -1315,7 +1315,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-357"><a href="#Ok-357"><span class="linenos">357</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Ok-358"><a href="#Ok-358"><span class="linenos">358</span></a>
 </span><span id="Ok-359"><a href="#Ok-359"><span class="linenos">359</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ok</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="Ok-360"><a href="#Ok-360"><span class="linenos">360</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
+</span><span id="Ok-360"><a href="#Ok-360"><span class="linenos">360</span></a>        <span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
 </span><span id="Ok-361"><a href="#Ok-361"><span class="linenos">361</span></a><span class="sd">        leaving `Err` untouched.</span>
 </span><span id="Ok-362"><a href="#Ok-362"><span class="linenos">362</span></a>
 </span><span id="Ok-363"><a href="#Ok-363"><span class="linenos">363</span></a><span class="sd">        Example</span>
@@ -1331,7 +1331,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-373"><a href="#Ok-373"><span class="linenos">373</span></a>        <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">))</span>
 </span><span id="Ok-374"><a href="#Ok-374"><span class="linenos">374</span></a>
 </span><span id="Ok-375"><a href="#Ok-375"><span class="linenos">375</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Ok-376"><a href="#Ok-376"><span class="linenos">376</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
+</span><span id="Ok-376"><a href="#Ok-376"><span class="linenos">376</span></a>        <span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
 </span><span id="Ok-377"><a href="#Ok-377"><span class="linenos">377</span></a>
 </span><span id="Ok-378"><a href="#Ok-378"><span class="linenos">378</span></a><span class="sd">        Otherwise extracts the `Ok` value and maps it to `f()`</span>
 </span><span id="Ok-379"><a href="#Ok-379"><span class="linenos">379</span></a>
@@ -1348,7 +1348,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-390"><a href="#Ok-390"><span class="linenos">390</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Ok-391"><a href="#Ok-391"><span class="linenos">391</span></a>
 </span><span id="Ok-392"><a href="#Ok-392"><span class="linenos">392</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Ok-393"><a href="#Ok-393"><span class="linenos">393</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
+</span><span id="Ok-393"><a href="#Ok-393"><span class="linenos">393</span></a>        <span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
 </span><span id="Ok-394"><a href="#Ok-394"><span class="linenos">394</span></a><span class="sd">        or function `f` to a contained Ok value.</span>
 </span><span id="Ok-395"><a href="#Ok-395"><span class="linenos">395</span></a>
 </span><span id="Ok-396"><a href="#Ok-396"><span class="linenos">396</span></a><span class="sd">        Example</span>
@@ -1370,7 +1370,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-412"><a href="#Ok-412"><span class="linenos">412</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Ok-413"><a href="#Ok-413"><span class="linenos">413</span></a>
 </span><span id="Ok-414"><a href="#Ok-414"><span class="linenos">414</span></a>    <span class="k">def</span> <span class="nf">map_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Ok-415"><a href="#Ok-415"><span class="linenos">415</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
+</span><span id="Ok-415"><a href="#Ok-415"><span class="linenos">415</span></a>        <span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
 </span><span id="Ok-416"><a href="#Ok-416"><span class="linenos">416</span></a>
 </span><span id="Ok-417"><a href="#Ok-417"><span class="linenos">417</span></a><span class="sd">        Example</span>
 </span><span id="Ok-418"><a href="#Ok-418"><span class="linenos">418</span></a><span class="sd">        -------</span>
@@ -1389,7 +1389,7 @@ wide variety of different methods.</p>
 </span><span id="Ok-431"><a href="#Ok-431"><span class="linenos">431</span></a>    <span class="c1">##############################</span>
 </span><span id="Ok-432"><a href="#Ok-432"><span class="linenos">432</span></a>
 </span><span id="Ok-433"><a href="#Ok-433"><span class="linenos">433</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Ok-434"><a href="#Ok-434"><span class="linenos">434</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
+</span><span id="Ok-434"><a href="#Ok-434"><span class="linenos">434</span></a>        <span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
 </span><span id="Ok-435"><a href="#Ok-435"><span class="linenos">435</span></a>
 </span><span id="Ok-436"><a href="#Ok-436"><span class="linenos">436</span></a><span class="sd">        If `self` was `Ok`, then the iterator will yield the Ok `T`. otherwise yields nothing.</span>
 </span><span id="Ok-437"><a href="#Ok-437"><span class="linenos">437</span></a>
@@ -1451,7 +1451,7 @@ wide variety of different methods.</p>
     </div>
     <a class="headerlink" href="#Ok.is_ok"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.is_ok-138"><a href="#Ok.is_ok-138"><span class="linenos">138</span></a>    <span class="k">def</span> <span class="nf">is_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]:</span>
-</span><span id="Ok.is_ok-139"><a href="#Ok.is_ok-139"><span class="linenos">139</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
+</span><span id="Ok.is_ok-139"><a href="#Ok.is_ok-139"><span class="linenos">139</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
 </span><span id="Ok.is_ok-140"><a href="#Ok.is_ok-140"><span class="linenos">140</span></a>
 </span><span id="Ok.is_ok-141"><a href="#Ok.is_ok-141"><span class="linenos">141</span></a><span class="sd">        Example</span>
 </span><span id="Ok.is_ok-142"><a href="#Ok.is_ok-142"><span class="linenos">142</span></a><span class="sd">        -------</span>
@@ -1489,7 +1489,7 @@ wide variety of different methods.</p>
     </div>
     <a class="headerlink" href="#Ok.is_ok_and"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.is_ok_and-150"><a href="#Ok.is_ok_and-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">is_ok_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Ok.is_ok_and-151"><a href="#Ok.is_ok_and-151"><span class="linenos">151</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="Ok.is_ok_and-151"><a href="#Ok.is_ok_and-151"><span class="linenos">151</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="Ok.is_ok_and-152"><a href="#Ok.is_ok_and-152"><span class="linenos">152</span></a>
 </span><span id="Ok.is_ok_and-153"><a href="#Ok.is_ok_and-153"><span class="linenos">153</span></a><span class="sd">        Example</span>
 </span><span id="Ok.is_ok_and-154"><a href="#Ok.is_ok_and-154"><span class="linenos">154</span></a><span class="sd">        -------</span>
@@ -1531,7 +1531,7 @@ wide variety of different methods.</p>
     </div>
     <a class="headerlink" href="#Ok.is_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.is_err-165"><a href="#Ok.is_err-165"><span class="linenos">165</span></a>    <span class="k">def</span> <span class="nf">is_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="Ok.is_err-166"><a href="#Ok.is_err-166"><span class="linenos">166</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
+</span><span id="Ok.is_err-166"><a href="#Ok.is_err-166"><span class="linenos">166</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
 </span><span id="Ok.is_err-167"><a href="#Ok.is_err-167"><span class="linenos">167</span></a>
 </span><span id="Ok.is_err-168"><a href="#Ok.is_err-168"><span class="linenos">168</span></a><span class="sd">        Example</span>
 </span><span id="Ok.is_err-169"><a href="#Ok.is_err-169"><span class="linenos">169</span></a><span class="sd">        -------</span>
@@ -1571,7 +1571,7 @@ wide variety of different methods.</p>
     </div>
     <a class="headerlink" href="#Ok.is_err_and"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.is_err_and-178"><a href="#Ok.is_err_and-178"><span class="linenos">178</span></a>    <span class="k">def</span> <span class="nf">is_err_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="Ok.is_err_and-179"><a href="#Ok.is_err_and-179"><span class="linenos">179</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="Ok.is_err_and-179"><a href="#Ok.is_err_and-179"><span class="linenos">179</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="Ok.is_err_and-180"><a href="#Ok.is_err_and-180"><span class="linenos">180</span></a>
 </span><span id="Ok.is_err_and-181"><a href="#Ok.is_err_and-181"><span class="linenos">181</span></a><span class="sd">        Example</span>
 </span><span id="Ok.is_err_and-182"><a href="#Ok.is_err_and-182"><span class="linenos">182</span></a><span class="sd">        -------</span>
@@ -1613,7 +1613,7 @@ wide variety of different methods.</p>
     </div>
     <a class="headerlink" href="#Ok.expect"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.expect-196"><a href="#Ok.expect-196"><span class="linenos">196</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Ok.expect-197"><a href="#Ok.expect-197"><span class="linenos">197</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
+</span><span id="Ok.expect-197"><a href="#Ok.expect-197"><span class="linenos">197</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
 </span><span id="Ok.expect-198"><a href="#Ok.expect-198"><span class="linenos">198</span></a><span class="sd">        if it was `Err` with `message` passed to it.</span>
 </span><span id="Ok.expect-199"><a href="#Ok.expect-199"><span class="linenos">199</span></a>
 </span><span id="Ok.expect-200"><a href="#Ok.expect-200"><span class="linenos">200</span></a><span class="sd">        Example</span>
@@ -1659,7 +1659,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.expect_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.expect_err-212"><a href="#Ok.expect_err-212"><span class="linenos">212</span></a>    <span class="k">def</span> <span class="nf">expect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="Ok.expect_err-213"><a href="#Ok.expect_err-213"><span class="linenos">213</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the `Err` value if `self` is an `Err`, panicking otherwise.</span>
+</span><span id="Ok.expect_err-213"><a href="#Ok.expect_err-213"><span class="linenos">213</span></a>        <span class="sd">&quot;&quot;&quot;Return the `Err` value if `self` is an `Err`, panicking otherwise.</span>
 </span><span id="Ok.expect_err-214"><a href="#Ok.expect_err-214"><span class="linenos">214</span></a>
 </span><span id="Ok.expect_err-215"><a href="#Ok.expect_err-215"><span class="linenos">215</span></a><span class="sd">        Example</span>
 </span><span id="Ok.expect_err-216"><a href="#Ok.expect_err-216"><span class="linenos">216</span></a><span class="sd">        -------</span>
@@ -1703,7 +1703,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.unwrap"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.unwrap-227"><a href="#Ok.unwrap-227"><span class="linenos">227</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Ok.unwrap-228"><a href="#Ok.unwrap-228"><span class="linenos">228</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
+</span><span id="Ok.unwrap-228"><a href="#Ok.unwrap-228"><span class="linenos">228</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
 </span><span id="Ok.unwrap-229"><a href="#Ok.unwrap-229"><span class="linenos">229</span></a>
 </span><span id="Ok.unwrap-230"><a href="#Ok.unwrap-230"><span class="linenos">230</span></a><span class="sd">        Example</span>
 </span><span id="Ok.unwrap-231"><a href="#Ok.unwrap-231"><span class="linenos">231</span></a><span class="sd">        -------</span>
@@ -1747,7 +1747,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.unwrap_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.unwrap_or-242"><a href="#Ok.unwrap_or-242"><span class="linenos">242</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Ok.unwrap_or-243"><a href="#Ok.unwrap_or-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
+</span><span id="Ok.unwrap_or-243"><a href="#Ok.unwrap_or-243"><span class="linenos">243</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
 </span><span id="Ok.unwrap_or-244"><a href="#Ok.unwrap_or-244"><span class="linenos">244</span></a>
 </span><span id="Ok.unwrap_or-245"><a href="#Ok.unwrap_or-245"><span class="linenos">245</span></a><span class="sd">        Example</span>
 </span><span id="Ok.unwrap_or-246"><a href="#Ok.unwrap_or-246"><span class="linenos">246</span></a><span class="sd">        -------</span>
@@ -1791,7 +1791,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.unwrap_or_else"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.unwrap_or_else-257"><a href="#Ok.unwrap_or_else-257"><span class="linenos">257</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Ok.unwrap_or_else-258"><a href="#Ok.unwrap_or_else-258"><span class="linenos">258</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
+</span><span id="Ok.unwrap_or_else-258"><a href="#Ok.unwrap_or_else-258"><span class="linenos">258</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
 </span><span id="Ok.unwrap_or_else-259"><a href="#Ok.unwrap_or_else-259"><span class="linenos">259</span></a>
 </span><span id="Ok.unwrap_or_else-260"><a href="#Ok.unwrap_or_else-260"><span class="linenos">260</span></a><span class="sd">        Example</span>
 </span><span id="Ok.unwrap_or_else-261"><a href="#Ok.unwrap_or_else-261"><span class="linenos">261</span></a><span class="sd">        -------</span>
@@ -1835,7 +1835,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.unwrap_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.unwrap_err-272"><a href="#Ok.unwrap_err-272"><span class="linenos">272</span></a>    <span class="k">def</span> <span class="nf">unwrap_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="Ok.unwrap_err-273"><a href="#Ok.unwrap_err-273"><span class="linenos">273</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
+</span><span id="Ok.unwrap_err-273"><a href="#Ok.unwrap_err-273"><span class="linenos">273</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
 </span><span id="Ok.unwrap_err-274"><a href="#Ok.unwrap_err-274"><span class="linenos">274</span></a>
 </span><span id="Ok.unwrap_err-275"><a href="#Ok.unwrap_err-275"><span class="linenos">275</span></a><span class="sd">        Example</span>
 </span><span id="Ok.unwrap_err-276"><a href="#Ok.unwrap_err-276"><span class="linenos">276</span></a><span class="sd">        -------</span>
@@ -1881,7 +1881,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.ok"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.ok-292"><a href="#Ok.ok-292"><span class="linenos">292</span></a>    <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Ok.ok-293"><a href="#Ok.ok-293"><span class="linenos">293</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
+</span><span id="Ok.ok-293"><a href="#Ok.ok-293"><span class="linenos">293</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
 </span><span id="Ok.ok-294"><a href="#Ok.ok-294"><span class="linenos">294</span></a>
 </span><span id="Ok.ok-295"><a href="#Ok.ok-295"><span class="linenos">295</span></a><span class="sd">        Example</span>
 </span><span id="Ok.ok-296"><a href="#Ok.ok-296"><span class="linenos">296</span></a><span class="sd">        -------</span>
@@ -1925,7 +1925,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.err-307"><a href="#Ok.err-307"><span class="linenos">307</span></a>    <span class="k">def</span> <span class="nf">err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Ok.err-308"><a href="#Ok.err-308"><span class="linenos">308</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
+</span><span id="Ok.err-308"><a href="#Ok.err-308"><span class="linenos">308</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
 </span><span id="Ok.err-309"><a href="#Ok.err-309"><span class="linenos">309</span></a>
 </span><span id="Ok.err-310"><a href="#Ok.err-310"><span class="linenos">310</span></a><span class="sd">        Example</span>
 </span><span id="Ok.err-311"><a href="#Ok.err-311"><span class="linenos">311</span></a><span class="sd">        -------</span>
@@ -1969,7 +1969,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.inspect"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.inspect-322"><a href="#Ok.inspect-322"><span class="linenos">322</span></a>    <span class="k">def</span> <span class="nf">inspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Ok.inspect-323"><a href="#Ok.inspect-323"><span class="linenos">323</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
+</span><span id="Ok.inspect-323"><a href="#Ok.inspect-323"><span class="linenos">323</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
 </span><span id="Ok.inspect-324"><a href="#Ok.inspect-324"><span class="linenos">324</span></a>
 </span><span id="Ok.inspect-325"><a href="#Ok.inspect-325"><span class="linenos">325</span></a><span class="sd">        Example</span>
 </span><span id="Ok.inspect-326"><a href="#Ok.inspect-326"><span class="linenos">326</span></a><span class="sd">        -------</span>
@@ -2021,7 +2021,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.inspect_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.inspect_err-341"><a href="#Ok.inspect_err-341"><span class="linenos">341</span></a>    <span class="k">def</span> <span class="nf">inspect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Ok.inspect_err-342"><a href="#Ok.inspect_err-342"><span class="linenos">342</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
+</span><span id="Ok.inspect_err-342"><a href="#Ok.inspect_err-342"><span class="linenos">342</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
 </span><span id="Ok.inspect_err-343"><a href="#Ok.inspect_err-343"><span class="linenos">343</span></a>
 </span><span id="Ok.inspect_err-344"><a href="#Ok.inspect_err-344"><span class="linenos">344</span></a><span class="sd">        Example</span>
 </span><span id="Ok.inspect_err-345"><a href="#Ok.inspect_err-345"><span class="linenos">345</span></a><span class="sd">        -------</span>
@@ -2072,7 +2072,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Ok.map"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.map-359"><a href="#Ok.map-359"><span class="linenos">359</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ok</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="Ok.map-360"><a href="#Ok.map-360"><span class="linenos">360</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
+</span><span id="Ok.map-360"><a href="#Ok.map-360"><span class="linenos">360</span></a>        <span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
 </span><span id="Ok.map-361"><a href="#Ok.map-361"><span class="linenos">361</span></a><span class="sd">        leaving `Err` untouched.</span>
 </span><span id="Ok.map-362"><a href="#Ok.map-362"><span class="linenos">362</span></a>
 </span><span id="Ok.map-363"><a href="#Ok.map-363"><span class="linenos">363</span></a><span class="sd">        Example</span>
@@ -2118,7 +2118,7 @@ leaving <code><a href="#Err">Err</a></code> untouched.</p>
     </div>
     <a class="headerlink" href="#Ok.map_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.map_or-375"><a href="#Ok.map_or-375"><span class="linenos">375</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Ok.map_or-376"><a href="#Ok.map_or-376"><span class="linenos">376</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
+</span><span id="Ok.map_or-376"><a href="#Ok.map_or-376"><span class="linenos">376</span></a>        <span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
 </span><span id="Ok.map_or-377"><a href="#Ok.map_or-377"><span class="linenos">377</span></a>
 </span><span id="Ok.map_or-378"><a href="#Ok.map_or-378"><span class="linenos">378</span></a><span class="sd">        Otherwise extracts the `Ok` value and maps it to `f()`</span>
 </span><span id="Ok.map_or-379"><a href="#Ok.map_or-379"><span class="linenos">379</span></a>
@@ -2166,7 +2166,7 @@ leaving <code><a href="#Err">Err</a></code> untouched.</p>
     </div>
     <a class="headerlink" href="#Ok.map_or_else"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.map_or_else-392"><a href="#Ok.map_or_else-392"><span class="linenos">392</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Ok.map_or_else-393"><a href="#Ok.map_or_else-393"><span class="linenos">393</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
+</span><span id="Ok.map_or_else-393"><a href="#Ok.map_or_else-393"><span class="linenos">393</span></a>        <span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
 </span><span id="Ok.map_or_else-394"><a href="#Ok.map_or_else-394"><span class="linenos">394</span></a><span class="sd">        or function `f` to a contained Ok value.</span>
 </span><span id="Ok.map_or_else-395"><a href="#Ok.map_or_else-395"><span class="linenos">395</span></a>
 </span><span id="Ok.map_or_else-396"><a href="#Ok.map_or_else-396"><span class="linenos">396</span></a><span class="sd">        Example</span>
@@ -2217,14 +2217,14 @@ or function <code>f</code> to a contained Ok value.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map_err</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">E</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">map_err</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">E</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Ok.map_err-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Ok.map_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.map_err-414"><a href="#Ok.map_err-414"><span class="linenos">414</span></a>    <span class="k">def</span> <span class="nf">map_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Ok.map_err-415"><a href="#Ok.map_err-415"><span class="linenos">415</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
+</span><span id="Ok.map_err-415"><a href="#Ok.map_err-415"><span class="linenos">415</span></a>        <span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
 </span><span id="Ok.map_err-416"><a href="#Ok.map_err-416"><span class="linenos">416</span></a>
 </span><span id="Ok.map_err-417"><a href="#Ok.map_err-417"><span class="linenos">417</span></a><span class="sd">        Example</span>
 </span><span id="Ok.map_err-418"><a href="#Ok.map_err-418"><span class="linenos">418</span></a><span class="sd">        -------</span>
@@ -2268,7 +2268,7 @@ or function <code>f</code> to a contained Ok value.</p>
     </div>
     <a class="headerlink" href="#Ok.iter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Ok.iter-433"><a href="#Ok.iter-433"><span class="linenos">433</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="Ok.iter-434"><a href="#Ok.iter-434"><span class="linenos">434</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
+</span><span id="Ok.iter-434"><a href="#Ok.iter-434"><span class="linenos">434</span></a>        <span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
 </span><span id="Ok.iter-435"><a href="#Ok.iter-435"><span class="linenos">435</span></a>
 </span><span id="Ok.iter-436"><a href="#Ok.iter-436"><span class="linenos">436</span></a><span class="sd">        If `self` was `Ok`, then the iterator will yield the Ok `T`. otherwise yields nothing.</span>
 </span><span id="Ok.iter-437"><a href="#Ok.iter-437"><span class="linenos">437</span></a>
@@ -2321,7 +2321,7 @@ or function <code>f</code> to a contained Ok value.</p>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err-467"><a href="#Err-467"><span class="linenos">467</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="Err-468"><a href="#Err-468"><span class="linenos">468</span></a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span><span id="Err-469"><a href="#Err-469"><span class="linenos">469</span></a><span class="k">class</span> <span class="nc">Err</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">E</span><span class="p">]):</span>
-</span><span id="Err-470"><a href="#Err-470"><span class="linenos">470</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains the error value of `Result[..., E]`.&quot;&quot;&quot;</span>
+</span><span id="Err-470"><a href="#Err-470"><span class="linenos">470</span></a>    <span class="sd">&quot;&quot;&quot;Contains the error value of `Result[..., E]`.&quot;&quot;&quot;</span>
 </span><span id="Err-471"><a href="#Err-471"><span class="linenos">471</span></a>
 </span><span id="Err-472"><a href="#Err-472"><span class="linenos">472</span></a>    <span class="n">_inner</span><span class="p">:</span> <span class="n">E</span>
 </span><span id="Err-473"><a href="#Err-473"><span class="linenos">473</span></a>
@@ -2330,7 +2330,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-476"><a href="#Err-476"><span class="linenos">476</span></a>    <span class="c1">################################</span>
 </span><span id="Err-477"><a href="#Err-477"><span class="linenos">477</span></a>
 </span><span id="Err-478"><a href="#Err-478"><span class="linenos">478</span></a>    <span class="k">def</span> <span class="nf">is_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="Err-479"><a href="#Err-479"><span class="linenos">479</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
+</span><span id="Err-479"><a href="#Err-479"><span class="linenos">479</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
 </span><span id="Err-480"><a href="#Err-480"><span class="linenos">480</span></a>
 </span><span id="Err-481"><a href="#Err-481"><span class="linenos">481</span></a><span class="sd">        Example</span>
 </span><span id="Err-482"><a href="#Err-482"><span class="linenos">482</span></a><span class="sd">        -------</span>
@@ -2343,7 +2343,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-489"><a href="#Err-489"><span class="linenos">489</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="Err-490"><a href="#Err-490"><span class="linenos">490</span></a>
 </span><span id="Err-491"><a href="#Err-491"><span class="linenos">491</span></a>    <span class="k">def</span> <span class="nf">is_ok_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="Err-492"><a href="#Err-492"><span class="linenos">492</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True.</span>
+</span><span id="Err-492"><a href="#Err-492"><span class="linenos">492</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True.</span>
 </span><span id="Err-493"><a href="#Err-493"><span class="linenos">493</span></a>
 </span><span id="Err-494"><a href="#Err-494"><span class="linenos">494</span></a><span class="sd">        Example</span>
 </span><span id="Err-495"><a href="#Err-495"><span class="linenos">495</span></a><span class="sd">        -------</span>
@@ -2358,7 +2358,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-504"><a href="#Err-504"><span class="linenos">504</span></a>
 </span><span id="Err-505"><a href="#Err-505"><span class="linenos">505</span></a>    <span class="c1"># These are never truthy in an `Ok` instance.</span>
 </span><span id="Err-506"><a href="#Err-506"><span class="linenos">506</span></a>    <span class="k">def</span> <span class="nf">is_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]:</span>
-</span><span id="Err-507"><a href="#Err-507"><span class="linenos">507</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
+</span><span id="Err-507"><a href="#Err-507"><span class="linenos">507</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
 </span><span id="Err-508"><a href="#Err-508"><span class="linenos">508</span></a>
 </span><span id="Err-509"><a href="#Err-509"><span class="linenos">509</span></a><span class="sd">        Example</span>
 </span><span id="Err-510"><a href="#Err-510"><span class="linenos">510</span></a><span class="sd">        -------</span>
@@ -2371,7 +2371,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-517"><a href="#Err-517"><span class="linenos">517</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="Err-518"><a href="#Err-518"><span class="linenos">518</span></a>
 </span><span id="Err-519"><a href="#Err-519"><span class="linenos">519</span></a>    <span class="k">def</span> <span class="nf">is_err_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Err-520"><a href="#Err-520"><span class="linenos">520</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="Err-520"><a href="#Err-520"><span class="linenos">520</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="Err-521"><a href="#Err-521"><span class="linenos">521</span></a>
 </span><span id="Err-522"><a href="#Err-522"><span class="linenos">522</span></a><span class="sd">        Example</span>
 </span><span id="Err-523"><a href="#Err-523"><span class="linenos">523</span></a><span class="sd">        -------</span>
@@ -2389,7 +2389,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-535"><a href="#Err-535"><span class="linenos">535</span></a>    <span class="c1">###################</span>
 </span><span id="Err-536"><a href="#Err-536"><span class="linenos">536</span></a>
 </span><span id="Err-537"><a href="#Err-537"><span class="linenos">537</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="Err-538"><a href="#Err-538"><span class="linenos">538</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
+</span><span id="Err-538"><a href="#Err-538"><span class="linenos">538</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
 </span><span id="Err-539"><a href="#Err-539"><span class="linenos">539</span></a><span class="sd">        if it was `Err` with `message` passed to it.</span>
 </span><span id="Err-540"><a href="#Err-540"><span class="linenos">540</span></a>
 </span><span id="Err-541"><a href="#Err-541"><span class="linenos">541</span></a><span class="sd">        Example</span>
@@ -2402,10 +2402,10 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-548"><a href="#Err-548"><span class="linenos">548</span></a><span class="sd">        err.expect(&quot;err&quot;) # RuntimeError(&quot;err&quot;)</span>
 </span><span id="Err-549"><a href="#Err-549"><span class="linenos">549</span></a><span class="sd">        ```</span>
 </span><span id="Err-550"><a href="#Err-550"><span class="linenos">550</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Err-551"><a href="#Err-551"><span class="linenos">551</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="Err-551"><a href="#Err-551"><span class="linenos">551</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="Err-552"><a href="#Err-552"><span class="linenos">552</span></a>
 </span><span id="Err-553"><a href="#Err-553"><span class="linenos">553</span></a>    <span class="k">def</span> <span class="nf">expect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">E</span><span class="p">:</span>
-</span><span id="Err-554"><a href="#Err-554"><span class="linenos">554</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the `Err` if it was `Err`, panicking otherwise.</span>
+</span><span id="Err-554"><a href="#Err-554"><span class="linenos">554</span></a>        <span class="sd">&quot;&quot;&quot;Return the `Err` if it was `Err`, panicking otherwise.</span>
 </span><span id="Err-555"><a href="#Err-555"><span class="linenos">555</span></a>
 </span><span id="Err-556"><a href="#Err-556"><span class="linenos">556</span></a>
 </span><span id="Err-557"><a href="#Err-557"><span class="linenos">557</span></a><span class="sd">        Example</span>
@@ -2421,7 +2421,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-567"><a href="#Err-567"><span class="linenos">567</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span>
 </span><span id="Err-568"><a href="#Err-568"><span class="linenos">568</span></a>
 </span><span id="Err-569"><a href="#Err-569"><span class="linenos">569</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="Err-570"><a href="#Err-570"><span class="linenos">570</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
+</span><span id="Err-570"><a href="#Err-570"><span class="linenos">570</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
 </span><span id="Err-571"><a href="#Err-571"><span class="linenos">571</span></a>
 </span><span id="Err-572"><a href="#Err-572"><span class="linenos">572</span></a><span class="sd">        Example</span>
 </span><span id="Err-573"><a href="#Err-573"><span class="linenos">573</span></a><span class="sd">        -------</span>
@@ -2435,10 +2435,10 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-581"><a href="#Err-581"><span class="linenos">581</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Err-582"><a href="#Err-582"><span class="linenos">582</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="Err-583"><a href="#Err-583"><span class="linenos">583</span></a>            <span class="sa">f</span><span class="s2">&quot;Called `unwrap()` on an `Err` variant: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="si">!r}</span><span class="s2">&quot;</span>
-</span><span id="Err-584"><a href="#Err-584"><span class="linenos">584</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="Err-584"><a href="#Err-584"><span class="linenos">584</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span><span id="Err-585"><a href="#Err-585"><span class="linenos">585</span></a>
 </span><span id="Err-586"><a href="#Err-586"><span class="linenos">586</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Err-587"><a href="#Err-587"><span class="linenos">587</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
+</span><span id="Err-587"><a href="#Err-587"><span class="linenos">587</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
 </span><span id="Err-588"><a href="#Err-588"><span class="linenos">588</span></a>
 </span><span id="Err-589"><a href="#Err-589"><span class="linenos">589</span></a><span class="sd">        Example</span>
 </span><span id="Err-590"><a href="#Err-590"><span class="linenos">590</span></a><span class="sd">        -------</span>
@@ -2453,7 +2453,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-599"><a href="#Err-599"><span class="linenos">599</span></a>        <span class="k">return</span> <span class="n">default</span>
 </span><span id="Err-600"><a href="#Err-600"><span class="linenos">600</span></a>
 </span><span id="Err-601"><a href="#Err-601"><span class="linenos">601</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Err-602"><a href="#Err-602"><span class="linenos">602</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
+</span><span id="Err-602"><a href="#Err-602"><span class="linenos">602</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
 </span><span id="Err-603"><a href="#Err-603"><span class="linenos">603</span></a>
 </span><span id="Err-604"><a href="#Err-604"><span class="linenos">604</span></a><span class="sd">        Example</span>
 </span><span id="Err-605"><a href="#Err-605"><span class="linenos">605</span></a><span class="sd">        -------</span>
@@ -2468,7 +2468,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-614"><a href="#Err-614"><span class="linenos">614</span></a>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Err-615"><a href="#Err-615"><span class="linenos">615</span></a>
 </span><span id="Err-616"><a href="#Err-616"><span class="linenos">616</span></a>    <span class="k">def</span> <span class="nf">unwrap_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">E</span><span class="p">:</span>
-</span><span id="Err-617"><a href="#Err-617"><span class="linenos">617</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
+</span><span id="Err-617"><a href="#Err-617"><span class="linenos">617</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
 </span><span id="Err-618"><a href="#Err-618"><span class="linenos">618</span></a>
 </span><span id="Err-619"><a href="#Err-619"><span class="linenos">619</span></a><span class="sd">        Example</span>
 </span><span id="Err-620"><a href="#Err-620"><span class="linenos">620</span></a><span class="sd">        -------</span>
@@ -2488,7 +2488,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-634"><a href="#Err-634"><span class="linenos">634</span></a>    <span class="c1">############################</span>
 </span><span id="Err-635"><a href="#Err-635"><span class="linenos">635</span></a>
 </span><span id="Err-636"><a href="#Err-636"><span class="linenos">636</span></a>    <span class="k">def</span> <span class="nf">inspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Err-637"><a href="#Err-637"><span class="linenos">637</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
+</span><span id="Err-637"><a href="#Err-637"><span class="linenos">637</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
 </span><span id="Err-638"><a href="#Err-638"><span class="linenos">638</span></a>
 </span><span id="Err-639"><a href="#Err-639"><span class="linenos">639</span></a><span class="sd">        Example</span>
 </span><span id="Err-640"><a href="#Err-640"><span class="linenos">640</span></a><span class="sd">        -------</span>
@@ -2507,7 +2507,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-653"><a href="#Err-653"><span class="linenos">653</span></a>        <span class="k">return</span> <span class="kc">None</span>
 </span><span id="Err-654"><a href="#Err-654"><span class="linenos">654</span></a>
 </span><span id="Err-655"><a href="#Err-655"><span class="linenos">655</span></a>    <span class="k">def</span> <span class="nf">inspect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Err-656"><a href="#Err-656"><span class="linenos">656</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
+</span><span id="Err-656"><a href="#Err-656"><span class="linenos">656</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
 </span><span id="Err-657"><a href="#Err-657"><span class="linenos">657</span></a>
 </span><span id="Err-658"><a href="#Err-658"><span class="linenos">658</span></a><span class="sd">        Example</span>
 </span><span id="Err-659"><a href="#Err-659"><span class="linenos">659</span></a><span class="sd">        -------</span>
@@ -2526,7 +2526,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-672"><a href="#Err-672"><span class="linenos">672</span></a>        <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Err-673"><a href="#Err-673"><span class="linenos">673</span></a>
 </span><span id="Err-674"><a href="#Err-674"><span class="linenos">674</span></a>    <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
-</span><span id="Err-675"><a href="#Err-675"><span class="linenos">675</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
+</span><span id="Err-675"><a href="#Err-675"><span class="linenos">675</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
 </span><span id="Err-676"><a href="#Err-676"><span class="linenos">676</span></a>
 </span><span id="Err-677"><a href="#Err-677"><span class="linenos">677</span></a><span class="sd">        Example</span>
 </span><span id="Err-678"><a href="#Err-678"><span class="linenos">678</span></a><span class="sd">        -------</span>
@@ -2541,7 +2541,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-687"><a href="#Err-687"><span class="linenos">687</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">NOTHING</span>
 </span><span id="Err-688"><a href="#Err-688"><span class="linenos">688</span></a>
 </span><span id="Err-689"><a href="#Err-689"><span class="linenos">689</span></a>    <span class="k">def</span> <span class="nf">err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">E</span><span class="p">]:</span>
-</span><span id="Err-690"><a href="#Err-690"><span class="linenos">690</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
+</span><span id="Err-690"><a href="#Err-690"><span class="linenos">690</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
 </span><span id="Err-691"><a href="#Err-691"><span class="linenos">691</span></a>
 </span><span id="Err-692"><a href="#Err-692"><span class="linenos">692</span></a><span class="sd">        Example</span>
 </span><span id="Err-693"><a href="#Err-693"><span class="linenos">693</span></a><span class="sd">        -------</span>
@@ -2556,7 +2556,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-702"><a href="#Err-702"><span class="linenos">702</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Err-703"><a href="#Err-703"><span class="linenos">703</span></a>
 </span><span id="Err-704"><a href="#Err-704"><span class="linenos">704</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Err-705"><a href="#Err-705"><span class="linenos">705</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
+</span><span id="Err-705"><a href="#Err-705"><span class="linenos">705</span></a>        <span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
 </span><span id="Err-706"><a href="#Err-706"><span class="linenos">706</span></a><span class="sd">        leaving `Err` untouched.</span>
 </span><span id="Err-707"><a href="#Err-707"><span class="linenos">707</span></a>
 </span><span id="Err-708"><a href="#Err-708"><span class="linenos">708</span></a><span class="sd">        Example</span>
@@ -2572,7 +2572,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-718"><a href="#Err-718"><span class="linenos">718</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="Err-719"><a href="#Err-719"><span class="linenos">719</span></a>
 </span><span id="Err-720"><a href="#Err-720"><span class="linenos">720</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Err-721"><a href="#Err-721"><span class="linenos">721</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
+</span><span id="Err-721"><a href="#Err-721"><span class="linenos">721</span></a>        <span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
 </span><span id="Err-722"><a href="#Err-722"><span class="linenos">722</span></a>
 </span><span id="Err-723"><a href="#Err-723"><span class="linenos">723</span></a><span class="sd">        Otherwise extracts the `Ok` value and maps it to `f()`</span>
 </span><span id="Err-724"><a href="#Err-724"><span class="linenos">724</span></a>
@@ -2589,7 +2589,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-735"><a href="#Err-735"><span class="linenos">735</span></a>        <span class="k">return</span> <span class="n">default</span>
 </span><span id="Err-736"><a href="#Err-736"><span class="linenos">736</span></a>
 </span><span id="Err-737"><a href="#Err-737"><span class="linenos">737</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Err-738"><a href="#Err-738"><span class="linenos">738</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
+</span><span id="Err-738"><a href="#Err-738"><span class="linenos">738</span></a>        <span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
 </span><span id="Err-739"><a href="#Err-739"><span class="linenos">739</span></a><span class="sd">        or function `f` to a contained Ok value.</span>
 </span><span id="Err-740"><a href="#Err-740"><span class="linenos">740</span></a>
 </span><span id="Err-741"><a href="#Err-741"><span class="linenos">741</span></a><span class="sd">        Example</span>
@@ -2611,7 +2611,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-757"><a href="#Err-757"><span class="linenos">757</span></a>        <span class="k">return</span> <span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">)</span>
 </span><span id="Err-758"><a href="#Err-758"><span class="linenos">758</span></a>
 </span><span id="Err-759"><a href="#Err-759"><span class="linenos">759</span></a>    <span class="k">def</span> <span class="nf">map_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Err</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="Err-760"><a href="#Err-760"><span class="linenos">760</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
+</span><span id="Err-760"><a href="#Err-760"><span class="linenos">760</span></a>        <span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
 </span><span id="Err-761"><a href="#Err-761"><span class="linenos">761</span></a>
 </span><span id="Err-762"><a href="#Err-762"><span class="linenos">762</span></a><span class="sd">        Example</span>
 </span><span id="Err-763"><a href="#Err-763"><span class="linenos">763</span></a><span class="sd">        -------</span>
@@ -2630,7 +2630,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err-776"><a href="#Err-776"><span class="linenos">776</span></a>    <span class="c1">##############################</span>
 </span><span id="Err-777"><a href="#Err-777"><span class="linenos">777</span></a>
 </span><span id="Err-778"><a href="#Err-778"><span class="linenos">778</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
-</span><span id="Err-779"><a href="#Err-779"><span class="linenos">779</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
+</span><span id="Err-779"><a href="#Err-779"><span class="linenos">779</span></a>        <span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
 </span><span id="Err-780"><a href="#Err-780"><span class="linenos">780</span></a>
 </span><span id="Err-781"><a href="#Err-781"><span class="linenos">781</span></a><span class="sd">        If `self` was `Ok`, then the iterator will yield `T`, otherwise yields nothing.</span>
 </span><span id="Err-782"><a href="#Err-782"><span class="linenos">782</span></a>
@@ -2692,7 +2692,7 @@ or function <code>f</code> to a contained Ok value.</p>
     </div>
     <a class="headerlink" href="#Err.is_ok"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.is_ok-478"><a href="#Err.is_ok-478"><span class="linenos">478</span></a>    <span class="k">def</span> <span class="nf">is_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="Err.is_ok-479"><a href="#Err.is_ok-479"><span class="linenos">479</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
+</span><span id="Err.is_ok-479"><a href="#Err.is_ok-479"><span class="linenos">479</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `False` if it an `Err`.</span>
 </span><span id="Err.is_ok-480"><a href="#Err.is_ok-480"><span class="linenos">480</span></a>
 </span><span id="Err.is_ok-481"><a href="#Err.is_ok-481"><span class="linenos">481</span></a><span class="sd">        Example</span>
 </span><span id="Err.is_ok-482"><a href="#Err.is_ok-482"><span class="linenos">482</span></a><span class="sd">        -------</span>
@@ -2732,7 +2732,7 @@ or function <code>f</code> to a contained Ok value.</p>
     </div>
     <a class="headerlink" href="#Err.is_ok_and"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.is_ok_and-491"><a href="#Err.is_ok_and-491"><span class="linenos">491</span></a>    <span class="k">def</span> <span class="nf">is_ok_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
-</span><span id="Err.is_ok_and-492"><a href="#Err.is_ok_and-492"><span class="linenos">492</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True.</span>
+</span><span id="Err.is_ok_and-492"><a href="#Err.is_ok_and-492"><span class="linenos">492</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True.</span>
 </span><span id="Err.is_ok_and-493"><a href="#Err.is_ok_and-493"><span class="linenos">493</span></a>
 </span><span id="Err.is_ok_and-494"><a href="#Err.is_ok_and-494"><span class="linenos">494</span></a><span class="sd">        Example</span>
 </span><span id="Err.is_ok_and-495"><a href="#Err.is_ok_and-495"><span class="linenos">495</span></a><span class="sd">        -------</span>
@@ -2774,7 +2774,7 @@ or function <code>f</code> to a contained Ok value.</p>
     </div>
     <a class="headerlink" href="#Err.is_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.is_err-506"><a href="#Err.is_err-506"><span class="linenos">506</span></a>    <span class="k">def</span> <span class="nf">is_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]:</span>
-</span><span id="Err.is_err-507"><a href="#Err.is_err-507"><span class="linenos">507</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
+</span><span id="Err.is_err-507"><a href="#Err.is_err-507"><span class="linenos">507</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Err`.</span>
 </span><span id="Err.is_err-508"><a href="#Err.is_err-508"><span class="linenos">508</span></a>
 </span><span id="Err.is_err-509"><a href="#Err.is_err-509"><span class="linenos">509</span></a><span class="sd">        Example</span>
 </span><span id="Err.is_err-510"><a href="#Err.is_err-510"><span class="linenos">510</span></a><span class="sd">        -------</span>
@@ -2814,7 +2814,7 @@ or function <code>f</code> to a contained Ok value.</p>
     </div>
     <a class="headerlink" href="#Err.is_err_and"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.is_err_and-519"><a href="#Err.is_err_and-519"><span class="linenos">519</span></a>    <span class="k">def</span> <span class="nf">is_err_and</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Err.is_err_and-520"><a href="#Err.is_err_and-520"><span class="linenos">520</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
+</span><span id="Err.is_err_and-520"><a href="#Err.is_err_and-520"><span class="linenos">520</span></a>        <span class="sd">&quot;&quot;&quot;Returns `True` if the contained value is `Ok` and `f()` returns True..</span>
 </span><span id="Err.is_err_and-521"><a href="#Err.is_err_and-521"><span class="linenos">521</span></a>
 </span><span id="Err.is_err_and-522"><a href="#Err.is_err_and-522"><span class="linenos">522</span></a><span class="sd">        Example</span>
 </span><span id="Err.is_err_and-523"><a href="#Err.is_err_and-523"><span class="linenos">523</span></a><span class="sd">        -------</span>
@@ -2856,7 +2856,7 @@ or function <code>f</code> to a contained Ok value.</p>
     </div>
     <a class="headerlink" href="#Err.expect"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.expect-537"><a href="#Err.expect-537"><span class="linenos">537</span></a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="Err.expect-538"><a href="#Err.expect-538"><span class="linenos">538</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
+</span><span id="Err.expect-538"><a href="#Err.expect-538"><span class="linenos">538</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError`</span>
 </span><span id="Err.expect-539"><a href="#Err.expect-539"><span class="linenos">539</span></a><span class="sd">        if it was `Err` with `message` passed to it.</span>
 </span><span id="Err.expect-540"><a href="#Err.expect-540"><span class="linenos">540</span></a>
 </span><span id="Err.expect-541"><a href="#Err.expect-541"><span class="linenos">541</span></a><span class="sd">        Example</span>
@@ -2869,7 +2869,7 @@ or function <code>f</code> to a contained Ok value.</p>
 </span><span id="Err.expect-548"><a href="#Err.expect-548"><span class="linenos">548</span></a><span class="sd">        err.expect(&quot;err&quot;) # RuntimeError(&quot;err&quot;)</span>
 </span><span id="Err.expect-549"><a href="#Err.expect-549"><span class="linenos">549</span></a><span class="sd">        ```</span>
 </span><span id="Err.expect-550"><a href="#Err.expect-550"><span class="linenos">550</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Err.expect-551"><a href="#Err.expect-551"><span class="linenos">551</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="Err.expect-551"><a href="#Err.expect-551"><span class="linenos">551</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span></pre></div>
 
 
@@ -2902,7 +2902,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.expect_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.expect_err-553"><a href="#Err.expect_err-553"><span class="linenos">553</span></a>    <span class="k">def</span> <span class="nf">expect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">E</span><span class="p">:</span>
-</span><span id="Err.expect_err-554"><a href="#Err.expect_err-554"><span class="linenos">554</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the `Err` if it was `Err`, panicking otherwise.</span>
+</span><span id="Err.expect_err-554"><a href="#Err.expect_err-554"><span class="linenos">554</span></a>        <span class="sd">&quot;&quot;&quot;Return the `Err` if it was `Err`, panicking otherwise.</span>
 </span><span id="Err.expect_err-555"><a href="#Err.expect_err-555"><span class="linenos">555</span></a>
 </span><span id="Err.expect_err-556"><a href="#Err.expect_err-556"><span class="linenos">556</span></a>
 </span><span id="Err.expect_err-557"><a href="#Err.expect_err-557"><span class="linenos">557</span></a><span class="sd">        Example</span>
@@ -2947,7 +2947,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.unwrap"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.unwrap-569"><a href="#Err.unwrap-569"><span class="linenos">569</span></a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="Err.unwrap-570"><a href="#Err.unwrap-570"><span class="linenos">570</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
+</span><span id="Err.unwrap-570"><a href="#Err.unwrap-570"><span class="linenos">570</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.</span>
 </span><span id="Err.unwrap-571"><a href="#Err.unwrap-571"><span class="linenos">571</span></a>
 </span><span id="Err.unwrap-572"><a href="#Err.unwrap-572"><span class="linenos">572</span></a><span class="sd">        Example</span>
 </span><span id="Err.unwrap-573"><a href="#Err.unwrap-573"><span class="linenos">573</span></a><span class="sd">        -------</span>
@@ -2961,7 +2961,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
 </span><span id="Err.unwrap-581"><a href="#Err.unwrap-581"><span class="linenos">581</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Err.unwrap-582"><a href="#Err.unwrap-582"><span class="linenos">582</span></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="Err.unwrap-583"><a href="#Err.unwrap-583"><span class="linenos">583</span></a>            <span class="sa">f</span><span class="s2">&quot;Called `unwrap()` on an `Err` variant: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="si">!r}</span><span class="s2">&quot;</span>
-</span><span id="Err.unwrap-584"><a href="#Err.unwrap-584"><span class="linenos">584</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="Err.unwrap-584"><a href="#Err.unwrap-584"><span class="linenos">584</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
 </span></pre></div>
 
 
@@ -2993,7 +2993,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.unwrap_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.unwrap_or-586"><a href="#Err.unwrap_or-586"><span class="linenos">586</span></a>    <span class="k">def</span> <span class="nf">unwrap_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Err.unwrap_or-587"><a href="#Err.unwrap_or-587"><span class="linenos">587</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
+</span><span id="Err.unwrap_or-587"><a href="#Err.unwrap_or-587"><span class="linenos">587</span></a>        <span class="sd">&quot;&quot;&quot;Return the underlying value if it was `Ok`, returning `default` if it was `Err`.</span>
 </span><span id="Err.unwrap_or-588"><a href="#Err.unwrap_or-588"><span class="linenos">588</span></a>
 </span><span id="Err.unwrap_or-589"><a href="#Err.unwrap_or-589"><span class="linenos">589</span></a><span class="sd">        Example</span>
 </span><span id="Err.unwrap_or-590"><a href="#Err.unwrap_or-590"><span class="linenos">590</span></a><span class="sd">        -------</span>
@@ -3037,7 +3037,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.unwrap_or_else"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.unwrap_or_else-601"><a href="#Err.unwrap_or_else-601"><span class="linenos">601</span></a>    <span class="k">def</span> <span class="nf">unwrap_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="Err.unwrap_or_else-602"><a href="#Err.unwrap_or_else-602"><span class="linenos">602</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
+</span><span id="Err.unwrap_or_else-602"><a href="#Err.unwrap_or_else-602"><span class="linenos">602</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Ok` value or computes it from `f()` if it was `Err`.</span>
 </span><span id="Err.unwrap_or_else-603"><a href="#Err.unwrap_or_else-603"><span class="linenos">603</span></a>
 </span><span id="Err.unwrap_or_else-604"><a href="#Err.unwrap_or_else-604"><span class="linenos">604</span></a><span class="sd">        Example</span>
 </span><span id="Err.unwrap_or_else-605"><a href="#Err.unwrap_or_else-605"><span class="linenos">605</span></a><span class="sd">        -------</span>
@@ -3081,7 +3081,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.unwrap_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.unwrap_err-616"><a href="#Err.unwrap_err-616"><span class="linenos">616</span></a>    <span class="k">def</span> <span class="nf">unwrap_err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">E</span><span class="p">:</span>
-</span><span id="Err.unwrap_err-617"><a href="#Err.unwrap_err-617"><span class="linenos">617</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
+</span><span id="Err.unwrap_err-617"><a href="#Err.unwrap_err-617"><span class="linenos">617</span></a>        <span class="sd">&quot;&quot;&quot;Return the contained `Err` value, Raising if it was `Ok`.</span>
 </span><span id="Err.unwrap_err-618"><a href="#Err.unwrap_err-618"><span class="linenos">618</span></a>
 </span><span id="Err.unwrap_err-619"><a href="#Err.unwrap_err-619"><span class="linenos">619</span></a><span class="sd">        Example</span>
 </span><span id="Err.unwrap_err-620"><a href="#Err.unwrap_err-620"><span class="linenos">620</span></a><span class="sd">        -------</span>
@@ -3127,7 +3127,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.inspect"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.inspect-636"><a href="#Err.inspect-636"><span class="linenos">636</span></a>    <span class="k">def</span> <span class="nf">inspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Err.inspect-637"><a href="#Err.inspect-637"><span class="linenos">637</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
+</span><span id="Err.inspect-637"><a href="#Err.inspect-637"><span class="linenos">637</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Ok` and do nothing if it was `Err`</span>
 </span><span id="Err.inspect-638"><a href="#Err.inspect-638"><span class="linenos">638</span></a>
 </span><span id="Err.inspect-639"><a href="#Err.inspect-639"><span class="linenos">639</span></a><span class="sd">        Example</span>
 </span><span id="Err.inspect-640"><a href="#Err.inspect-640"><span class="linenos">640</span></a><span class="sd">        -------</span>
@@ -3179,7 +3179,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.inspect_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.inspect_err-655"><a href="#Err.inspect_err-655"><span class="linenos">655</span></a>    <span class="k">def</span> <span class="nf">inspect_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Err.inspect_err-656"><a href="#Err.inspect_err-656"><span class="linenos">656</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
+</span><span id="Err.inspect_err-656"><a href="#Err.inspect_err-656"><span class="linenos">656</span></a>        <span class="sd">&quot;&quot;&quot;Call a function to the contained value if it was `Err` and do nothing if it was `Ok`</span>
 </span><span id="Err.inspect_err-657"><a href="#Err.inspect_err-657"><span class="linenos">657</span></a>
 </span><span id="Err.inspect_err-658"><a href="#Err.inspect_err-658"><span class="linenos">658</span></a><span class="sd">        Example</span>
 </span><span id="Err.inspect_err-659"><a href="#Err.inspect_err-659"><span class="linenos">659</span></a><span class="sd">        -------</span>
@@ -3231,7 +3231,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.ok"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.ok-674"><a href="#Err.ok-674"><span class="linenos">674</span></a>    <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
-</span><span id="Err.ok-675"><a href="#Err.ok-675"><span class="linenos">675</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
+</span><span id="Err.ok-675"><a href="#Err.ok-675"><span class="linenos">675</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.</span>
 </span><span id="Err.ok-676"><a href="#Err.ok-676"><span class="linenos">676</span></a>
 </span><span id="Err.ok-677"><a href="#Err.ok-677"><span class="linenos">677</span></a><span class="sd">        Example</span>
 </span><span id="Err.ok-678"><a href="#Err.ok-678"><span class="linenos">678</span></a><span class="sd">        -------</span>
@@ -3275,7 +3275,7 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
     </div>
     <a class="headerlink" href="#Err.err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.err-689"><a href="#Err.err-689"><span class="linenos">689</span></a>    <span class="k">def</span> <span class="nf">err</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">E</span><span class="p">]:</span>
-</span><span id="Err.err-690"><a href="#Err.err-690"><span class="linenos">690</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
+</span><span id="Err.err-690"><a href="#Err.err-690"><span class="linenos">690</span></a>        <span class="sd">&quot;&quot;&quot;Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.</span>
 </span><span id="Err.err-691"><a href="#Err.err-691"><span class="linenos">691</span></a>
 </span><span id="Err.err-692"><a href="#Err.err-692"><span class="linenos">692</span></a><span class="sd">        Example</span>
 </span><span id="Err.err-693"><a href="#Err.err-693"><span class="linenos">693</span></a><span class="sd">        -------</span>
@@ -3312,14 +3312,14 @@ if it was <code><a href="#Err">Err</a></code> with <code>message</code> passed t
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">E</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">map</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">E</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="Err.map-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Err.map"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.map-704"><a href="#Err.map-704"><span class="linenos">704</span></a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Err.map-705"><a href="#Err.map-705"><span class="linenos">705</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
+</span><span id="Err.map-705"><a href="#Err.map-705"><span class="linenos">705</span></a>        <span class="sd">&quot;&quot;&quot;Map `Result&lt;T, E&gt;` to `Result&lt;U, E&gt;` by applying a function to the `Ok` value,</span>
 </span><span id="Err.map-706"><a href="#Err.map-706"><span class="linenos">706</span></a><span class="sd">        leaving `Err` untouched.</span>
 </span><span id="Err.map-707"><a href="#Err.map-707"><span class="linenos">707</span></a>
 </span><span id="Err.map-708"><a href="#Err.map-708"><span class="linenos">708</span></a><span class="sd">        Example</span>
@@ -3365,7 +3365,7 @@ leaving <code><a href="#Err">Err</a></code> untouched.</p>
     </div>
     <a class="headerlink" href="#Err.map_or"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.map_or-720"><a href="#Err.map_or-720"><span class="linenos">720</span></a>    <span class="k">def</span> <span class="nf">map_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">U</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Err.map_or-721"><a href="#Err.map_or-721"><span class="linenos">721</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
+</span><span id="Err.map_or-721"><a href="#Err.map_or-721"><span class="linenos">721</span></a>        <span class="sd">&quot;&quot;&quot;Returns the provided `default` if the contained value is `Err`,</span>
 </span><span id="Err.map_or-722"><a href="#Err.map_or-722"><span class="linenos">722</span></a>
 </span><span id="Err.map_or-723"><a href="#Err.map_or-723"><span class="linenos">723</span></a><span class="sd">        Otherwise extracts the `Ok` value and maps it to `f()`</span>
 </span><span id="Err.map_or-724"><a href="#Err.map_or-724"><span class="linenos">724</span></a>
@@ -3413,7 +3413,7 @@ leaving <code><a href="#Err">Err</a></code> untouched.</p>
     </div>
     <a class="headerlink" href="#Err.map_or_else"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.map_or_else-737"><a href="#Err.map_or_else-737"><span class="linenos">737</span></a>    <span class="k">def</span> <span class="nf">map_or_else</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">U</span><span class="p">:</span>
-</span><span id="Err.map_or_else-738"><a href="#Err.map_or_else-738"><span class="linenos">738</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
+</span><span id="Err.map_or_else-738"><a href="#Err.map_or_else-738"><span class="linenos">738</span></a>        <span class="sd">&quot;&quot;&quot;Maps a Result&lt;T, E&gt; to U by applying fallback function `default` to a contained Err value,</span>
 </span><span id="Err.map_or_else-739"><a href="#Err.map_or_else-739"><span class="linenos">739</span></a><span class="sd">        or function `f` to a contained Ok value.</span>
 </span><span id="Err.map_or_else-740"><a href="#Err.map_or_else-740"><span class="linenos">740</span></a>
 </span><span id="Err.map_or_else-741"><a href="#Err.map_or_else-741"><span class="linenos">741</span></a><span class="sd">        Example</span>
@@ -3471,7 +3471,7 @@ or function <code>f</code> to a contained Ok value.</p>
     </div>
     <a class="headerlink" href="#Err.map_err"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.map_err-759"><a href="#Err.map_err-759"><span class="linenos">759</span></a>    <span class="k">def</span> <span class="nf">map_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Err</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
-</span><span id="Err.map_err-760"><a href="#Err.map_err-760"><span class="linenos">760</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
+</span><span id="Err.map_err-760"><a href="#Err.map_err-760"><span class="linenos">760</span></a>        <span class="sd">&quot;&quot;&quot;Maps a `Result[T, E]` to `Result[T, U]` by applying function `f`, leaving the `Ok` value untouched.</span>
 </span><span id="Err.map_err-761"><a href="#Err.map_err-761"><span class="linenos">761</span></a>
 </span><span id="Err.map_err-762"><a href="#Err.map_err-762"><span class="linenos">762</span></a><span class="sd">        Example</span>
 </span><span id="Err.map_err-763"><a href="#Err.map_err-763"><span class="linenos">763</span></a><span class="sd">        -------</span>
@@ -3508,14 +3508,14 @@ or function <code>f</code> to a contained Ok value.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="../sain.html#Iterator">sain.Iterator</a></span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Never</span><span class="p">]</span>:</span></span>
+        <span class="name">iter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="../sain.html#Iterator">sain.Iterator</a></span><span class="p">[</span><span class="n">typing_extensions</span><span class="o">.</span><span class="n">Never</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="Err.iter-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Err.iter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Err.iter-778"><a href="#Err.iter-778"><span class="linenos">778</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Never</span><span class="p">]:</span>
-</span><span id="Err.iter-779"><a href="#Err.iter-779"><span class="linenos">779</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
+</span><span id="Err.iter-779"><a href="#Err.iter-779"><span class="linenos">779</span></a>        <span class="sd">&quot;&quot;&quot;An iterator over the possible contained value.</span>
 </span><span id="Err.iter-780"><a href="#Err.iter-780"><span class="linenos">780</span></a>
 </span><span id="Err.iter-781"><a href="#Err.iter-781"><span class="linenos">781</span></a><span class="sd">        If `self` was `Ok`, then the iterator will yield `T`, otherwise yields nothing.</span>
 </span><span id="Err.iter-782"><a href="#Err.iter-782"><span class="linenos">782</span></a>

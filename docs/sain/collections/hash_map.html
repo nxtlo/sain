@@ -34,10 +34,7 @@
                     <a class="class" href="#HashMap">HashMap</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#HashMap.__init__">HashMap</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#HashMap.new_mut">new_mut</a>
+                                <a class="function" href="#HashMap.from_mut">from_mut</a>
                         </li>
                         <li>
                                 <a class="function" href="#HashMap.as_mut">as_mut</a>
@@ -48,9 +45,6 @@
             <li>
                     <a class="class" href="#RefMut">RefMut</a>
                             <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#RefMut.__init__">RefMut</a>
-                        </li>
                         <li>
                                 <a class="function" href="#RefMut.insert">insert</a>
                         </li>
@@ -154,7 +148,7 @@
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>    <span class="k">def</span> <span class="nf">from_keys</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">iterable</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new `HashMap` from a sequence of key-value pairs.</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="sd">&quot;&quot;&quot;Create a new `HashMap` from a sequence of key-value pairs.</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">        Example</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        -------</span>
@@ -174,7 +168,7 @@
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>    <span class="c1"># default impls</span>
 </span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
 </span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>    <span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether this `self` contains any items or not.</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>        <span class="sd">&quot;&quot;&quot;Whether this `self` contains any items or not.</span>
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        Example</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">        -------</span>
@@ -190,7 +184,7 @@
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value associated with `key`, returns `None` if not found.</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="sd">&quot;&quot;&quot;Get the value associated with `key`, returns `None` if not found.</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">        Unlike `dict.get` which returns builtin `None`, This returns `Option[T]`.</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
@@ -210,7 +204,7 @@
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;An iterator visiting all key-value pairs in arbitrary order.</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>        <span class="sd">&quot;&quot;&quot;An iterator visiting all key-value pairs in arbitrary order.</span>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">        This returns `sain.Iterator` and not a normal iterator.</span>
 </span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
@@ -228,7 +222,7 @@
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>        <span class="k">return</span> <span class="n">_iter</span><span class="o">.</span><span class="n">Iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get how many elements are in this map.</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>        <span class="sd">&quot;&quot;&quot;Get how many elements are in this map.</span>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        Example</span>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">        -------</span>
@@ -242,7 +236,7 @@
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="c1"># conversions</span>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>    <span class="k">def</span> <span class="nf">leak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Leaks and returns an owned mutable mapping of the underlying source.</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>        <span class="sd">&quot;&quot;&quot;Leaks and returns a mutable reference to the underlying map.</span>
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">        Example</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">        -------</span>
@@ -257,7 +251,7 @@
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="c1"># built-ins</span>
 </span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy the contents of this hash map into a new one.</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>        <span class="sd">&quot;&quot;&quot;Copy the contents of this hash map into a new one.</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
 </span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">        Example</span>
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">        -------</span>
@@ -293,7 +287,7 @@
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="k">class</span> <span class="nc">HashMap</span><span class="p">(</span><span class="n">_RawMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]):</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An immutable key-value dictionary.</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>    <span class="sd">&quot;&quot;&quot;An immutable key-value dictionary.</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">    But default, it is immutable it cannot change its values after initializing it. however,</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    you can return a mutable reference to this hashmap via `HashMap.as_mut` method, it doesn&#39;t return copy.</span>
@@ -332,20 +326,20 @@
 </span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
 </span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="k">def</span> <span class="nf">new_mut</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new mutable `HashMap`, with the given source if available.</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="k">def</span> <span class="nf">from_mut</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>        <span class="sd">&quot;&quot;&quot;Create a new mutable `HashMap`, with the given source if available.</span>
 </span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
 </span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">        Example</span>
 </span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">        -------</span>
 </span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="sd">        ```py</span>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="sd">        books = HashMap.new_mut()</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="sd">        books = HashMap.from_mut()</span>
 </span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="sd">        books[0] = &quot;Twilight&quot;</span>
 </span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="sd">        ```</span>
 </span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>        <span class="k">return</span> <span class="n">RefMut</span><span class="p">(</span><span class="n">source</span> <span class="ow">or</span> <span class="p">{})</span>
 </span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>
 </span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a mutable reference to this hash map.</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>        <span class="sd">&quot;&quot;&quot;Get a mutable reference to this hash map.</span>
 </span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>
 </span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">        Example</span>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">        -------</span>
@@ -365,7 +359,7 @@
 </span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>
 </span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a><span class="k">class</span> <span class="nc">RefMut</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">],</span> <span class="n">_RawMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">],</span> <span class="n">collections</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]):</span>
-</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference to a mutable dictionary / hashmap.</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>    <span class="sd">&quot;&quot;&quot;A reference to a mutable dictionary / hashmap.</span>
 </span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>
 </span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a><span class="sd">    This is built from the `HashMap.as_mut()` method.</span>
 </span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -379,7 +373,7 @@
 </span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">source</span>
 </span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a>
 </span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert a key/value pair into the map.</span>
+</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a>        <span class="sd">&quot;&quot;&quot;Insert a key/value pair into the map.</span>
 </span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a>
 </span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a><span class="sd">        if the map doesn&#39;t already `key` present, `None` is returned.</span>
 </span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a>
@@ -389,7 +383,7 @@
 </span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a><span class="sd">        Example</span>
 </span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a><span class="sd">        -------</span>
 </span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a><span class="sd">        ```py</span>
-</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a><span class="sd">        users = HashMap.new_mut({0: &quot;admin&quot;})</span>
+</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a><span class="sd">        users = HashMap.from_mut({0: &quot;admin&quot;})</span>
 </span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a><span class="sd">        assert users.insert(1, &quot;admin&quot;).is_none()</span>
 </span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a><span class="sd">        old = users.insert(0, &quot;normal&quot;).unwrap()</span>
 </span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a><span class="sd">        assert old == &quot;admin&quot;</span>
@@ -404,12 +398,12 @@
 </span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the value of the key if it was previously in the map.</span>
+</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>        <span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the value of the key if it was previously in the map.</span>
 </span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>
 </span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a><span class="sd">        Example</span>
 </span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a><span class="sd">        -------</span>
 </span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a><span class="sd">        ```py</span>
-</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a><span class="sd">        map = HashMap.new_mut()</span>
+</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a><span class="sd">        map = HashMap.from_mut()</span>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a><span class="sd">        map.insert(0, &quot;a&quot;)</span>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a><span class="sd">        map.remove(0).unwrap() == &quot;a&quot;</span>
 </span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="sd">        map.remove(0).is_none()</span>
@@ -423,12 +417,12 @@
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 </span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>
 </span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>    <span class="k">def</span> <span class="nf">remove_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
-</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the key and value if it was previously in the map.</span>
+</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>        <span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the key and value if it was previously in the map.</span>
 </span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>
 </span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="sd">        Example</span>
 </span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a><span class="sd">        -------</span>
 </span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a><span class="sd">        ```py</span>
-</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a><span class="sd">        map = HashMap.new_mut()</span>
+</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a><span class="sd">        map = HashMap.from_mut()</span>
 </span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a><span class="sd">        map.insert(0, &quot;a&quot;)</span>
 </span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a><span class="sd">        map.remove(0).unwrap() == &quot;a&quot;</span>
 </span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a><span class="sd">        map.remove(0).is_none()</span>
@@ -442,12 +436,12 @@
 </span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
 </span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>
 </span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>    <span class="k">def</span> <span class="nf">retain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove items from this map based on `f(key, value)` returning `False`.</span>
+</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>        <span class="sd">&quot;&quot;&quot;Remove items from this map based on `f(key, value)` returning `False`.</span>
 </span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>
 </span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a><span class="sd">        Example</span>
 </span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a><span class="sd">        -------</span>
 </span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a><span class="sd">        ```py</span>
-</span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a><span class="sd">        users = HashMap.new_mut({</span>
+</span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a><span class="sd">        users = HashMap.from_mut({</span>
 </span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a><span class="sd">            &quot;user1&quot;: &quot;admin&quot;,</span>
 </span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a><span class="sd">            &quot;user2&quot;: &quot;admin&quot;,</span>
 </span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a><span class="sd">            &quot;user3&quot;: &quot;regular&quot;,</span>
@@ -500,7 +494,7 @@
     </div>
     <a class="headerlink" href="#HashMap"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="HashMap-203"><a href="#HashMap-203"><span class="linenos">203</span></a><span class="k">class</span> <span class="nc">HashMap</span><span class="p">(</span><span class="n">_RawMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]):</span>
-</span><span id="HashMap-204"><a href="#HashMap-204"><span class="linenos">204</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An immutable key-value dictionary.</span>
+</span><span id="HashMap-204"><a href="#HashMap-204"><span class="linenos">204</span></a>    <span class="sd">&quot;&quot;&quot;An immutable key-value dictionary.</span>
 </span><span id="HashMap-205"><a href="#HashMap-205"><span class="linenos">205</span></a>
 </span><span id="HashMap-206"><a href="#HashMap-206"><span class="linenos">206</span></a><span class="sd">    But default, it is immutable it cannot change its values after initializing it. however,</span>
 </span><span id="HashMap-207"><a href="#HashMap-207"><span class="linenos">207</span></a><span class="sd">    you can return a mutable reference to this hashmap via `HashMap.as_mut` method, it doesn&#39;t return copy.</span>
@@ -539,20 +533,20 @@
 </span><span id="HashMap-240"><a href="#HashMap-240"><span class="linenos">240</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 </span><span id="HashMap-241"><a href="#HashMap-241"><span class="linenos">241</span></a>
 </span><span id="HashMap-242"><a href="#HashMap-242"><span class="linenos">242</span></a>    <span class="nd">@classmethod</span>
-</span><span id="HashMap-243"><a href="#HashMap-243"><span class="linenos">243</span></a>    <span class="k">def</span> <span class="nf">new_mut</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="HashMap-244"><a href="#HashMap-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new mutable `HashMap`, with the given source if available.</span>
+</span><span id="HashMap-243"><a href="#HashMap-243"><span class="linenos">243</span></a>    <span class="k">def</span> <span class="nf">from_mut</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
+</span><span id="HashMap-244"><a href="#HashMap-244"><span class="linenos">244</span></a>        <span class="sd">&quot;&quot;&quot;Create a new mutable `HashMap`, with the given source if available.</span>
 </span><span id="HashMap-245"><a href="#HashMap-245"><span class="linenos">245</span></a>
 </span><span id="HashMap-246"><a href="#HashMap-246"><span class="linenos">246</span></a><span class="sd">        Example</span>
 </span><span id="HashMap-247"><a href="#HashMap-247"><span class="linenos">247</span></a><span class="sd">        -------</span>
 </span><span id="HashMap-248"><a href="#HashMap-248"><span class="linenos">248</span></a><span class="sd">        ```py</span>
-</span><span id="HashMap-249"><a href="#HashMap-249"><span class="linenos">249</span></a><span class="sd">        books = HashMap.new_mut()</span>
+</span><span id="HashMap-249"><a href="#HashMap-249"><span class="linenos">249</span></a><span class="sd">        books = HashMap.from_mut()</span>
 </span><span id="HashMap-250"><a href="#HashMap-250"><span class="linenos">250</span></a><span class="sd">        books[0] = &quot;Twilight&quot;</span>
 </span><span id="HashMap-251"><a href="#HashMap-251"><span class="linenos">251</span></a><span class="sd">        ```</span>
 </span><span id="HashMap-252"><a href="#HashMap-252"><span class="linenos">252</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="HashMap-253"><a href="#HashMap-253"><span class="linenos">253</span></a>        <span class="k">return</span> <span class="n">RefMut</span><span class="p">(</span><span class="n">source</span> <span class="ow">or</span> <span class="p">{})</span>
 </span><span id="HashMap-254"><a href="#HashMap-254"><span class="linenos">254</span></a>
 </span><span id="HashMap-255"><a href="#HashMap-255"><span class="linenos">255</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="HashMap-256"><a href="#HashMap-256"><span class="linenos">256</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a mutable reference to this hash map.</span>
+</span><span id="HashMap-256"><a href="#HashMap-256"><span class="linenos">256</span></a>        <span class="sd">&quot;&quot;&quot;Get a mutable reference to this hash map.</span>
 </span><span id="HashMap-257"><a href="#HashMap-257"><span class="linenos">257</span></a>
 </span><span id="HashMap-258"><a href="#HashMap-258"><span class="linenos">258</span></a><span class="sd">        Example</span>
 </span><span id="HashMap-259"><a href="#HashMap-259"><span class="linenos">259</span></a><span class="sd">        -------</span>
@@ -608,48 +602,30 @@ A dictionary to point to. this will be used as the underlying source.</li>
 </div>
 
 
-                            <div id="HashMap.__init__" class="classattr">
-                                        <input id="HashMap.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="name">HashMap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="o">~</span><span class="n">K</span><span class="p">,</span> <span class="o">~</span><span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>, </span><span class="param"><span class="o">/</span></span>)</span>
-
-                <label class="view-source-button" for="HashMap.__init__-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#HashMap.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="HashMap.__init__-239"><a href="#HashMap.__init__-239"><span class="linenos">239</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="HashMap.__init__-240"><a href="#HashMap.__init__-240"><span class="linenos">240</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
-</span></pre></div>
-
-
-    
-
-                            </div>
-                            <div id="HashMap.new_mut" class="classattr">
-                                        <input id="HashMap.new_mut-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="HashMap.from_mut" class="classattr">
+                                        <input id="HashMap.from_mut-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">new_mut</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="o">~</span><span class="n">K</span><span class="p">,</span> <span class="o">~</span><span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">/</span></span><span class="return-annotation">) -> <span class="n"><a href="#RefMut">RefMut</a></span><span class="p">[</span><span class="o">~</span><span class="n">K</span><span class="p">,</span> <span class="o">~</span><span class="n">V</span><span class="p">]</span>:</span></span>
+        <span class="name">from_mut</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="o">~</span><span class="n">K</span><span class="p">,</span> <span class="o">~</span><span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">/</span></span><span class="return-annotation">) -> <span class="n"><a href="#RefMut">RefMut</a></span><span class="p">[</span><span class="o">~</span><span class="n">K</span><span class="p">,</span> <span class="o">~</span><span class="n">V</span><span class="p">]</span>:</span></span>
 
-                <label class="view-source-button" for="HashMap.new_mut-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="HashMap.from_mut-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#HashMap.new_mut"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="HashMap.new_mut-242"><a href="#HashMap.new_mut-242"><span class="linenos">242</span></a>    <span class="nd">@classmethod</span>
-</span><span id="HashMap.new_mut-243"><a href="#HashMap.new_mut-243"><span class="linenos">243</span></a>    <span class="k">def</span> <span class="nf">new_mut</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="HashMap.new_mut-244"><a href="#HashMap.new_mut-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new mutable `HashMap`, with the given source if available.</span>
-</span><span id="HashMap.new_mut-245"><a href="#HashMap.new_mut-245"><span class="linenos">245</span></a>
-</span><span id="HashMap.new_mut-246"><a href="#HashMap.new_mut-246"><span class="linenos">246</span></a><span class="sd">        Example</span>
-</span><span id="HashMap.new_mut-247"><a href="#HashMap.new_mut-247"><span class="linenos">247</span></a><span class="sd">        -------</span>
-</span><span id="HashMap.new_mut-248"><a href="#HashMap.new_mut-248"><span class="linenos">248</span></a><span class="sd">        ```py</span>
-</span><span id="HashMap.new_mut-249"><a href="#HashMap.new_mut-249"><span class="linenos">249</span></a><span class="sd">        books = HashMap.new_mut()</span>
-</span><span id="HashMap.new_mut-250"><a href="#HashMap.new_mut-250"><span class="linenos">250</span></a><span class="sd">        books[0] = &quot;Twilight&quot;</span>
-</span><span id="HashMap.new_mut-251"><a href="#HashMap.new_mut-251"><span class="linenos">251</span></a><span class="sd">        ```</span>
-</span><span id="HashMap.new_mut-252"><a href="#HashMap.new_mut-252"><span class="linenos">252</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="HashMap.new_mut-253"><a href="#HashMap.new_mut-253"><span class="linenos">253</span></a>        <span class="k">return</span> <span class="n">RefMut</span><span class="p">(</span><span class="n">source</span> <span class="ow">or</span> <span class="p">{})</span>
+    <a class="headerlink" href="#HashMap.from_mut"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="HashMap.from_mut-242"><a href="#HashMap.from_mut-242"><span class="linenos">242</span></a>    <span class="nd">@classmethod</span>
+</span><span id="HashMap.from_mut-243"><a href="#HashMap.from_mut-243"><span class="linenos">243</span></a>    <span class="k">def</span> <span class="nf">from_mut</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
+</span><span id="HashMap.from_mut-244"><a href="#HashMap.from_mut-244"><span class="linenos">244</span></a>        <span class="sd">&quot;&quot;&quot;Create a new mutable `HashMap`, with the given source if available.</span>
+</span><span id="HashMap.from_mut-245"><a href="#HashMap.from_mut-245"><span class="linenos">245</span></a>
+</span><span id="HashMap.from_mut-246"><a href="#HashMap.from_mut-246"><span class="linenos">246</span></a><span class="sd">        Example</span>
+</span><span id="HashMap.from_mut-247"><a href="#HashMap.from_mut-247"><span class="linenos">247</span></a><span class="sd">        -------</span>
+</span><span id="HashMap.from_mut-248"><a href="#HashMap.from_mut-248"><span class="linenos">248</span></a><span class="sd">        ```py</span>
+</span><span id="HashMap.from_mut-249"><a href="#HashMap.from_mut-249"><span class="linenos">249</span></a><span class="sd">        books = HashMap.from_mut()</span>
+</span><span id="HashMap.from_mut-250"><a href="#HashMap.from_mut-250"><span class="linenos">250</span></a><span class="sd">        books[0] = &quot;Twilight&quot;</span>
+</span><span id="HashMap.from_mut-251"><a href="#HashMap.from_mut-251"><span class="linenos">251</span></a><span class="sd">        ```</span>
+</span><span id="HashMap.from_mut-252"><a href="#HashMap.from_mut-252"><span class="linenos">252</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="HashMap.from_mut-253"><a href="#HashMap.from_mut-253"><span class="linenos">253</span></a>        <span class="k">return</span> <span class="n">RefMut</span><span class="p">(</span><span class="n">source</span> <span class="ow">or</span> <span class="p">{})</span>
 </span></pre></div>
 
 
@@ -658,7 +634,7 @@ A dictionary to point to. this will be used as the underlying source.</li>
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="n">books</span> <span class="o">=</span> <span class="n"><a href="#HashMap.new_mut">HashMap.new_mut</a></span><span class="p">()</span>
+<pre><span></span><code><span class="n">books</span> <span class="o">=</span> <span class="n"><a href="#HashMap.from_mut">HashMap.from_mut</a></span><span class="p">()</span>
 <span class="n">books</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Twilight&quot;</span>
 </code></pre>
 </div>
@@ -678,7 +654,7 @@ A dictionary to point to. this will be used as the underlying source.</li>
     </div>
     <a class="headerlink" href="#HashMap.as_mut"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="HashMap.as_mut-255"><a href="#HashMap.as_mut-255"><span class="linenos">255</span></a>    <span class="k">def</span> <span class="nf">as_mut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefMut</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="HashMap.as_mut-256"><a href="#HashMap.as_mut-256"><span class="linenos">256</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a mutable reference to this hash map.</span>
+</span><span id="HashMap.as_mut-256"><a href="#HashMap.as_mut-256"><span class="linenos">256</span></a>        <span class="sd">&quot;&quot;&quot;Get a mutable reference to this hash map.</span>
 </span><span id="HashMap.as_mut-257"><a href="#HashMap.as_mut-257"><span class="linenos">257</span></a>
 </span><span id="HashMap.as_mut-258"><a href="#HashMap.as_mut-258"><span class="linenos">258</span></a><span class="sd">        Example</span>
 </span><span id="HashMap.as_mut-259"><a href="#HashMap.as_mut-259"><span class="linenos">259</span></a><span class="sd">        -------</span>
@@ -720,7 +696,8 @@ A dictionary to point to. this will be used as the underlying source.</li>
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="#_RawMap">_RawMap</a></dt>
-                                <dd id="HashMap.from_keys" class="function"><a href="#_RawMap.from_keys">from_keys</a></dd>
+                                <dd id="HashMap.__init__" class="function"><a href="#_RawMap.__init__">_RawMap</a></dd>
+                <dd id="HashMap.from_keys" class="function"><a href="#_RawMap.from_keys">from_keys</a></dd>
                 <dd id="HashMap.is_empty" class="function"><a href="#_RawMap.is_empty">is_empty</a></dd>
                 <dd id="HashMap.get" class="function"><a href="#_RawMap.get">get</a></dd>
                 <dd id="HashMap.iter" class="function"><a href="#_RawMap.iter">iter</a></dd>
@@ -752,7 +729,7 @@ A dictionary to point to. this will be used as the underlying source.</li>
     <a class="headerlink" href="#RefMut"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="RefMut-274"><a href="#RefMut-274"><span class="linenos">274</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="RefMut-275"><a href="#RefMut-275"><span class="linenos">275</span></a><span class="k">class</span> <span class="nc">RefMut</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">],</span> <span class="n">_RawMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">],</span> <span class="n">collections</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]):</span>
-</span><span id="RefMut-276"><a href="#RefMut-276"><span class="linenos">276</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference to a mutable dictionary / hashmap.</span>
+</span><span id="RefMut-276"><a href="#RefMut-276"><span class="linenos">276</span></a>    <span class="sd">&quot;&quot;&quot;A reference to a mutable dictionary / hashmap.</span>
 </span><span id="RefMut-277"><a href="#RefMut-277"><span class="linenos">277</span></a>
 </span><span id="RefMut-278"><a href="#RefMut-278"><span class="linenos">278</span></a><span class="sd">    This is built from the `HashMap.as_mut()` method.</span>
 </span><span id="RefMut-279"><a href="#RefMut-279"><span class="linenos">279</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -766,7 +743,7 @@ A dictionary to point to. this will be used as the underlying source.</li>
 </span><span id="RefMut-287"><a href="#RefMut-287"><span class="linenos">287</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">source</span>
 </span><span id="RefMut-288"><a href="#RefMut-288"><span class="linenos">288</span></a>
 </span><span id="RefMut-289"><a href="#RefMut-289"><span class="linenos">289</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-</span><span id="RefMut-290"><a href="#RefMut-290"><span class="linenos">290</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert a key/value pair into the map.</span>
+</span><span id="RefMut-290"><a href="#RefMut-290"><span class="linenos">290</span></a>        <span class="sd">&quot;&quot;&quot;Insert a key/value pair into the map.</span>
 </span><span id="RefMut-291"><a href="#RefMut-291"><span class="linenos">291</span></a>
 </span><span id="RefMut-292"><a href="#RefMut-292"><span class="linenos">292</span></a><span class="sd">        if the map doesn&#39;t already `key` present, `None` is returned.</span>
 </span><span id="RefMut-293"><a href="#RefMut-293"><span class="linenos">293</span></a>
@@ -776,7 +753,7 @@ A dictionary to point to. this will be used as the underlying source.</li>
 </span><span id="RefMut-297"><a href="#RefMut-297"><span class="linenos">297</span></a><span class="sd">        Example</span>
 </span><span id="RefMut-298"><a href="#RefMut-298"><span class="linenos">298</span></a><span class="sd">        -------</span>
 </span><span id="RefMut-299"><a href="#RefMut-299"><span class="linenos">299</span></a><span class="sd">        ```py</span>
-</span><span id="RefMut-300"><a href="#RefMut-300"><span class="linenos">300</span></a><span class="sd">        users = HashMap.new_mut({0: &quot;admin&quot;})</span>
+</span><span id="RefMut-300"><a href="#RefMut-300"><span class="linenos">300</span></a><span class="sd">        users = HashMap.from_mut({0: &quot;admin&quot;})</span>
 </span><span id="RefMut-301"><a href="#RefMut-301"><span class="linenos">301</span></a><span class="sd">        assert users.insert(1, &quot;admin&quot;).is_none()</span>
 </span><span id="RefMut-302"><a href="#RefMut-302"><span class="linenos">302</span></a><span class="sd">        old = users.insert(0, &quot;normal&quot;).unwrap()</span>
 </span><span id="RefMut-303"><a href="#RefMut-303"><span class="linenos">303</span></a><span class="sd">        assert old == &quot;admin&quot;</span>
@@ -791,12 +768,12 @@ A dictionary to point to. this will be used as the underlying source.</li>
 </span><span id="RefMut-312"><a href="#RefMut-312"><span class="linenos">312</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
 </span><span id="RefMut-313"><a href="#RefMut-313"><span class="linenos">313</span></a>
 </span><span id="RefMut-314"><a href="#RefMut-314"><span class="linenos">314</span></a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-</span><span id="RefMut-315"><a href="#RefMut-315"><span class="linenos">315</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the value of the key if it was previously in the map.</span>
+</span><span id="RefMut-315"><a href="#RefMut-315"><span class="linenos">315</span></a>        <span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the value of the key if it was previously in the map.</span>
 </span><span id="RefMut-316"><a href="#RefMut-316"><span class="linenos">316</span></a>
 </span><span id="RefMut-317"><a href="#RefMut-317"><span class="linenos">317</span></a><span class="sd">        Example</span>
 </span><span id="RefMut-318"><a href="#RefMut-318"><span class="linenos">318</span></a><span class="sd">        -------</span>
 </span><span id="RefMut-319"><a href="#RefMut-319"><span class="linenos">319</span></a><span class="sd">        ```py</span>
-</span><span id="RefMut-320"><a href="#RefMut-320"><span class="linenos">320</span></a><span class="sd">        map = HashMap.new_mut()</span>
+</span><span id="RefMut-320"><a href="#RefMut-320"><span class="linenos">320</span></a><span class="sd">        map = HashMap.from_mut()</span>
 </span><span id="RefMut-321"><a href="#RefMut-321"><span class="linenos">321</span></a><span class="sd">        map.insert(0, &quot;a&quot;)</span>
 </span><span id="RefMut-322"><a href="#RefMut-322"><span class="linenos">322</span></a><span class="sd">        map.remove(0).unwrap() == &quot;a&quot;</span>
 </span><span id="RefMut-323"><a href="#RefMut-323"><span class="linenos">323</span></a><span class="sd">        map.remove(0).is_none()</span>
@@ -810,12 +787,12 @@ A dictionary to point to. this will be used as the underlying source.</li>
 </span><span id="RefMut-331"><a href="#RefMut-331"><span class="linenos">331</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 </span><span id="RefMut-332"><a href="#RefMut-332"><span class="linenos">332</span></a>
 </span><span id="RefMut-333"><a href="#RefMut-333"><span class="linenos">333</span></a>    <span class="k">def</span> <span class="nf">remove_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
-</span><span id="RefMut-334"><a href="#RefMut-334"><span class="linenos">334</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the key and value if it was previously in the map.</span>
+</span><span id="RefMut-334"><a href="#RefMut-334"><span class="linenos">334</span></a>        <span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the key and value if it was previously in the map.</span>
 </span><span id="RefMut-335"><a href="#RefMut-335"><span class="linenos">335</span></a>
 </span><span id="RefMut-336"><a href="#RefMut-336"><span class="linenos">336</span></a><span class="sd">        Example</span>
 </span><span id="RefMut-337"><a href="#RefMut-337"><span class="linenos">337</span></a><span class="sd">        -------</span>
 </span><span id="RefMut-338"><a href="#RefMut-338"><span class="linenos">338</span></a><span class="sd">        ```py</span>
-</span><span id="RefMut-339"><a href="#RefMut-339"><span class="linenos">339</span></a><span class="sd">        map = HashMap.new_mut()</span>
+</span><span id="RefMut-339"><a href="#RefMut-339"><span class="linenos">339</span></a><span class="sd">        map = HashMap.from_mut()</span>
 </span><span id="RefMut-340"><a href="#RefMut-340"><span class="linenos">340</span></a><span class="sd">        map.insert(0, &quot;a&quot;)</span>
 </span><span id="RefMut-341"><a href="#RefMut-341"><span class="linenos">341</span></a><span class="sd">        map.remove(0).unwrap() == &quot;a&quot;</span>
 </span><span id="RefMut-342"><a href="#RefMut-342"><span class="linenos">342</span></a><span class="sd">        map.remove(0).is_none()</span>
@@ -829,12 +806,12 @@ A dictionary to point to. this will be used as the underlying source.</li>
 </span><span id="RefMut-350"><a href="#RefMut-350"><span class="linenos">350</span></a>        <span class="k">return</span> <span class="n">_option</span><span class="o">.</span><span class="n">Some</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
 </span><span id="RefMut-351"><a href="#RefMut-351"><span class="linenos">351</span></a>
 </span><span id="RefMut-352"><a href="#RefMut-352"><span class="linenos">352</span></a>    <span class="k">def</span> <span class="nf">retain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="RefMut-353"><a href="#RefMut-353"><span class="linenos">353</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove items from this map based on `f(key, value)` returning `False`.</span>
+</span><span id="RefMut-353"><a href="#RefMut-353"><span class="linenos">353</span></a>        <span class="sd">&quot;&quot;&quot;Remove items from this map based on `f(key, value)` returning `False`.</span>
 </span><span id="RefMut-354"><a href="#RefMut-354"><span class="linenos">354</span></a>
 </span><span id="RefMut-355"><a href="#RefMut-355"><span class="linenos">355</span></a><span class="sd">        Example</span>
 </span><span id="RefMut-356"><a href="#RefMut-356"><span class="linenos">356</span></a><span class="sd">        -------</span>
 </span><span id="RefMut-357"><a href="#RefMut-357"><span class="linenos">357</span></a><span class="sd">        ```py</span>
-</span><span id="RefMut-358"><a href="#RefMut-358"><span class="linenos">358</span></a><span class="sd">        users = HashMap.new_mut({</span>
+</span><span id="RefMut-358"><a href="#RefMut-358"><span class="linenos">358</span></a><span class="sd">        users = HashMap.from_mut({</span>
 </span><span id="RefMut-359"><a href="#RefMut-359"><span class="linenos">359</span></a><span class="sd">            &quot;user1&quot;: &quot;admin&quot;,</span>
 </span><span id="RefMut-360"><a href="#RefMut-360"><span class="linenos">360</span></a><span class="sd">            &quot;user2&quot;: &quot;admin&quot;,</span>
 </span><span id="RefMut-361"><a href="#RefMut-361"><span class="linenos">361</span></a><span class="sd">            &quot;user3&quot;: &quot;regular&quot;,</span>
@@ -880,24 +857,6 @@ A dictionary to point to. this will be used as the underlying source.</li>
 </div>
 
 
-                            <div id="RefMut.__init__" class="classattr">
-                                        <input id="RefMut.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="name">RefMut</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="o">~</span><span class="n">K</span><span class="p">,</span> <span class="o">~</span><span class="n">V</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span>)</span>
-
-                <label class="view-source-button" for="RefMut.__init__-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#RefMut.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RefMut.__init__-286"><a href="#RefMut.__init__-286"><span class="linenos">286</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">],</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="RefMut.__init__-287"><a href="#RefMut.__init__-287"><span class="linenos">287</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">source</span>
-</span></pre></div>
-
-
-    
-
-                            </div>
                             <div id="RefMut.insert" class="classattr">
                                         <input id="RefMut.insert-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -910,7 +869,7 @@ A dictionary to point to. this will be used as the underlying source.</li>
     </div>
     <a class="headerlink" href="#RefMut.insert"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="RefMut.insert-289"><a href="#RefMut.insert-289"><span class="linenos">289</span></a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_option</span><span class="o">.</span><span class="n">Option</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-</span><span id="RefMut.insert-290"><a href="#RefMut.insert-290"><span class="linenos">290</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert a key/value pair into the map.</span>
+</span><span id="RefMut.insert-290"><a href="#RefMut.insert-290"><span class="linenos">290</span></a>        <span class="sd">&quot;&quot;&quot;Insert a key/value pair into the map.</span>
 </span><span id="RefMut.insert-291"><a href="#RefMut.insert-291"><span class="linenos">291</span></a>
 </span><span id="RefMut.insert-292"><a href="#RefMut.insert-292"><span class="linenos">292</span></a><span class="sd">        if the map doesn&#39;t already `key` present, `None` is returned.</span>
 </span><span id="RefMut.insert-293"><a href="#RefMut.insert-293"><span class="linenos">293</span></a>
@@ -920,7 +879,7 @@ A dictionary to point to. this will be used as the underlying source.</li>
 </span><span id="RefMut.insert-297"><a href="#RefMut.insert-297"><span class="linenos">297</span></a><span class="sd">        Example</span>
 </span><span id="RefMut.insert-298"><a href="#RefMut.insert-298"><span class="linenos">298</span></a><span class="sd">        -------</span>
 </span><span id="RefMut.insert-299"><a href="#RefMut.insert-299"><span class="linenos">299</span></a><span class="sd">        ```py</span>
-</span><span id="RefMut.insert-300"><a href="#RefMut.insert-300"><span class="linenos">300</span></a><span class="sd">        users = HashMap.new_mut({0: &quot;admin&quot;})</span>
+</span><span id="RefMut.insert-300"><a href="#RefMut.insert-300"><span class="linenos">300</span></a><span class="sd">        users = HashMap.from_mut({0: &quot;admin&quot;})</span>
 </span><span id="RefMut.insert-301"><a href="#RefMut.insert-301"><span class="linenos">301</span></a><span class="sd">        assert users.insert(1, &quot;admin&quot;).is_none()</span>
 </span><span id="RefMut.insert-302"><a href="#RefMut.insert-302"><span class="linenos">302</span></a><span class="sd">        old = users.insert(0, &quot;normal&quot;).unwrap()</span>
 </span><span id="RefMut.insert-303"><a href="#RefMut.insert-303"><span class="linenos">303</span></a><span class="sd">        assert old == &quot;admin&quot;</span>
@@ -946,7 +905,7 @@ is returned.</p>
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="n">users</span> <span class="o">=</span> <span class="n"><a href="#HashMap.new_mut">HashMap.new_mut</a></span><span class="p">({</span><span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;admin&quot;</span><span class="p">})</span>
+<pre><span></span><code><span class="n">users</span> <span class="o">=</span> <span class="n"><a href="#HashMap.from_mut">HashMap.from_mut</a></span><span class="p">({</span><span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;admin&quot;</span><span class="p">})</span>
 <span class="k">assert</span> <span class="n">users</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;admin&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_none</span><span class="p">()</span>
 <span class="n">old</span> <span class="o">=</span> <span class="n">users</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;normal&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
 <span class="k">assert</span> <span class="n">old</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span>
@@ -968,12 +927,12 @@ is returned.</p>
     </div>
     <a class="headerlink" href="#RefMut.remove"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="RefMut.remove-314"><a href="#RefMut.remove-314"><span class="linenos">314</span></a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-</span><span id="RefMut.remove-315"><a href="#RefMut.remove-315"><span class="linenos">315</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the value of the key if it was previously in the map.</span>
+</span><span id="RefMut.remove-315"><a href="#RefMut.remove-315"><span class="linenos">315</span></a>        <span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the value of the key if it was previously in the map.</span>
 </span><span id="RefMut.remove-316"><a href="#RefMut.remove-316"><span class="linenos">316</span></a>
 </span><span id="RefMut.remove-317"><a href="#RefMut.remove-317"><span class="linenos">317</span></a><span class="sd">        Example</span>
 </span><span id="RefMut.remove-318"><a href="#RefMut.remove-318"><span class="linenos">318</span></a><span class="sd">        -------</span>
 </span><span id="RefMut.remove-319"><a href="#RefMut.remove-319"><span class="linenos">319</span></a><span class="sd">        ```py</span>
-</span><span id="RefMut.remove-320"><a href="#RefMut.remove-320"><span class="linenos">320</span></a><span class="sd">        map = HashMap.new_mut()</span>
+</span><span id="RefMut.remove-320"><a href="#RefMut.remove-320"><span class="linenos">320</span></a><span class="sd">        map = HashMap.from_mut()</span>
 </span><span id="RefMut.remove-321"><a href="#RefMut.remove-321"><span class="linenos">321</span></a><span class="sd">        map.insert(0, &quot;a&quot;)</span>
 </span><span id="RefMut.remove-322"><a href="#RefMut.remove-322"><span class="linenos">322</span></a><span class="sd">        map.remove(0).unwrap() == &quot;a&quot;</span>
 </span><span id="RefMut.remove-323"><a href="#RefMut.remove-323"><span class="linenos">323</span></a><span class="sd">        map.remove(0).is_none()</span>
@@ -993,7 +952,7 @@ is returned.</p>
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="nb">map</span> <span class="o">=</span> <span class="n"><a href="#HashMap.new_mut">HashMap.new_mut</a></span><span class="p">()</span>
+<pre><span></span><code><span class="nb">map</span> <span class="o">=</span> <span class="n"><a href="#HashMap.from_mut">HashMap.from_mut</a></span><span class="p">()</span>
 <span class="nb">map</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
 <span class="nb">map</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span>
 <span class="nb">map</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">is_none</span><span class="p">()</span>
@@ -1015,12 +974,12 @@ is returned.</p>
     </div>
     <a class="headerlink" href="#RefMut.remove_entry"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="RefMut.remove_entry-333"><a href="#RefMut.remove_entry-333"><span class="linenos">333</span></a>    <span class="k">def</span> <span class="nf">remove_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">K</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Option</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
-</span><span id="RefMut.remove_entry-334"><a href="#RefMut.remove_entry-334"><span class="linenos">334</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the key and value if it was previously in the map.</span>
+</span><span id="RefMut.remove_entry-334"><a href="#RefMut.remove_entry-334"><span class="linenos">334</span></a>        <span class="sd">&quot;&quot;&quot;Remove a key from the map, returning the key and value if it was previously in the map.</span>
 </span><span id="RefMut.remove_entry-335"><a href="#RefMut.remove_entry-335"><span class="linenos">335</span></a>
 </span><span id="RefMut.remove_entry-336"><a href="#RefMut.remove_entry-336"><span class="linenos">336</span></a><span class="sd">        Example</span>
 </span><span id="RefMut.remove_entry-337"><a href="#RefMut.remove_entry-337"><span class="linenos">337</span></a><span class="sd">        -------</span>
 </span><span id="RefMut.remove_entry-338"><a href="#RefMut.remove_entry-338"><span class="linenos">338</span></a><span class="sd">        ```py</span>
-</span><span id="RefMut.remove_entry-339"><a href="#RefMut.remove_entry-339"><span class="linenos">339</span></a><span class="sd">        map = HashMap.new_mut()</span>
+</span><span id="RefMut.remove_entry-339"><a href="#RefMut.remove_entry-339"><span class="linenos">339</span></a><span class="sd">        map = HashMap.from_mut()</span>
 </span><span id="RefMut.remove_entry-340"><a href="#RefMut.remove_entry-340"><span class="linenos">340</span></a><span class="sd">        map.insert(0, &quot;a&quot;)</span>
 </span><span id="RefMut.remove_entry-341"><a href="#RefMut.remove_entry-341"><span class="linenos">341</span></a><span class="sd">        map.remove(0).unwrap() == &quot;a&quot;</span>
 </span><span id="RefMut.remove_entry-342"><a href="#RefMut.remove_entry-342"><span class="linenos">342</span></a><span class="sd">        map.remove(0).is_none()</span>
@@ -1040,7 +999,7 @@ is returned.</p>
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="nb">map</span> <span class="o">=</span> <span class="n"><a href="#HashMap.new_mut">HashMap.new_mut</a></span><span class="p">()</span>
+<pre><span></span><code><span class="nb">map</span> <span class="o">=</span> <span class="n"><a href="#HashMap.from_mut">HashMap.from_mut</a></span><span class="p">()</span>
 <span class="nb">map</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
 <span class="nb">map</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span>
 <span class="nb">map</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">is_none</span><span class="p">()</span>
@@ -1062,12 +1021,12 @@ is returned.</p>
     </div>
     <a class="headerlink" href="#RefMut.retain"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="RefMut.retain-352"><a href="#RefMut.retain-352"><span class="linenos">352</span></a>    <span class="k">def</span> <span class="nf">retain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="RefMut.retain-353"><a href="#RefMut.retain-353"><span class="linenos">353</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove items from this map based on `f(key, value)` returning `False`.</span>
+</span><span id="RefMut.retain-353"><a href="#RefMut.retain-353"><span class="linenos">353</span></a>        <span class="sd">&quot;&quot;&quot;Remove items from this map based on `f(key, value)` returning `False`.</span>
 </span><span id="RefMut.retain-354"><a href="#RefMut.retain-354"><span class="linenos">354</span></a>
 </span><span id="RefMut.retain-355"><a href="#RefMut.retain-355"><span class="linenos">355</span></a><span class="sd">        Example</span>
 </span><span id="RefMut.retain-356"><a href="#RefMut.retain-356"><span class="linenos">356</span></a><span class="sd">        -------</span>
 </span><span id="RefMut.retain-357"><a href="#RefMut.retain-357"><span class="linenos">357</span></a><span class="sd">        ```py</span>
-</span><span id="RefMut.retain-358"><a href="#RefMut.retain-358"><span class="linenos">358</span></a><span class="sd">        users = HashMap.new_mut({</span>
+</span><span id="RefMut.retain-358"><a href="#RefMut.retain-358"><span class="linenos">358</span></a><span class="sd">        users = HashMap.from_mut({</span>
 </span><span id="RefMut.retain-359"><a href="#RefMut.retain-359"><span class="linenos">359</span></a><span class="sd">            &quot;user1&quot;: &quot;admin&quot;,</span>
 </span><span id="RefMut.retain-360"><a href="#RefMut.retain-360"><span class="linenos">360</span></a><span class="sd">            &quot;user2&quot;: &quot;admin&quot;,</span>
 </span><span id="RefMut.retain-361"><a href="#RefMut.retain-361"><span class="linenos">361</span></a><span class="sd">            &quot;user3&quot;: &quot;regular&quot;,</span>
@@ -1094,7 +1053,7 @@ is returned.</p>
 <h6 id="example">Example</h6>
 
 <p>```py
-users = <a href="#HashMap.new_mut">HashMap.new_mut</a>({
+users = <a href="#HashMap.from_mut">HashMap.from_mut</a>({
     "user1": "admin",
     "user2": "admin",
     "user3": "regular",
@@ -1118,7 +1077,8 @@ for user, role in users.items():
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="#_RawMap">_RawMap</a></dt>
-                                <dd id="RefMut.from_keys" class="function"><a href="#_RawMap.from_keys">from_keys</a></dd>
+                                <dd id="RefMut.__init__" class="function"><a href="#_RawMap.__init__">_RawMap</a></dd>
+                <dd id="RefMut.from_keys" class="function"><a href="#_RawMap.from_keys">from_keys</a></dd>
                 <dd id="RefMut.is_empty" class="function"><a href="#_RawMap.is_empty">is_empty</a></dd>
                 <dd id="RefMut.get" class="function"><a href="#_RawMap.get">get</a></dd>
                 <dd id="RefMut.iter" class="function"><a href="#_RawMap.iter">iter</a></dd>

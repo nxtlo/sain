@@ -45,10 +45,10 @@ from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
 
+from . import vec as _vec
+
 if typing.TYPE_CHECKING:
     import inspect
-
-    from typing_extensions import Self
 
     from sain import Option
     from sain import Result
@@ -106,6 +106,7 @@ class Bytes:
     * `from_bytes`: Create `Bytes` from a `Buffer` type
     * `from_raw`: Create `Bytes` from a `Rawish` type
     * `from_static`: Create `Bytes` that points to an `array.array[int]` without copying it
+    * `zeroed(count)`: Create `Bytes` filled with zeroes * count.
 
     Example
     -------
@@ -133,7 +134,7 @@ class Bytes:
     # construction
 
     @classmethod
-    def from_str(cls, s: str) -> Self:
+    def from_str(cls, s: str) -> Bytes:
         """Create a new `Bytes` from a utf-8 string.
 
         Example
@@ -148,7 +149,7 @@ class Bytes:
         return b
 
     @classmethod
-    def from_static(cls, arr: array.array[int]) -> Self:
+    def from_static(cls, arr: array.array[int]) -> Bytes:
         """Create a new `Bytes` from an array.
 
         The returned `Bytes` will directly point to `arr` without copying.
@@ -165,7 +166,7 @@ class Bytes:
         return b
 
     @classmethod
-    def from_bytes(cls, buf: Buffer) -> Self:
+    def from_bytes(cls, buf: Buffer) -> Bytes:
         """Create a new `Bytes` from an initial bytes.
 
         Example
@@ -179,7 +180,7 @@ class Bytes:
         return b
 
     @classmethod
-    def from_raw(cls, raw: Rawish) -> Self:
+    def from_raw(cls, raw: Rawish) -> Bytes:
         """Initialize a new `Bytes` in-place from a valid raw data type.
 
         Example
@@ -195,14 +196,25 @@ class Bytes:
         string_io = io.StringIO("data")
         buffer2 = Bytes.from_raw(string_io)
         ```
-
-        Raises
-        ------
-        `ValueError`
-            If `raw` contains a byte not in range `0..256`
         """
         c = cls()
         c._buf = array.array("B", unwrap_bytes(raw))
+        return c
+
+    @classmethod
+    def zeroed(cls, count: int) -> Bytes:
+        """Initialize a new `Bytes` filled with zeros * `count`.
+
+        Example
+        -------
+        ```py
+        ALLOC_SIZE = 1024 * 2
+        buffer = Bytes.zeros(ALLOC_SIZE)
+        assert buffer.len() == ALLOC_SIZE
+        ```
+        """
+        c = cls()
+        c._buf = array.array("B", [0] * count)
         return c
 
     # buffer evolution
@@ -266,16 +278,6 @@ class Bytes:
         invalid_bytes = Bytes.from_bytes(b"Hello \xf0\x90\x80World")
         assert invalid_bytes.to_str() == "Hello �World"
         ```
-
-        Unrecoverable failures
-        ----------------------
-        This method may raise `UnicodeDecodeError` if `self` contains
-        invalid bytes that cannot be decoded.
-
-        ```py
-        invalid_bytes = Bytes.from_bytes([0, 159, 146, 150])
-        invalid_bytes.to_str() # ERROR
-        ```
         """
         if not self._buf:
             return ""
@@ -297,26 +299,45 @@ class Bytes:
 
         return self._buf.tobytes()
 
-    def leak(self) -> Option[array.array[int]]:
-        """Consumes and leaks the `Bytes`, returning the underlying `array` and setting it to `None`.
+    def to_vec(self) -> _vec.Vec[int]:
+        """Copies `self` into a new `Vec`.
 
-        `None` is returned if `self` isn't initialized.
+        Example
+        -------
+        ```py
+        buffer = Bytes.from_str([1, 2, 3, 4])
+        x = buffer.to_vec()
+        assert x == [1, 2, 3, 4]
+        """
+        return _vec.Vec(self)
+
+    def leak(self) -> Option[array.array[int]]:
+        """Consumes and leaks the `Bytes`, returning the contents as an `array[int]`.
+
+        `self` will deallocate the underlying array. therefore it becomes unusable.
+
+        Safety
+        ------
+        It is unsafe to access the leaked array from `self` after calling this function.
 
         Example
         -------
         ```py
         bytes = Bytes.from_str("chunks of data")
         consumed = bytes.leak().unwrap()
-
-        assert bytes.is_empty()
-        assert consumed.tobytes() == b"chunks of data"
+        # This is undefined behavior!!!
+        bytes.put(0)
+        # access the array directly instead.
+        consumed.tobytes() == b"chunks of data"
         ```
         """
         if self._buf is None:
             return _option.NOTHING  # pyright: ignore
 
         arr = self._buf
-        self._buf = None
+        # We don't need to reference this anymore since the caller will own the array.
+        # therefore the *self* become useless. thats exactly how its implemented in Rust.
+        del self._buf
         return _option.Some(arr)
 
     def as_ptr(self) -> memoryview[int]:
@@ -494,6 +515,67 @@ class Bytes:
         """
         self.put_bytes(s.encode(ENCODING))
 
+    def fill(self, value: int) -> None:
+        """Fill this `self` with the given byte.
+
+        Nothing happens if the vec is empty or unallocated.
+
+        Example
+        ```py
+        a = Vec([0, 1, 2, 3])
+        a.fill(0)
+        assert a == [0, 0, 0, 0]
+        ```
+        """
+        if not self._buf:
+            return
+
+        for n, _ in enumerate(self):
+            self[n] = value
+
+    def swap(self, a: int, b: int):
+        """Swap two bytes in the buffer.
+
+        if `a` equals to `b` then it's guaranteed that elements won't change value.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([1, 2, 3, 4])
+        buf.swap(0, 3)
+        assert buf == [4, 2, 3, 1]
+        ```
+
+        Raises
+        ------
+        IndexError
+            If the positions of `a` or `b` are out of index.
+        """
+        if self[a] == self[b]:
+            return
+
+        self[a], self[b] = self[b], self[a]
+
+    def swap_unchecked(self, a: int, b: int):
+        """Swap two bytes in the buffer. without checking if `a` == `b`.
+
+        If you care about `a` and `b` equality, see `Bytes.swap`.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([1, 2, 3, 1])
+        buf.swap_unchecked(0, 3)
+        assert buf == [1, 2, 3, 1]
+        ```
+
+        Raises
+        ------
+        IndexError
+            If the positions of `a` or `b` are out of index.
+        """
+        self[a], self[b] = self[b], self[a]
+
     def len(self) -> int:
         """Return the number of bytes in this buffer.
 
@@ -561,7 +643,8 @@ class Bytes:
         # c_char(b'o')
         ```
         """
-        return self.iter().map(_ctypes.c_char)  # pyright: ignore - this is fine but pyright is trolling.
+        # The built-in map is actually faster than our own pure python adapter impl.
+        return _iter.Iter(map(_ctypes.c_char, self))
 
     def is_empty(self) -> bool:
         """Check whether `self` contains any bytes or not.
@@ -575,9 +658,106 @@ class Bytes:
         """
         return not self._buf
 
+    def truncate(self, size: int) -> None:
+        """Shortens the bytes, keeping the first `size` elements and dropping the rest.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([0, 0, 0, 0])
+        buf.truncate(1)
+        assert buf.len() == 1
+        ```
+        """
+        if not self._buf:
+            return
+
+        del self._buf[size:]
+
+    def split_off(self, at: int) -> Bytes:
+        """Split the vector off at the specified position, returning a new
+        vec at the range of `[at : len]`, leaving `self` at `[at : vec_len]`.
+
+        if this vec is empty, `self` is returned unchanged.
+
+        Example
+        -------
+        ```py
+        origin = Vec((1, 2, 3, 4))
+        split = vec.split_off(2)
+
+        print(origin, split)  # [1, 2], [3, 4]
+        ```
+
+        Raises
+        ------
+        `RuntimeError`
+            This method will raise if `at` > `len(self)`
+        """
+        len_ = self.len()
+        if at > len_:
+            raise RuntimeError(
+                f"Index `at` ({at}) should be <= than len of vector ({len_}) "
+            ) from None
+
+        # Either the list is empty or uninit.
+        if not self._buf:
+            return self
+
+        split = self[at:len_]  # split the items into a new vec.
+        del self._buf[at:len_]  # remove the items from the original list.
+        return split
+
+    def split_first(self) -> _option.Option[tuple[int, collections.Sequence[int]]]:
+        """Split the first and rest elements of the vector, If empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        vec = Vec([1, 2, 3])
+        split = vec.split_first()
+        assert split == Some((1, [2, 3]))
+
+        vec: Vec[int] = Vec()
+        split = vec.split_first()
+        assert split.is_none()
+        ```
+        """
+        if not self._buf:
+            return _option.NOTHING  # pyright: ignore
+
+        # optimized to only one element in the vector.
+        if self.len() == 1:
+            return _option.Some((self[0], ()))
+
+        first, *rest = self._buf
+        return _option.Some((first, rest))
+
+    def split_last(self) -> _option.Option[tuple[int, collections.Sequence[int]]]:
+        """Split the last and rest elements of the vector, If empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        vec = Vec([1, 2, 3])
+        last, rest = vec.split_last().unwrap()
+        assert (last, rest) == [3, [1, 2]]
+        ```
+        """
+        if not self._buf:
+            return _option.NOTHING  # pyright: ignore
+
+        len_ = self.len()
+        # optimized to only one element in the vector.
+        if len_ == 1:
+            return _option.Some((self[0], ()))
+
+        last = self[-1]
+        return _option.Some((last, [*self[:-1]]))
+
     # layout methods.
 
-    def copy(self) -> Self:
+    def copy(self) -> Bytes:
         """Create a copy of the bytes.
 
         Example
@@ -588,7 +768,7 @@ class Bytes:
         ```
         """
         if not self._buf:
-            return self.__class__()
+            return Bytes()
 
         return self.from_static(self._buf[:])
 
@@ -661,6 +841,42 @@ class Bytes:
 
         return _option.Some(self._buf.pop(i))
 
+    def swap_remove(self, byte: int) -> int:
+        """Remove the first appearance of `item` from this vector and return it.
+
+        Raises
+        ------
+        * `ValueError`: if `item` is not in this vector.
+        * `MemoryError`: if this vector hasn't allocated, Aka nothing has been pushed to it.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([1, 2, 3, 4])
+        assert 1 == buf.swap_remove(1)
+        assert buf == [2, 3, 4]
+        ```
+        """
+        if self._buf is None:
+            raise MemoryError("Vec is unallocated.") from None
+
+        return self._buf.pop(self.index(byte))
+
+    def remove(self, i: int) -> None:
+        """Remove the first appearance of `i` from `self`.
+
+        Example
+        ```py
+        buf = Bytes.from_bytes([1, 1, 2, 3, 4])
+        buf.remove(1)
+        print(buf) # [1, 2, 3, 4]
+        ```
+        """
+        if not self._buf:
+            return
+
+        self._buf.remove(i)
+
     # special methods
 
     def __iter__(self) -> collections.Iterator[int]:
@@ -673,11 +889,7 @@ class Bytes:
         return len(self._buf) if self._buf else 0
 
     def __repr__(self) -> str:
-        return (
-            "[]"
-            if not self._buf
-            else "[" + ", ".join(i.__str__() for i in self._buf) + "]"
-        )
+        return "[]" if not self._buf else "[" + ", ".join(map(str, self)) + "]"
 
     __str__ = __repr__
 
@@ -757,12 +969,12 @@ class Bytes:
         self._buf[index] = value
 
     @typing.overload
-    def __getitem__(self, index: slice) -> Self: ...
+    def __getitem__(self, index: slice) -> Bytes: ...
 
     @typing.overload
     def __getitem__(self, index: int) -> int: ...
 
-    def __getitem__(self, index: int | slice) -> int | Self:
+    def __getitem__(self, index: int | slice) -> int | Bytes:
         if not self._buf:
             raise IndexError("Index out of range")
 

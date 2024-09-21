@@ -31,13 +31,11 @@
 
 from __future__ import annotations
 
-
 __all__ = ("Lazy", "LazyFuture")
 
 import asyncio
 import threading
 import typing
-
 
 if typing.TYPE_CHECKING:
     from collections import abc as collections

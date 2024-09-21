@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Bytes.zeroed`
+- `Bytes.to_vec`
+- `Bytes.fill`
+- `Bytes.swap`
+- `Bytes.swap_unchecked`
+- `Bytes.truncate`
+- `Bytes.split_off`
+- `Bytes.split_first`
+- `Bytes.split_last`
+- `Bytes.remove`
+- `Bytes.swap_remove`
+- `Vec.swap`
+- `Vec.swap_unchecked`
+- `Vec.fill`
+
+### Changed
+
+- Greatly improved the speed of some `Vec` methods.
+- Renamed `HashMap.new_mut` to `HashMap.from_mut`
+
+## 1.2.0 - 09/09/2024
+
+### Added
+
 - `HashMap`
 - `Bytes.chars`
 - `Bytes.as_ptr`

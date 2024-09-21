@@ -149,7 +149,7 @@ class _RawMap(collections.Mapping[K, V]):
     # conversions
 
     def leak(self) -> collections.MutableMapping[K, V]:
-        """Leaks and returns an owned mutable mapping of the underlying source.
+        """Leaks and returns a mutable reference to the underlying map.
 
         Example
         -------
@@ -239,13 +239,13 @@ class HashMap(_RawMap[K, V]):
         super().__init__(source)
 
     @classmethod
-    def new_mut(cls, source: dict[K, V] | None = None, /) -> RefMut[K, V]:
+    def from_mut(cls, source: dict[K, V] | None = None, /) -> RefMut[K, V]:
         """Create a new mutable `HashMap`, with the given source if available.
 
         Example
         -------
         ```py
-        books = HashMap.new_mut()
+        books = HashMap.from_mut()
         books[0] = "Twilight"
         ```
         """
@@ -296,7 +296,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         Example
         -------
         ```py
-        users = HashMap.new_mut({0: "admin"})
+        users = HashMap.from_mut({0: "admin"})
         assert users.insert(1, "admin").is_none()
         old = users.insert(0, "normal").unwrap()
         assert old == "admin"
@@ -316,7 +316,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         Example
         -------
         ```py
-        map = HashMap.new_mut()
+        map = HashMap.from_mut()
         map.insert(0, "a")
         map.remove(0).unwrap() == "a"
         map.remove(0).is_none()
@@ -335,7 +335,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         Example
         -------
         ```py
-        map = HashMap.new_mut()
+        map = HashMap.from_mut()
         map.insert(0, "a")
         map.remove(0).unwrap() == "a"
         map.remove(0).is_none()
@@ -354,7 +354,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         Example
         -------
         ```py
-        users = HashMap.new_mut({
+        users = HashMap.from_mut({
             "user1": "admin",
             "user2": "admin",
             "user3": "regular",

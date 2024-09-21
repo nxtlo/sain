@@ -121,7 +121,7 @@
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="k">class</span> <span class="nc">MaybeUninit</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A wrapper type to construct uninitialized instances of `T`.</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>    <span class="sd">&quot;&quot;&quot;A wrapper type to construct uninitialized instances of `T`.</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">    This is kinda equivalent to Rust&#39;s `MaybeUninit&lt;T&gt;` wrapper.</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>
@@ -169,7 +169,7 @@
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="nf">uninit</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="sd">&quot;&quot;&quot;Creates a new `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        Example</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        -------</span>
@@ -181,7 +181,7 @@
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="k">def</span> <span class="nf">uninit_array</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Self</span><span class="p">]:</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an immutable sequence of `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="sd">&quot;&quot;&quot;Creates an immutable sequence of `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        Example</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">        -------</span>
@@ -198,7 +198,7 @@
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
 </span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">def</span> <span class="nf">assume_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the inner value, assuming that it was initialized by the caller.</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="sd">&quot;&quot;&quot;Get the inner value, assuming that it was initialized by the caller.</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
 </span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        It is unsafe and undefined behavior to call this method on an uninitialized state,</span>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
@@ -217,7 +217,7 @@
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__value</span>
 </span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the value of the `MaybeUninit[T]`.</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>        <span class="sd">&quot;&quot;&quot;Sets the value of the `MaybeUninit[T]`.</span>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
 </span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        This will overwrite any previous values, if was initialized obviously.</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
@@ -255,7 +255,7 @@
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>    <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>
 </span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span> <span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a boolean check on whether the value is initialized or not.</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="sd">&quot;&quot;&quot;Perform a boolean check on whether the value is initialized or not.</span>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">        Example</span>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">        -------</span>
@@ -301,7 +301,7 @@
     <a class="headerlink" href="#MaybeUninit"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MaybeUninit-47"><a href="#MaybeUninit-47"><span class="linenos"> 47</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
 </span><span id="MaybeUninit-48"><a href="#MaybeUninit-48"><span class="linenos"> 48</span></a><span class="k">class</span> <span class="nc">MaybeUninit</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="MaybeUninit-49"><a href="#MaybeUninit-49"><span class="linenos"> 49</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A wrapper type to construct uninitialized instances of `T`.</span>
+</span><span id="MaybeUninit-49"><a href="#MaybeUninit-49"><span class="linenos"> 49</span></a>    <span class="sd">&quot;&quot;&quot;A wrapper type to construct uninitialized instances of `T`.</span>
 </span><span id="MaybeUninit-50"><a href="#MaybeUninit-50"><span class="linenos"> 50</span></a>
 </span><span id="MaybeUninit-51"><a href="#MaybeUninit-51"><span class="linenos"> 51</span></a><span class="sd">    This is kinda equivalent to Rust&#39;s `MaybeUninit&lt;T&gt;` wrapper.</span>
 </span><span id="MaybeUninit-52"><a href="#MaybeUninit-52"><span class="linenos"> 52</span></a>
@@ -349,7 +349,7 @@
 </span><span id="MaybeUninit-94"><a href="#MaybeUninit-94"><span class="linenos"> 94</span></a>
 </span><span id="MaybeUninit-95"><a href="#MaybeUninit-95"><span class="linenos"> 95</span></a>    <span class="nd">@classmethod</span>
 </span><span id="MaybeUninit-96"><a href="#MaybeUninit-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="nf">uninit</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="MaybeUninit-97"><a href="#MaybeUninit-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
+</span><span id="MaybeUninit-97"><a href="#MaybeUninit-97"><span class="linenos"> 97</span></a>        <span class="sd">&quot;&quot;&quot;Creates a new `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
 </span><span id="MaybeUninit-98"><a href="#MaybeUninit-98"><span class="linenos"> 98</span></a>
 </span><span id="MaybeUninit-99"><a href="#MaybeUninit-99"><span class="linenos"> 99</span></a><span class="sd">        Example</span>
 </span><span id="MaybeUninit-100"><a href="#MaybeUninit-100"><span class="linenos">100</span></a><span class="sd">        -------</span>
@@ -361,7 +361,7 @@
 </span><span id="MaybeUninit-106"><a href="#MaybeUninit-106"><span class="linenos">106</span></a>
 </span><span id="MaybeUninit-107"><a href="#MaybeUninit-107"><span class="linenos">107</span></a>    <span class="nd">@classmethod</span>
 </span><span id="MaybeUninit-108"><a href="#MaybeUninit-108"><span class="linenos">108</span></a>    <span class="k">def</span> <span class="nf">uninit_array</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Self</span><span class="p">]:</span>
-</span><span id="MaybeUninit-109"><a href="#MaybeUninit-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an immutable sequence of `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
+</span><span id="MaybeUninit-109"><a href="#MaybeUninit-109"><span class="linenos">109</span></a>        <span class="sd">&quot;&quot;&quot;Creates an immutable sequence of `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
 </span><span id="MaybeUninit-110"><a href="#MaybeUninit-110"><span class="linenos">110</span></a>
 </span><span id="MaybeUninit-111"><a href="#MaybeUninit-111"><span class="linenos">111</span></a><span class="sd">        Example</span>
 </span><span id="MaybeUninit-112"><a href="#MaybeUninit-112"><span class="linenos">112</span></a><span class="sd">        -------</span>
@@ -378,7 +378,7 @@
 </span><span id="MaybeUninit-123"><a href="#MaybeUninit-123"><span class="linenos">123</span></a>
 </span><span id="MaybeUninit-124"><a href="#MaybeUninit-124"><span class="linenos">124</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="MaybeUninit-125"><a href="#MaybeUninit-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="nf">assume_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="MaybeUninit-126"><a href="#MaybeUninit-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the inner value, assuming that it was initialized by the caller.</span>
+</span><span id="MaybeUninit-126"><a href="#MaybeUninit-126"><span class="linenos">126</span></a>        <span class="sd">&quot;&quot;&quot;Get the inner value, assuming that it was initialized by the caller.</span>
 </span><span id="MaybeUninit-127"><a href="#MaybeUninit-127"><span class="linenos">127</span></a>
 </span><span id="MaybeUninit-128"><a href="#MaybeUninit-128"><span class="linenos">128</span></a><span class="sd">        It is unsafe and undefined behavior to call this method on an uninitialized state,</span>
 </span><span id="MaybeUninit-129"><a href="#MaybeUninit-129"><span class="linenos">129</span></a>
@@ -397,7 +397,7 @@
 </span><span id="MaybeUninit-142"><a href="#MaybeUninit-142"><span class="linenos">142</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__value</span>
 </span><span id="MaybeUninit-143"><a href="#MaybeUninit-143"><span class="linenos">143</span></a>
 </span><span id="MaybeUninit-144"><a href="#MaybeUninit-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="MaybeUninit-145"><a href="#MaybeUninit-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the value of the `MaybeUninit[T]`.</span>
+</span><span id="MaybeUninit-145"><a href="#MaybeUninit-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;Sets the value of the `MaybeUninit[T]`.</span>
 </span><span id="MaybeUninit-146"><a href="#MaybeUninit-146"><span class="linenos">146</span></a>
 </span><span id="MaybeUninit-147"><a href="#MaybeUninit-147"><span class="linenos">147</span></a><span class="sd">        This will overwrite any previous values, if was initialized obviously.</span>
 </span><span id="MaybeUninit-148"><a href="#MaybeUninit-148"><span class="linenos">148</span></a>
@@ -435,7 +435,7 @@
 </span><span id="MaybeUninit-180"><a href="#MaybeUninit-180"><span class="linenos">180</span></a>    <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span>
 </span><span id="MaybeUninit-181"><a href="#MaybeUninit-181"><span class="linenos">181</span></a>
 </span><span id="MaybeUninit-182"><a href="#MaybeUninit-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="MaybeUninit-183"><a href="#MaybeUninit-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a boolean check on whether the value is initialized or not.</span>
+</span><span id="MaybeUninit-183"><a href="#MaybeUninit-183"><span class="linenos">183</span></a>        <span class="sd">&quot;&quot;&quot;Perform a boolean check on whether the value is initialized or not.</span>
 </span><span id="MaybeUninit-184"><a href="#MaybeUninit-184"><span class="linenos">184</span></a>
 </span><span id="MaybeUninit-185"><a href="#MaybeUninit-185"><span class="linenos">185</span></a><span class="sd">        Example</span>
 </span><span id="MaybeUninit-186"><a href="#MaybeUninit-186"><span class="linenos">186</span></a><span class="sd">        -------</span>
@@ -528,7 +528,7 @@ as a programmer is responsible for initializing it.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">uninit</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">uninit</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span></span><span class="return-annotation">) -> <span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span>:</span></span>
 
                 <label class="view-source-button" for="MaybeUninit.uninit-view-source"><span>View Source</span></label>
 
@@ -536,7 +536,7 @@ as a programmer is responsible for initializing it.</p>
     <a class="headerlink" href="#MaybeUninit.uninit"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MaybeUninit.uninit-95"><a href="#MaybeUninit.uninit-95"><span class="linenos"> 95</span></a>    <span class="nd">@classmethod</span>
 </span><span id="MaybeUninit.uninit-96"><a href="#MaybeUninit.uninit-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="nf">uninit</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="MaybeUninit.uninit-97"><a href="#MaybeUninit.uninit-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
+</span><span id="MaybeUninit.uninit-97"><a href="#MaybeUninit.uninit-97"><span class="linenos"> 97</span></a>        <span class="sd">&quot;&quot;&quot;Creates a new `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
 </span><span id="MaybeUninit.uninit-98"><a href="#MaybeUninit.uninit-98"><span class="linenos"> 98</span></a>
 </span><span id="MaybeUninit.uninit-99"><a href="#MaybeUninit.uninit-99"><span class="linenos"> 99</span></a><span class="sd">        Example</span>
 </span><span id="MaybeUninit.uninit-100"><a href="#MaybeUninit.uninit-100"><span class="linenos">100</span></a><span class="sd">        -------</span>
@@ -566,7 +566,7 @@ as a programmer is responsible for initializing it.</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">uninit_array</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">n</span><span class="p">:</span> <span class="nb">int</span></span><span class="return-annotation">) -> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Self</span><span class="p">]</span>:</span></span>
+        <span class="name">uninit_array</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">n</span><span class="p">:</span> <span class="nb">int</span></span><span class="return-annotation">) -> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">typing_extensions</span><span class="o">.</span><span class="n">Self</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="MaybeUninit.uninit_array-view-source"><span>View Source</span></label>
 
@@ -574,7 +574,7 @@ as a programmer is responsible for initializing it.</p>
     <a class="headerlink" href="#MaybeUninit.uninit_array"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MaybeUninit.uninit_array-107"><a href="#MaybeUninit.uninit_array-107"><span class="linenos">107</span></a>    <span class="nd">@classmethod</span>
 </span><span id="MaybeUninit.uninit_array-108"><a href="#MaybeUninit.uninit_array-108"><span class="linenos">108</span></a>    <span class="k">def</span> <span class="nf">uninit_array</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Self</span><span class="p">]:</span>
-</span><span id="MaybeUninit.uninit_array-109"><a href="#MaybeUninit.uninit_array-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an immutable sequence of `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
+</span><span id="MaybeUninit.uninit_array-109"><a href="#MaybeUninit.uninit_array-109"><span class="linenos">109</span></a>        <span class="sd">&quot;&quot;&quot;Creates an immutable sequence of `MaybeUninit&lt;T&gt;` in an uninitialized state.</span>
 </span><span id="MaybeUninit.uninit_array-110"><a href="#MaybeUninit.uninit_array-110"><span class="linenos">110</span></a>
 </span><span id="MaybeUninit.uninit_array-111"><a href="#MaybeUninit.uninit_array-111"><span class="linenos">111</span></a><span class="sd">        Example</span>
 </span><span id="MaybeUninit.uninit_array-112"><a href="#MaybeUninit.uninit_array-112"><span class="linenos">112</span></a><span class="sd">        -------</span>
@@ -622,7 +622,7 @@ as a programmer is responsible for initializing it.</p>
     <a class="headerlink" href="#MaybeUninit.assume_init"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MaybeUninit.assume_init-124"><a href="#MaybeUninit.assume_init-124"><span class="linenos">124</span></a>    <span class="nd">@macros</span><span class="o">.</span><span class="n">unsafe</span>
 </span><span id="MaybeUninit.assume_init-125"><a href="#MaybeUninit.assume_init-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="nf">assume_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="MaybeUninit.assume_init-126"><a href="#MaybeUninit.assume_init-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the inner value, assuming that it was initialized by the caller.</span>
+</span><span id="MaybeUninit.assume_init-126"><a href="#MaybeUninit.assume_init-126"><span class="linenos">126</span></a>        <span class="sd">&quot;&quot;&quot;Get the inner value, assuming that it was initialized by the caller.</span>
 </span><span id="MaybeUninit.assume_init-127"><a href="#MaybeUninit.assume_init-127"><span class="linenos">127</span></a>
 </span><span id="MaybeUninit.assume_init-128"><a href="#MaybeUninit.assume_init-128"><span class="linenos">128</span></a><span class="sd">        It is unsafe and undefined behavior to call this method on an uninitialized state,</span>
 </span><span id="MaybeUninit.assume_init-129"><a href="#MaybeUninit.assume_init-129"><span class="linenos">129</span></a>
@@ -677,7 +677,7 @@ as a programmer is responsible for initializing it.</p>
     </div>
     <a class="headerlink" href="#MaybeUninit.write"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MaybeUninit.write-144"><a href="#MaybeUninit.write-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="MaybeUninit.write-145"><a href="#MaybeUninit.write-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the value of the `MaybeUninit[T]`.</span>
+</span><span id="MaybeUninit.write-145"><a href="#MaybeUninit.write-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;Sets the value of the `MaybeUninit[T]`.</span>
 </span><span id="MaybeUninit.write-146"><a href="#MaybeUninit.write-146"><span class="linenos">146</span></a>
 </span><span id="MaybeUninit.write-147"><a href="#MaybeUninit.write-147"><span class="linenos">147</span></a><span class="sd">        This will overwrite any previous values, if was initialized obviously.</span>
 </span><span id="MaybeUninit.write-148"><a href="#MaybeUninit.write-148"><span class="linenos">148</span></a>
