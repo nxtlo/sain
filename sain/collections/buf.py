@@ -214,7 +214,7 @@ class Bytes:
         ```
         """
         c = cls()
-        c._buf = array.array("B", [0] * count)
+        c._buf = array.array("B", (0,) * count)
         return c
 
     # buffer evolution
@@ -341,17 +341,31 @@ class Bytes:
         return _option.Some(arr)
 
     def as_ptr(self) -> memoryview[int]:
-        """Returns a read-only `memoryview` which's pointing to the array.
+        """Returns a read-only pointer to the buffer data.
 
         Example
         -------
         ```py
-        buffer = Bytes.from_str("data")
+        buffer = Bytes.from_bytes(b"data")
         ptr = buffer.as_ptr()
-        assert ptr == buffer.as_ref()
+        ptr[0] = 1 # TypeError: cannot modify read-only memory
         ```
         """
-        return self.__buffer__(256)  # 256 == READ
+        return self.__buffer__(0x100).toreadonly()
+
+    def as_mut_ptr(self) -> memoryview[int]:
+        """Returns a mutable pointer to the buffer data.
+
+        Example
+        -------
+        ```py
+        buffer = Bytes.from_str("ouv")
+        ptr = buffer.as_mut_ptr()
+        ptr[0] = ord(b'L')
+        assert buffer.to_bytes() == b"Luv"
+        ```
+        """
+        return self.__buffer__(0x100)
 
     def as_ref(self) -> collections.Sequence[int]:
         """Get an immutable reference to the underlying sequence, without copying.
@@ -530,8 +544,7 @@ class Bytes:
         if not self._buf:
             return
 
-        for n, _ in enumerate(self):
-            self[n] = value
+        self._buf.__buffer__(0x100)[:] = bytearray((value,) * self.len())
 
     def swap(self, a: int, b: int):
         """Swap two bytes in the buffer.
@@ -900,7 +913,7 @@ class Bytes:
         if not self._buf:
             raise BufferError("Cannot work with uninitialized bytes.")
 
-        return self._buf.__buffer__(int(flag))
+        return self._buf.__buffer__(flag)
 
     def __contains__(self, byte: int) -> bool:
         return byte in self._buf if self._buf else False
