@@ -68,10 +68,12 @@ class Lazy(typing.Generic[T]):
 
     def __init__(self, f: collections.Callable[[], T]) -> None:
         self.__inner: T | collections.Callable[[], T] = f
-        self.__lock = threading.Lock()
+        self.__lock: threading.Lock | None = None
 
     def get(self) -> T:
         """Get the value if it was initialized, otherwise initialize it and return it.
+
+        Its guaranteed to not block if the value has been initialized.
 
         Example
         -------
@@ -88,6 +90,9 @@ class Lazy(typing.Generic[T]):
         if not callable(self.__inner):
             # value is already initialized, no need to make a call.
             return self.__inner
+
+        if self.__lock is None:
+            self.__lock = threading.Lock()
 
         with self.__lock:
             inner = self.__inner = self.__inner()
@@ -145,7 +150,7 @@ class LazyFuture(typing.Generic[T]):
             T
             | collections.Callable[[], collections.Coroutine[typing.Any, typing.Any, T]]
         ) = f
-        self.__lock = asyncio.Lock()
+        self.__lock: asyncio.Lock | None = asyncio.Lock()
 
     async def get(self) -> T:
         """Get the value if it was initialized, otherwise initialize it and return it.
@@ -165,6 +170,9 @@ class LazyFuture(typing.Generic[T]):
         if not callable(self.__inner):
             # value is already initialized, no need to make a call.
             return self.__inner
+
+        if self.__lock is None:
+            self.__lock = asyncio.Lock()
 
         async with self.__lock:
             # calling self.__inner will make self.__inner type T

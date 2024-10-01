@@ -352,6 +352,33 @@ class Vec(typing.Generic[T]):
         last = self[-1]
         return _option.Some((last, [*self[:-1]]))
 
+    def split_at(self, mid: int) -> tuple[Vec[T], Vec[T]]:
+        """Divide `self` into two at an index.
+
+        The first will contain all elements from `[0:mid]` excluding `mid` it self.
+        and the second will contain the remaninig elements.
+
+        if `mid` > `self.len()`, Then all elements will be moved to the left,
+        returning an empty vec in right.
+
+        Example
+        -------
+        ```py
+        buffer = Vec((1, 2, 3, 4))
+        left, right = buffer.split_at(0)
+        assert left == [] and right == [1, 2, 3, 4]
+
+        left, right = buffer.split_at(2)
+        assert left == [1, 2] and right == [2, 3]
+        ```
+
+        The is roughly the implementation
+        ```py
+        self[0:mid], self[mid:]
+        ```
+        """
+        return self[0:mid], self[mid:]
+
     def swap(self, a: int, b: int):
         """Swap two elements in the vec.
 

@@ -45,6 +45,7 @@ __all__ = (
     "Enumerate",
     "TakeWhile",
     "DropWhile",
+    "Chunks",
     "Empty",
     # Functions
     "into_iter",
@@ -210,7 +211,7 @@ class Iterator(
         iterator = Iter([1, 1, 2, 3, 4, 2, 6])
         uniques = set()
         iterator.collect_into(uniques)
-        # (1, 2, 3, 4, 6)
+        # assert uniques == {1, 2, 3, 4, 6}
         ```
 
         Parameters
@@ -482,6 +483,23 @@ class Iterator(
             The function to predicate each item in the iterator.
         """
         return DropWhile(self, f)
+
+    def chunks(self, chunk_size: int, /) -> Chunks[Item]:
+        """Returns an iterator over `chunk_size` elements of the iterator at a time. starting
+        at the begining of the iterator.
+
+        Example
+        -------
+        ```py
+        iter = Iter(['a', 'b', 'c', 'd', 'e'])
+        chunks = iter.chunks()
+        assert chunks.next().unwrap() == ['a', 'b']
+        assert chunks.next().unwrap() == ['c', 'd']
+        assert chunks.next().unwrap() == ['e']
+        assert chunks.next().is_none()
+        ```
+        """
+        return Chunks(self, chunk_size)
 
     def all(self, predicate: collections.Callable[[Item], bool]) -> bool:
         """Return `True` if all items in the iterator match the predicate.
@@ -805,7 +823,7 @@ class Iter(Iterator[Item]):
     def __init__(self, iterable: collections.Iterable[Item]) -> None:
         self._it = iter(iterable)
 
-    def clone(self) -> typing.Self:
+    def clone(self) -> Iter[Item]:
         """Return a copy of this iterator.
 
         ```py
@@ -818,13 +836,13 @@ class Iter(Iterator[Item]):
         assert it.count() == 3
         ```
         """
-        return self.__class__(copy.copy(self._it))
+        return Iter(copy.copy(self._it))
 
     def __next__(self) -> Item:
         try:
             return next(self._it)
         except StopIteration:
-            unreachable()
+            raise
 
     def __getitem__(self, index: int) -> Option[Item]:
         try:
@@ -1040,6 +1058,34 @@ class DropWhile(typing.Generic[Item], Iterator[Item]):
 
 
 @diagnostic
+class Chunks(typing.Generic[Item], Iterator[collections.Sequence[Item]]):
+    """An iterator that yields elements in chunks.
+
+    This iterator is created by the `Iterator.chunks` method.
+    """
+
+    __slots__ = ("chunk_size", "_it")
+
+    def __init__(self, it: Iterator[Item], chunk_size: int) -> None:
+        self.chunk_size = chunk_size
+        self._it = it
+
+    def __next__(self) -> collections.Sequence[Item]:
+        chunk: list[Item] = []
+
+        for item in self._it:
+            chunk.append(item)
+
+            if len(chunk) == self.chunk_size:
+                break
+
+        if chunk:
+            return chunk
+
+        unreachable()
+
+
+@diagnostic
 class Empty(typing.Generic[Item], Iterator[Item]):
     """An iterator that yields literally nothing.
 
@@ -1100,7 +1146,7 @@ def repeat(element: Item, count: int) -> Iterator[Item]:
     assert iterator.next() == Some(None)
     ```
     """
-    return Iter((element for _ in range(count)))
+    return Iter((copy.copy(element) for _ in range(count)))
 
 
 def once(item: Item) -> Iterator[Item]:

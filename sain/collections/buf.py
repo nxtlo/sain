@@ -118,7 +118,7 @@ class Bytes:
     print(buffer) # [72, 101, 108, 108, 111]
 
     buf.put(32) # space
-    assert buffer.as_bytes() == b"Hello "
+    assert buffer.to_bytes() == b"Hello "
     ```
     """
 
@@ -383,7 +383,7 @@ class Bytes:
         ```
         """
         if self._buf is not None:
-            return self._buf
+            return self._buf.__buffer__(0x100).toreadonly()
 
         raise ReferenceError("`self` must be initialized first.") from None
 
@@ -430,8 +430,8 @@ class Bytes:
         -------
         ```py
         buf = Bytes()
-        buf.put(32)
-        assert buf.as_bytes() == b' '
+        buf.put(32) # append a space to the end of the buffer
+        assert buf.to_bytes() == b' '
         ```
 
         Parameters
@@ -442,7 +442,7 @@ class Bytes:
         Raises
         ------
         `OverflowError`
-            If a byte in `src` not in range 0..=255
+            If `src` not in range of `0..255`
         """
         if self._buf is None:
             # If it was `None`, we initialize it with a source instead of appending.
@@ -475,7 +475,7 @@ class Bytes:
         Raises
         ------
         `OverflowError`
-            If a byte in `src` is greater than `u8->MAX` which is 255.
+            If `src` not in range of `0..255`
         """
         if self._buf is None:
             # If it was `None`, we initialize it with a source instead of extending.
@@ -502,7 +502,7 @@ class Bytes:
         Raises
         ------
         `OverflowError`
-            If a byte in `src` is greater than `u8->MAX` which is 255.
+            If `src` not in range of `0..255`
         """
         if self._buf is None:
             # If it was `None`, we initialize it with a source instead of extending.
@@ -511,7 +511,7 @@ class Bytes:
             self._buf.extend(src)
 
     def put_str(self, s: str) -> None:
-        """Put bytes into `self` from an encoded string.
+        """Put a `utf-8` encoded bytes from a string.
 
         Example
         -------
@@ -532,11 +532,11 @@ class Bytes:
     def fill(self, value: int) -> None:
         """Fill this `self` with the given byte.
 
-        Nothing happens if the vec is empty or unallocated.
+        Nothing happens if the buffer is empty or unallocated.
 
         Example
         ```py
-        a = Vec([0, 1, 2, 3])
+        a = Bytes.from_bytes([0, 1, 2, 3])
         a.fill(0)
         assert a == [0, 0, 0, 0]
         ```
@@ -688,16 +688,16 @@ class Bytes:
         del self._buf[size:]
 
     def split_off(self, at: int) -> Bytes:
-        """Split the vector off at the specified position, returning a new
-        vec at the range of `[at : len]`, leaving `self` at `[at : vec_len]`.
+        """Split the bytes off at the specified position, returning a new
+        `Bytes` at the range of `[at : len]`, leaving `self` at `[at : bytes_len]`.
 
-        if this vec is empty, `self` is returned unchanged.
+        if this bytes is empty, `self` is returned unchanged.
 
         Example
         -------
         ```py
-        origin = Vec((1, 2, 3, 4))
-        split = vec.split_off(2)
+        origin = Bytes.from_bytes((1, 2, 3, 4))
+        split = origin.split_off(2)
 
         print(origin, split)  # [1, 2], [3, 4]
         ```
@@ -710,36 +710,36 @@ class Bytes:
         len_ = self.len()
         if at > len_:
             raise RuntimeError(
-                f"Index `at` ({at}) should be <= than len of vector ({len_}) "
+                f"Index `at` ({at}) should be <= than len of `self` ({len_}) "
             ) from None
 
         # Either the list is empty or uninit.
         if not self._buf:
             return self
 
-        split = self[at:len_]  # split the items into a new vec.
+        split = self[at:len_]  # split the items into a new buffer.
         del self._buf[at:len_]  # remove the items from the original list.
         return split
 
     def split_first(self) -> _option.Option[tuple[int, collections.Sequence[int]]]:
-        """Split the first and rest elements of the vector, If empty, `None` is returned.
+        """Split the first and rest elements of the bytes, If empty, `None` is returned.
 
         Example
         -------
         ```py
-        vec = Vec([1, 2, 3])
-        split = vec.split_first()
+        buf = Bytes.from_bytes([1, 2, 3])
+        split = buf.split_first()
         assert split == Some((1, [2, 3]))
 
-        vec: Vec[int] = Vec()
-        split = vec.split_first()
+        buf: Bytes = Bytes()
+        split = buf.split_first()
         assert split.is_none()
         ```
         """
         if not self._buf:
             return _option.NOTHING  # pyright: ignore
 
-        # optimized to only one element in the vector.
+        # optimized to only one element in the buffer.
         if self.len() == 1:
             return _option.Some((self[0], ()))
 
@@ -747,13 +747,13 @@ class Bytes:
         return _option.Some((first, rest))
 
     def split_last(self) -> _option.Option[tuple[int, collections.Sequence[int]]]:
-        """Split the last and rest elements of the vector, If empty, `None` is returned.
+        """Split the last and rest elements of the bytes, If empty, `None` is returned.
 
         Example
         -------
         ```py
-        vec = Vec([1, 2, 3])
-        last, rest = vec.split_last().unwrap()
+        buf = Bytes.from_bytes([1, 2, 3])
+        last, rest = buf.split_last().unwrap()
         assert (last, rest) == [3, [1, 2]]
         ```
         """
@@ -761,12 +761,39 @@ class Bytes:
             return _option.NOTHING  # pyright: ignore
 
         len_ = self.len()
-        # optimized to only one element in the vector.
+        # optimized to only one element in the buffer.
         if len_ == 1:
             return _option.Some((self[0], ()))
 
         last = self[-1]
         return _option.Some((last, [*self[:-1]]))
+
+    def split_at(self, mid: int) -> tuple[Bytes, Bytes]:
+        """Divide `self` into two at an index.
+
+        The first will contain all bytes from `[0:mid]` excluding `mid` it self.
+        and the second will contain the remaninig bytes.
+
+        if `mid` > `self.len()`, Then all bytes will be moved to the left,
+        returning an empty bytes in right.
+
+        Example
+        -------
+        ```py
+        buffer = Bytes.from_bytes((1, 2, 3, 4))
+        left, right = buffer.split_at(0)
+        assert left == [] and right == [1, 2, 3, 4]
+
+        left, right = buffer.split_at(2)
+        assert left == [1, 2] and right == [2, 3]
+        ```
+
+        The is roughly the implementation
+        ```py
+        self[0:mid], self[mid:]
+        ```
+        """
+        return self[0:mid], self[mid:]
 
     # layout methods.
 
@@ -855,12 +882,12 @@ class Bytes:
         return _option.Some(self._buf.pop(i))
 
     def swap_remove(self, byte: int) -> int:
-        """Remove the first appearance of `item` from this vector and return it.
+        """Remove the first appearance of `item` from this buffer and return it.
 
         Raises
         ------
-        * `ValueError`: if `item` is not in this vector.
-        * `MemoryError`: if this vector hasn't allocated, Aka nothing has been pushed to it.
+        * `ValueError`: if `item` is not in this buffer.
+        * `MemoryError`: if this buffer hasn't allocated, Aka nothing has been pushed to it.
 
         Example
         -------
@@ -871,7 +898,7 @@ class Bytes:
         ```
         """
         if self._buf is None:
-            raise MemoryError("Vec is unallocated.") from None
+            raise MemoryError("`self` is unallocated.") from None
 
         return self._buf.pop(self.index(byte))
 
@@ -921,6 +948,11 @@ class Bytes:
     def __eq__(self, other: object, /) -> bool:
         if not self._buf:
             return False
+
+        if isinstance(other, list):
+            # this conversion may or may not cost,
+            # users usually should not compare bytes this way anyway.
+            return self._buf.tolist() == other
 
         return self._buf.__eq__(other)
 
