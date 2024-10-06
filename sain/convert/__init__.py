@@ -95,6 +95,8 @@ assert payload.into() == message_bytes
 
 from __future__ import annotations
 
+__slots__ = ("Into", "TryInto", "From", "TryFrom")
+
 import typing
 
 if typing.TYPE_CHECKING:

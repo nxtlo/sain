@@ -35,7 +35,12 @@ It appends useful messages to warn at runtime and to the object documentation.
 
 from __future__ import annotations
 
-__all__ = ("deprecated", "unimplemented", "todo", "doc", "unsafe")
+__all__ = (
+    "deprecated",
+    "unimplemented",
+    "todo",
+    "doc",
+)
 
 import functools
 import inspect
@@ -50,6 +55,79 @@ if typing.TYPE_CHECKING:
     P = typing.ParamSpec("P")
     U = typing.TypeVar("U")
     Read = _typeshed.FileDescriptorOrPath
+    # fmt: off
+    RustItem = typing.Literal[
+        # mem
+        "MaybeUninit",
+        # option
+        "Option", "Some", "None",
+        # result
+        "Result", "Ok", "Err",
+        # macros
+        "unimplemented", "todo",
+        "deprecated", "doc",
+        "cfg", "cfg_attr",
+        # std::iter::*
+        "Iterator", "Iter", "empty",
+        "once", "repeat", "into_iter",
+        # errors
+        "Error",
+        # sync
+        "Lazy",
+        "Once",
+        # convert
+        "From", "TryFrom",
+        "Into", "TryInto",
+        # default
+        "Default",
+        # std::collections::*
+        "HashMap",
+        "Vec", "vec!",
+    ]
+    # fmt: on
+
+_MAP_TO_PATH: dict[RustItem, typing.LiteralString] = {
+    # mem
+    "MaybeUninit": "std/mem/union.MaybeUninit.html",
+    # option
+    "Option": "std/option/enum.Option.html",
+    "Some": "std/option/enum.Option.html#variant.Some",
+    "None": "std/option/enum.Option.html#variant.None",
+    # result,
+    "Result": "std/result/enum.Result.html",
+    "Ok": "std/result/enum.Result.html#variant.Ok",
+    "Err": "std/result/enum.Result.html#variant.Err",
+    # macros
+    "unimplemented": "std/macro.unimplemented.html",
+    "todo": "std/macro.todo.html",
+    "deprecated": "reference/attributes/diagnostics.html#the-deprecated-attribute",
+    "cfg": "std/macro.cfg.html",
+    "cfg_attr": "reference/conditional-compilation.html#the-cfg_attr-attribute",
+    "doc": "rustdoc/write-documentation/the-doc-attribute.html",
+    # "iter"
+    "Iterator": "std/iter/trait.Iterator.html",
+    "Iter": "std/slice/struct.Iter.html",
+    "empty": "std/iter/fn.empty.html",
+    "repeat": "std/iter/fn.repeat.html",
+    "once": "std/iter/fn.once.html",
+    "into_iter": "std/iter/trait.IntoIterator.html#tymethod.into_iter",
+    # errors
+    "Error": "std/error/trait.Error.html",
+    # sync
+    "Lazy": "std/sync/struct.LazyLock.html",
+    "Once": "std/sync/struct.OnceLock.html",
+    # convert
+    "From": "std/convert/trait.From.html",
+    "TryFrom": "std/convert/trait.TryFrom.html",
+    "Into": "std/convert/trait.Into.html",
+    "TryInto": "std/convert/trait.TryInto.html",
+    # default
+    "Default": "std/default/trait.Default.html",
+    # collections
+    "HashMap": "std/collections/struct.HashMap.html",
+    "Vec": "std/vec/struct.Vec.html",
+    "vec!": "std/macro.vec.html",
+}
 
 
 @typing.final
@@ -71,14 +149,58 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
 
     The caller of the decorated function is responsible for the undefined behavior if occurred.
     """
-    m = "\n# Safety ⚠️\nCalling this method on `None` is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior)."
+    m = "\n# Safety ⚠️\nCalling this method on `None` is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior).\n"
     if fn.__doc__:
         # append this message to an existing document.
-        fn.__doc__ = inspect.cleandoc(fn.__doc__) + f"\n{m}"
+        fn.__doc__ = inspect.cleandoc(fn.__doc__) + m
     else:
         fn.__doc__ = m
 
     return fn
+
+
+# this function applies on both classes and functions,
+# typing it will be clusterfuck, so we're just ignoring and
+# type checkers will infer the types.
+def rustc_diagnostic_item(item: RustItem, /):  # type: ignore
+    """Expands a Python callable object's documentation, generating the corresponding Rust implementation of the marked object.
+
+    This is a decorator that applies on both classes, methods and functions.
+
+    Assuming we're implementing the `Clone` trait from Rust, the object in Python may be marked with this decorator like this.
+    ```py
+    from sain.macros import rustc_diagnostic_item
+
+    @rustc_diagnostic_item("Clone")
+    class Clone:
+        # The Clone trait for types that cannot be ‘implicitly copied’.
+
+        # this doesn't exist but... you get the idea.
+        @rustc_diagnostic_item("clone_fn")
+        def clone(self) -> Self:
+            ...
+    ```
+
+    Now that the class is marked,
+    It will generate documentation that links to the Rust object that we implemented in Python.
+    """
+
+    RUSTC_DOCS = "https://doc.rust-lang.org"
+
+    def decorator(f):  # type: ignore
+        @functools.wraps(f)  # type: ignore
+        def wrapper(*args, **kwargs):  # type: ignore
+            return f(*args, **kwargs)  # type: ignore
+
+        m = f"# Implementations\n\nThis {_obj_type(f)} implementes [{item}]({RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."  # type: ignore
+        if wrapper.__doc__ is not None:
+            # append this message to an existing document.
+            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + "\n" + m
+        else:
+            wrapper.__doc__ = m
+        return wrapper  # type: ignore
+
+    return decorator  # type: ignore
 
 
 @functools.cache
@@ -148,6 +270,7 @@ def unstable(
     return decorator
 
 
+@rustc_diagnostic_item("deprecated")
 def deprecated(
     *,
     since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
@@ -232,6 +355,7 @@ def deprecated(
     return decorator
 
 
+@rustc_diagnostic_item("todo")
 def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     """A place holder that indicates unfinished code.
 
@@ -253,6 +377,7 @@ def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     raise Error(f"not yet implemented: {message}" if message else "not yet implemented")
 
 
+@rustc_diagnostic_item("unimplemented")
 def unimplemented(
     *,
     message: typing.LiteralString | None = None,
@@ -313,6 +438,7 @@ def unimplemented(
     return decorator
 
 
+@rustc_diagnostic_item("doc")
 def doc(
     path: Read,
 ) -> collections.Callable[

@@ -590,11 +590,11 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         -------
         ```py
         from sain import Some
-        value = Some("gg")
-        value.next() == Some("gg")
+        value = Some("gg").iter()
+        assert value.next() == Some("gg")
 
         value: Option[int] = Some(None)
-        value.next().is_none()
+        assert value.iter().next().is_none()
         ```
         """
         if self._value is None:
@@ -685,7 +685,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         return hash(self._value)
 
 
-Option: typing.TypeAlias = Some[T]
+Option: typing.TypeAlias = "Some[T]"
 """A type hint for a value that can be `Some<T>` or `None`.
 
 The reason this exist is to satisfy the UX with Rust's type system.

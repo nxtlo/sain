@@ -140,10 +140,56 @@ class MaybeUninit(typing.Generic[T]):
         # SAFETY: the caller must guarantee that `self` is initialized.
         return self.__value
 
+    @staticmethod
+    @macros.unsafe
+    def array_assume_init(
+        array: collections.Sequence[MaybeUninit[T]],
+    ) -> collections.Sequence[T]:
+        """Extracts a sequence of `MaybeUninit[T]` containers.
+
+        You must guarantee that all elements in the array are initialized.
+
+        Example
+        -------
+        ```py
+        array: list[MaybeUninit[int]] = [MaybeUninit(), MaybeUninit(), MaybeUninit()]
+        array[0].write(0)
+        array[1].write(1)
+        array[2].write(2)
+        # transposed into a tuple.
+        assert MaybeUninit.array_assume_init(array) == (0, 1, 2)
+        ```
+        """
+        # SAFETY: The caller guarantees that all elements of the array are initialized
+        return tuple(uninit.assume_init() for uninit in array)
+
+    @staticmethod
+    @macros.unsafe
+    def array_assume_init_mut(
+        array: collections.Sequence[MaybeUninit[T]],
+    ) -> collections.MutableSequence[T]:
+        """Extracts a sequence of `MaybeUninit[T]` to a list of `T`s.
+
+        You must guarantee that all elements in the array are initialized.
+
+        Example
+        -------
+        ```py
+        array: list[MaybeUninit[int]] = [MaybeUninit(), MaybeUninit(), MaybeUninit()]
+        array[0].write(0)
+        array[1].write(1)
+        array[2].write(2)
+        # transposed into a list.
+        assert MaybeUninit.array_assume_init_mut(array) == [0, 1, 2]
+        ```
+        """
+        # SAFETY: The caller guarantees that all elements of the array are initialized
+        return [uninit.assume_init() for uninit in array]
+
     def write(self, value: T) -> T:
         """Sets the value of the `MaybeUninit[T]`.
 
-        This will overwrite any previous values, if was initialized obviously.
+        This will overwrite any previous values, if was initialized.
 
         Example
         -------

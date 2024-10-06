@@ -64,6 +64,8 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
+
+# from .macros import rustc_diagnostic_item
 from .collections import vec
 
 Item = typing.TypeVar("Item")
@@ -96,6 +98,7 @@ def diagnostic(cls: type[AnyIter]) -> type[AnyIter]:
     return cls
 
 
+# @rustc_diagnostic_item("Iterator")
 class Iterator(
     typing.Generic[Item],
     abc.ABC,
@@ -685,9 +688,8 @@ class Iterator(
     def find(self, predicate: collections.Callable[[Item], bool]) -> Option[Item]:
         """Searches for an element of an iterator that satisfies a predicate.
 
-        `find()` takes a closure that returns true or false. It applies this closure to each element of the iterator,
-        and if any of them return true,
-        then find() returns `Some(element)`. If they all return false, it returns None.
+        `find()` takes a lambda that returns true or false. It applies this closure to each element of the iterator,
+        and if any of them return true, then find() returns `Some(element)`. If they all return false, it returns None.
 
         Example
         -------
@@ -697,15 +699,12 @@ class Iterator(
         print(item) # 6
         ```
         """
-        while True:
-            try:
-                n = self.__next__()
-                if predicate(n):
-                    return _option.Some(n)
-            except StopIteration:
-                # ! SAFETY: No more items to search.
-                # we also want to avoid function calls.
-                return _option.NOTHING  # pyright: ignore
+        for item in self:
+            if predicate(item):
+                return _option.Some(item)
+
+        # no more items
+        return _option.NOTHING  # pyright: ignore
 
     def for_each(self, func: collections.Callable[[Item], typing.Any]) -> None:
         """Calls `func` on each item in the iterator.
@@ -782,6 +781,7 @@ class Iterator(
 
 
 @typing.final
+# @rustc_diagnostic_item("Iter")
 @diagnostic
 class Iter(Iterator[Item]):
     """a lazy iterator that has its items ready in-memory.
@@ -1086,6 +1086,7 @@ class Chunks(typing.Generic[Item], Iterator[collections.Sequence[Item]]):
 
 
 @diagnostic
+# @rustc_diagnostic_item("empty")
 class Empty(typing.Generic[Item], Iterator[Item]):
     """An iterator that yields literally nothing.
 
@@ -1120,6 +1121,7 @@ class Empty(typing.Generic[Item], Iterator[Item]):
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.
+# @rustc_diagnostic_item("empty")
 def empty() -> Empty[Item]:  # pyright: ignore
     """Create an iterator that yields nothing.
 
@@ -1133,6 +1135,7 @@ def empty() -> Empty[Item]:  # pyright: ignore
     return Empty()
 
 
+# @rustc_diagnostic_item("repeat")
 def repeat(element: Item, count: int) -> Iterator[Item]:
     """Returns an iterator that yields the same `element` number of `count` times.
 
@@ -1149,6 +1152,7 @@ def repeat(element: Item, count: int) -> Iterator[Item]:
     return Iter((copy.copy(element) for _ in range(count)))
 
 
+# @rustc_diagnostic_item("once")
 def once(item: Item) -> Iterator[Item]:
     """Returns an iterator that yields exactly a single item.
 
@@ -1163,6 +1167,7 @@ def once(item: Item) -> Iterator[Item]:
     return Iter((item,))
 
 
+# @rustc_diagnostic_item("into_iter")
 def into_iter(
     iterable: collections.Iterable[Item],
 ) -> Iterator[Item]:

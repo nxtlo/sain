@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Bytes.split_at`
 - `Vec.split_at`
 - `Iteratr.chunks`
+- `MaybeUninit.array_assume_init`
+- `MaybeUninit.array_assume_init_mut`
 
 ### Added
 

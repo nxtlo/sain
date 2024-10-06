@@ -31,65 +31,55 @@
 
 `Result[T, E]` is a drop-in replacement for exceptions `try/except`
 
-where`Ok(T)` is the successful value and `Err(E)` is the error result.
+where `Ok(T)` is the successful value and `Err(E)` is the error result.
 
+A function returning a `Result` may be defined like this:
 ```py
-import enum
-
 from sain import Result, Ok, Err
+from enum import Enum
 
-class FileError(enum.Enum):
-    READ = enum.auto()
-    WRITE = enum.auto()
-    EMPTY = enum.auto()
+class Version(Enum):
+    VERSION_1 = 0x1
+    VERSION_2 = 0x2
 
-def ready_lines(path: str) -> Result[list[str], FileError]:
-    with open(path, 'r') as file:
-        if (lines := file.readable()):
-            if not lines:
-                # File is readable but doesn't contain any lines.
-                return Err(FileError.EMPTY)
-
-            # File is not readable.
-            return Err(FileError.READ)
-
-        # Success.
-        return Ok(file.readlines())
+def parse_version(header: str) -> Result[Version, str]:
+    match header.split('.')[0]:
+        case '1':
+            return Ok(Version.VERSION_1)
+        case '2':
+            return Ok(Version.VERSION_2)
+        case _:
+            return Err(f"Invalid version {header}")
 ```
 
 simple pattern matching in `Result` is a straight-forward way to handle the returned value.
 
 ```py
-match read_lines('quotes.txt'):
-    # Ok(T) represents the success result which's `list[str]`.
-    case Ok(lines):
-        for line in lines:
-            print(line)
-
-    # Error represents the error contained value which's the enum `FileError`.
-    case Err(reason):
-        # Match the reason.
-        match reason:
-            case FileError.READ | FileError.WRITE:
-                print("Can't read/write file.")
-            case FileError.EMPTY:
-                print("No lines in file.")
+version = parse_version("1.2.0")
+match version:
+    Ok(v): print(f"working with version {v}")
+    Err(e): print(f"error parsing header {e}")
 ```
 
 In addition to working with pattern matching, `Result` provides a
 wide variety of different methods.
 
 ```py
-# This will either return the `Ok` value or default if it was `Err
-# which's equivalent to `unwrap_or` method.
+# `unwrap_or` is used to return a default value incase of an `Err` variant returned.
+good_result: Result[str, bool] = Ok("Name")
+print(username.unwrap_or("default_name"))  # name
 
-# On Ok
-username: Result[str, bool] = Ok("Name")
-print(username | "default_name")  # name
+bad_result: Result[str, bool] = Err(False)
+print(username.unwrap_or("default_name"))  # name
+```
 
-# On Err
-username: Result[str, bool] = Err(False)
-print(username | "default_name")  # default_name
+If you're expecting a value should never be an `Err` at runtime, use `.expect`
+```py
+def request(token: str) -> Result[bytes, None]:
+    ...
+
+resposne = request("token").expect("likely and invalid token")
+# This will raise at runtime with the message 'likely ...'
 ```
 """
 
@@ -102,6 +92,8 @@ import typing
 
 from sain import iter as _iter
 from sain import option as _option
+
+# from sain.macros import rustc_diagnostic_item
 
 T = typing.TypeVar("T")
 E = typing.TypeVar("E")
@@ -808,4 +800,7 @@ class Err(typing.Generic[E]):
         self.unwrap()
 
 
-Result: TypeAlias = Ok[T] | Err[E]
+Result: TypeAlias = "Ok[T] | Err[E]"
+"""A type hint for a function that may return `Ok[T]` or `Err[E]`,
+
+See the module documentation level for more information."""
