@@ -17,83 +17,73 @@ pip install sain
 
 ## Overview
 
-More examples in [examples](https://github.com/nxtlo/sain/tree/master/examples)
-
-### no `try/except`
-
-Rust doesn't have exception, But `Option<T>` which handles None's, and `Result<T, E>` for returning and propagating errors.
-we can easily achieve the same results in Python
+`sain` provides a variety of the standard library crates. such as `Vec<T>` and converter interfaces.
 
 ```py
-from __future__ import annotations
-
 from sain import Option, Result, Ok, Err
-from sain.collections import Vec, Bytes
-from sain.convert import Into
+from sain.collections import Vec
+from sain.collections.buf import Bytes
+from sain.convert import Into, TryFrom
 
 from dataclasses import dataclass, field
 
 
-# A chunk of data, the Into protocol allows users to convert the chunk into bytes.
-# similar to Rust's Into trait.
+# A layout of some data.
 @dataclass
-class Chunk(Into[bytes]):
+class Layout(Into[Bytes], TryFrom[str, None]):
     tag: str
-    data: Bytes
+    content: str
 
-    # convert a chunk into bytes.
-    # in Rust, this consumes `self`, But in Python it copies it.
-    def into(self) -> bytes:
-        return self.data.to_bytes()
+    # converts this layout into a some raw bytes as JSON.
+    def into(self) -> Bytes:
+        # you probably want to use `json.dumps` here.
+        return Bytes.from_str(str({"tag": self.tag, "content": self.content}))
+
+    @classmethod
+    def try_from(cls, value: str) -> Result[Layout, None]:
+        # implement a conversion from a string to a layout.
+        # in case of success, return Ok(layout)
+        # and in case of failure, return Ok(None)
+        parsed = value.split(".")  # this is an example.
+        return Ok(Layout(tag=parsed[0], content=parsed[1]))
 
 
 @dataclass
-class BlobStore:
-    pos: int
-    # A buffer that contains chunks of bytes over which we might
-    # lazily load from somewhere. This buffer can hold up to 1024 chunks.
-    buffer: Vec[Chunk] = field(default_factory=lambda: Vec[Chunk].with_capacity(1024))
+class Intrinsic:
+    layouts: Vec[Layout] = field(default_factory=Vec)
 
-    def put(self, tag: str, data: bytes) -> Result[None, str]:
-        chunk = Chunk(tag, Bytes.from_bytes(data))
-        # push_within_capacity returns `Result[None, Chunk]`.
-        # It returns the chunk that got failed to be pushed,
-        # we try to push if there's space, mapping the error to
-        # a string.
-        return self.buffer.push_within_capacity(chunk).map_err(
-            lambda chunk: "No more capacity to push chunk: " + str(chunk)
-        )
+    # extends the vec from an iterable.
+    def add(self, *layouts: Layout):
+        self.layouts.extend(layouts)
 
-    def next_chunk(self) -> Option[Chunk]:
-        chunk = self.buffer.get(self.pos)
-        self.pos += 1
-        return chunk
+    # finds an optional layout that's tagged with `pattern`
+    def find(self, pattern: str) -> Option[Layout]:
+        return self.layouts.iter().find(lambda book: pattern in book.tag)
 
+    # converts the entire buffer into `Bytes`
+    def to_payload(self) -> Result[Bytes, None]:
+        if not self.layouts:
+            return Err(None)
 
-def main() -> None:
-    blobs = BlobStore(0)
+        buffer = Bytes()
+        for layout in self.layouts:
+            buffer.put_bytes(layout.into())
 
-    # upload a blob matching any errors.
-    match blobs.put("c1", b"first chunk"):
-        case Ok(_):
-            print("chunk pushed succefully.")
-        case Err(why):
-            print(why)
-
-    # or just
-    blobs.put("c2", b"second chunk").unwrap()
-
-    # Read back the chunks, and map it to bytes object.
-    # in Rust, you would do something similar to
-    # * while let Some(chunk) = option.map(String::from_utf8_lossy) { ... } *
-    while (chunk := blobs.next_chunk()).is_some():
-        print(chunk.map(Chunk.into))
-
-    # use an iterator over the chunks
-    for pos, chunk in blobs.buffer.iter().enumerate():
-        print(pos, chunk.data)
+        return Ok(buffer)
 
 
+intr = Intrinsic()
+intr.add(
+    Layout("llm1", "content"),
+)
+# try to convert the string into a Layout.
+match Layout.try_from("llm2.content"):
+    case Ok(layout):
+        intr.add(layout)  # add it if parsed.
+    case Err(_):
+        ...  # Error parsing the str.
+
+print(intr.to_payload().unwrap())
 ```
 
 ## built-in types
