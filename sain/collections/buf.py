@@ -97,8 +97,7 @@ class Bytes:
     A `Bytes` objects are usually used within networking applications, but can also be used
     elsewhere as well.
 
-    Construction
-    ------------
+    ## Construction
     `Bytes` object accept multiple rawish data types, See `Rawish` for all supported types.
 
     * `Bytes()`: Initialize an empty `Bytes` object
@@ -106,7 +105,7 @@ class Bytes:
     * `from_bytes`: Create `Bytes` from a `Buffer` type
     * `from_raw`: Create `Bytes` from a `Rawish` type
     * `from_static`: Create `Bytes` that points to an `array.array[int]` without copying it
-    * `zeroed(count)`: Create `Bytes` filled with zeroes * count.
+    * `Bytes.zeroed(count)`: Create `Bytes` filled with `zeroes * count`.
 
     Example
     -------

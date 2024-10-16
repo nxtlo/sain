@@ -9,7 +9,6 @@ type Python = _typing.Literal["CPython", "PyPy", "IronPython", "Jython"]
 
 def cfg_attr[F: Callable[..., object]](
     *,
-    requires: str | None = ...,
     target_os: System | None = ...,
     python_version: tuple[int, int, int] | None = ...,
     target_arch: Arch | None = ...,
@@ -18,7 +17,6 @@ def cfg_attr[F: Callable[..., object]](
 def cfg(
     *,
     target_os: System | None = ...,
-    requires: str | None = ...,
     python_version: tuple[int, int, int] | None = ...,
     target_arch: Arch | None = ...,
     impl: Python | None = ...,

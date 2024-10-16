@@ -909,7 +909,7 @@ class Vec(typing.Generic[T]):
 
 
 def from_args(*elements: T) -> Vec[T]:
-    """Construct a vector containing `elements`.
+    """Creates a `Vec` containing `elements`.
 
     Example
     -------
