@@ -192,12 +192,13 @@ def rustc_diagnostic_item(item: RustItem, /):  # type: ignore
         def wrapper(*args, **kwargs):  # type: ignore
             return f(*args, **kwargs)  # type: ignore
 
-        m = f"# Implementations\n\nThis {_obj_type(f)} implementes [{item}]({RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."  # type: ignore
-        if wrapper.__doc__ is not None:
+        m = f"\n# Implementations\nThis {_obj_type(f)} implementes [{item}]({RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust.\n"  # type: ignore
+        if f.__doc__ is not None:
             # append this message to an existing document.
-            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + "\n" + m
+            f.__doc__ = inspect.cleandoc(f.__doc__) + m
         else:
-            wrapper.__doc__ = m
+            f.__doc__ = m
+        f.__func__ = wrapper
         return wrapper  # type: ignore
 
     return decorator  # type: ignore
@@ -270,7 +271,6 @@ def unstable(
     return decorator
 
 
-@rustc_diagnostic_item("deprecated")
 def deprecated(
     *,
     since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
@@ -355,7 +355,6 @@ def deprecated(
     return decorator
 
 
-@rustc_diagnostic_item("todo")
 def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     """A place holder that indicates unfinished code.
 
@@ -377,7 +376,6 @@ def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     raise Error(f"not yet implemented: {message}" if message else "not yet implemented")
 
 
-@rustc_diagnostic_item("unimplemented")
 def unimplemented(
     *,
     message: typing.LiteralString | None = None,
@@ -438,7 +436,6 @@ def unimplemented(
     return decorator
 
 
-@rustc_diagnostic_item("doc")
 def doc(
     path: Read,
 ) -> collections.Callable[

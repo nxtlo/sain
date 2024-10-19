@@ -65,8 +65,6 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-
-# from .macros import rustc_diagnostic_item
 from .collections import vec
 
 Item = typing.TypeVar("Item")
@@ -108,7 +106,6 @@ def diagnostic(cls: type[AnyIter]) -> type[AnyIter]:
     return cls
 
 
-# @rustc_diagnostic_item("Iterator")
 class Iterator(
     typing.Generic[Item],
     abc.ABC,
@@ -1168,7 +1165,7 @@ class Chunks(typing.Generic[Item], Iterator[collections.Sequence[Item]]):
 @typing.final
 @diagnostic
 class Empty(typing.Generic[Item], Iterator[Item]):
-    """An iterator that yields literally nothing.
+    """An iterator that yields nothing.
 
     This is the default iterator that is created by `Iterator.default()` or `empty()`
     """
@@ -1234,7 +1231,6 @@ class Repeat(typing.Generic[Item], Iterator[Item]):
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.
-# @rustc_diagnostic_item("empty")
 def empty() -> Empty[Item]:  # pyright: ignore
     """Create an iterator that yields nothing.
 
@@ -1273,7 +1269,6 @@ def repeat(element: Item, count: int) -> Repeat[Item]:
     return Repeat(element, count)
 
 
-# @rustc_diagnostic_item("once")
 def once(item: Item) -> Iterator[Item]:
     """Returns an iterator that yields exactly a single item.
 
@@ -1288,7 +1283,6 @@ def once(item: Item) -> Iterator[Item]:
     return Iter((item,))
 
 
-# @rustc_diagnostic_item("into_iter")
 def into_iter(
     iterable: collections.Iterable[Item],
 ) -> Iterator[Item]:
@@ -1304,10 +1298,5 @@ def into_iter(
     # 2
     # 1
     ```
-
-    Parameters
-    ----------
-    iterable: `Iterable[Item]`
-        The iterable to convert.
     """
     return Iter(iterable)

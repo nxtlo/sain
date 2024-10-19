@@ -34,6 +34,8 @@ This contains Rust's `std::collections::HashMap` methods.
 
 from __future__ import annotations
 
+__all__ = ("HashMap", "RefMut")
+
 import collections.abc as collections
 import typing
 

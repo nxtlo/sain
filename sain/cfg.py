@@ -123,13 +123,11 @@ def cfg_attr(
     class Zoo:
         @sain.cfg_attr(target_os="linux")
         def bark(self) -> None:
-            windows_only()  # RuntimeError("Windows OS only!)
+            ...
 
     # An instance will not be created if raised.
     zoo = Zoo()
     # RuntimeError("class Zoo requires PyPy implementation")
-    zoo.bark()
-    # Whats zoo??
     ```
 
     Parameters

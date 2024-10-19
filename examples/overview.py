@@ -11,41 +11,40 @@ from __future__ import annotations
 import typing
 import dataclasses
 
-import sain
+from sain import cfg, cfg_attr, Some
 
 if typing.TYPE_CHECKING:
     from sain import Option
-    from typing_extensions import Self
 
 
 @dataclasses.dataclass
 class TokenGetter:
     """A token getter strategy."""
 
-    token: Option[str] = sain.Some(None)
+    token: Option[str] = Some(None)
 
-    # ! Warning: the `required_modules` attribute is currently buggy
-    # ! and will warn you if you run that code.
     @classmethod
-    @sain.cfg_attr(requires="python-dotenv")
-    def from_dotenv(cls, key: str, /) -> Self:
+    @cfg_attr(
+        python_version=(3, 12, 0)
+    )  # assumes dotenv is gated behind this Python version.
+    def from_dotenv(cls, key: str, /) -> TokenGetter:
         """Gets the token from the .env file. This requires the module `python-dotenv`."""
         import dotenv  # pyright: ignore[reportMissingImports]
 
-        return cls(sain.Some(dotenv.get_key(".env", key)))
+        return cls(Some(dotenv.get_key(".env", key)))
 
     @classmethod
-    def from_raw_env(cls, key: str, /) -> Self:
+    def from_raw_env(cls, key: str, /) -> TokenGetter:
         """Gets the token from the raw OS environment."""
         import os
 
-        return cls(sain.Some(os.environ.get(key)))
+        return cls(Some(os.environ.get(key)))
 
 
 # CPython implementation only function.
-@sain.cfg_attr(impl="CPython")
+@cfg_attr(impl="CPython")
 def main() -> None:
-    if sain.cfg(target_os="windows"):
+    if cfg(target_os="windows"):
         print("Running on Windows...")
         getter = TokenGetter.from_dotenv("API_TOKEN")
     else:
@@ -69,7 +68,7 @@ def main() -> None:
     print(getter.token.unwrap_or("DEFAULT_TOKEN"))  # DEFAULT_TOKEN
 
     # Map the token to a function making it upper case.
-    to_map = TokenGetter(sain.Some("blah"))
+    to_map = TokenGetter(Some("blah"))
     print(to_map.token.map(str.upper))  # Some("BLAH")
 
 
