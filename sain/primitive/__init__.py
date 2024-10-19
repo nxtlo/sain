@@ -8,11 +8,14 @@ __all__ = (
 )
 
 import typing
-from sain import Option, Some, NOTHING
+
+from sain import NOTHING
+from sain import Option
+from sain import Some
 
 if typing.TYPE_CHECKING:
-    from typing_extensions import Self
     from _typeshed import ConvertibleToInt
+    from typing_extensions import Self
 
 
 class _Primitive(int):

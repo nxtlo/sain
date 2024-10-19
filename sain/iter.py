@@ -47,6 +47,7 @@ __all__ = (
     "DropWhile",
     "Chunks",
     "Empty",
+    "Repeat",
     # Functions
     "into_iter",
     "empty",
@@ -82,6 +83,15 @@ if typing.TYPE_CHECKING:
     from .option import Option
 
     Collector = collections.MutableSequence[Item] | set[Item]
+    _typeshed.ConvertibleToInt
+    Sum: typing.TypeAlias = (
+        "Iterator[str]"
+        | "Iterator[typing.SupportsInt]"
+        | "Iterator[typing.SupportsIndex]"
+        | "Iterator[_typeshed.ReadableBuffer]"
+        | "Iterator[_typeshed.SupportsTrunc]"
+        | "Iterator[float]"
+    )
 
 
 def unreachable() -> typing.NoReturn:
@@ -488,8 +498,8 @@ class Iterator(
         return DropWhile(self, f)
 
     def chunks(self, chunk_size: int, /) -> Chunks[Item]:
-        """Returns an iterator over `chunk_size` elements of the iterator at a time. starting
-        at the begining of the iterator.
+        """Returns an iterator over `chunk_size` elements of the iterator at a time,
+        starting at the beginning of the iterator.
 
         Example
         -------
@@ -688,6 +698,8 @@ class Iterator(
     def find(self, predicate: collections.Callable[[Item], bool]) -> Option[Item]:
         """Searches for an element of an iterator that satisfies a predicate.
 
+        If you want the position of the element, use `Iterator.position` instead.
+
         `find()` takes a lambda that returns true or false. It applies this closure to each element of the iterator,
         and if any of them return true, then find() returns `Some(element)`. If they all return false, it returns None.
 
@@ -705,6 +717,74 @@ class Iterator(
 
         # no more items
         return _option.NOTHING  # pyright: ignore
+
+    def position(self, predicate: collections.Callable[[Item], bool]) -> Option[int]:
+        """Searches for the position of an element in the iterator that satisfies a predicate.
+
+        If you want the object itself, use `Iterator.find` instead.
+
+        `position()` takes a lambda that returns true or false. It applies this closure to each element of the iterator,
+        and if any of them return true, then position() returns `Some(position_of_element)`. If they all return false, it returns None.
+
+        Example
+        -------
+        ```py
+        it = Iter(range(10))
+        position = it.find(lambda num: num > 5)
+        assert position.unwrap() == 6
+        ```
+        """
+        for position, value in self.enumerate():
+            if predicate(value):
+                return _option.Some(position)
+
+        # no more items
+        return _option.NOTHING  # pyright: ignore
+
+    def fold(
+        self, init: OtherItem, f: collections.Callable[[OtherItem, Item], OtherItem]
+    ) -> OtherItem:
+        """Folds every element into an accumulator by applying an operation, returning the final result.
+
+        fold() takes two arguments: an initial value, and a closure with two arguments: an ‘accumulator’, and an element.
+        The closure returns the value that the accumulator should have for the next iteration.
+
+        The initial value is the value the accumulator will have on the first call.
+
+        After applying this closure to every element of the iterator, fold() returns the accumulator.
+
+        This operation is sometimes called ‘reduce’ or ‘inject’.
+
+        Example
+        -------
+        ```py
+        a = Iter([1, 2, 3, 4])
+        sum = a.fold(0, lambda acc, elem: acc + elem)
+        assert sum == 10
+        ```
+        """
+        accum = init
+        while True:
+            try:
+                x = self.__next__()
+                accum = f(accum, x)
+            except StopIteration:
+                break
+
+        return accum
+
+    def sum(self: Sum) -> int:
+        """Sums an iterator of a possible type that can be converted to an integer.
+
+        Example
+        -------
+        ```py
+        numbers: Iterator[str] = Iter(["1", "2", "3"])
+        total = numbers.sum()
+        assert total == 6
+        ```
+        """
+        return sum(int(_) for _ in self)
 
     def for_each(self, func: collections.Callable[[Item], typing.Any]) -> None:
         """Calls `func` on each item in the iterator.
@@ -1085,18 +1165,18 @@ class Chunks(typing.Generic[Item], Iterator[collections.Sequence[Item]]):
         unreachable()
 
 
+@typing.final
 @diagnostic
-# @rustc_diagnostic_item("empty")
 class Empty(typing.Generic[Item], Iterator[Item]):
     """An iterator that yields literally nothing.
 
     This is the default iterator that is created by `Iterator.default()` or `empty()`
     """
 
-    __slots__ = ("_it",)
+    __slots__ = ()
 
     def __init__(self) -> None:
-        self._it: collections.Generator[Item, None, None] = (_ for _ in ())
+        pass
 
     def next(self) -> Option[Item]:
         # SAFETY: an empty iterator always returns None.
@@ -1120,6 +1200,39 @@ class Empty(typing.Generic[Item], Iterator[Item]):
         unreachable()
 
 
+@typing.final
+@diagnostic
+class Repeat(typing.Generic[Item], Iterator[Item]):
+    """An iterator that repeats a given value an exact number of times.
+
+    This iterator is created by calling `repeat()`.
+    """
+
+    __slots__ = ("_count", "_element")
+
+    def __init__(self, element: Item, count: int) -> None:
+        self._count = count
+        self._element = element
+
+    def __next__(self) -> Item:
+        if self._count > 0:
+            self._count -= 1
+            if self._count == 0:
+                # Return the origin element last
+                return self._element
+
+            return copy.copy(self._element)
+
+        unreachable()
+
+    # Specializing these methods to avoid unnecessary function calls.
+    def count(self) -> int:
+        return self._count
+
+    def __len__(self) -> int:
+        return self._count
+
+
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.
 # @rustc_diagnostic_item("empty")
 def empty() -> Empty[Item]:  # pyright: ignore
@@ -1136,20 +1249,28 @@ def empty() -> Empty[Item]:  # pyright: ignore
 
 
 # @rustc_diagnostic_item("repeat")
-def repeat(element: Item, count: int) -> Iterator[Item]:
-    """Returns an iterator that yields the same `element` number of `count` times.
+def repeat(element: Item, count: int) -> Repeat[Item]:
+    """Returns an iterator that yields the exact same `element` number of `count` times.
+
+    The yielded elements is a copy of `element`, but the last element is guaranteed to be the same as the
+    original `element`.
 
     Example
     -------
     ```py
-    iterator = sain.iter.repeat(1, 3)
-    assert iterator.next() == Some(1)
-    assert iterator.next() == Some(1)
-    assert iterator.next() == Some(1)
-    assert iterator.next() == Some(None)
+    nums = [1, 2, 3]
+    it = sain.iter.repeat(nums, 5)
+    for i in range(4):
+        cloned = it.next().unwrap()
+        assert cloned == [1, 2, 3]
+
+    # But the last item is the origin one...
+    last = it.next().unwrap()
+    last.append(4)
+    assert nums == [1, 2, 3, 4]
     ```
     """
-    return Iter((copy.copy(element) for _ in range(count)))
+    return Repeat(element, count)
 
 
 # @rustc_diagnostic_item("once")

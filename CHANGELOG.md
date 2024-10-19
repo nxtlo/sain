@@ -11,12 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `Bytes.split_at`
 - `Vec.split_at`
-- `Iteratr.chunks`
+- `Iterator.chunks`
 - `MaybeUninit.array_assume_init`
 - `MaybeUninit.array_assume_init_mut`
-
-### Added
-
 - `Bytes.zeroed`
 - `Bytes.to_vec`
 - `Bytes.fill`
@@ -31,11 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Vec.swap`
 - `Vec.swap_unchecked`
 - `Vec.fill`
+- `Iterator.sum`
+- `Iterator.position`
+- `Iterator.fold`
 
 ### Changed
 
 - Greatly improved the speed of some `Vec` methods.
 - Renamed `HashMap.new_mut` to `HashMap.from_mut`
+- Specialized implementation for `iter.repeat`
 
 ## 1.2.0 - 09/09/2024
 
