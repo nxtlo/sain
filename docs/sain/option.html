@@ -744,11 +744,11 @@
 </span><span id="L-590"><a href="#L-590"><span class="linenos">590</span></a><span class="sd">        -------</span>
 </span><span id="L-591"><a href="#L-591"><span class="linenos">591</span></a><span class="sd">        ```py</span>
 </span><span id="L-592"><a href="#L-592"><span class="linenos">592</span></a><span class="sd">        from sain import Some</span>
-</span><span id="L-593"><a href="#L-593"><span class="linenos">593</span></a><span class="sd">        value = Some(&quot;gg&quot;)</span>
-</span><span id="L-594"><a href="#L-594"><span class="linenos">594</span></a><span class="sd">        value.next() == Some(&quot;gg&quot;)</span>
+</span><span id="L-593"><a href="#L-593"><span class="linenos">593</span></a><span class="sd">        value = Some(&quot;gg&quot;).iter()</span>
+</span><span id="L-594"><a href="#L-594"><span class="linenos">594</span></a><span class="sd">        assert value.next() == Some(&quot;gg&quot;)</span>
 </span><span id="L-595"><a href="#L-595"><span class="linenos">595</span></a>
 </span><span id="L-596"><a href="#L-596"><span class="linenos">596</span></a><span class="sd">        value: Option[int] = Some(None)</span>
-</span><span id="L-597"><a href="#L-597"><span class="linenos">597</span></a><span class="sd">        value.next().is_none()</span>
+</span><span id="L-597"><a href="#L-597"><span class="linenos">597</span></a><span class="sd">        assert value.iter().next().is_none()</span>
 </span><span id="L-598"><a href="#L-598"><span class="linenos">598</span></a><span class="sd">        ```</span>
 </span><span id="L-599"><a href="#L-599"><span class="linenos">599</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-600"><a href="#L-600"><span class="linenos">600</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -839,7 +839,7 @@
 </span><span id="L-685"><a href="#L-685"><span class="linenos">685</span></a>        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
 </span><span id="L-686"><a href="#L-686"><span class="linenos">686</span></a>
 </span><span id="L-687"><a href="#L-687"><span class="linenos">687</span></a>
-</span><span id="L-688"><a href="#L-688"><span class="linenos">688</span></a><span class="n">Option</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Some</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+</span><span id="L-688"><a href="#L-688"><span class="linenos">688</span></a><span class="n">Option</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeAlias</span> <span class="o">=</span> <span class="s2">&quot;Some[T]&quot;</span>
 </span><span id="L-689"><a href="#L-689"><span class="linenos">689</span></a><span class="sd">&quot;&quot;&quot;A type hint for a value that can be `Some&lt;T&gt;` or `None`.</span>
 </span><span id="L-690"><a href="#L-690"><span class="linenos">690</span></a>
 </span><span id="L-691"><a href="#L-691"><span class="linenos">691</span></a><span class="sd">The reason this exist is to satisfy the UX with Rust&#39;s type system.</span>
@@ -1452,11 +1452,11 @@
 </span><span id="Some-591"><a href="#Some-591"><span class="linenos">591</span></a><span class="sd">        -------</span>
 </span><span id="Some-592"><a href="#Some-592"><span class="linenos">592</span></a><span class="sd">        ```py</span>
 </span><span id="Some-593"><a href="#Some-593"><span class="linenos">593</span></a><span class="sd">        from sain import Some</span>
-</span><span id="Some-594"><a href="#Some-594"><span class="linenos">594</span></a><span class="sd">        value = Some(&quot;gg&quot;)</span>
-</span><span id="Some-595"><a href="#Some-595"><span class="linenos">595</span></a><span class="sd">        value.next() == Some(&quot;gg&quot;)</span>
+</span><span id="Some-594"><a href="#Some-594"><span class="linenos">594</span></a><span class="sd">        value = Some(&quot;gg&quot;).iter()</span>
+</span><span id="Some-595"><a href="#Some-595"><span class="linenos">595</span></a><span class="sd">        assert value.next() == Some(&quot;gg&quot;)</span>
 </span><span id="Some-596"><a href="#Some-596"><span class="linenos">596</span></a>
 </span><span id="Some-597"><a href="#Some-597"><span class="linenos">597</span></a><span class="sd">        value: Option[int] = Some(None)</span>
-</span><span id="Some-598"><a href="#Some-598"><span class="linenos">598</span></a><span class="sd">        value.next().is_none()</span>
+</span><span id="Some-598"><a href="#Some-598"><span class="linenos">598</span></a><span class="sd">        assert value.iter().next().is_none()</span>
 </span><span id="Some-599"><a href="#Some-599"><span class="linenos">599</span></a><span class="sd">        ```</span>
 </span><span id="Some-600"><a href="#Some-600"><span class="linenos">600</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Some-601"><a href="#Some-601"><span class="linenos">601</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1600,7 +1600,7 @@
                     <div class="decorator">@staticmethod</div>
 
         <span class="def">def</span>
-        <span class="name">default</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="n">NoneType</span><span class="p">]</span>:</span></span>
+        <span class="name">default</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="s1">&#39;Option[None]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.default-view-source"><span>View Source</span></label>
 
@@ -1957,7 +1957,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">U</span><span class="p">]</span>:</span></span>
+        <span class="name">map</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[U]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.map-view-source"><span>View Source</span></label>
 
@@ -2126,7 +2126,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">filter</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">filter</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.filter-view-source"><span>View Source</span></label>
 
@@ -2184,7 +2184,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">ok_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">err</span><span class="p">:</span> <span class="o">~</span><span class="n">U</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="../sain.html#Ok">sain.Ok</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="n"><a href="../sain.html#Err">sain.Err</a></span><span class="p">[</span><span class="o">~</span><span class="n">U</span><span class="p">]]</span>:</span></span>
+        <span class="name">ok_or</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">err</span><span class="p">:</span> <span class="o">~</span><span class="n">U</span></span><span class="return-annotation">) -> <span class="s1">&#39;_result.Result[T, U]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.ok_or-view-source"><span>View Source</span></label>
 
@@ -2231,7 +2231,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">ok_or_else</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">err</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="../sain.html#Ok">sain.Ok</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="n"><a href="../sain.html#Err">sain.Err</a></span><span class="p">[</span><span class="o">~</span><span class="n">U</span><span class="p">]]</span>:</span></span>
+        <span class="name">ok_or_else</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">err</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">U</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="s1">&#39;_result.Result[T, U]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.ok_or_else-view-source"><span>View Source</span></label>
 
@@ -2278,7 +2278,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">zip</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">other</span><span class="p">:</span> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">U</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">,</span> <span class="o">~</span><span class="n">U</span><span class="p">]]</span>:</span></span>
+        <span class="name">zip</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">other</span><span class="p">:</span> <span class="s1">&#39;Option[U]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[tuple[T, U]]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.zip-view-source"><span>View Source</span></label>
 
@@ -2331,7 +2331,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">zip_with</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">other</span><span class="p">:</span> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">U</span><span class="p">]</span>,</span><span class="param">	<span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">,</span> <span class="o">~</span><span class="n">U</span><span class="p">],</span> <span class="o">+</span><span class="n">T_co</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">+</span><span class="n">T_co</span><span class="p">]</span>:</span></span>
+        <span class="name">zip_with</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">other</span><span class="p">:</span> <span class="s1">&#39;Option[U]&#39;</span>,</span><span class="param">	<span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">,</span> <span class="o">~</span><span class="n">U</span><span class="p">],</span> <span class="o">+</span><span class="n">T_co</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T_co]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.zip_with-view-source"><span>View Source</span></label>
 
@@ -2388,7 +2388,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">take</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">take</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.take-view-source"><span>View Source</span></label>
 
@@ -2437,7 +2437,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">take_if</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">take_if</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">predicate</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.take_if-view-source"><span>View Source</span></label>
 
@@ -2496,7 +2496,7 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">replace</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">replace</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.replace-view-source"><span>View Source</span></label>
 
@@ -2684,7 +2684,7 @@ and then return a reference to it.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">and_ok</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">optb</span><span class="p">:</span> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">and_ok</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">optb</span><span class="p">:</span> <span class="s1">&#39;Option[T]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.and_ok-view-source"><span>View Source</span></label>
 
@@ -2747,7 +2747,7 @@ and then return a reference to it.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">and_then</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">and_then</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="s1">&#39;Fn[T, Option[T]]&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.and_then-view-source"><span>View Source</span></label>
 
@@ -2800,7 +2800,7 @@ on <code>T</code> and return <code>Option[T]</code>.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">inspect</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Some">Some</a></span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+        <span class="name">inspect</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="s1">&#39;Option[T]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="Some.inspect-view-source"><span>View Source</span></label>
 
@@ -2866,11 +2866,11 @@ value.inspect(debug) # prints nothing</p>
 </span><span id="Some.iter-591"><a href="#Some.iter-591"><span class="linenos">591</span></a><span class="sd">        -------</span>
 </span><span id="Some.iter-592"><a href="#Some.iter-592"><span class="linenos">592</span></a><span class="sd">        ```py</span>
 </span><span id="Some.iter-593"><a href="#Some.iter-593"><span class="linenos">593</span></a><span class="sd">        from sain import Some</span>
-</span><span id="Some.iter-594"><a href="#Some.iter-594"><span class="linenos">594</span></a><span class="sd">        value = Some(&quot;gg&quot;)</span>
-</span><span id="Some.iter-595"><a href="#Some.iter-595"><span class="linenos">595</span></a><span class="sd">        value.next() == Some(&quot;gg&quot;)</span>
+</span><span id="Some.iter-594"><a href="#Some.iter-594"><span class="linenos">594</span></a><span class="sd">        value = Some(&quot;gg&quot;).iter()</span>
+</span><span id="Some.iter-595"><a href="#Some.iter-595"><span class="linenos">595</span></a><span class="sd">        assert value.next() == Some(&quot;gg&quot;)</span>
 </span><span id="Some.iter-596"><a href="#Some.iter-596"><span class="linenos">596</span></a>
 </span><span id="Some.iter-597"><a href="#Some.iter-597"><span class="linenos">597</span></a><span class="sd">        value: Option[int] = Some(None)</span>
-</span><span id="Some.iter-598"><a href="#Some.iter-598"><span class="linenos">598</span></a><span class="sd">        value.next().is_none()</span>
+</span><span id="Some.iter-598"><a href="#Some.iter-598"><span class="linenos">598</span></a><span class="sd">        assert value.iter().next().is_none()</span>
 </span><span id="Some.iter-599"><a href="#Some.iter-599"><span class="linenos">599</span></a><span class="sd">        ```</span>
 </span><span id="Some.iter-600"><a href="#Some.iter-600"><span class="linenos">600</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Some.iter-601"><a href="#Some.iter-601"><span class="linenos">601</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2886,11 +2886,11 @@ value.inspect(debug) # prints nothing</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="kn">from</span> <span class="nn">sain</span> <span class="kn">import</span> <span class="n">Some</span>
-<span class="n">value</span> <span class="o">=</span> <span class="n">Some</span><span class="p">(</span><span class="s2">&quot;gg&quot;</span><span class="p">)</span>
-<span class="n">value</span><span class="o">.</span><span class="n">next</span><span class="p">()</span> <span class="o">==</span> <span class="n">Some</span><span class="p">(</span><span class="s2">&quot;gg&quot;</span><span class="p">)</span>
+<span class="n">value</span> <span class="o">=</span> <span class="n">Some</span><span class="p">(</span><span class="s2">&quot;gg&quot;</span><span class="p">)<a href="iter.html">sain.iter</a></span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">value</span><span class="o">.</span><span class="n">next</span><span class="p">()</span> <span class="o">==</span> <span class="n">Some</span><span class="p">(</span><span class="s2">&quot;gg&quot;</span><span class="p">)</span>
 
 <span class="n">value</span><span class="p">:</span> <span class="n">Option</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Some</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-<span class="n">value</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">is_none</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">value</span><span class="o">.</span><span class="n">iter</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">is_none</span><span class="p">()</span>
 </code></pre>
 </div>
 </div>
@@ -3047,7 +3047,7 @@ the predicate returns <code>True</code>, otherwise returns <code>False</code>.</
                 <section id="Option">
                     <div class="attr variable">
             <span class="name">Option</span><span class="annotation">: TypeAlias</span>        =
-<span class="default_value"><a href="#Some">Some</a>[~T]</span>
+<span class="default_value">&#39;Some[T]&#39;</span>
 
         
     </div>

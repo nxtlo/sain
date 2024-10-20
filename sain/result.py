@@ -78,7 +78,7 @@ If you're expecting a value should never be an `Err` at runtime, use `.expect`
 def request(token: str) -> Result[bytes, None]:
     ...
 
-resposne = request("token").expect("likely and invalid token")
+response = request("token").expect("likely and invalid token")
 # This will raise at runtime with the message 'likely ...'
 ```
 """
