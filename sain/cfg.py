@@ -62,6 +62,8 @@ import platform
 import sys
 import typing
 
+from sain.macros import rustc_diagnostic_item
+
 F = typing.TypeVar("F", bound=collections.Callable[..., object])
 
 System = typing.Literal["linux", "win32", "darwin", "macos", "unix", "windows", "ios"]
@@ -95,6 +97,7 @@ def _py_version() -> str:
     return platform.python_version()
 
 
+@rustc_diagnostic_item("cfg_attr")
 def cfg_attr(
     *,
     target_os: System | None = None,
@@ -166,6 +169,7 @@ def cfg_attr(
     return decorator
 
 
+@rustc_diagnostic_item("cfg")
 def cfg(
     target_os: System | None = None,
     python_version: tuple[int, int, int] | None = None,

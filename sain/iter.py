@@ -66,6 +66,7 @@ from . import futures
 from . import option as _option
 from . import result as _result
 from .collections import vec
+from .macros import rustc_diagnostic_item
 
 Item = typing.TypeVar("Item")
 """The type of the item that is being yielded."""
@@ -80,7 +81,11 @@ if typing.TYPE_CHECKING:
 
     from .option import Option
 
-    Collector = collections.MutableSequence[Item] | set[Item]
+    Collector = (
+        collections.MutableSequence[Item]
+        | set[Item]
+        | collections.MutableMapping[int, Item]
+    )
     _typeshed.ConvertibleToInt
     Sum: typing.TypeAlias = (
         "Iterator[str]"
@@ -125,30 +130,23 @@ class Iterator(
     -------
     ```py
     @dataclass
-    class Message:
-        content: str
+    class Counter(Iterator[int]):
+        start: int = 0
+        stop: int | None = None
 
-    class MessageIterator(sain.Iterator[Message]):
-        def __init__(self, id: int = random.randint(0, 100)) -> None:
-            self._session: requests.Session | None = None
-            self.id = id
+        # implement the required method.
+        def __next__(self) -> int:
+            result = self.start
+            self.start += 1
 
-        def __next__(self) -> Message:
-            if self._session is None:
-                self._session = requests.session()
+            if self.stop is not None and result >= self.stop:
+                raise StopIteration
 
-            try:
-                with self._session:
-                    response = self._session.get(f"https://dummyjson.com/products/{self.id}").json()
-            finally:
-                self._session = None
+            return result
 
-            return Message(response["description"])
-
-    it = MessageIterator()
-    # Lazily fetch the first 5 messages from the API.
-    for msg in it.take(5):
-        print(msg)
+    counter = Counter(start=0, stop=10)
+    for i in counter.map(lambda x: x * 2): # multiply each number
+        ...
     ```
     """
 
@@ -231,8 +229,11 @@ class Iterator(
         """
         if isinstance(collection, collections.MutableSequence):
             collection.extend(_ for _ in self)
-        else:
+        elif isinstance(collection, collections.MutableSet):
             collection.update(_ for _ in self)
+        else:
+            for idx, item in enumerate(self):
+                collection[idx] = item
 
     @typing.final
     def to_vec(self) -> vec.Vec[Item]:
@@ -1231,6 +1232,7 @@ class Repeat(typing.Generic[Item], Iterator[Item]):
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.
+@rustc_diagnostic_item("repeat")
 def empty() -> Empty[Item]:  # pyright: ignore
     """Create an iterator that yields nothing.
 
@@ -1244,7 +1246,7 @@ def empty() -> Empty[Item]:  # pyright: ignore
     return Empty()
 
 
-# @rustc_diagnostic_item("repeat")
+@rustc_diagnostic_item("repeat")
 def repeat(element: Item, count: int) -> Repeat[Item]:
     """Returns an iterator that yields the exact same `element` number of `count` times.
 
@@ -1269,6 +1271,7 @@ def repeat(element: Item, count: int) -> Repeat[Item]:
     return Repeat(element, count)
 
 
+@rustc_diagnostic_item("once")
 def once(item: Item) -> Iterator[Item]:
     """Returns an iterator that yields exactly a single item.
 
@@ -1283,6 +1286,7 @@ def once(item: Item) -> Iterator[Item]:
     return Iter((item,))
 
 
+@rustc_diagnostic_item("into_iter")
 def into_iter(
     iterable: collections.Iterable[Item],
 ) -> Iterator[Item]:

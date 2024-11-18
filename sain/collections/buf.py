@@ -213,7 +213,7 @@ class Bytes:
         ```
         """
         c = cls()
-        c._buf = array.array("B", (0,) * count)
+        c._buf = array.array("B", [0] * count)
         return c
 
     # buffer evolution
@@ -445,7 +445,7 @@ class Bytes:
         """
         if self._buf is None:
             # If it was `None`, we initialize it with a source instead of appending.
-            self._buf = array.array("B", (src,))
+            self._buf = array.array("B", [src])
         else:
             self._buf.append(src)
 
@@ -543,7 +543,7 @@ class Bytes:
         if not self._buf:
             return
 
-        self._buf.__buffer__(0x100)[:] = bytearray((value,) * self.len())
+        self._buf.__buffer__(0x100)[:] = bytearray([value] * self.len())
 
     def swap(self, a: int, b: int):
         """Swap two bytes in the buffer.
@@ -771,7 +771,7 @@ class Bytes:
         """Divide `self` into two at an index.
 
         The first will contain all bytes from `[0:mid]` excluding `mid` it self.
-        and the second will contain the remaninig bytes.
+        and the second will contain the remaining bytes.
 
         if `mid` > `self.len()`, Then all bytes will be moved to the left,
         returning an empty bytes in right.

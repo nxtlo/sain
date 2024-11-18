@@ -53,6 +53,7 @@ from collections import abc as collections
 from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
+from sain.macros import rustc_diagnostic_item
 
 if typing.TYPE_CHECKING:
     from _typeshed import SupportsRichComparison
@@ -573,7 +574,7 @@ class Vec(typing.Generic[T]):
         if self._ptr is None:
             self._ptr = []
 
-        if self._capacity is not None and self._capacity <= self.len():
+        if self.len() == self._capacity:
             return _result.Err(x)
 
         self._ptr.append(x)
@@ -908,6 +909,7 @@ class Vec(typing.Generic[T]):
         return bool(self._ptr)
 
 
+@rustc_diagnostic_item("vec!")
 def from_args(*elements: T) -> Vec[T]:
     """Creates a `Vec` containing `elements`.
 

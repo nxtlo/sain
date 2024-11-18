@@ -95,8 +95,9 @@ class Lazy(typing.Generic[T]):
             self.__lock = threading.Lock()
 
         with self.__lock:
-            inner = self.__inner = self.__inner()
-            return inner
+            # TYPE SAFETY: We know we need to call this function.
+            self.__inner = self.__inner()  # type: ignore
+            return self.__inner  # type: ignore
 
     def __repr__(self) -> str:
         if callable(self.__inner):

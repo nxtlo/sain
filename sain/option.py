@@ -387,8 +387,8 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
             x: float
             y: float
 
-        x, t = Some(32.1), Some(42.4)
-        assert x.zip_with(t, Point) == Some(Point(32.1, 42.4))
+        x, y = Some(32.1), Some(42.4)
+        assert x.zip_with(y, Point) == Some(Point(32.1, 42.4))
         ```
         """
         if self._value is not None and other._value is not None:
@@ -566,8 +566,8 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         Example
         -------
         ```py
-        def debug(x: Option[str]) -> None:
-            print("Debugging:", x.into_inner())
+        def debug(x: str) -> None:
+            print("Debugging:", x)
 
         value = Some("foo")
         inner = value.inspect(debug).expect("no value to debug")
@@ -655,6 +655,28 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         ```
         """
         return self._value is None
+
+    def is_none_or(self, f: Fn[T, bool]) -> bool:
+        """Returns `True` if the contained value is `None` or the predicate returns `True`,
+        otherwise returns `False`.
+
+        Example
+        -------
+        ```py
+        value = Some(5)
+        print(value.is_none_or(lambda x: x > 3))
+        # False
+
+        value: Option[int] = Some(None)
+        print(value.is_none_or(lambda x: x > 3))
+        # True
+        ```
+        """
+        match self._value:
+            case None:
+                return True
+            case x:
+                return f(x)
 
     def __repr__(self) -> str:
         if self._value is None:

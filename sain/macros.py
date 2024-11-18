@@ -162,46 +162,51 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
 # this function applies on both classes and functions,
 # typing it will be clusterfuck, so we're just ignoring and
 # type checkers will infer the types.
-def rustc_diagnostic_item(item: RustItem, /):  # type: ignore
-    """Expands a Python callable object's documentation, generating the corresponding Rust implementation of the marked object.
+def rustc_diagnostic_item(
+    item: RustItem, /
+) -> collections.Callable[[collections.Callable[P, U]], collections.Callable[P, U]]:
+    '''Expands a Python callable object's documentation, generating the corresponding Rust implementation of the marked object.
 
     This is a decorator that applies on both classes, methods and functions.
 
-    Assuming we're implementing the `Clone` trait from Rust, the object in Python may be marked with this decorator like this.
+    Assuming we're implementing the `FnOnce` trait from Rust, the object in Python may be marked with this decorator like this.
     ```py
     from sain.macros import rustc_diagnostic_item
 
-    @rustc_diagnostic_item("Clone")
-    class Clone:
-        # The Clone trait for types that cannot be ‘implicitly copied’.
+    @rustc_diagnostic_item("fn_once")
+    class FnOnce[Output, *Args]:
+        """The version of the call operator that takes a by-value receiver."""
 
-        # this doesn't exist but... you get the idea.
-        @rustc_diagnostic_item("clone_fn")
-        def clone(self) -> Self:
-            ...
+        def __init__(self, fn: Callable[[*Args], Output]) -> None:
+            self._call = fn
+
+        @rustc_diagnostic_item("call_once_fn")
+        def call_once(self, *args: *Args) -> Output:
+            return self._call(*args)
     ```
 
     Now that the class is marked,
     It will generate documentation that links to the Rust object that we implemented in Python.
-    """
+    '''
 
     RUSTC_DOCS = "https://doc.rust-lang.org"
 
-    def decorator(f):  # type: ignore
-        @functools.wraps(f)  # type: ignore
-        def wrapper(*args, **kwargs):  # type: ignore
-            return f(*args, **kwargs)  # type: ignore
+    def decorator(f: collections.Callable[P, U]) -> collections.Callable[P, U]:
+        @functools.wraps(f)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
+            return f(*args, **kwargs)
 
-        m = f"\n# Implementations\nThis {_obj_type(f)} implementes [{item}]({RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust.\n"  # type: ignore
+        m = f"\n# Implementations\nThis {_obj_type(f)} implements [{item}]({RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."
         if f.__doc__ is not None:
             # append this message to an existing document.
             f.__doc__ = inspect.cleandoc(f.__doc__) + m
         else:
             f.__doc__ = m
-        f.__func__ = wrapper
-        return wrapper  # type: ignore
 
-    return decorator  # type: ignore
+        wrapper.__doc__ = f.__doc__
+        return wrapper.__wrapped__
+
+    return decorator
 
 
 @functools.cache
@@ -271,6 +276,7 @@ def unstable(
     return decorator
 
 
+@rustc_diagnostic_item("deprecated")
 def deprecated(
     *,
     since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
@@ -355,6 +361,7 @@ def deprecated(
     return decorator
 
 
+@rustc_diagnostic_item("todo")
 def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     """A place holder that indicates unfinished code.
 
@@ -376,6 +383,7 @@ def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     raise Error(f"not yet implemented: {message}" if message else "not yet implemented")
 
 
+@rustc_diagnostic_item("unimplemented")
 def unimplemented(
     *,
     message: typing.LiteralString | None = None,
@@ -436,6 +444,7 @@ def unimplemented(
     return decorator
 
 
+@rustc_diagnostic_item("doc")
 def doc(
     path: Read,
 ) -> collections.Callable[

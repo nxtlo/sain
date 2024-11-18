@@ -271,7 +271,7 @@ class AsyncOnce(typing.Generic[T]):
 
         This method will never block.
         """
-        return _option.Some(self._inner)
+        return _option.Some(self._inner) if self.is_set else _option.NOTHING  # pyright: ignore
 
     @macros.unsafe
     def get_unchecked(self) -> T:
