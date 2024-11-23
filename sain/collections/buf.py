@@ -534,6 +534,7 @@ class Bytes:
         Nothing happens if the buffer is empty or unallocated.
 
         Example
+        -------
         ```py
         a = Bytes.from_bytes([0, 1, 2, 3])
         a.fill(0)

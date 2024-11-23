@@ -118,6 +118,41 @@ class _RawMap(collections.Mapping[K, V]):
 
         return _option.Some(self._source[key])
 
+    def get_many(self, *keys: K) -> _option.Option[collections.Collection[V]]:
+        """Attempts to get `len(keys)` values in the map at once.
+
+        Returns a collection of length `keys` with the results of each query.
+        None will be returned if any of the keys missing.
+
+        Example
+        -------
+        ```py
+        urls: HashMap[str, str] = HashMap({
+            "google": "www.google.com",
+            "github": "www.github.com",
+            "facebook": "www.facebook.com",
+            "twitter": "www.twitter.com",
+        })
+        assert urls.get_many("google","github") == Some(["www.google.com", "www.github.com"])
+
+        # Missing keys results in `None`
+        assert urls.get_many("google", "linkedin").is_none()
+
+        # duplicate keys results in `None`
+        assert urls.get_many("google", "google").is_none()
+        ```
+        """
+        # transfer all values from self to a list, the `count` call
+        # ensures no duplicated keys are passed and the `all` call ensures
+        # that all keys passed must be present in the hashmap.
+        results = [
+            self[k] for k in keys if all(_ in self for _ in keys) and keys.count(k) == 1
+        ]
+        if results:
+            return _option.Some(results)
+
+        return _option.NOTHING  # pyright: ignore
+
     def iter(self) -> _iter.Iterator[tuple[K, V]]:
         """An iterator visiting all key-value pairs in arbitrary order.
 
@@ -201,7 +236,7 @@ class _RawMap(collections.Mapping[K, V]):
         )
 
 
-class HashMap(_RawMap[K, V]):
+class HashMap(typing.Generic[K, V], _RawMap[K, V]):
     """An immutable key-value dictionary.
 
     But default, it is immutable it cannot change its values after initializing it. however,
