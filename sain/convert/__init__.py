@@ -36,6 +36,7 @@ The protocols in this module provide a way to convert from one type to another t
 * Implement the From trait for consuming value-to-value conversions
 * Implement the Into trait for consuming value-to-value conversions to types outside the current crate
 * The TryFrom and TryInto traits behave like From and Into, but should be implemented when the conversion can fail.
+* Implement the `ToString` trait for explicitly converting objects to string.
 
 Example
 --------
@@ -95,7 +96,7 @@ assert payload.into() == message_bytes
 
 from __future__ import annotations
 
-__slots__ = ("Into", "TryInto", "From", "TryFrom")
+__slots__ = ("Into", "TryInto", "From", "TryFrom", "ToString")
 
 import typing
 
@@ -240,3 +241,35 @@ class TryInto(typing.Protocol[T, E]):
     def try_into(self) -> Result[T, E]:
         """Perform the conversion."""
         raise NotImplementedError
+
+
+@typing.runtime_checkable
+class ToString(typing.Protocol):
+    """A trait for explicitly converting a value to a `str`.
+
+    Example
+    -------
+    ```py
+    class Value[T: bytes](ToString):
+        buffer: T
+
+        def to_string(self) -> str:
+            return self.buffer.decode("utf-8")
+    ```
+    """
+
+    def to_string(self) -> str:
+        """Converts the given value to a `str`.
+
+        Example
+        --------
+        ```py
+        i = 5  # assume `int` implements `ToString`
+        five = "5"
+        assert five == i.to_string()
+        ```
+        """
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        return self.to_string()

@@ -70,13 +70,14 @@ __all__ = ("Error",)
 import typing
 
 from . import option as _option
+from .convert import ToString
 
 if typing.TYPE_CHECKING:
     from sain import Option
 
 
 @typing.runtime_checkable
-class Error(typing.Protocol):
+class Error(ToString, typing.Protocol):
     """`Error` is an interface usually used for values that returns `sain.Result[T, E]`
 
     where `E` is an implementation of this interface.
@@ -166,6 +167,9 @@ class Error(typing.Protocol):
     def description(self) -> str:
         """Context for this error."""
         return ""
+
+    def to_string(self) -> str:
+        return self.__repr__()
 
     def __repr__(self) -> str:
         source = None if (src := self.source()).is_none() else src
