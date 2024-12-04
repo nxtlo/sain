@@ -258,6 +258,8 @@ class ToString(typing.Protocol):
     ```
     """
 
+    __slots__ = ()
+
     def to_string(self) -> str:
         """Converts the given value to a `str`.
 
