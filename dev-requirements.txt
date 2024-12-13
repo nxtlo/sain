@@ -6,7 +6,7 @@ pytest~=8.3.3
 pdoc~=15.0.0
 
 # Format - Type checking.
-ruff~=0.7.4
+ruff~=0.8.3
 isort~=5.13.2
 pyright~=1.1.389
 codespell~=2.3.0
