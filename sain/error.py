@@ -65,7 +65,7 @@ class NotFound(HTTPError):
 
 from __future__ import annotations
 
-__all__ = ("Error",)
+__all__ = ("Error", "catch_unwind")
 
 import typing
 
@@ -73,6 +73,10 @@ from . import option as _option
 
 if typing.TYPE_CHECKING:
     from sain import Option
+    from sain import result as _result
+    from collections.abc import Callable
+
+R = typing.TypeVar("R", covariant=True)
 
 
 @typing.runtime_checkable
@@ -179,3 +183,50 @@ class Error(typing.Protocol):
     # An error is always falsy.
     def __bool__(self) -> typing.Literal[False]:
         return False
+
+
+def catch_unwind(fn: Callable[[], R]) -> _result.Result[R, BaseException]:
+    """Invokes a closure, capturing exceptions if any one raised.
+
+    This function will return `Ok` with the closure's result if it doesn't raise any exceptions,
+    otherwise it will return `Err(cause)` with the exception.
+
+    You can treat this as an inline try-except block.
+
+    Notes
+    -----
+    This function also catch exceptions such as `KeyboardInterrupt` and `SystemExit`,
+    so try to use it with extreme caution.
+
+    Example
+    -------
+    ```py
+    from sain.error import catch_unwind
+
+    def request() -> str:
+        return requests.get("some url").text
+
+    def fetch() -> str:
+        raise RuntimeError from None
+
+    result = catch_unwind(request)
+    assert result.is_ok()
+
+    result = catch_unwind(fetch)
+    assert result.is_err()
+    ```
+
+    Parameters
+    ----------
+    fn: `Callable[[], R]`
+        The function to run.
+
+    Returns
+    -------
+    `Result[R, BaseException]`
+        Returns `Ok(value)` if the function ran successfully, otherwise `Err(cause)` with the exception.
+    """
+    try:
+        return _result.Ok(fn())
+    except BaseException as e:
+        return _result.Err(e)
