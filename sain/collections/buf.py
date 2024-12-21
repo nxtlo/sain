@@ -41,6 +41,7 @@ import sys as _sys
 import typing
 from collections import abc as collections
 
+from sain import convert
 from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
@@ -88,7 +89,7 @@ def unwrap_bytes(data: Rawish) -> bytes:
 
 
 @typing.final
-class Bytes:
+class Bytes(convert.ToString):
     """Provides abstractions for working with UTF-8 compatible bytes.
 
     It is an efficient container for storing and operating with bytes.
@@ -217,6 +218,13 @@ class Bytes:
         return c
 
     # buffer evolution
+
+    def to_string(self) -> str:
+        """Convert the bytes to a string.
+
+        Same as `Bytes.to_str`
+        """
+        return self.to_str()
 
     def try_to_str(self) -> Result[str, bytes]:
         """A safe method to convert `self` into a string.

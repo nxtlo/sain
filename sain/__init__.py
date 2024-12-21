@@ -80,6 +80,7 @@ __all__ = (
     "TryFrom",
     "Into",
     "TryInto",
+    "ToString",
 )
 
 from . import boxed
@@ -100,6 +101,7 @@ from .cfg import cfg_attr
 from .collections import Vec
 from .convert import From
 from .convert import Into
+from .convert import ToString
 from .convert import TryFrom
 from .convert import TryInto
 from .default import Default
