@@ -237,7 +237,7 @@ class Bytes(convert.ToString):
         ```py
         buf = Bytes()
         sparkles_heart = [240, 159, 146, 150]
-        buf.put(sparkles_heart)
+        buf.put_bytes(sparkles_heart)
 
         assert buf.try_to_str().unwrap() == "💖"
         ```
@@ -272,9 +272,9 @@ class Bytes(convert.ToString):
         Example
         -------
         ```py
-        buff = Bytes()
+        buf = Bytes()
         sparkles_heart = [240, 159, 146, 150]
-        buff.put_bytes(sparkles_heart)
+        buf.put_bytes(sparkles_heart)
 
         assert buf.to_str() == "💖"
         ```
@@ -319,9 +319,10 @@ class Bytes(convert.ToString):
         return _vec.Vec(self)
 
     def leak(self) -> Option[array.array[int]]:
-        """Consumes and leaks the `Bytes`, returning the contents as an `array[int]`.
+        """Consumes and leaks the `Bytes`, returning the contents as an `array[int]`
+        or `None` if the buffer is not initialized.
 
-        `self` will deallocate the underlying array. therefore it becomes unusable.
+        `self` will deallocate the underlying array, therefore it becomes unusable.
 
         Safety
         ------
@@ -343,7 +344,6 @@ class Bytes(convert.ToString):
 
         arr = self._buf
         # We don't need to reference this anymore since the caller will own the array.
-        # therefore the *self* become useless. thats exactly how its implemented in Rust.
         del self._buf
         return _option.Some(arr)
 
@@ -425,6 +425,33 @@ class Bytes(convert.ToString):
 
     # default methods.
 
+    def extend(self, src: Buffer) -> None:
+        """Extend `self` from a buffer.
+
+        Example
+        -------
+        ```py
+        buf = Bytes()
+        buf.extend([1, 2, 3])
+        assert buf == [1, 2, 3]
+        ```
+
+        Parameters
+        ----------
+        src : `Buffer`
+            Can be one of `Bytes`, `bytes`, `bytearray` or `Sequence[int]`
+
+        Raises
+        ------
+        `OverflowError`
+            If `src` not in range of `0..255`
+        """
+        if self._buf is None:
+            # If it was `None`, we initialize it with a source instead of extending.
+            self._buf = array.array("B", src)
+        else:
+            self._buf.extend(src)
+
     def put(self, src: int) -> None:
         """Append a byte at the end of the array.
 
@@ -456,6 +483,27 @@ class Bytes(convert.ToString):
             self._buf = array.array("B", [src])
         else:
             self._buf.append(src)
+
+    def put_char(self, char: str) -> None:
+        """Append a single character to the buffer.
+
+        This is the same as `self.put(ord(char))`.
+
+        Example
+        -------
+        ```py
+        buf = Bytes()
+        buf.put_char('a')
+        assert buf.to_str() == "a"
+        ```
+
+        Parameters
+        ----------
+        char : `str`
+            The character to put.
+        """
+        assert (ln := len(char)) == 1, f"Expected a single character, got {ln}"
+        self.put(ord(char))
 
     def put_raw(self, src: Rawish) -> None:
         """Extend `self` from a raw data type source.

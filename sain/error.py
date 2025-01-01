@@ -57,7 +57,7 @@ class HTTPError(Error):
 @dataclass
 class NotFound(HTTPError):
     message = "Response not found."
-    response =
+    response: requests.Response
 
     def description(self) -> str:
         ...
@@ -73,9 +73,10 @@ from . import option as _option
 from .convert import ToString
 
 if typing.TYPE_CHECKING:
+    from collections.abc import Callable
+
     from sain import Option
     from sain import result as _result
-    from collections.abc import Callable
 
 R = typing.TypeVar("R", covariant=True)
 

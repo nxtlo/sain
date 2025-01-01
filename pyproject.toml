@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sain"
-version = "1.2.0"
+version = "1.3.0"
 description = "Standard Rust core types implementations for Python."
 authors = ["nxtlo <dhmony-99@hotmail.com>"]
 license = "BSD-3-Clause license"
@@ -36,10 +36,6 @@ exclude = [
     "dist",
     "node_modules",
     "venv",
-    "aiobungie/_*.py",
-    "aiobungie/_*.pyi",
-    "aiobungie/crates/_*.py",
-    "aiobungie/crates/_*.pyi",
 ]
 
 # Same as Black.
