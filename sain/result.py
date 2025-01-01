@@ -446,7 +446,7 @@ class Ok(typing.Generic[T]):
     #################
 
     def __repr__(self) -> str:
-        return f"Ok({self._inner})"
+        return f"Ok({self._inner!r})"
 
     def __or__(self, other: T) -> T:
         return self._inner
@@ -791,7 +791,7 @@ class Err(typing.Generic[E]):
     #################
 
     def __repr__(self) -> str:
-        return f"Err({self._inner})"
+        return f"Err({self._inner!r})"
 
     def __or__(self, other: T) -> T:
         return other
