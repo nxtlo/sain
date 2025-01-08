@@ -69,8 +69,9 @@ __all__ = ("Error", "catch_unwind")
 
 import typing
 
-from . import option as _option
 from sain import result as _result
+
+from . import option as _option
 from .convert import ToString
 
 if typing.TYPE_CHECKING:

@@ -28,62 +28,63 @@ from sain.convert import Into, TryFrom
 from dataclasses import dataclass, field
 
 
-# A layout of some data.
+# some blob of data.
 @dataclass
-class Layout(Into[Bytes], TryFrom[str, None]):
+class Blob(Into[Bytes], TryFrom[str, None]):
     tag: str
-    content: str
+    buffer: bytes
 
-    # converts this layout into a some raw bytes as JSON.
+    # converts this layout into some raw bytes.
     def into(self) -> Bytes:
-        # you probably want to use `json.dumps` here.
-        return Bytes.from_str(str({"tag": self.tag, "content": self.content}))
+        buf = Bytes()
+        buf.put_bytes(self.tag.encode())
+        buf.put_bytes(b"-")
+        buf.put_bytes(self.buffer)
+        return buf
 
     @classmethod
-    def try_from(cls, value: str) -> Result[Layout, None]:
-        # implement a conversion from a string to a layout.
+    def try_from(cls, value: str) -> Result[Blob, None]:
+        # implement a conversion from a string to a blob.
         # in case of success, return Ok(layout)
         # and in case of failure, return Ok(None)
-        parsed = value.split(".")  # this is an example.
-        return Ok(Layout(tag=parsed[0], content=parsed[1]))
+        tag, buffer = value.split(".")  # this is an example.
+        return Ok(Blob(tag, buffer.encode()))
 
 
 @dataclass
-class Intrinsic:
-    layouts: Vec[Layout] = field(default_factory=Vec)
+class BlobStore:
+    buf: Vec[Blob] = field(default_factory=Vec)
 
     # extends the vec from an iterable.
-    def add(self, *layouts: Layout):
-        self.layouts.extend(layouts)
+    def add(self, *blobs: Blob):
+        self.buf.extend(blobs)
 
-    # finds an optional layout that's tagged with `pattern`
-    def find(self, pattern: str) -> Option[Layout]:
-        return self.layouts.iter().find(lambda book: pattern in book.tag)
+    # finds blob that's tagged with `pattern`
+    def find(self, pattern: str) -> Option[Blob]:
+        return self.buf.iter().find(lambda blob: pattern in blob.tag)
 
     # converts the entire buffer into `Bytes`
-    def to_payload(self) -> Result[Bytes, None]:
-        if not self.layouts:
+    def into_bytes(self) -> Result[Bytes, None]:
+        if not self.buf:
             return Err(None)
 
         buffer = Bytes()
-        for layout in self.layouts:
-            buffer.put_bytes(layout.into())
+        for blob in self.buf:
+            buffer.put_bytes(blob.into())
 
         return Ok(buffer)
 
 
-intr = Intrinsic()
-intr.add(
-    Layout("llm1", "content"),
-)
+blobstore = BlobStore()
+blobstore.add(Blob("safe", b"Rust"))
 # try to convert the string into a Layout.
-match Layout.try_from("llm2.content"):
-    case Ok(layout):
-        intr.add(layout)  # add it if parsed.
+match Blob.try_from("unsafe.Python"):
+    case Ok(blob):
+        blobstore.add(blob)  # add it if parsed.
     case Err(_):
         ...  # Error parsing the str.
 
-print(intr.to_payload().unwrap())
+print(blobstore.into_bytes().expect("cannot convert to bytes").to_str())
 ```
 
 ## built-in types
