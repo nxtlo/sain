@@ -607,6 +607,50 @@ class Vec(typing.Generic[T]):
         if self._capacity is not None:
             self._capacity += additional
 
+    def shrink_to_fit(self) -> None:
+        """Shrink the capacity of this `Vec` to match its length.
+
+        If `self` is initialized with no capacity, This is a `NOP`.
+
+        Example
+        -------
+        ```py
+        s = Vec([1, 2, 3, 4])
+
+        s.reserve(100)
+        s.shrink_to_fit()
+        assert s.capacity() == 4
+        ```
+        """
+        if self._capacity is None:
+            return
+
+        # The capacity is never less than the length.
+        self._capacity = min(self.__len__(), self._capacity)
+
+    def shrink_to(self, min_capacity: int) -> None:
+        """Shrink the capacity of this `Vec` to a minimum specified capacity.
+
+        If `self` is initialized with no capacity or the current capacity is less than the lower limit,
+        This is a `NOP`.
+
+        Example
+        -------
+        ```py
+        vec = Vec.with_capacity(10)
+        vec.extend([1, 2, 3])
+        assert vec.capacity() >= 10
+        vec.shrink_to(4)
+        assert vec.capacity() >= 4
+        vec.shrink_to(0)
+        ```
+        """
+        if self._capacity is None or self._capacity <= min_capacity:
+            return
+
+        # Ensure the capacity is not reduced below the current length of the vector.
+        self._capacity = max(self.__len__(), min_capacity)
+
     ##########################
     # * Builtin Operations *
     ##########################
