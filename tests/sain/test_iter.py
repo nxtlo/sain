@@ -67,5 +67,4 @@ class TestIterator:
 
     def test_to_vec(self):
         it = iter.Iter(("a", "b"))
-        v = it.to_vec()
-        assert v == ["a", "b"]
+        assert it.to_vec() == ["a", "b"]
