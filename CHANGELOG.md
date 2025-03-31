@@ -11,10 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `iter.Once`
 - `iter.ExactSizeIterator`
+- `Vec.shrink_to`
+- `Vec.shrink_to_fit`
 
 ### Changed
 
-- `iter.once` now returns a specialized iterator.
+- `iter.once() -> Once[T]` now returns a specialized iterator.
 
 ## 1.3.0 - 01/01/2025
 
