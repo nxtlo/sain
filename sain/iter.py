@@ -35,6 +35,7 @@ __all__ = (
     # Core
     "Iter",
     "Iterator",
+    "TrustedIter",
     # Adapters
     "Cloned",
     "Copied",
@@ -67,16 +68,18 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
+from .collections import buf as _buf
 from .collections import vec as _vec
 from .macros import rustc_diagnostic_item
 
 Item = typing.TypeVar("Item")
 """The type of the item that is being yielded."""
 
-OtherItem = typing.TypeVar("OtherItem", covariant=True)
+OtherItem = typing.TypeVar("OtherItem")
 """The type of the item that is being mapped into then yielded."""
 
 AnyIter = typing.TypeVar("AnyIter", bound="Iterator[typing.Any]")
+
 
 if typing.TYPE_CHECKING:
     import _typeshed
@@ -810,7 +813,7 @@ class Iterator(
         func: collections.Callable[
             [Item], collections.Coroutine[None, typing.Any, OtherItem]
         ],
-    ) -> _result.Result[collections.Sequence[OtherItem], futures.SpawnError]:
+    ) -> _result.Result[collections.Sequence[OtherItem], futures.JoinError]:
         """Calls the async function on each item in the iterator concurrently.
 
         Example
@@ -832,7 +835,7 @@ class Iterator(
         func: `collections.Callable[[Item], Coroutine[None, Any, Any]]`
             The async function to call on each item in the iterator.
         """
-        return await futures.spawn(*(func(item) for item in self))
+        return await futures.join(*(func(item) for item in self))
 
     def __reversed__(self) -> Iter[Item]:
         return self.reversed()
@@ -848,7 +851,9 @@ class Iterator(
     def __copy__(self) -> Cloned[Item]:
         return self.cloned()
 
-    def __deepcopy__(self) -> Copied[Item]:
+    def __deepcopy__(
+        self, memo: collections.MutableMapping[int, typing.Any], /
+    ) -> Copied[Item]:
         return self.copied()
 
     def __len__(self) -> int:
@@ -893,7 +898,7 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item]):
 
     @typing.final
     def len(self) -> int:
-        """Returns the length of the iterator.
+        """Returns the remaining number of items in the iterator.
 
         This doesn't exhaust the iterator.
 
@@ -931,7 +936,7 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item]):
 @typing.final
 # @rustc_diagnostic_item("Iter")
 @diagnostic
-class Iter(Iterator[Item]):
+class Iter(typing.Generic[Item], Iterator[Item]):
     """a lazy iterator that has its items ready in-memory.
 
     This is similar to Rust `std::slice::Iter<T>` item which iterables can build
@@ -999,6 +1004,67 @@ class Iter(Iterator[Item]):
         return item in self._it
 
 
+@typing.final
+class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
+    """Similar to `Iter`, but it reports an accurate length using `ExactSizeIterator`.
+
+    iterable objects such as `Vec`, `Bytes`, `list` and other `Sized` may be created
+    using this iterator.
+
+    Example
+    -------
+    ```py
+    # we know the size of the iterator.
+    sized_buf: TrustedIter[int] = into_iter((1, 2, 3, 4))
+    # this is `Iter[int]` since we don't know when the generator will stop yielding.
+    unsized_buf: Iter[int] = into_iter((_ for _ in ([1, 2, 3, 4] if cond else [1, 2])))
+    ```
+
+    Parameters
+    ----------
+    items: `collections.Collection[Item]`
+        A sized collection of items to iterate over.
+    """
+
+    __slots__ = ("_it", "_len", "__alive")
+
+    def __init__(self, iterable: collections.Sequence[Item]) -> None:
+        self.__alive = iterable
+        self._len = len(iterable)
+        self._it = iter(iterable)
+
+    def as_slice(self) -> collections.Sequence[Item]:
+        """Returns an immutable slice of all elements that have not been yielded
+
+        Example
+        -------
+        ```py
+        iterator = into_iter([1, 2, 3])
+        iterator.as_slice() == [1, 2, 3]
+        iterator.next()
+        assert iterator.as_slice() == [2, 3]
+        ```
+        """
+        return self.__alive[-self._len :]
+
+    def __next__(self) -> Item:
+        i = next(self._it)
+        self._len -= 1
+        return i
+
+    def __getitem__(self, index: int) -> Option[Item]:
+        try:
+            return self.skip(index).first()
+        except IndexError:
+            unreachable()
+
+    def __contains__(self, item: Item) -> bool:
+        return item in self._it
+
+    def __len__(self) -> int:
+        return self._len
+
+
 @diagnostic
 class Cloned(typing.Generic[Item], Iterator[Item]):
     """An iterator that copies the elements from an underlying iterator.
@@ -1039,7 +1105,7 @@ class Copied(typing.Generic[Item], Iterator[Item]):
 
 
 @diagnostic
-class Map(typing.Generic[Item, OtherItem], Iterator[Item]):
+class Map(typing.Generic[Item, OtherItem], Iterator[OtherItem]):
     """An iterator that maps the elements to a callable.
 
     This iterator is created by the `Iterator.map` method.
@@ -1369,11 +1435,37 @@ def once(item: Item) -> Once[Item]:
     return Once(item)
 
 
-@rustc_diagnostic_item("into_iter")
+@typing.overload
+def into_iter(
+    iterable: collections.Sequence[Item] | _vec.Vec[Item],
+) -> TrustedIter[Item]: ...
+
+
+@typing.overload
+def into_iter(
+    iterable: _buf.Bytes,
+) -> TrustedIter[int]: ...
+
+
+@typing.overload
 def into_iter(
     iterable: collections.Iterable[Item],
-) -> Iter[Item]:
+    /,
+) -> Iter[Item]: ...
+
+
+@rustc_diagnostic_item("into_iter")
+def into_iter(
+    iterable: collections.Sequence[Item]
+    | _buf.Bytes
+    | _vec.Vec[Item]
+    | collections.Iterable[Item],
+    /,
+) -> Iter[Item] | TrustedIter[Item] | TrustedIter[int]:
     """Convert any iterable into `Iterator[Item]`.
+
+    if the size of the iterable is known, it will return `TrustedIter`,
+    otherwise it will return `Iter`.
 
     Example
     -------
@@ -1386,4 +1478,8 @@ def into_iter(
     # 1
     ```
     """
+    if isinstance(
+        iterable, (collections.Sequence, _vec.Vec, _buf.Bytes)
+    ):  # Vec and Bytes are specialized types. not `Sequence`.
+        return TrustedIter(iterable)  # pyright: ignore - Bytes CAN be turned into a sequence because it implements `__iter__`.
     return Iter(iterable)

@@ -672,7 +672,7 @@ class Bytes(convert.ToString):
             return 0
         return self._buf.itemsize
 
-    def iter(self) -> _iter.Iter[int]:
+    def iter(self) -> _iter.TrustedIter[int]:
         """Returns an iterator over the bytes of `self`.
 
         This iterator yields all `int`s from start to end.
@@ -691,7 +691,7 @@ class Bytes(convert.ToString):
         # ♥
         ```
         """
-        return _iter.Iter(self)
+        return _iter.into_iter(self)
 
     def chars(self) -> _iter.Iterator[_ctypes.c_char]:
         """Returns an iterator over the characters of `Bytes`.
