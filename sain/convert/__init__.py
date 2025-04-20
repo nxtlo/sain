@@ -89,7 +89,7 @@ match Message.try_from(message_bytes):
     case Err(invalid_bytes):
         print("Invalid bytes:", invalid_bytes)
 
-payload = Message(content='...', id=0)
+payload = Message(content='content', id=0)
 assert payload.into() == message_bytes
 ```
 """

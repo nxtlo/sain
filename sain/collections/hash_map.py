@@ -118,7 +118,17 @@ class _RawMap(collections.Mapping[K, V]):
 
         return _option.Some(self._source[key])
 
-    def get_many(self, *keys: K) -> _option.Option[collections.Collection[V]]:
+    @typing.overload
+    def get_many(self, keys: K) -> _option.Option[V]: ...
+
+    @typing.overload
+    def get_many(
+        self, keys: collections.Iterable[K]
+    ) -> _option.Option[collections.Collection[V]]: ...
+
+    def get_many(
+        self, keys: K | collections.Iterable[K]
+    ) -> _option.Option[collections.Collection[V]] | _option.Option[V]:
         """Attempts to get `len(keys)` values in the map at once.
 
         Returns a collection of length `keys` with the results of each query.
@@ -142,21 +152,33 @@ class _RawMap(collections.Mapping[K, V]):
         assert urls.get_many("google", "google").is_none()
         ```
         """
-        # transfer all values from self to a list, the `count` call
-        # ensures no duplicated keys are passed and the `all` call ensures
-        # that all keys passed must be present in the hashmap.
-        results = [
-            self[k] for k in keys if all(_ in self for _ in keys) and keys.count(k) == 1
-        ]
-        if results:
-            return _option.Some(results)
 
-        return _option.NOTHING  # pyright: ignore
+        # Single key optimization.
+        if not isinstance(keys, collections.Iterable) and keys in self:
+            return _option.Some(self[keys])
 
-    def iter(self) -> _iter.Iterator[tuple[K, V]]:
+        # Single value optimization.
+        assert isinstance(keys, collections.Iterable)
+
+        if len(self) == 1:
+            once = next(iter(self))
+            if once in keys:
+                return _option.Some([self[once]])
+            return _option.NOTHING  # pyright: ignore
+
+        seen: set[K] = set()
+        results: list[V] = []
+
+        for key in keys:
+            if key in seen or key not in self:
+                return _option.NOTHING  # type: ignore
+
+            seen.add(key)
+            results.append(self[key])
+        return _option.Some(results)
+
+    def iter(self) -> _iter.Iter[tuple[K, V]]:
         """An iterator visiting all key-value pairs in arbitrary order.
-
-        This returns `sain.Iterator` and not a normal iterator.
 
         Example
         -------
@@ -225,12 +247,12 @@ class _RawMap(collections.Mapping[K, V]):
     def __getitem__(self, key: K, /) -> V:
         return self._source[key]
 
-    def __setitem__(self, _key: Never, _value: Never) -> typing.NoReturn:
+    def __setitem__(self, _key: Never, _value: Never) -> Never:
         raise NotImplementedError(
             "`HashMap` is immutable, use `.as_mut()` to make it mutable instead"
         )
 
-    def __delitem__(self, _key: Never) -> typing.NoReturn:
+    def __delitem__(self, _key: Never) -> Never:
         raise NotImplementedError(
             "`HashMap` is immutable, use `.as_mut()` to make it mutable instead"
         )
@@ -311,7 +333,7 @@ class HashMap(typing.Generic[K, V], _RawMap[K, V]):
 class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, V]):
     """A reference to a mutable dictionary / hashmap.
 
-    This is built from the `HashMap.as_mut()` method.
+    This is built from the `HashMap.as_mut()` / `HashMap.from_mut` methods.
     """
 
     if typing.TYPE_CHECKING:

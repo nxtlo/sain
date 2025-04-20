@@ -28,10 +28,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""A module that contains useful decorators for marking objects.
-
-It appends useful messages to warn at runtime and to the object documentation.
-"""
+"""A module that contains useful functions and decorators for marking objects."""
 
 from __future__ import annotations
 
@@ -40,6 +37,10 @@ __all__ = (
     "unimplemented",
     "todo",
     "doc",
+    "assert_eq",
+    "assert_ne",
+    "include_str",
+    "include_bytes",
 )
 
 import functools
@@ -48,6 +49,7 @@ import typing
 import warnings
 
 if typing.TYPE_CHECKING:
+    T = typing.TypeVar("T", covariant=True)
     import collections.abc as collections
 
     import _typeshed
@@ -150,13 +152,108 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     The caller of the decorated function is responsible for the undefined behavior if occurred.
     """
     m = "\n# Safety ⚠️\nCalling this method on `None` is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior).\n"
-    if fn.__doc__:
+    if fn.__doc__ is not None:
         # append this message to an existing document.
         fn.__doc__ = inspect.cleandoc(fn.__doc__) + m
     else:
         fn.__doc__ = m
 
     return fn
+
+
+def assert_eq(left: T, right: T) -> None:
+    """Asserts that two expressions are equal to each other.
+
+    This exactly as `assert left == right`, but includes a useful message incase of failure.
+
+    Example
+    -------
+    ```py
+    from sain.macros import assert_eq
+    a = 3
+    b = 1 + 2
+    assert_eq(a, b)
+    ```
+    """
+    assert (
+        left == right
+    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+
+
+def assert_ne(left: T, right: T) -> None:
+    """Asserts that two expressions are not equal to each other.
+
+    This exactly as `assert left == right`, but includes a useful message incase of failure.
+
+    Example
+    -------
+    ```py
+    from sain.macros import assert_ne
+    a = 3
+    b = 2 + 2
+    assert_ne(a, b)
+    ```
+    """
+    assert (
+        left != right
+    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+
+
+def include_bytes(file: typing.LiteralString) -> bytes:
+    """Includes a file as `bytes`.
+
+    This function is not magic like Rust's, It is literally defined as
+
+    ```py
+    with open(file, "rb") as f:
+        return f.read()
+    ```
+
+    The file name can may be either a relative to the current file or a complate path.
+
+    Example
+    -------
+    File "spanish.in":
+    ```text
+    adiós
+    ```
+    File "main.py":
+    ```py
+    from sain.macros import include_bytes
+    buffer = include_bytes("spanish.in")
+    assert buffer.decode() == "adiós"
+    ```
+    """
+    with open(file, "rb") as buf:
+        return buf.read()
+
+
+def include_str(file: typing.LiteralString) -> typing.LiteralString:
+    """Includes a file as literal `str`.
+
+    This function is not magic like Rust's, It is literally defined as
+
+    ```py
+    with open(file, "r") as f:
+        return f.read()
+    ```
+
+    The file name can may be either a relative to the current file or a complate path.
+
+    Example
+    -------
+    ```py
+    from sain.macros import include_str
+
+    def entry() -> None:
+        ...
+
+    entry.__doc__ = include_str("README.md")
+
+    ```
+    """
+    with open(file, "r") as buf:
+        return buf.read()  # pyright: ignore - stimulates a `&'static str` slice.
 
 
 # this function applies on both classes and functions,

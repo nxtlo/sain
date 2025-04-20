@@ -54,6 +54,10 @@ __all__ = (
     "deprecated",
     "unimplemented",
     "doc",
+    "include_str",
+    "include_bytes",
+    "assert_eq",
+    "assert_ne",
     # futures.py
     "futures",
     # result.py
@@ -108,8 +112,12 @@ from .default import Default
 from .error import Error
 from .iter import Iter
 from .iter import Iterator
+from .macros import assert_eq
+from .macros import assert_ne
 from .macros import deprecated
 from .macros import doc
+from .macros import include_bytes
+from .macros import include_str
 from .macros import todo
 from .macros import unimplemented
 from .option import NOTHING

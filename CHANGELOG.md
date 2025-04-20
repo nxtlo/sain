@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `Vec.shirnk_to`
 - `Vec.shirnk_to_fit`
+- `macros.include_str`
+- `macros.include_bytes`
+- `macros.assert_eq`
+- `macros.assert_ne`
 
 ## 1.3.0 - 01/01/2025
 
