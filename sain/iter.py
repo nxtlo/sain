@@ -35,6 +35,7 @@ __all__ = (
     # Core
     "Iter",
     "Iterator",
+    "TrustedIter",
     # Adapters
     "Cloned",
     "Copied",
@@ -48,6 +49,8 @@ __all__ = (
     "Chunks",
     "Empty",
     "Repeat",
+    "Once",
+    "ExactSizeIterator",
     # Functions
     "into_iter",
     "empty",
@@ -65,16 +68,18 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-from .collections import vec
+from .collections import buf as _buf
+from .collections import vec as _vec
 from .macros import rustc_diagnostic_item
 
 Item = typing.TypeVar("Item")
 """The type of the item that is being yielded."""
 
-OtherItem = typing.TypeVar("OtherItem", covariant=True)
+OtherItem = typing.TypeVar("OtherItem")
 """The type of the item that is being mapped into then yielded."""
 
 AnyIter = typing.TypeVar("AnyIter", bound="Iterator[typing.Any]")
+
 
 if typing.TYPE_CHECKING:
     import _typeshed
@@ -173,11 +178,9 @@ class Iterator(
         return Empty()
 
     @typing.overload
-    @typing.final
     def collect(self) -> collections.Sequence[Item]: ...
 
     @typing.overload
-    @typing.final
     def collect(
         self, *, cast: collections.Callable[[Item], OtherItem]
     ) -> collections.Sequence[OtherItem]: ...
@@ -236,7 +239,7 @@ class Iterator(
                 collection[idx] = item
 
     @typing.final
-    def to_vec(self) -> vec.Vec[Item]:
+    def to_vec(self) -> _vec.Vec[Item]:
         """Convert this iterator into `Vec[T]`.
 
         Example
@@ -248,7 +251,7 @@ class Iterator(
         assert to_vec == [0]
         ```
         """
-        return vec.Vec(_ for _ in self)
+        return _vec.Vec(_ for _ in self)
 
     @typing.final
     def sink(self) -> None:
@@ -553,7 +556,7 @@ class Iterator(
 
     def zip(
         self, other: collections.Iterable[OtherItem]
-    ) -> Iterator[tuple[Item, OtherItem]]:
+    ) -> Iter[tuple[Item, OtherItem]]:
         """Zips the iterator with another iterable.
 
         Example
@@ -583,7 +586,7 @@ class Iterator(
         *,
         key: collections.Callable[[Item], _typeshed.SupportsRichComparison],
         reverse: bool = False,
-    ) -> Iterator[Item]:
+    ) -> Iter[Item]:
         """Sorts the iterator.
 
         Example
@@ -608,7 +611,7 @@ class Iterator(
         """
         return Iter(sorted(self.raw_parts(), key=key, reverse=reverse))
 
-    def reversed(self) -> Iterator[Item]:
+    def reversed(self) -> Iter[Item]:
         """Returns a new iterator that yields the items in the iterator in reverse order.
 
         Example
@@ -627,7 +630,7 @@ class Iterator(
         # first collect it into some collection.
         return Iter(reversed(self.collect()))
 
-    def union(self, other: collections.Iterable[Item]) -> Iterator[Item]:
+    def union(self, other: collections.Iterable[Item]) -> Iter[Item]:
         """Returns a new iterator that yields all items from both iterators.
 
         Example
@@ -810,7 +813,7 @@ class Iterator(
         func: collections.Callable[
             [Item], collections.Coroutine[None, typing.Any, OtherItem]
         ],
-    ) -> _result.Result[collections.Sequence[OtherItem], futures.SpawnError]:
+    ) -> _result.Result[collections.Sequence[OtherItem], futures.JoinError]:
         """Calls the async function on each item in the iterator concurrently.
 
         Example
@@ -832,9 +835,9 @@ class Iterator(
         func: `collections.Callable[[Item], Coroutine[None, Any, Any]]`
             The async function to call on each item in the iterator.
         """
-        return await futures.spawn(*(func(item) for item in self))
+        return await futures.join(*(func(item) for item in self))
 
-    def __reversed__(self) -> Iterator[Item]:
+    def __reversed__(self) -> Iter[Item]:
         return self.reversed()
 
     def __setitem__(self, _: None, __: None) -> typing.NoReturn:
@@ -848,7 +851,9 @@ class Iterator(
     def __copy__(self) -> Cloned[Item]:
         return self.cloned()
 
-    def __deepcopy__(self) -> Copied[Item]:
+    def __deepcopy__(
+        self, memo: collections.MutableMapping[int, typing.Any], /
+    ) -> Copied[Item]:
         return self.copied()
 
     def __len__(self) -> int:
@@ -858,10 +863,80 @@ class Iterator(
         return self
 
 
+class ExactSizeIterator(typing.Generic[Item], Iterator[Item]):
+    """An iterator that knows its exact size.
+
+    The implementations of this interface indicates that the iterator knows exactly
+    how many items it can yield.
+
+    however, this is not a requirement for the iterator to implement this trait, as its
+    only used for iterators that can know their size.
+
+    Example
+    -------
+    ```py
+    @dataclass
+    class Letters(ExactSizeIterator[str]):
+        letters: list[str]
+
+        def __next__(self) -> str:
+            return self.letters.pop(0)
+
+        def __len__(self) -> int:
+            return len(self.letters)
+
+    letters = Letters(['a', 'b', 'c'])
+    assert letters.count() == 3
+    assert letters.next() == Some('a')
+    assert letters.count() == 2
+    ```
+    """
+
+    @typing.final
+    def count(self) -> int:
+        return len(self)
+
+    @typing.final
+    def len(self) -> int:
+        """Returns the remaining number of items in the iterator.
+
+        This doesn't exhaust the iterator.
+
+        Example
+        -------
+        ```py
+        it = once(0)
+        assert it.len() == 1
+        assert it.len() == 1
+        it.next()
+        assert it.len() == 0
+        ```
+        """
+        return len(self)
+
+    @typing.final
+    def is_empty(self) -> bool:
+        """Return `True` if this iterator has no items left to yield.
+
+        Example
+        -------
+        ```py
+        iterator = once(1)
+        assert not iterator.is_empty()
+        assert once.next() == Some(1)
+        assert iterator.is_empty()
+        ```
+        """
+        return len(self) == 0
+
+    def __len__(self) -> int:
+        return 0
+
+
 @typing.final
 # @rustc_diagnostic_item("Iter")
 @diagnostic
-class Iter(Iterator[Item]):
+class Iter(typing.Generic[Item], Iterator[Item]):
     """a lazy iterator that has its items ready in-memory.
 
     This is similar to Rust `std::slice::Iter<T>` item which iterables can build
@@ -917,10 +992,7 @@ class Iter(Iterator[Item]):
         return Iter(copy.copy(self._it))
 
     def __next__(self) -> Item:
-        try:
-            return next(self._it)
-        except StopIteration:
-            raise
+        return next(self._it)
 
     def __getitem__(self, index: int) -> Option[Item]:
         try:
@@ -930,6 +1002,67 @@ class Iter(Iterator[Item]):
 
     def __contains__(self, item: Item) -> bool:
         return item in self._it
+
+
+@typing.final
+class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
+    """Similar to `Iter`, but it reports an accurate length using `ExactSizeIterator`.
+
+    iterable objects such as `Vec`, `Bytes`, `list` and other `Sized` may be created
+    using this iterator.
+
+    Example
+    -------
+    ```py
+    # we know the size of the iterator.
+    sized_buf: TrustedIter[int] = into_iter((1, 2, 3, 4))
+    # this is `Iter[int]` since we don't know when the generator will stop yielding.
+    unsized_buf: Iter[int] = into_iter((_ for _ in ([1, 2, 3, 4] if cond else [1, 2])))
+    ```
+
+    Parameters
+    ----------
+    items: `collections.Collection[Item]`
+        A sized collection of items to iterate over.
+    """
+
+    __slots__ = ("_it", "_len", "__alive")
+
+    def __init__(self, iterable: collections.Sequence[Item]) -> None:
+        self.__alive = iterable
+        self._len = len(iterable)
+        self._it = iter(iterable)
+
+    def as_slice(self) -> collections.Sequence[Item]:
+        """Returns an immutable slice of all elements that have not been yielded
+
+        Example
+        -------
+        ```py
+        iterator = into_iter([1, 2, 3])
+        iterator.as_slice() == [1, 2, 3]
+        iterator.next()
+        assert iterator.as_slice() == [2, 3]
+        ```
+        """
+        return self.__alive[-self._len :]
+
+    def __next__(self) -> Item:
+        i = next(self._it)
+        self._len -= 1
+        return i
+
+    def __getitem__(self, index: int) -> Option[Item]:
+        try:
+            return self.skip(index).first()
+        except IndexError:
+            unreachable()
+
+    def __contains__(self, item: Item) -> bool:
+        return item in self._it
+
+    def __len__(self) -> int:
+        return self._len
 
 
 @diagnostic
@@ -972,7 +1105,7 @@ class Copied(typing.Generic[Item], Iterator[Item]):
 
 
 @diagnostic
-class Map(typing.Generic[Item, OtherItem], Iterator[Item]):
+class Map(typing.Generic[Item, OtherItem], Iterator[OtherItem]):
     """An iterator that maps the elements to a callable.
 
     This iterator is created by the `Iterator.map` method.
@@ -1165,7 +1298,7 @@ class Chunks(typing.Generic[Item], Iterator[collections.Sequence[Item]]):
 
 @typing.final
 @diagnostic
-class Empty(typing.Generic[Item], Iterator[Item]):
+class Empty(typing.Generic[Item], ExactSizeIterator[Item]):
     """An iterator that yields nothing.
 
     This is the default iterator that is created by `Iterator.default()` or `empty()`
@@ -1181,7 +1314,7 @@ class Empty(typing.Generic[Item], Iterator[Item]):
         # also we avoid calling `nothing_unchecked()` here for fast returns.
         return _option.NOTHING  # pyright: ignore
 
-    def count(self) -> typing.Literal[0]:
+    def __len__(self) -> typing.Literal[0]:
         return 0
 
     def any(
@@ -1200,7 +1333,7 @@ class Empty(typing.Generic[Item], Iterator[Item]):
 
 @typing.final
 @diagnostic
-class Repeat(typing.Generic[Item], Iterator[Item]):
+class Repeat(typing.Generic[Item], ExactSizeIterator[Item]):
     """An iterator that repeats a given value an exact number of times.
 
     This iterator is created by calling `repeat()`.
@@ -1223,12 +1356,28 @@ class Repeat(typing.Generic[Item], Iterator[Item]):
 
         unreachable()
 
-    # Specializing these methods to avoid unnecessary function calls.
-    def count(self) -> int:
-        return self._count
-
     def __len__(self) -> int:
         return self._count
+
+
+@typing.final
+@diagnostic
+class Once(typing.Generic[Item], ExactSizeIterator[Item]):
+    """An iterator that yields exactly one item.
+
+    This iterator is created by calling `once()`.
+    """
+
+    __slots__ = ("_item",)
+
+    def __init__(self, item: Item) -> None:
+        self.item: Option[Item] = _option.Some(item)
+
+    def __next__(self) -> Item:
+        return self.item.take().unwrap_or_else(unreachable)
+
+    def __len__(self) -> typing.Literal[0, 1]:
+        return 1 if self.item else 0
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.
@@ -1272,7 +1421,7 @@ def repeat(element: Item, count: int) -> Repeat[Item]:
 
 
 @rustc_diagnostic_item("once")
-def once(item: Item) -> Iterator[Item]:
+def once(item: Item) -> Once[Item]:
     """Returns an iterator that yields exactly a single item.
 
     Example
@@ -1283,14 +1432,40 @@ def once(item: Item) -> Iterator[Item]:
     assert iterator.next() == Some(None)
     ```
     """
-    return Iter((item,))
+    return Once(item)
+
+
+@typing.overload
+def into_iter(
+    iterable: collections.Sequence[Item] | _vec.Vec[Item],
+) -> TrustedIter[Item]: ...
+
+
+@typing.overload
+def into_iter(
+    iterable: _buf.Bytes,
+) -> TrustedIter[int]: ...
+
+
+@typing.overload
+def into_iter(
+    iterable: collections.Iterable[Item],
+    /,
+) -> Iter[Item]: ...
 
 
 @rustc_diagnostic_item("into_iter")
 def into_iter(
-    iterable: collections.Iterable[Item],
-) -> Iterator[Item]:
+    iterable: collections.Sequence[Item]
+    | _buf.Bytes
+    | _vec.Vec[Item]
+    | collections.Iterable[Item],
+    /,
+) -> Iter[Item] | TrustedIter[Item] | TrustedIter[int]:
     """Convert any iterable into `Iterator[Item]`.
+
+    if the size of the iterable is known, it will return `TrustedIter`,
+    otherwise it will return `Iter`.
 
     Example
     -------
@@ -1303,4 +1478,8 @@ def into_iter(
     # 1
     ```
     """
+    if isinstance(
+        iterable, (collections.Sequence, _vec.Vec, _buf.Bytes)
+    ):  # Vec and Bytes are specialized types. not `Sequence`.
+        return TrustedIter(iterable)  # pyright: ignore - Bytes CAN be turned into a sequence because it implements `__iter__`.
     return Iter(iterable)

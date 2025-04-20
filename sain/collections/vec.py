@@ -256,8 +256,8 @@ class Vec(typing.Generic[T]):
         """
         return 0 if self._capacity is None else self._capacity
 
-    def iter(self) -> _iter.Iterator[T]:
-        """Return an iterator over this vector elements.
+    def iter(self) -> _iter.TrustedIter[T]:
+        """Returns an iterator over this vector elements.
 
         Example
         -------
@@ -267,7 +267,7 @@ class Vec(typing.Generic[T]):
             print(element)
         ```
         """
-        return _iter.Iter(self)
+        return _iter.TrustedIter(self._ptr or ())
 
     def is_empty(self) -> bool:
         """Returns true if the vector contains no elements."""

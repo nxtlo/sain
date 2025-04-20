@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## Added
+### Added
 
 - `Vec.shirnk_to`
 - `Vec.shirnk_to_fit`
@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `macros.include_bytes`
 - `macros.assert_eq`
 - `macros.assert_ne`
+- `iter.Once`
+- `iter.ExactSizeIterator`
+
+### Changed
+
+- `iter.once() -> Once[T]` now returns a specialized iterator.
 
 ## 1.3.0 - 01/01/2025
 

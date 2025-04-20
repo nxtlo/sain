@@ -31,7 +31,7 @@
 
 from __future__ import annotations
 
-__all__ = ("spawn", "loop")
+__all__ = ("join", "loop")
 
 import asyncio
 import enum
@@ -46,7 +46,7 @@ if typing.TYPE_CHECKING:
     T = typing.TypeVar("T", bound=collections.Callable[..., typing.Any])
 
 
-class SpawnError(enum.Enum):
+class JoinError(enum.Enum):
     EMPTY = 0
     """No awaitables were passed."""
     CANCELED = 1
@@ -55,27 +55,22 @@ class SpawnError(enum.Enum):
     """The future gatherer timed-out."""
 
 
-async def spawn(
+async def join(
     *aws: collections.Awaitable[T_co],
     timeout: float | None = None,
-) -> _result.Result[collections.Sequence[T_co], SpawnError]:
-    """Spawn all given awaitables concurrently.
+) -> _result.Result[collections.Sequence[T_co], JoinError]:
+    """Polls multiple awaitables concurrently, returning a sequence of their results once complete.
 
     Example
     -------
     ```py
-    async def get(url: str) -> dict[str, Any]:
-        return await http.get(url).json()
+    async def one() -> int:
+        return 1
 
-    async def main() -> None:
-        tasks = await spawn(*(get("url.com") for _ in range(10)))
-        match tasks:
-            case Ok(tasks):
-                assert len(tasks) <= 10
-            case Err(why) if why.TIMEOUT:
-                print("couldn't make it in time :<")
-            case _:
-                ...
+    async def two() -> int:
+        return 2
+
+    x, y = (await join(one(), two())).unwrap()
     ```
 
     Parameters
@@ -87,12 +82,12 @@ async def spawn(
 
     Returns
     -------
-    `sain.Result[T, SpawnError]`:
+    `sain.Result[T, JoinError]`:
         The result of the gathered awaitables.
     """
 
     if not aws:
-        return _result.Err(SpawnError.EMPTY)
+        return _result.Err(JoinError.EMPTY)
 
     tasks: list[asyncio.Task[T_co]] = []
 
@@ -102,9 +97,9 @@ async def spawn(
         return _result.Ok(await asyncio.wait_for(gatherer, timeout=timeout))
 
     except asyncio.CancelledError:
-        return _result.Err(SpawnError.CANCELED)
+        return _result.Err(JoinError.CANCELED)
     except asyncio.TimeoutError:
-        return _result.Err(SpawnError.TIMEOUT)
+        return _result.Err(JoinError.TIMEOUT)
 
     finally:
         for task in tasks:

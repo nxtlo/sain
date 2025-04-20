@@ -8,6 +8,5 @@ __pycache__/
 dist/*
 *.whl
 *.gz
-.venv11
 pyrightconfig.json
 t.py
