@@ -34,6 +34,7 @@ from __future__ import annotations
 import typing
 
 from . import macros
+from .macros import rustc_diagnostic_item
 
 if typing.TYPE_CHECKING:
     import collections.abc as collections
@@ -43,6 +44,7 @@ if typing.TYPE_CHECKING:
 T = typing.TypeVar("T")
 
 
+@rustc_diagnostic_item("MaybeUninit")
 @typing.final
 class MaybeUninit(typing.Generic[T]):
     """A wrapper type to construct uninitialized instances of `T`.

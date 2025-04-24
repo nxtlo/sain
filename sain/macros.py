@@ -85,6 +85,8 @@ if typing.TYPE_CHECKING:
         # std::collections::*
         "HashMap",
         "Vec", "vec!",
+        # alloc
+        "String"
     ]
     # fmt: on
 
@@ -129,6 +131,8 @@ _MAP_TO_PATH: dict[RustItem, typing.LiteralString] = {
     "HashMap": "std/collections/struct.HashMap.html",
     "Vec": "std/vec/struct.Vec.html",
     "vec!": "std/macro.vec.html",
+    # alloc
+    "String": "alloc/string/struct.String.html",
 }
 
 
@@ -256,12 +260,7 @@ def include_str(file: typing.LiteralString) -> typing.LiteralString:
         return buf.read()  # pyright: ignore - stimulates a `&'static str` slice.
 
 
-# this function applies on both classes and functions,
-# typing it will be clusterfuck, so we're just ignoring and
-# type checkers will infer the types.
-def rustc_diagnostic_item(
-    item: RustItem, /
-) -> collections.Callable[[collections.Callable[P, U]], collections.Callable[P, U]]:
+def rustc_diagnostic_item(item: RustItem, /) -> collections.Callable[[T], T]:
     '''Expands a Python callable object's documentation, generating the corresponding Rust implementation of the marked object.
 
     This is a decorator that applies on both classes, methods and functions.
@@ -288,20 +287,10 @@ def rustc_diagnostic_item(
 
     RUSTC_DOCS = "https://doc.rust-lang.org"
 
-    def decorator(f: collections.Callable[P, U]) -> collections.Callable[P, U]:
-        @functools.wraps(f)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            return f(*args, **kwargs)
-
-        m = f"\n# Implementations\nThis {_obj_type(f)} implements [{item}]({RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."
-        if f.__doc__ is not None:
-            # append this message to an existing document.
-            f.__doc__ = inspect.cleandoc(f.__doc__) + m
-        else:
-            f.__doc__ = m
-
-        wrapper.__doc__ = f.__doc__
-        return wrapper.__wrapped__
+    def decorator(obj: T) -> T:
+        additional_doc = f"\n\n# Implementations\nThis {_obj_type(obj)} implements [{item}]({RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."
+        obj.__doc__ = inspect.cleandoc(obj.__doc__ or "") + additional_doc
+        return obj
 
     return decorator
 
