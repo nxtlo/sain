@@ -50,9 +50,12 @@ __all__ = ("Default",)
 
 import typing
 
+from .macros import rustc_diagnostic_item
+
 _T_co = typing.TypeVar("_T_co", covariant=True)
 
 
+@rustc_diagnostic_item("Default")
 @typing.runtime_checkable
 class Default(typing.Protocol[_T_co]):
     """An interface for an object that has a default value.
@@ -77,6 +80,7 @@ class Default(typing.Protocol[_T_co]):
 
     __slots__ = ()
 
+    @rustc_diagnostic_item("default_fn")
     @staticmethod
     def default() -> _T_co:
         """Return the default value of the object."""

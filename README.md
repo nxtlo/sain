@@ -37,7 +37,7 @@ class Blob(Into[Bytes], TryFrom[str, None]):
     # converts this layout into some raw bytes.
     def into(self) -> Bytes:
         buf = Bytes()
-        buf.put_bytes(self.tag.encode())
+        buf.put_str(self.tag)
         buf.put_bytes(b"-")
         buf.put_bytes(self.buffer)
         return buf

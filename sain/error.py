@@ -41,26 +41,6 @@ For an example
 # Read the env variable, raises `RuntimeError` if it is not present.
 path: Option[str] = Some(os.environ.get('SOME_PATH')).unwrap()
 ```
-
-HTTP requests are good example where errors can be returned all the time.
-Lets implement one.
-
-Example
--------
-from sain import Error
-from dataclasses import dataclass
-
-# Base error.
-class HTTPError(Error):
-    ...
-
-@dataclass
-class NotFound(HTTPError):
-    message = "Response not found."
-    response: requests.Response
-
-    def description(self) -> str:
-        ...
 """
 
 from __future__ import annotations
@@ -70,6 +50,7 @@ __all__ = ("Error", "catch_unwind")
 import typing
 
 from sain import result as _result
+from sain.macros import rustc_diagnostic_item
 
 from . import option as _option
 from .convert import ToString
@@ -83,6 +64,7 @@ if typing.TYPE_CHECKING:
 R = typing.TypeVar("R", covariant=True)
 
 
+@rustc_diagnostic_item("Error")
 @typing.runtime_checkable
 class Error(ToString, typing.Protocol):
     """`Error` is an interface usually used for values that returns `sain.Result[T, E]`
@@ -192,6 +174,7 @@ class Error(ToString, typing.Protocol):
         return False
 
 
+@rustc_diagnostic_item("catch_unwind")
 def catch_unwind(fn: Callable[[], R]) -> _result.Result[R, BaseException]:
     """Invokes a closure, capturing exceptions if any one raised.
 

@@ -71,6 +71,7 @@ from . import result as _result
 from .collections import buf as _buf
 from .collections import vec as _vec
 from .macros import rustc_diagnostic_item
+from .macros import unsafe
 
 Item = typing.TypeVar("Item")
 """The type of the item that is being yielded."""
@@ -933,8 +934,8 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item]):
         return 0
 
 
+@rustc_diagnostic_item("Iter")
 @typing.final
-# @rustc_diagnostic_item("Iter")
 @diagnostic
 class Iter(typing.Generic[Item], Iterator[Item]):
     """a lazy iterator that has its items ready in-memory.
@@ -1033,6 +1034,29 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         self._len = len(iterable)
         self._it = iter(iterable)
 
+    def next(self) -> Option[Item]:
+        if self._len == 0:
+            # ! SAFETY: len == 0
+            return _option.NOTHING  # pyright: ignore
+
+        return _option.Some(self.__next__())
+
+    @unsafe
+    def next_unchecked(self) -> Item:
+        """Returns the next item in the iterator without checking if it exists.
+
+        This is equivalent to calling `next()` on the iterator directly.
+
+        Example
+        -------
+        ```py
+        iterator = Iter([1])
+        assert iterator.next_unchecked() == 1
+        iterator.next_unchecked() # raises StopIteration
+        ```
+        """
+        return self.__next__()
+
     def as_slice(self) -> collections.Sequence[Item]:
         """Returns an immutable slice of all elements that have not been yielded
 
@@ -1047,12 +1071,18 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         """
         return self.__alive[-self._len :]
 
+    def __repr__(self) -> str:
+        return f"TrustedIter({self.as_slice()})"
+
     def __next__(self) -> Item:
         i = next(self._it)
         self._len -= 1
         return i
 
     def __getitem__(self, index: int) -> Option[Item]:
+        if self._len == 0:
+            return _option.NOTHING  # pyright: ignore - we know this is empty.
+
         try:
             return self.skip(index).first()
         except IndexError:
@@ -1460,7 +1490,6 @@ def into_iter(
     | _buf.Bytes
     | _vec.Vec[Item]
     | collections.Iterable[Item],
-    /,
 ) -> Iter[Item] | TrustedIter[Item] | TrustedIter[int]:
     """Convert any iterable into `Iterator[Item]`.
 

@@ -63,11 +63,11 @@
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn">sain</span> <span class="kn">import</span> <span class="n">Default</span>
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sain</span><span class="w"> </span><span class="kn">import</span> <span class="n">Default</span>
 
-<span class="k">class</span> <span class="nc">Generator</span><span class="p">(</span><span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Generator</span><span class="p">(</span><span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">generator</span><span class="o">.</span><span class="n">random_str</span><span class="p">()</span>
 
 <span class="n">DEFAULT_GENERATOR</span> <span class="o">=</span> <span class="n">Generator</span><span class="o">.</span><span class="n">default</span><span class="p">()</span>
@@ -125,43 +125,46 @@
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">```</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
 </span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Default&quot;</span><span class="p">,)</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="n">_T_co</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_T_co&quot;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.macros</span><span class="w"> </span><span class="kn">import</span> <span class="n">rustc_diagnostic_item</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="n">_T_co</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_T_co&quot;</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="k">class</span> <span class="nc">Default</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">_T_co</span><span class="p">]):</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="sd">&quot;&quot;&quot;An interface for an object that has a default value.</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    Example</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">    -------</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">    ```py</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">    from sain import Default</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">    class Cache(Default[dict[str, Any]]):</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;Default&quot;</span><span class="p">)</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Default</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">_T_co</span><span class="p">]):</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An interface for an object that has a default value.</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">    Example</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">    -------</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">    ```py</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">    from sain import Default</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">        @staticmethod</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        def default() -&gt; dict[str, Any]:</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">            return {}</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">    cache = Cache.default()</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">    print(cache)</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">    assert isinstance(cache, Default)</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="sd">    # {}</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">    ```</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">    class Cache(Default[dict[str, Any]]):</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">        @staticmethod</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">        def default() -&gt; dict[str, Any]:</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">            return {}</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">    cache = Cache.default()</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="sd">    print(cache)</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">    assert isinstance(cache, Default)</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">    # {}</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">    ```</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;default_fn&quot;</span><span class="p">)</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -169,7 +172,8 @@
                 <section id="Default">
                             <input id="Default-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-typing.runtime_checkable">@typing.runtime_checkable</div>
+                    <div class="decorator decorator-rustc_diagnostic_item">@rustc_diagnostic_item(&#39;Default&#39;)</div>
+        <div class="decorator decorator-typing.runtime_checkable">@typing.runtime_checkable</div>
 
     <span class="def">class</span>
     <span class="name">Default</span><wbr>(<span class="base">typing.Protocol[+_T_co]</span>):
@@ -178,34 +182,36 @@
 
     </div>
     <a class="headerlink" href="#Default"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Default-57"><a href="#Default-57"><span class="linenos">57</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
-</span><span id="Default-58"><a href="#Default-58"><span class="linenos">58</span></a><span class="k">class</span> <span class="nc">Default</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">_T_co</span><span class="p">]):</span>
-</span><span id="Default-59"><a href="#Default-59"><span class="linenos">59</span></a>    <span class="sd">&quot;&quot;&quot;An interface for an object that has a default value.</span>
-</span><span id="Default-60"><a href="#Default-60"><span class="linenos">60</span></a>
-</span><span id="Default-61"><a href="#Default-61"><span class="linenos">61</span></a><span class="sd">    Example</span>
-</span><span id="Default-62"><a href="#Default-62"><span class="linenos">62</span></a><span class="sd">    -------</span>
-</span><span id="Default-63"><a href="#Default-63"><span class="linenos">63</span></a><span class="sd">    ```py</span>
-</span><span id="Default-64"><a href="#Default-64"><span class="linenos">64</span></a><span class="sd">    from sain import Default</span>
-</span><span id="Default-65"><a href="#Default-65"><span class="linenos">65</span></a>
-</span><span id="Default-66"><a href="#Default-66"><span class="linenos">66</span></a><span class="sd">    class Cache(Default[dict[str, Any]]):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Default-58"><a href="#Default-58"><span class="linenos">58</span></a><span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;Default&quot;</span><span class="p">)</span>
+</span><span id="Default-59"><a href="#Default-59"><span class="linenos">59</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">runtime_checkable</span>
+</span><span id="Default-60"><a href="#Default-60"><span class="linenos">60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Default</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Protocol</span><span class="p">[</span><span class="n">_T_co</span><span class="p">]):</span>
+</span><span id="Default-61"><a href="#Default-61"><span class="linenos">61</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;An interface for an object that has a default value.</span>
+</span><span id="Default-62"><a href="#Default-62"><span class="linenos">62</span></a>
+</span><span id="Default-63"><a href="#Default-63"><span class="linenos">63</span></a><span class="sd">    Example</span>
+</span><span id="Default-64"><a href="#Default-64"><span class="linenos">64</span></a><span class="sd">    -------</span>
+</span><span id="Default-65"><a href="#Default-65"><span class="linenos">65</span></a><span class="sd">    ```py</span>
+</span><span id="Default-66"><a href="#Default-66"><span class="linenos">66</span></a><span class="sd">    from sain import Default</span>
 </span><span id="Default-67"><a href="#Default-67"><span class="linenos">67</span></a>
-</span><span id="Default-68"><a href="#Default-68"><span class="linenos">68</span></a><span class="sd">        @staticmethod</span>
-</span><span id="Default-69"><a href="#Default-69"><span class="linenos">69</span></a><span class="sd">        def default() -&gt; dict[str, Any]:</span>
-</span><span id="Default-70"><a href="#Default-70"><span class="linenos">70</span></a><span class="sd">            return {}</span>
-</span><span id="Default-71"><a href="#Default-71"><span class="linenos">71</span></a>
-</span><span id="Default-72"><a href="#Default-72"><span class="linenos">72</span></a><span class="sd">    cache = Cache.default()</span>
-</span><span id="Default-73"><a href="#Default-73"><span class="linenos">73</span></a><span class="sd">    print(cache)</span>
-</span><span id="Default-74"><a href="#Default-74"><span class="linenos">74</span></a><span class="sd">    assert isinstance(cache, Default)</span>
-</span><span id="Default-75"><a href="#Default-75"><span class="linenos">75</span></a><span class="sd">    # {}</span>
-</span><span id="Default-76"><a href="#Default-76"><span class="linenos">76</span></a><span class="sd">    ```</span>
-</span><span id="Default-77"><a href="#Default-77"><span class="linenos">77</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Default-78"><a href="#Default-78"><span class="linenos">78</span></a>
-</span><span id="Default-79"><a href="#Default-79"><span class="linenos">79</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="Default-68"><a href="#Default-68"><span class="linenos">68</span></a><span class="sd">    class Cache(Default[dict[str, Any]]):</span>
+</span><span id="Default-69"><a href="#Default-69"><span class="linenos">69</span></a>
+</span><span id="Default-70"><a href="#Default-70"><span class="linenos">70</span></a><span class="sd">        @staticmethod</span>
+</span><span id="Default-71"><a href="#Default-71"><span class="linenos">71</span></a><span class="sd">        def default() -&gt; dict[str, Any]:</span>
+</span><span id="Default-72"><a href="#Default-72"><span class="linenos">72</span></a><span class="sd">            return {}</span>
+</span><span id="Default-73"><a href="#Default-73"><span class="linenos">73</span></a>
+</span><span id="Default-74"><a href="#Default-74"><span class="linenos">74</span></a><span class="sd">    cache = Cache.default()</span>
+</span><span id="Default-75"><a href="#Default-75"><span class="linenos">75</span></a><span class="sd">    print(cache)</span>
+</span><span id="Default-76"><a href="#Default-76"><span class="linenos">76</span></a><span class="sd">    assert isinstance(cache, Default)</span>
+</span><span id="Default-77"><a href="#Default-77"><span class="linenos">77</span></a><span class="sd">    # {}</span>
+</span><span id="Default-78"><a href="#Default-78"><span class="linenos">78</span></a><span class="sd">    ```</span>
+</span><span id="Default-79"><a href="#Default-79"><span class="linenos">79</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Default-80"><a href="#Default-80"><span class="linenos">80</span></a>
-</span><span id="Default-81"><a href="#Default-81"><span class="linenos">81</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Default-82"><a href="#Default-82"><span class="linenos">82</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="Default-83"><a href="#Default-83"><span class="linenos">83</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
-</span><span id="Default-84"><a href="#Default-84"><span class="linenos">84</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="Default-81"><a href="#Default-81"><span class="linenos">81</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="Default-82"><a href="#Default-82"><span class="linenos">82</span></a>
+</span><span id="Default-83"><a href="#Default-83"><span class="linenos">83</span></a>    <span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;default_fn&quot;</span><span class="p">)</span>
+</span><span id="Default-84"><a href="#Default-84"><span class="linenos">84</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="Default-85"><a href="#Default-85"><span class="linenos">85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
+</span><span id="Default-86"><a href="#Default-86"><span class="linenos">86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="Default-87"><a href="#Default-87"><span class="linenos">87</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -214,12 +220,12 @@
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn">sain</span> <span class="kn">import</span> <span class="n">Default</span>
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sain</span><span class="w"> </span><span class="kn">import</span> <span class="n">Default</span>
 
-<span class="k">class</span> <span class="nc">Cache</span><span class="p">(</span><span class="n">Default</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cache</span><span class="p">(</span><span class="n">Default</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">{}</span>
 
 <span class="n">cache</span> <span class="o">=</span> <span class="n">Cache</span><span class="o">.</span><span class="n">default</span><span class="p">()</span>
@@ -228,6 +234,10 @@
 <span class="c1"># {}</span>
 </code></pre>
 </div>
+
+<h1 id="implementations">Implementations</h1>
+
+<p>This class implements <a href="https://doc.rust-lang.org/std/default/trait.Default.html">Default</a> in Rust.</p>
 </div>
 
 
@@ -241,33 +251,33 @@
 
     </div>
     <a class="headerlink" href="#Default.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Default.__init__-1430"><a href="#Default.__init__-1430"><span class="linenos">1430</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="Default.__init__-1431"><a href="#Default.__init__-1431"><span class="linenos">1431</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="Default.__init__-1432"><a href="#Default.__init__-1432"><span class="linenos">1432</span></a>
-</span><span id="Default.__init__-1433"><a href="#Default.__init__-1433"><span class="linenos">1433</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="Default.__init__-1434"><a href="#Default.__init__-1434"><span class="linenos">1434</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="Default.__init__-1435"><a href="#Default.__init__-1435"><span class="linenos">1435</span></a>
-</span><span id="Default.__init__-1436"><a href="#Default.__init__-1436"><span class="linenos">1436</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="Default.__init__-1437"><a href="#Default.__init__-1437"><span class="linenos">1437</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="Default.__init__-1438"><a href="#Default.__init__-1438"><span class="linenos">1438</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="Default.__init__-1439"><a href="#Default.__init__-1439"><span class="linenos">1439</span></a>        <span class="k">return</span>
-</span><span id="Default.__init__-1440"><a href="#Default.__init__-1440"><span class="linenos">1440</span></a>
-</span><span id="Default.__init__-1441"><a href="#Default.__init__-1441"><span class="linenos">1441</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="Default.__init__-1442"><a href="#Default.__init__-1442"><span class="linenos">1442</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="Default.__init__-1443"><a href="#Default.__init__-1443"><span class="linenos">1443</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="Default.__init__-1444"><a href="#Default.__init__-1444"><span class="linenos">1444</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="Default.__init__-1445"><a href="#Default.__init__-1445"><span class="linenos">1445</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="Default.__init__-1446"><a href="#Default.__init__-1446"><span class="linenos">1446</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="Default.__init__-1447"><a href="#Default.__init__-1447"><span class="linenos">1447</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="Default.__init__-1448"><a href="#Default.__init__-1448"><span class="linenos">1448</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="Default.__init__-1449"><a href="#Default.__init__-1449"><span class="linenos">1449</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="Default.__init__-1450"><a href="#Default.__init__-1450"><span class="linenos">1450</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="Default.__init__-1451"><a href="#Default.__init__-1451"><span class="linenos">1451</span></a>            <span class="k">break</span>
-</span><span id="Default.__init__-1452"><a href="#Default.__init__-1452"><span class="linenos">1452</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="Default.__init__-1453"><a href="#Default.__init__-1453"><span class="linenos">1453</span></a>        <span class="c1"># should not happen</span>
-</span><span id="Default.__init__-1454"><a href="#Default.__init__-1454"><span class="linenos">1454</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="Default.__init__-1455"><a href="#Default.__init__-1455"><span class="linenos">1455</span></a>
-</span><span id="Default.__init__-1456"><a href="#Default.__init__-1456"><span class="linenos">1456</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Default.__init__-1941"><a href="#Default.__init__-1941"><span class="linenos">1941</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="Default.__init__-1942"><a href="#Default.__init__-1942"><span class="linenos">1942</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="Default.__init__-1943"><a href="#Default.__init__-1943"><span class="linenos">1943</span></a>
+</span><span id="Default.__init__-1944"><a href="#Default.__init__-1944"><span class="linenos">1944</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="Default.__init__-1945"><a href="#Default.__init__-1945"><span class="linenos">1945</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="Default.__init__-1946"><a href="#Default.__init__-1946"><span class="linenos">1946</span></a>
+</span><span id="Default.__init__-1947"><a href="#Default.__init__-1947"><span class="linenos">1947</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="Default.__init__-1948"><a href="#Default.__init__-1948"><span class="linenos">1948</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="Default.__init__-1949"><a href="#Default.__init__-1949"><span class="linenos">1949</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="Default.__init__-1950"><a href="#Default.__init__-1950"><span class="linenos">1950</span></a>        <span class="k">return</span>
+</span><span id="Default.__init__-1951"><a href="#Default.__init__-1951"><span class="linenos">1951</span></a>
+</span><span id="Default.__init__-1952"><a href="#Default.__init__-1952"><span class="linenos">1952</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="Default.__init__-1953"><a href="#Default.__init__-1953"><span class="linenos">1953</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="Default.__init__-1954"><a href="#Default.__init__-1954"><span class="linenos">1954</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="Default.__init__-1955"><a href="#Default.__init__-1955"><span class="linenos">1955</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="Default.__init__-1956"><a href="#Default.__init__-1956"><span class="linenos">1956</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="Default.__init__-1957"><a href="#Default.__init__-1957"><span class="linenos">1957</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="Default.__init__-1958"><a href="#Default.__init__-1958"><span class="linenos">1958</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="Default.__init__-1959"><a href="#Default.__init__-1959"><span class="linenos">1959</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="Default.__init__-1960"><a href="#Default.__init__-1960"><span class="linenos">1960</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="Default.__init__-1961"><a href="#Default.__init__-1961"><span class="linenos">1961</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="Default.__init__-1962"><a href="#Default.__init__-1962"><span class="linenos">1962</span></a>            <span class="k">break</span>
+</span><span id="Default.__init__-1963"><a href="#Default.__init__-1963"><span class="linenos">1963</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="Default.__init__-1964"><a href="#Default.__init__-1964"><span class="linenos">1964</span></a>        <span class="c1"># should not happen</span>
+</span><span id="Default.__init__-1965"><a href="#Default.__init__-1965"><span class="linenos">1965</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="Default.__init__-1966"><a href="#Default.__init__-1966"><span class="linenos">1966</span></a>
+</span><span id="Default.__init__-1967"><a href="#Default.__init__-1967"><span class="linenos">1967</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -277,7 +287,8 @@
                             <div id="Default.default" class="classattr">
                                         <input id="Default.default-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
-                    <div class="decorator decorator-staticmethod">@staticmethod</div>
+                    <div class="decorator decorator-rustc_diagnostic_item">@rustc_diagnostic_item(&#39;default_fn&#39;)</div>
+        <div class="decorator decorator-staticmethod">@staticmethod</div>
 
         <span class="def">def</span>
         <span class="name">default</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="o">+</span><span class="n">_T_co</span>:</span></span>
@@ -286,10 +297,11 @@
 
     </div>
     <a class="headerlink" href="#Default.default"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Default.default-81"><a href="#Default.default-81"><span class="linenos">81</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Default.default-82"><a href="#Default.default-82"><span class="linenos">82</span></a>    <span class="k">def</span> <span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
-</span><span id="Default.default-83"><a href="#Default.default-83"><span class="linenos">83</span></a>        <span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
-</span><span id="Default.default-84"><a href="#Default.default-84"><span class="linenos">84</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Default.default-83"><a href="#Default.default-83"><span class="linenos">83</span></a>    <span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;default_fn&quot;</span><span class="p">)</span>
+</span><span id="Default.default-84"><a href="#Default.default-84"><span class="linenos">84</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="Default.default-85"><a href="#Default.default-85"><span class="linenos">85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_T_co</span><span class="p">:</span>
+</span><span id="Default.default-86"><a href="#Default.default-86"><span class="linenos">86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default value of the object.&quot;&quot;&quot;</span>
+</span><span id="Default.default-87"><a href="#Default.default-87"><span class="linenos">87</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 

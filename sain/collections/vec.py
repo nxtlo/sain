@@ -44,7 +44,7 @@ assert names.len() == 2
 
 from __future__ import annotations
 
-__all__ = ("Vec", "from_args")
+__all__ = ("Vec",)
 
 import sys as _sys
 import typing
@@ -66,6 +66,7 @@ _LIST_REPR = _sys.intern("[]")
 
 
 # We are our own implementation, since MutableSequence have some conflicts with the return types.
+@rustc_diagnostic_item("Vec")
 @typing.final
 class Vec(typing.Generic[T]):
     """A contiguous growable alternative to builtin `list` with extra functionalities.
@@ -951,19 +952,3 @@ class Vec(typing.Generic[T]):
 
     def __bool__(self) -> bool:
         return bool(self._ptr)
-
-
-@rustc_diagnostic_item("vec!")
-def from_args(*elements: T) -> Vec[T]:
-    """Creates a `Vec` containing `elements`.
-
-    Example
-    -------
-    ```py
-    import sain.vec as vec
-
-    items = vec.from_args('Apple', 'Orange', 'Lemon')
-    items.push('Grape')
-    ```
-    """
-    return Vec(elements)

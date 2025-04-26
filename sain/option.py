@@ -39,6 +39,7 @@ from . import default as _default
 from . import iter as _iter
 from . import macros
 from . import result as _result
+from .macros import rustc_diagnostic_item
 
 T = typing.TypeVar("T")
 T_co = typing.TypeVar("T_co", covariant=True)
@@ -51,11 +52,12 @@ if typing.TYPE_CHECKING:
     FnOnce = collections.Callable[[], U]
 
 
+@rustc_diagnostic_item("Option")
 @typing.final
 class Some(typing.Generic[T], _default.Default["Option[None]"]):
     """The `Option` type. An object that might be `T` or `None`.
 
-    It is a drop-in replacement for `typing.Optional[T]`, But has proper methods to handle the contained value.
+    It is a replacement for `typing.Optional[T]`, with more convenient methods to handle the contained value.
 
     Example
     -------

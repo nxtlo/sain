@@ -100,6 +100,8 @@ __slots__ = ("Into", "TryInto", "From", "TryFrom", "ToString")
 
 import typing
 
+from sain.macros import rustc_diagnostic_item
+
 if typing.TYPE_CHECKING:
     from typing_extensions import Self
 
@@ -111,6 +113,7 @@ T_cov = typing.TypeVar("T_cov", covariant=True)
 E = typing.TypeVar("E")
 
 
+@rustc_diagnostic_item("From")
 @typing.runtime_checkable
 class From(typing.Protocol[T_co]):
     """Used to do value-to-value conversions while consuming the input value. It is the reciprocal of Into.
@@ -146,6 +149,7 @@ class From(typing.Protocol[T_co]):
         raise NotImplementedError
 
 
+@rustc_diagnostic_item("TryFrom")
 @typing.runtime_checkable
 class TryFrom(typing.Protocol[T_co, E]):
     """Simple and safe type conversions that may fail in a controlled way under some circumstances.
@@ -186,6 +190,7 @@ class TryFrom(typing.Protocol[T_co, E]):
         raise NotImplementedError
 
 
+@rustc_diagnostic_item("TryFrom")
 @typing.runtime_checkable
 class Into(typing.Protocol[T_cov]):
     """Conversion from `self`, which may or may not be expensive.
@@ -209,6 +214,7 @@ class Into(typing.Protocol[T_cov]):
         raise NotImplementedError
 
 
+@rustc_diagnostic_item("TryInto")
 @typing.runtime_checkable
 class TryInto(typing.Protocol[T, E]):
     """An attempted conversion from `self`, which may or may not be expensive.
@@ -243,6 +249,7 @@ class TryInto(typing.Protocol[T, E]):
         raise NotImplementedError
 
 
+@rustc_diagnostic_item("ToString")
 @typing.runtime_checkable
 class ToString(typing.Protocol):
     """A trait for explicitly converting a value to a `str`.

@@ -50,6 +50,7 @@ if typing.TYPE_CHECKING:
 T = typing.TypeVar("T")
 
 
+@macros.rustc_diagnostic_item("Once")
 @typing.final
 class Once(typing.Generic[T]):
     """A synchronization primitive which can be written to only once.

@@ -69,11 +69,13 @@ if typing.TYPE_CHECKING:
         "unimplemented", "todo",
         "deprecated", "doc",
         "cfg", "cfg_attr",
+        "assert_eq", "assert_ne",
+        "include_bytes", "include_str",
         # std::iter::*
         "Iterator", "Iter", "empty",
         "once", "repeat", "into_iter",
         # errors
-        "Error",
+        "Error", "catch_unwind",
         # sync
         "Lazy",
         "Once",
@@ -81,12 +83,16 @@ if typing.TYPE_CHECKING:
         "From", "TryFrom",
         "Into", "TryInto",
         # default
-        "Default",
+        "Default", "default_fn",
         # std::collections::*
         "HashMap",
         "Vec", "vec!",
         # alloc
-        "String"
+        "String", "ToString",
+        # keywords
+        "unsafe",
+        # primitives
+        "&[u8]",
     ]
     # fmt: on
 
@@ -108,6 +114,10 @@ _MAP_TO_PATH: dict[RustItem, typing.LiteralString] = {
     "cfg": "std/macro.cfg.html",
     "cfg_attr": "reference/conditional-compilation.html#the-cfg_attr-attribute",
     "doc": "rustdoc/write-documentation/the-doc-attribute.html",
+    "assert_eq": "std/macro.assert_eq.html",
+    "assert_ne": "std/macro.assert_ne.html",
+    "include_bytes": "std/macro.include_bytes.html",
+    "include_str": "std/macro.include_str.html",
     # "iter"
     "Iterator": "std/iter/trait.Iterator.html",
     "Iter": "std/slice/struct.Iter.html",
@@ -117,6 +127,7 @@ _MAP_TO_PATH: dict[RustItem, typing.LiteralString] = {
     "into_iter": "std/iter/trait.IntoIterator.html#tymethod.into_iter",
     # errors
     "Error": "std/error/trait.Error.html",
+    "catch_unwind": "std/panic/fn.catch_unwind.html",
     # sync
     "Lazy": "std/sync/struct.LazyLock.html",
     "Once": "std/sync/struct.OnceLock.html",
@@ -127,13 +138,21 @@ _MAP_TO_PATH: dict[RustItem, typing.LiteralString] = {
     "TryInto": "std/convert/trait.TryInto.html",
     # default
     "Default": "std/default/trait.Default.html",
+    "default_fn": "std/default/trait.Default.html#tymethod.default",
     # collections
     "HashMap": "std/collections/struct.HashMap.html",
     "Vec": "std/vec/struct.Vec.html",
     "vec!": "std/macro.vec.html",
     # alloc
     "String": "alloc/string/struct.String.html",
+    "ToString": "alloc/string/trait.ToString.html",
+    # keywords
+    "unsafe": "std/keyword.unsafe.html",
+    # primitives
+    "&[u8]": "std/primitive.slice.html",
 }
+
+_RUSTC_DOCS = "https://doc.rust-lang.org"
 
 
 @typing.final
@@ -150,6 +169,45 @@ def _warn(msg: str, stacklevel: int = 2) -> None:
     warnings.warn(message=msg, stacklevel=stacklevel, category=Error)
 
 
+@functools.cache
+def _obj_type(obj: type[typing.Any]) -> str:
+    return "class" if inspect.isclass(obj) else "function"
+
+
+def rustc_diagnostic_item(item: RustItem, /) -> collections.Callable[[T], T]:
+    '''Expands a Python callable object's documentation, generating the corresponding Rust implementation of the marked object.
+
+    This is a decorator that applies on both classes, methods and functions.
+
+    Assuming we're implementing the `FnOnce` trait from Rust, the object in Python may be marked with this decorator like this.
+    ```py
+    from sain.macros import rustc_diagnostic_item
+
+    @rustc_diagnostic_item("fn_once")
+    class FnOnce[Output, *Args]:
+        """The version of the call operator that takes a by-value receiver."""
+
+        def __init__(self, fn: Callable[[*Args], Output]) -> None:
+            self._call = fn
+
+        @rustc_diagnostic_item("call_once_fn")
+        def call_once(self, *args: *Args) -> Output:
+            return self._call(*args)
+    ```
+
+    Now that the class is marked,
+    It will generate documentation that links to the Rust object that we implemented in Python.
+    '''
+
+    def decorator(obj: T) -> T:
+        additional_doc = f"\n\n# Implementations\nThis {_obj_type(obj)} implements [{item}]({_RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."
+        obj.__doc__ = inspect.cleandoc(obj.__doc__ or "") + additional_doc
+        return obj
+
+    return decorator
+
+
+@rustc_diagnostic_item("unsafe")
 def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     """Mark a function as unsafe.
 
@@ -165,6 +223,7 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     return fn
 
 
+@rustc_diagnostic_item("assert_eq")
 def assert_eq(left: T, right: T) -> None:
     """Asserts that two expressions are equal to each other.
 
@@ -179,11 +238,12 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert (
-        left == right
-    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    assert left == right, (
+        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    )
 
 
+@rustc_diagnostic_item("assert_ne")
 def assert_ne(left: T, right: T) -> None:
     """Asserts that two expressions are not equal to each other.
 
@@ -198,11 +258,12 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert (
-        left != right
-    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    assert left != right, (
+        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    )
 
 
+@rustc_diagnostic_item("include_bytes")
 def include_bytes(file: typing.LiteralString) -> bytes:
     """Includes a file as `bytes`.
 
@@ -232,6 +293,7 @@ def include_bytes(file: typing.LiteralString) -> bytes:
         return buf.read()
 
 
+@rustc_diagnostic_item("include_str")
 def include_str(file: typing.LiteralString) -> typing.LiteralString:
     """Includes a file as literal `str`.
 
@@ -257,47 +319,7 @@ def include_str(file: typing.LiteralString) -> typing.LiteralString:
     ```
     """
     with open(file, "r") as buf:
-        return buf.read()  # pyright: ignore - stimulates a `&'static str` slice.
-
-
-def rustc_diagnostic_item(item: RustItem, /) -> collections.Callable[[T], T]:
-    '''Expands a Python callable object's documentation, generating the corresponding Rust implementation of the marked object.
-
-    This is a decorator that applies on both classes, methods and functions.
-
-    Assuming we're implementing the `FnOnce` trait from Rust, the object in Python may be marked with this decorator like this.
-    ```py
-    from sain.macros import rustc_diagnostic_item
-
-    @rustc_diagnostic_item("fn_once")
-    class FnOnce[Output, *Args]:
-        """The version of the call operator that takes a by-value receiver."""
-
-        def __init__(self, fn: Callable[[*Args], Output]) -> None:
-            self._call = fn
-
-        @rustc_diagnostic_item("call_once_fn")
-        def call_once(self, *args: *Args) -> Output:
-            return self._call(*args)
-    ```
-
-    Now that the class is marked,
-    It will generate documentation that links to the Rust object that we implemented in Python.
-    '''
-
-    RUSTC_DOCS = "https://doc.rust-lang.org"
-
-    def decorator(obj: T) -> T:
-        additional_doc = f"\n\n# Implementations\nThis {_obj_type(obj)} implements [{item}]({RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."
-        obj.__doc__ = inspect.cleandoc(obj.__doc__ or "") + additional_doc
-        return obj
-
-    return decorator
-
-
-@functools.cache
-def _obj_type(obj: type[typing.Any]) -> str:
-    return "class" if inspect.isclass(obj) else "function"
+        return buf.read()  # pyright: ignore - simulates a `&'static str` slice.
 
 
 def unstable(

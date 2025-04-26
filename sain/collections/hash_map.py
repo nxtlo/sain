@@ -34,6 +34,8 @@ This contains Rust's `std::collections::HashMap` methods.
 
 from __future__ import annotations
 
+from sain.macros import rustc_diagnostic_item
+
 __all__ = ("HashMap", "RefMut")
 
 import collections.abc as collections
@@ -258,6 +260,7 @@ class _RawMap(collections.Mapping[K, V]):
         )
 
 
+@rustc_diagnostic_item("HashMap")
 class HashMap(typing.Generic[K, V], _RawMap[K, V]):
     """An immutable key-value dictionary.
 

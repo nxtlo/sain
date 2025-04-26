@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `macros.assert_ne`
 - `iter.Once`
 - `iter.ExactSizeIterator`
+- `iter.TrustedIter`
 
 ### Changed
 

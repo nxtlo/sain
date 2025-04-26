@@ -37,12 +37,15 @@ import asyncio
 import threading
 import typing
 
+from sain.macros import rustc_diagnostic_item
+
 if typing.TYPE_CHECKING:
     from collections import abc as collections
 
 T = typing.TypeVar("T")
 
 
+@rustc_diagnostic_item("Lazy")
 @typing.final
 class Lazy(typing.Generic[T]):
     """A thread-safe value that gets lazily initialized at first access.

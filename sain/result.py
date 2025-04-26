@@ -29,7 +29,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """Error handling with the `Result` type.
 
-`Result[T, E]` is a drop-in replacement for exceptions `try/except`
+`Result[T, E]` is a convenient replacement for exceptions `try/except`
 
 where `Ok(T)` is the successful value and `Err(E)` is the error result.
 
@@ -92,8 +92,7 @@ import typing
 
 from sain import iter as _iter
 from sain import option as _option
-
-# from sain.macros import rustc_diagnostic_item
+from sain.macros import rustc_diagnostic_item
 
 T = typing.TypeVar("T")
 E = typing.TypeVar("E")
@@ -115,6 +114,7 @@ if typing.TYPE_CHECKING:
 # ux and type checker, for an example `map` is only available for `Ok` but `Err` also needs to implement it
 # which simply just returns self, same way goes around for `map_err`.
 # Also for unwrapping values, `Err` guarantees an exception to be thrown but `Ok` doesn't.
+@rustc_diagnostic_item("Ok")
 @typing.final
 @dataclasses.dataclass(slots=True, frozen=True, repr=False)
 class Ok(typing.Generic[T]):
@@ -123,7 +123,7 @@ class Ok(typing.Generic[T]):
     _inner: T
 
     ###############################
-    # * Boolean operations. * #
+    # * Querying operations. * #
     ###############################
 
     def is_ok(self) -> typing.Literal[True]:
@@ -139,13 +139,12 @@ class Ok(typing.Generic[T]):
         return True
 
     def is_ok_and(self, f: F[T, bool]) -> bool:
-        """Returns `True` if the contained value is `Ok` and `f()` returns True..
+        """Returns `True` if the contained value is `Ok` and `f()` returns True.
 
         Example
         -------
         ```py
         value: Result[str, None] = Ok("value")
-
         assert value.is_ok_and(lambda inner: inner == "value")
         # True
         ```
@@ -167,7 +166,7 @@ class Ok(typing.Generic[T]):
         return False
 
     def is_err_and(self, f: F[T, bool]) -> typing.Literal[False]:
-        """Returns `True` if the contained value is `Ok` and `f()` returns True..
+        """Returns `True` if the contained value is `Ok` and `f()` returns True.
 
         Example
         -------
@@ -181,7 +180,7 @@ class Ok(typing.Generic[T]):
         return False
 
     ###################
-    # * Extractors. * #
+    # * Extractors * #
     ###################
 
     def expect(self, message: str, /) -> T:
@@ -200,7 +199,7 @@ class Ok(typing.Generic[T]):
         """
         return self._inner
 
-    def expect_err(self) -> typing.NoReturn:
+    def expect_err(self) -> Never:
         """Return the `Err` value if `self` is an `Err`, panicking otherwise.
 
         Example
@@ -260,7 +259,7 @@ class Ok(typing.Generic[T]):
         """
         return self._inner
 
-    def unwrap_err(self) -> typing.NoReturn:
+    def unwrap_err(self) -> Never:
         """Return the contained `Err` value, Raising if it was `Ok`.
 
         Example
@@ -281,7 +280,7 @@ class Ok(typing.Generic[T]):
     ############################
 
     def ok(self) -> Option[T]:
-        """Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.
+        """Transform `Result[T, E]` to `Option[T]`, mapping `Ok(v)` to `Some(T)` and `Err(e)` to `None`.
 
         Example
         -------
@@ -296,7 +295,7 @@ class Ok(typing.Generic[T]):
         return _option.Some(self._inner)
 
     def err(self) -> Option[T]:
-        """Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.
+        """Transform `Result[T, E]` to `Option[E]`, mapping `Ok(v)` to `None` and `Err(e)` to `Some(e)`.
 
         Example
         -------
@@ -310,7 +309,7 @@ class Ok(typing.Generic[T]):
         """
         return _option.NOTHING  # pyright: ignore
 
-    def inspect(self, f: F[T, typing.Any]) -> None:
+    def inspect(self, f: F[T, typing.Any]) -> Self:
         """Call a function to the contained value if it was `Ok` and do nothing if it was `Err`
 
         Example
@@ -328,8 +327,9 @@ class Ok(typing.Generic[T]):
         ```
         """
         f(self._inner)
+        return self
 
-    def inspect_err(self, f: F[E, typing.Any]) -> None:
+    def inspect_err(self, f: F[E, typing.Any]) -> Self:
         """Call a function to the contained value if it was `Err` and do nothing if it was `Ok`
 
         Example
@@ -346,6 +346,7 @@ class Ok(typing.Generic[T]):
         x.inspect_err(sink) # Called err
         ```
         """
+        return self
 
     def map(self, f: F[T, U], /) -> Ok[U]:
         """Map `Result<T, E>` to `Result<U, E>` by applying a function to the `Ok` value,
@@ -421,7 +422,7 @@ class Ok(typing.Generic[T]):
     # * Iterator constructors. * #
     ##############################
 
-    def iter(self) -> _iter.Iterator[T]:
+    def iter(self) -> _iter.TrustedIter[T]:
         """An iterator over the possible contained value.
 
         If `self` was `Ok`, then the iterator will yield the Ok `T`. otherwise yields nothing.
@@ -436,10 +437,10 @@ class Ok(typing.Generic[T]):
         c.iter().next() == Some(None)
         ```
         """
-        return self.__iter__()
+        return _iter.TrustedIter((self._inner,))
 
-    def __iter__(self) -> _iter.Iterator[T]:
-        return _iter.once(self._inner)
+    def __iter__(self) -> collections.Iterator[T]:
+        yield self._inner
 
     #################
     # * Overloads * #
@@ -455,6 +456,7 @@ class Ok(typing.Generic[T]):
         return self._inner
 
 
+@rustc_diagnostic_item("Err")
 @typing.final
 @dataclasses.dataclass(slots=True, frozen=True, repr=False)
 class Err(typing.Generic[E]):
@@ -525,7 +527,7 @@ class Err(typing.Generic[E]):
     # * Extractors. * #
     ###################
 
-    def expect(self, msg: str) -> typing.NoReturn:
+    def expect(self, msg: str) -> Never:
         """Return the underlying value if it was `Ok`, Raising `RuntimeError`
         if it was `Err` with `message` passed to it.
 
@@ -557,7 +559,7 @@ class Err(typing.Generic[E]):
         """
         return self._inner
 
-    def unwrap(self) -> typing.NoReturn:
+    def unwrap(self) -> Never:
         """Return the underlying value if it was `Ok`, Raising `RuntimeError` if it was `Err`.
 
         Example
@@ -624,7 +626,7 @@ class Err(typing.Generic[E]):
     # * Conversion adapters. * #
     ############################
 
-    def inspect(self, f: F[T, typing.Any]) -> None:
+    def inspect(self, f: F[T, typing.Any]) -> Self:
         """Call a function to the contained value if it was `Ok` and do nothing if it was `Err`
 
         Example
@@ -641,9 +643,9 @@ class Err(typing.Generic[E]):
         x.inspect(sink) # None
         ```
         """
-        return None
+        return self
 
-    def inspect_err(self, f: F[E, typing.Any]) -> None:
+    def inspect_err(self, f: F[E, typing.Any]) -> Self:
         """Call a function to the contained value if it was `Err` and do nothing if it was `Ok`
 
         Example
@@ -661,9 +663,10 @@ class Err(typing.Generic[E]):
         ```
         """
         f(self._inner)
+        return self
 
     def ok(self) -> Option[None]:
-        """Convert `Ok[T]` to `Option[T]` if the contained value was `Ok` and `Option[None]` if it was `Err`.
+        """Transform `Result[T, E]` to `Option[T]`, mapping `Ok(v)` to `Some(T)` and `Err(e)` to `None`.
 
         Example
         -------
@@ -678,7 +681,7 @@ class Err(typing.Generic[E]):
         return _option.NOTHING
 
     def err(self) -> Option[E]:
-        """Convert `Err[T]` to `Option[T]` if the contained value was `Err` and `Option[None]` if it was `Ok`.
+        """Transform `Result[T, E]` to `Option[E]`, mapping `Ok(v)` to `None` and `Err(e)` to `Some(e)`.
 
         Example
         -------
@@ -766,7 +769,7 @@ class Err(typing.Generic[E]):
     # * Iterator constructors. * #
     ##############################
 
-    def iter(self) -> _iter.Iterator[Never]:
+    def iter(self) -> _iter.Empty[Never]:
         """An iterator over the possible contained value.
 
         If `self` was `Ok`, then the iterator will yield `T`, otherwise yields nothing.
@@ -781,10 +784,10 @@ class Err(typing.Generic[E]):
         c.iter().next() == Some(None)
         ```
         """
-        return self.__iter__()
-
-    def __iter__(self) -> _iter.Iterator[Never]:
         return _iter.Empty()
+
+    def __iter__(self) -> collections.Iterator[Never]:
+        yield from ()
 
     #################
     # * Overloads * #
@@ -796,7 +799,7 @@ class Err(typing.Generic[E]):
     def __or__(self, other: T) -> T:
         return other
 
-    def __invert__(self) -> typing.NoReturn:
+    def __invert__(self) -> Never:
         self.unwrap()
 
 

@@ -45,6 +45,7 @@ from sain import convert
 from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
+from sain.macros import rustc_diagnostic_item
 
 from . import vec as _vec
 
@@ -88,6 +89,7 @@ def unwrap_bytes(data: Rawish) -> bytes:
     return buf
 
 
+@rustc_diagnostic_item("&[u8]")
 @typing.final
 class Bytes(convert.ToString):
     """Provides abstractions for working with UTF-8 compatible bytes.
