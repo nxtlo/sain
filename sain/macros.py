@@ -526,7 +526,7 @@ def unimplemented(
         msg = (
             message
             or f"{_obj_type(obj)} `{obj.__module__}.{obj.__name__}` is not yet implemented."
-        )  # noqa: W503
+        )
 
         if available_in:
             msg += f" Available in `{available_in}`."

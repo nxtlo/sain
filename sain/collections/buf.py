@@ -47,6 +47,7 @@ from sain import option as _option
 from sain import result as _result
 from sain.macros import rustc_diagnostic_item
 
+from . import slice as _slice
 from . import vec as _vec
 
 if typing.TYPE_CHECKING:
@@ -91,7 +92,7 @@ def unwrap_bytes(data: Rawish) -> bytes:
 
 @rustc_diagnostic_item("&[u8]")
 @typing.final
-class Bytes(convert.ToString):
+class Bytes(convert.ToString, collections.MutableSequence[int]):
     """Provides abstractions for working with UTF-8 compatible bytes.
 
     It is an efficient container for storing and operating with bytes.
@@ -376,7 +377,7 @@ class Bytes(convert.ToString):
         """
         return self.__buffer__(0x100)
 
-    def as_ref(self) -> collections.Sequence[int]:
+    def as_ref(self) -> _slice.Slice[int]:
         """Get an immutable reference to the underlying sequence, without copying.
 
         A `ReferenceError` is raised if the underlying sequence is not initialized.
@@ -392,11 +393,11 @@ class Bytes(convert.ToString):
         ```
         """
         if self._buf is not None:
-            return self._buf.__buffer__(0x100).toreadonly()
+            return _slice.Slice(self)
 
         raise ReferenceError("`self` must be initialized first.") from None
 
-    def as_mut(self) -> collections.MutableSequence[int]:
+    def as_mut(self) -> _slice.SliceMut[int]:
         """Get a mutable reference to the underlying sequence, without copying.
 
         A `ReferenceError` is raised if the underlying sequence is not initialized.
@@ -412,7 +413,7 @@ class Bytes(convert.ToString):
         ```
         """
         if self._buf is not None:
-            return self._buf
+            return _slice.SliceMut(self)
 
         raise ReferenceError("`self` must be initialized first.") from None
 
@@ -987,7 +988,10 @@ class Bytes(convert.ToString):
         return len(self._buf) if self._buf else 0
 
     def __repr__(self) -> str:
-        return "[]" if not self._buf else "[" + ", ".join(map(str, self)) + "]"
+        if not self._buf:
+            return "[]"
+
+        return "[" + ", ".join(str(x) for x in self._buf) + "]"
 
     __str__ = __repr__
 
@@ -1091,3 +1095,6 @@ class Bytes(convert.ToString):
             return
 
         del self._buf[key]
+
+    def __reversed__(self) -> collections.Iterator[int]:
+        return reversed(self._buf or ())

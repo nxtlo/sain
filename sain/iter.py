@@ -68,7 +68,6 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-from .collections import buf as _buf
 from .collections import vec as _vec
 from .macros import rustc_diagnostic_item
 from .macros import unsafe
@@ -117,6 +116,7 @@ def diagnostic(cls: type[AnyIter]) -> type[AnyIter]:
     return cls
 
 
+@rustc_diagnostic_item("Iterator")
 class Iterator(
     typing.Generic[Item],
     abc.ABC,
@@ -1411,7 +1411,7 @@ class Once(typing.Generic[Item], ExactSizeIterator[Item]):
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.
-@rustc_diagnostic_item("repeat")
+@rustc_diagnostic_item("empty")
 def empty() -> Empty[Item]:  # pyright: ignore
     """Create an iterator that yields nothing.
 
@@ -1467,14 +1467,8 @@ def once(item: Item) -> Once[Item]:
 
 @typing.overload
 def into_iter(
-    iterable: collections.Sequence[Item] | _vec.Vec[Item],
+    iterable: collections.Sequence[Item],
 ) -> TrustedIter[Item]: ...
-
-
-@typing.overload
-def into_iter(
-    iterable: _buf.Bytes,
-) -> TrustedIter[int]: ...
 
 
 @typing.overload
@@ -1486,10 +1480,7 @@ def into_iter(
 
 @rustc_diagnostic_item("into_iter")
 def into_iter(
-    iterable: collections.Sequence[Item]
-    | _buf.Bytes
-    | _vec.Vec[Item]
-    | collections.Iterable[Item],
+    iterable: collections.Sequence[Item] | collections.Iterable[Item],
 ) -> Iter[Item] | TrustedIter[Item] | TrustedIter[int]:
     """Convert any iterable into `Iterator[Item]`.
 
@@ -1507,8 +1498,6 @@ def into_iter(
     # 1
     ```
     """
-    if isinstance(
-        iterable, (collections.Sequence, _vec.Vec, _buf.Bytes)
-    ):  # Vec and Bytes are specialized types. not `Sequence`.
-        return TrustedIter(iterable)  # pyright: ignore - Bytes CAN be turned into a sequence because it implements `__iter__`.
+    if isinstance(iterable, collections.Sequence):
+        return TrustedIter(iterable)
     return Iter(iterable)

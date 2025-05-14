@@ -18,10 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `iter.Once`
 - `iter.ExactSizeIterator`
 - `iter.TrustedIter`
+- `collections.slice` module.
 
 ### Changed
 
 - `iter.once() -> Once[T]` now returns a specialized iterator.
+- `Vec` and `Bytes` are now `MutableSequence`.
+- It is possible to do `Some(v) == None` checks now which checks if `v == None`.
+- `*.as_ref` and `*._as_mut` methods now return `Slice` and `SliceMut`, This ensures that the underlying buffer
+doesn't actually get mutated.
 
 ## 1.3.0 - 01/01/2025
 

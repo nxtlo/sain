@@ -696,7 +696,10 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
     def __bool__(self) -> bool:
         return self.is_some()
 
-    def __eq__(self, other: object) -> bool:
+    def __eq__(self, other: None | object) -> bool:
+        if other is None:
+            return self._value is None
+
         if not isinstance(other, Some):
             return NotImplemented
 
