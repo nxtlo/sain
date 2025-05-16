@@ -103,17 +103,11 @@ class Lazy(typing.Generic[T]):
             return self.__inner  # type: ignore
 
     def __repr__(self) -> str:
-        if callable(self.__inner):
-            return "Lazy(uninit)"
-
-        return f"Lazy(value: {self.__inner.__repr__()})"
+        return f"Lazy(value: {self.__inner!r})"
 
     __str__ = __repr__
 
     def __eq__(self, other: object) -> bool:
-        if not callable(self.__inner):
-            return False
-
         if isinstance(other, Lazy):
             return self.__inner == other.get()
 
@@ -185,9 +179,6 @@ class LazyFuture(typing.Generic[T]):
             return v
 
     def __repr__(self) -> str:
-        if not callable(self.__inner):
-            return "LazyFuture(uninit)"
-
         return f"LazyFuture(value: {self.__inner!r})"
 
     __str__ = __repr__

@@ -183,14 +183,14 @@ def rustc_diagnostic_item(item: RustItem, /) -> collections.Callable[[T], T]:
     ```py
     from sain.macros import rustc_diagnostic_item
 
-    @rustc_diagnostic_item("fn_once")
+    @rustc_diagnostic_item("FnOnce")
     class FnOnce[Output, *Args]:
         """The version of the call operator that takes a by-value receiver."""
 
         def __init__(self, fn: Callable[[*Args], Output]) -> None:
             self._call = fn
 
-        @rustc_diagnostic_item("call_once_fn")
+        @rustc_diagnostic_item("rust-call")
         def call_once(self, *args: *Args) -> Output:
             return self._call(*args)
     ```
@@ -238,9 +238,9 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert left == right, (
-        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left == right
+    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("assert_ne")
@@ -258,9 +258,9 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert left != right, (
-        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left != right
+    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("include_bytes")

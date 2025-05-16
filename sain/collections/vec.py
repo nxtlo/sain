@@ -68,7 +68,7 @@ _LIST_REPR = _sys.intern("[]")
 # We are our own implementation, since MutableSequence have some conflicts with the return types.
 @rustc_diagnostic_item("Vec")
 @typing.final
-class Vec(typing.Generic[T]):
+class Vec(typing.Generic[T], collections.MutableSequence[T]):
     """A contiguous growable alternative to builtin `list` with extra functionalities.
 
     The layout of `Vec` is almost the same as `list`.
@@ -358,7 +358,7 @@ class Vec(typing.Generic[T]):
         """Divide `self` into two at an index.
 
         The first will contain all elements from `[0:mid]` excluding `mid` it self.
-        and the second will contain the remaninig elements.
+        and the second will contain the remaining elements.
 
         if `mid` > `self.len()`, Then all elements will be moved to the left,
         returning an empty vec in right.
@@ -655,10 +655,6 @@ class Vec(typing.Generic[T]):
     ##########################
     # * Builtin Operations *
     ##########################
-
-    # For people how are used to calling list.append
-    append = push
-    """An alias for `Vec.push` method."""
 
     def get(self, index: int) -> _option.Option[T]:
         """Get the item at the given index, or `Some[None]` if its out of bounds.
