@@ -109,16 +109,53 @@ class _RawMap(collections.Mapping[K, V]):
         -------
         ```py
         users: HashMap[str, int] = HashMap()
-        assert null.get("jack").is_none()
+        assert users.get("jack").is_none()
 
-        null = HashMap({"jack": None})
-        assert null.get("jack").is_some()
+        users = HashMap({"jack": None})
+        assert users.get("jack").is_some()
         ```
         """
         if key not in self:
             return _option.NOTHING  # pyright: ignore
 
         return _option.Some(self._source[key])
+
+    def get_with(self, f: collections.Callable[[], K]) -> Option[V]:
+        """Get the value associated with `key` returned from a callable `f()`, returns `None` if not found.
+
+        Example
+        -------
+        ```py
+        def get_id() -> int:
+            return 0
+
+        map = HashMap({0: "buh", 1: "guh", 2: "luh"})
+        assert map.get_with(get_id).unwrap() == "a"
+        ```
+        """
+        key = f()
+        if key not in self:
+            return _option.NOTHING  # pyright: ignore
+
+        return _option.Some(self._source[key])
+
+    def get_pairs(self, key: K) -> Option[tuple[K, V]]:
+        """Get both `key-value` pairs associated with `key`, returns `None` if not found.
+
+        Example
+        -------
+        ```py
+        users: HashMap[str, int] = HashMap()
+        assert users.get_pairs("jack").is_none()
+
+        users = HashMap({"jack": 0})
+        assert users.get("jack").unwrap() == ("jack", 0)
+        ```
+        """
+        if key not in self:
+            return _option.NOTHING  # pyright: ignore
+
+        return _option.Some((key, self._source[key]))
 
     @typing.overload
     def get_many(self, keys: K) -> _option.Option[V]: ...

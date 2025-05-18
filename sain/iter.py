@@ -68,7 +68,6 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-from .collections import buf as _buf
 from .collections import vec as _vec
 from .macros import rustc_diagnostic_item
 from .macros import unsafe
@@ -117,6 +116,7 @@ def diagnostic(cls: type[AnyIter]) -> type[AnyIter]:
     return cls
 
 
+@rustc_diagnostic_item("Iterator")
 class Iterator(
     typing.Generic[Item],
     abc.ABC,
@@ -156,6 +156,8 @@ class Iterator(
     ```
     """
 
+    __slots__ = ()
+
     @abc.abstractmethod
     def __next__(self) -> Item:
         raise NotImplementedError
@@ -179,18 +181,18 @@ class Iterator(
         return Empty()
 
     @typing.overload
-    def collect(self) -> collections.Sequence[Item]: ...
+    def collect(self) -> collections.MutableSequence[Item]: ...
 
     @typing.overload
     def collect(
         self, *, cast: collections.Callable[[Item], OtherItem]
-    ) -> collections.Sequence[OtherItem]: ...
+    ) -> collections.MutableSequence[OtherItem]: ...
 
     @typing.final
     def collect(
         self, *, cast: collections.Callable[[Item], OtherItem] | None = None
-    ) -> collections.Sequence[Item] | collections.Sequence[OtherItem]:
-        """Collects all items in the iterator into an immutable sequence.
+    ) -> collections.MutableSequence[Item] | collections.MutableSequence[OtherItem]:
+        """Collects all items in the iterator into a sequence.
 
         Example
         -------
@@ -209,9 +211,9 @@ class Iterator(
             If not provided the items will be returned as it's original type.
         """
         if cast is not None:
-            return tuple(cast(i) for i in self)
+            return list(cast(i) for i in self)
 
-        return tuple(_ for _ in self)
+        return list(_ for _ in self)
 
     @typing.final
     def collect_into(self, collection: Collector[Item]) -> None:
@@ -271,8 +273,7 @@ class Iterator(
 
     @typing.final
     def raw_parts(self) -> collections.Generator[Item, None, None]:
-        """Decompose all elements from this iterator, yielding it one by one
-        as a normal generator.
+        """Decompose this iterator into a `Generator[Item]` that yields all of the remaining items.
 
         This mainly used for objects that needs to satisfy its exact type.
 
@@ -608,12 +609,14 @@ class Iterator(
             The function to sort by.
         reverse: `bool`
             Whether to reverse the sort.
-
         """
         return Iter(sorted(self.raw_parts(), key=key, reverse=reverse))
 
     def reversed(self) -> Iter[Item]:
         """Returns a new iterator that yields the items in the iterator in reverse order.
+
+        This consumes this iterator into a sequence and return a new iterator containing all of the elements
+        in reversed order.
 
         Example
         -------
@@ -629,7 +632,7 @@ class Iterator(
         """
         # NOTE: In order to reverse the iterator we need to
         # first collect it into some collection.
-        return Iter(reversed(self.collect()))
+        return Iter(reversed(list(_ for _ in self)))
 
     def union(self, other: collections.Iterable[Item]) -> Iter[Item]:
         """Returns a new iterator that yields all items from both iterators.
@@ -775,6 +778,54 @@ class Iterator(
 
         return accum
 
+    def advance_by(self, n: int) -> _result.Result[None, int]:
+        """Advances the iterator by `n` elements.
+
+        Returns `Result[None, int]`, where `Ok(None)` means the iterator
+        advanced successfully, and `Err(int)` if `None` encountered, where `int`
+        represents the remaining number of steps that could not be advanced because the iterator ran out.
+
+        Example
+        -------
+        ```py
+        it = into_iter([1, 2, 3, 4])
+        assert it.advance_by(2).is_ok()
+        assert it.next() == Some(3)
+        assert it.advance_by(0).is_ok()
+        assert it.advance_by(100) == Err(99)
+        ```
+        """
+        for i in range(n):
+            try:
+                self.__next__()
+            except StopIteration:
+                return _result.Err(n - i)
+
+        return _result.Ok(None)
+
+    def nth(self, n: int) -> Option[Item]:
+        """Returns the `n`th element of the iterator
+
+        Just like normal indexing, the count `n` starts from zero, so `nth(0)` returns the first
+        value.
+
+        Note all elements before `n` will be skipped / consumed.
+
+        Example
+        -------
+        ```py
+        a = into_iter([1, 2, 3])
+        assert a.iter().nth(1) == Some(2)
+        ```
+        """
+        for _ in range(n):
+            try:
+                self.__next__()
+            except StopIteration:
+                return _option.NOTHING  # type: ignore
+
+        return self.next()
+
     def sum(self: Sum) -> int:
         """Sums an iterator of a possible type that can be converted to an integer.
 
@@ -812,23 +863,30 @@ class Iterator(
     async def async_for_each(
         self,
         func: collections.Callable[
-            [Item], collections.Coroutine[None, typing.Any, OtherItem]
+            [Item], collections.Coroutine[typing.Any, typing.Any, OtherItem]
         ],
     ) -> _result.Result[collections.Sequence[OtherItem], futures.JoinError]:
-        """Calls the async function on each item in the iterator concurrently.
+        """Calls the async function on each item in the iterator *concurrently*.
+
+        Concurrently meaning that the next item will not wait for other items
+        to finish to execute, each item gets called in a separate task.
+
+        After all the tasks finish, a `Result[list[T], JoinError]` will be returned,
+        which will need to be handled by the caller.
 
         Example
         -------
         ```py
         async def create_user(username: str) -> None:
-            async with aiohttp.request("POST", f'.../{username}') as r:
-                return await r.json()
+            await aiohttp.request("POST", f'.../{username}')
 
         async def main():
-            users = sain.into_iter(["danny", "legalia"])
-            results = await users.async_for_each(lambda username: create_user(username))
-            for k, v in results.unwrap().items():
-                ...
+            users = sain.into_iter(["Danny", "Flower"])
+            match await users.async_for_each(lambda username: create_user(username)):
+                case Ok(result):
+                    # all good
+                case Err(why):
+                    print(f"couldn't gather all futures, err={why}")
         ```
 
         Parameters
@@ -840,11 +898,6 @@ class Iterator(
 
     def __reversed__(self) -> Iter[Item]:
         return self.reversed()
-
-    def __setitem__(self, _: None, __: None) -> typing.NoReturn:
-        raise NotImplementedError(
-            f"{type(self).__name__} doesn't support item assignment."
-        ) from None
 
     def __repr__(self) -> str:
         return "<Iterator>"
@@ -864,7 +917,7 @@ class Iterator(
         return self
 
 
-class ExactSizeIterator(typing.Generic[Item], Iterator[Item]):
+class ExactSizeIterator(typing.Generic[Item], Iterator[Item], abc.ABC):
     """An iterator that knows its exact size.
 
     The implementations of this interface indicates that the iterator knows exactly
@@ -892,6 +945,8 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item]):
     assert letters.count() == 2
     ```
     """
+
+    __slots__ = ()
 
     @typing.final
     def count(self) -> int:
@@ -930,8 +985,8 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item]):
         """
         return len(self) == 0
 
-    def __len__(self) -> int:
-        return 0
+    @abc.abstractmethod
+    def __len__(self) -> int: ...
 
 
 @rustc_diagnostic_item("Iter")
@@ -1401,17 +1456,17 @@ class Once(typing.Generic[Item], ExactSizeIterator[Item]):
     __slots__ = ("_item",)
 
     def __init__(self, item: Item) -> None:
-        self.item: Option[Item] = _option.Some(item)
+        self._item: Option[Item] = _option.Some(item)
 
     def __next__(self) -> Item:
-        return self.item.take().unwrap_or_else(unreachable)
+        return self._item.take().unwrap_or_else(unreachable)
 
     def __len__(self) -> typing.Literal[0, 1]:
-        return 1 if self.item else 0
+        return 1 if self._item else 0
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.
-@rustc_diagnostic_item("repeat")
+@rustc_diagnostic_item("empty")
 def empty() -> Empty[Item]:  # pyright: ignore
     """Create an iterator that yields nothing.
 
@@ -1467,14 +1522,8 @@ def once(item: Item) -> Once[Item]:
 
 @typing.overload
 def into_iter(
-    iterable: collections.Sequence[Item] | _vec.Vec[Item],
+    iterable: collections.Sequence[Item],
 ) -> TrustedIter[Item]: ...
-
-
-@typing.overload
-def into_iter(
-    iterable: _buf.Bytes,
-) -> TrustedIter[int]: ...
 
 
 @typing.overload
@@ -1486,10 +1535,7 @@ def into_iter(
 
 @rustc_diagnostic_item("into_iter")
 def into_iter(
-    iterable: collections.Sequence[Item]
-    | _buf.Bytes
-    | _vec.Vec[Item]
-    | collections.Iterable[Item],
+    iterable: collections.Sequence[Item] | collections.Iterable[Item],
 ) -> Iter[Item] | TrustedIter[Item] | TrustedIter[int]:
     """Convert any iterable into `Iterator[Item]`.
 
@@ -1507,8 +1553,6 @@ def into_iter(
     # 1
     ```
     """
-    if isinstance(
-        iterable, (collections.Sequence, _vec.Vec, _buf.Bytes)
-    ):  # Vec and Bytes are specialized types. not `Sequence`.
-        return TrustedIter(iterable)  # pyright: ignore - Bytes CAN be turned into a sequence because it implements `__iter__`.
+    if isinstance(iterable, collections.Sequence):
+        return TrustedIter(iterable)
     return Iter(iterable)

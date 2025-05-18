@@ -238,9 +238,9 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert (
-        left == right
-    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    assert left == right, (
+        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    )
 
 
 @rustc_diagnostic_item("assert_ne")
@@ -258,9 +258,9 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert (
-        left != right
-    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    assert left != right, (
+        f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    )
 
 
 @rustc_diagnostic_item("include_bytes")
@@ -526,7 +526,7 @@ def unimplemented(
         msg = (
             message
             or f"{_obj_type(obj)} `{obj.__module__}.{obj.__name__}` is not yet implemented."
-        )  # noqa: W503
+        )
 
         if available_in:
             msg += f" Available in `{available_in}`."

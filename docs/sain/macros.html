@@ -262,14 +262,14 @@
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="sd">    ```py</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">    from sain.macros import rustc_diagnostic_item</span>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">    @rustc_diagnostic_item(&quot;fn_once&quot;)</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">    @rustc_diagnostic_item(&quot;FnOnce&quot;)</span>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">    class FnOnce[Output, *Args]:</span>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">        &quot;&quot;&quot;The version of the call operator that takes a by-value receiver.&quot;&quot;&quot;</span>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
 </span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">        def __init__(self, fn: Callable[[*Args], Output]) -&gt; None:</span>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">            self._call = fn</span>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">        @rustc_diagnostic_item(&quot;call_once_fn&quot;)</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">        @rustc_diagnostic_item(&quot;rust-call&quot;)</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">        def call_once(self, *args: *Args) -&gt; Output:</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">            return self._call(*args)</span>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">    ```</span>
@@ -339,7 +339,7 @@
 </span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">assert</span> <span class="p">(</span>
 </span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>        <span class="n">left</span> <span class="o">!=</span> <span class="n">right</span>
-</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;assertion `left == right` failed</span><span class="se">\n</span><span class="s1">left: &quot;</span><span class="si">{</span><span class="n">left</span><span class="si">!r}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">right: &quot;</span><span class="si">{</span><span class="n">right</span><span class="si">!r}</span><span class="s1">&quot;&#39;</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;assertion `left != right` failed</span><span class="se">\n</span><span class="s1">left: &quot;</span><span class="si">{</span><span class="n">left</span><span class="si">!r}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">right: &quot;</span><span class="si">{</span><span class="n">right</span><span class="si">!r}</span><span class="s1">&quot;&#39;</span>
 </span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>
 </span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;include_bytes&quot;</span><span class="p">)</span>
@@ -605,7 +605,7 @@
 </span><span id="L-526"><a href="#L-526"><span class="linenos">526</span></a>        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
 </span><span id="L-527"><a href="#L-527"><span class="linenos">527</span></a>            <span class="n">message</span>
 </span><span id="L-528"><a href="#L-528"><span class="linenos">528</span></a>            <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_obj_type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="si">}</span><span class="s2"> `</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">` is not yet implemented.&quot;</span>
-</span><span id="L-529"><a href="#L-529"><span class="linenos">529</span></a>        <span class="p">)</span>  <span class="c1"># noqa: W503</span>
+</span><span id="L-529"><a href="#L-529"><span class="linenos">529</span></a>        <span class="p">)</span>
 </span><span id="L-530"><a href="#L-530"><span class="linenos">530</span></a>
 </span><span id="L-531"><a href="#L-531"><span class="linenos">531</span></a>        <span class="k">if</span> <span class="n">available_in</span><span class="p">:</span>
 </span><span id="L-532"><a href="#L-532"><span class="linenos">532</span></a>            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; Available in `</span><span class="si">{</span><span class="n">available_in</span><span class="si">}</span><span class="s2">`.&quot;</span>
@@ -860,7 +860,7 @@ An optional hint for the user.</li>
 </span><span id="unimplemented-527"><a href="#unimplemented-527"><span class="linenos">527</span></a>        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
 </span><span id="unimplemented-528"><a href="#unimplemented-528"><span class="linenos">528</span></a>            <span class="n">message</span>
 </span><span id="unimplemented-529"><a href="#unimplemented-529"><span class="linenos">529</span></a>            <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_obj_type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="si">}</span><span class="s2"> `</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">` is not yet implemented.&quot;</span>
-</span><span id="unimplemented-530"><a href="#unimplemented-530"><span class="linenos">530</span></a>        <span class="p">)</span>  <span class="c1"># noqa: W503</span>
+</span><span id="unimplemented-530"><a href="#unimplemented-530"><span class="linenos">530</span></a>        <span class="p">)</span>
 </span><span id="unimplemented-531"><a href="#unimplemented-531"><span class="linenos">531</span></a>
 </span><span id="unimplemented-532"><a href="#unimplemented-532"><span class="linenos">532</span></a>        <span class="k">if</span> <span class="n">available_in</span><span class="p">:</span>
 </span><span id="unimplemented-533"><a href="#unimplemented-533"><span class="linenos">533</span></a>            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; Available in `</span><span class="si">{</span><span class="n">available_in</span><span class="si">}</span><span class="s2">`.&quot;</span>
@@ -1143,7 +1143,7 @@ The path to read the content from.</li>
 </span><span id="assert_ne-261"><a href="#assert_ne-261"><span class="linenos">261</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="assert_ne-262"><a href="#assert_ne-262"><span class="linenos">262</span></a>    <span class="k">assert</span> <span class="p">(</span>
 </span><span id="assert_ne-263"><a href="#assert_ne-263"><span class="linenos">263</span></a>        <span class="n">left</span> <span class="o">!=</span> <span class="n">right</span>
-</span><span id="assert_ne-264"><a href="#assert_ne-264"><span class="linenos">264</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;assertion `left == right` failed</span><span class="se">\n</span><span class="s1">left: &quot;</span><span class="si">{</span><span class="n">left</span><span class="si">!r}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">right: &quot;</span><span class="si">{</span><span class="n">right</span><span class="si">!r}</span><span class="s1">&quot;&#39;</span>
+</span><span id="assert_ne-264"><a href="#assert_ne-264"><span class="linenos">264</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;assertion `left != right` failed</span><span class="se">\n</span><span class="s1">left: &quot;</span><span class="si">{</span><span class="n">left</span><span class="si">!r}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">right: &quot;</span><span class="si">{</span><span class="n">right</span><span class="si">!r}</span><span class="s1">&quot;&#39;</span>
 </span></pre></div>
 
 
