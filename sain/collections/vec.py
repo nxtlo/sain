@@ -55,6 +55,7 @@ from sain import option as _option
 from sain import result as _result
 from sain.collections.slice import Slice
 from sain.collections.slice import SliceMut
+from sain.collections.slice import SpecContains
 from sain.macros import rustc_diagnostic_item
 
 if typing.TYPE_CHECKING:
@@ -68,7 +69,7 @@ T = typing.TypeVar("T")
 # We are our own implementation, since MutableSequence have some conflicts with the return types.
 @rustc_diagnostic_item("Vec")
 @typing.final
-class Vec(typing.Generic[T], collections.MutableSequence[T]):
+class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     """A contiguous growable alternative to builtin `list` with extra functionalities.
 
     The layout of `Vec<T>` is exactly the same as `list<T>`.
@@ -220,6 +221,8 @@ class Vec(typing.Generic[T], collections.MutableSequence[T]):
     def as_ref(self) -> Slice[T]:
         """Return an immutable view over this vector elements.
 
+        No copying occurs.
+
         Example
         -------
         ```py
@@ -234,7 +237,9 @@ class Vec(typing.Generic[T], collections.MutableSequence[T]):
         return Slice(self)
 
     def as_mut(self) -> SliceMut[T]:
-        """Return a muable view over this vector elements.
+        """Return a mutable view over this vector elements.
+
+        No copying occurs.
 
         Example
         -------
@@ -263,7 +268,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T]):
         return self.__len__()
 
     def capacity(self) -> int:
-        """Return the capacity of this vector if set. 0 if not .
+        """Return the capacity of this vector if set, 0 if not .
 
         The number `0` here has two different Meanings:
         - The first means the `Vec` doesn't have a specific capacity set.
@@ -297,18 +302,18 @@ class Vec(typing.Generic[T], collections.MutableSequence[T]):
     def is_empty(self) -> bool:
         """Returns true if the vector contains no elements.
 
-        Exactly translates into:
+        Inlined into:
         ```py
         not self.vec
         ```
         """
         return not self._ptr
 
-    def leak(self) -> collections.MutableSequence[T]:
-        """Consumes and leaks the Vec, returning a mutable reference to the contents, MutableSequence[T].
+    def leak(self) -> list[T]:
+        """Consumes and leaks the Vec, returning a mutable reference to the contents.
 
         After calling this, this vec will no longer reference the underlying buffer,
-        therfore, it becomes unusable.
+        therefore, it becomes unusable.
 
         if `self` is uninitialized, an empty list is returned.
 
@@ -417,7 +422,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T]):
         """Divide `self` into two at an index.
 
         The first will contain all elements from `[0:mid]` excluding `mid` it self.
-        and the second will contain the remaninig elements.
+        and the second will contain the remaining elements.
 
         if `mid` > `self.len()`, Then all elements will be moved to the left,
         returning an empty vec in right.
@@ -528,6 +533,8 @@ class Vec(typing.Generic[T], collections.MutableSequence[T]):
     def retain(self, f: collections.Callable[[T], bool]) -> None:
         """Retains only the elements specified by the predicate.
 
+        This operation occurs in-place without copying the original list.
+
         Example
         -------
         ```py
@@ -535,6 +542,13 @@ class Vec(typing.Generic[T], collections.MutableSequence[T]):
         vec.retain(lambda elem: elem > 1)
 
         assert vec == [2, 3]
+        ```
+
+        The impl for this method is very simple
+        ```py
+        for idx, e in enumerate(vec):
+            if not f(e):
+                del vec[idx]
         ```
         """
         if not self._ptr:

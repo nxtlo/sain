@@ -92,7 +92,9 @@ def unwrap_bytes(data: Rawish) -> bytes:
 
 @rustc_diagnostic_item("&[u8]")
 @typing.final
-class Bytes(convert.ToString, collections.MutableSequence[int]):
+class Bytes(
+    convert.ToString, collections.MutableSequence[int], _slice.SpecContains[int]
+):
     """Provides abstractions for working with UTF-8 compatible bytes.
 
     It is an efficient container for storing and operating with bytes.

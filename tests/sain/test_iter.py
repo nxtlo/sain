@@ -59,11 +59,11 @@ class TestIterator:
 
     def test_collect_cast(self):
         it = iter.Iter(("a", "b", "c", "d"))
-        assert it.collect(cast=str.encode) == (b"a", b"b", b"c", b"d")
+        assert it.collect(cast=str.encode) == [b"a", b"b", b"c", b"d"]
 
     def test_collect(self):
         it = iter.Iter(("a", "b", "c", "d"))
-        assert ("a", "b", "c", "d") == it.collect()
+        assert ["a", "b", "c", "d"] == it.collect()
 
     def test_collect_into(self):
         values = iter.Iter([1, 2, 3, 3, 4, 5, 6, 7, 8, 4])
@@ -115,42 +115,42 @@ class TestIterator:
 
     def test_map(self):
         it = iter.Iter([1, 2, 3])
-        assert it.map(lambda x: x + 1).collect() == (2, 3, 4)
+        assert it.map(lambda x: x + 1).collect() == [2, 3, 4]
 
     def test_filter(self):
         it = iter.Iter([1, 2, 3, 4, 5])
         filtered = it.filter(lambda x: x % 2 == 0)
-        assert filtered.collect() == (2, 4)
+        assert filtered.collect() == [2, 4]
 
     def test_take(self):
         it = iter.Iter([1, 2, 3, 4, 5])
         taken = it.take(3)
-        assert taken.collect() == (1, 2, 3)
+        assert taken.collect() == [1, 2, 3]
 
     def test_skip(self):
         it = iter.Iter([1, 2, 3, 4, 5])
         skipped = it.skip(2)
-        assert skipped.collect() == (3, 4, 5)
+        assert skipped.collect() == [3, 4, 5]
 
     def test_enumerate(self):
         it = iter.Iter(["a", "b", "c"])
         enumerated = it.enumerate(start=1)
-        assert enumerated.collect() == ((1, "a"), (2, "b"), (3, "c"))
+        assert enumerated.collect() == [(1, "a"), (2, "b"), (3, "c")]
 
     def test_take_while(self):
         it = iter.Iter([1, 2, 3, 4, 5])
         taken = it.take_while(lambda x: x < 4)
-        assert taken.collect() == (1, 2, 3)
+        assert taken.collect() == [1, 2, 3]
 
     def test_drop_while(self):
         it = iter.Iter([1, 2, 3, 4, 5])
         dropped = it.drop_while(lambda x: x < 3)
-        assert dropped.collect() == (1,)
+        assert dropped.collect() == [1]
 
     def test_chunks(self):
         it = iter.Iter([1, 2, 3, 4, 5])
         chunks = it.chunks(2)
-        assert chunks.collect() == ([1, 2], [3, 4], [5])
+        assert chunks.collect() == [[1, 2], [3, 4], [5]]
 
     def test_all(self):
         it = iter.Iter([2, 4, 6])
@@ -164,23 +164,23 @@ class TestIterator:
         it1 = iter.Iter([1, 2, 3])
         it2 = [4, 5, 6]
         zipped = it1.zip(it2)
-        assert zipped.collect() == ((1, 4), (2, 5), (3, 6))
+        assert zipped.collect() == [(1, 4), (2, 5), (3, 6)]
 
     def test_sort(self):
         it = iter.Iter([3, 1, 4, 2])
         sorted_it = it.sort(key=lambda x: x)
-        assert sorted_it.collect() == (1, 2, 3, 4)
+        assert sorted_it.collect() == [1, 2, 3, 4]
 
     def test_reversed(self):
         it = iter.Iter([1, 2, 3])
         reversed_it = it.reversed()
-        assert reversed_it.collect() == (3, 2, 1)
+        assert reversed_it.collect() == [3, 2, 1]
 
     def test_union(self):
         it1 = iter.Iter([1, 2, 3])
         it2 = [4, 5, 6]
         union_it = it1.union(it2)
-        assert union_it.collect() == (1, 2, 3, 4, 5, 6)
+        assert union_it.collect() == [1, 2, 3, 4, 5, 6]
 
     def test_first(self):
         it = iter.Iter([1, 2, 3])
@@ -234,7 +234,7 @@ class TestIterator:
     def test___reversed__(self):
         it = iter.Iter([1, 2, 3])
         x = reversed(it)
-        assert isinstance(x, iter.Iter) and x.collect() == (3, 2, 1)
+        assert isinstance(x, iter.Iter) and x.collect() == [3, 2, 1]
 
     def test___len__(self):
         it = iter.Iter([1, 2, 3])
@@ -246,7 +246,7 @@ def test_empty_iter():
     it = iter.empty()
     assert it.next().is_none()
     assert it.len() == 0
-    assert it.collect() == ()
+    assert it.collect() == []
 
 
 def test_repeat_iter():
@@ -256,7 +256,7 @@ def test_repeat_iter():
     assert it.next().is_some_and(lambda x: x == 1)
     assert it.next().is_none()
     assert it.len() == 0
-    assert it.collect() == ()
+    assert it.collect() == []
 
 
 def test_repeat_iter_spec():
@@ -284,7 +284,7 @@ def test_into_iter_trusted():
     assert it.next().is_some_and(lambda x: x == 2)
     assert it.next().is_some_and(lambda x: x == 3)
     assert it.next().is_none()
-    assert it.collect() == ()
+    assert it.collect() == []
 
 
 def test_into_iter():
@@ -294,4 +294,4 @@ def test_into_iter():
     assert it.next().is_some_and(lambda x: x == 2)
     assert it.next().is_some_and(lambda x: x == 3)
     assert it.next().is_none()
-    assert it.collect() == ()
+    assert it.collect() == []

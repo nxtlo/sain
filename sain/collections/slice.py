@@ -30,7 +30,7 @@
 
 from __future__ import annotations
 
-__all__ = ("Slice", "SliceMut")
+__all__ = ("Slice", "SliceMut", "SpecContains")
 
 import typing
 from collections import abc as collections
@@ -40,8 +40,42 @@ from sain import iter as _iter
 T = typing.TypeVar("T")
 
 
+Pattern = T | collections.Iterable[T]
+
+
+class SpecContains(typing.Generic[T]):
+    """Provides a default `contains` method."""
+
+    @typing.final
+    def contains(self: collections.Container[T], pat: Pattern[T]) -> bool:
+        """Check if `pat` is contained in `self.
+
+        `pat` here can be either an element of type `T` or an iterable of type `T`.
+
+        If an iterable is passed, it will check if at least one of the elements is in `self`.
+
+        Example
+        ```py
+        vec = Vec([1, 2, 3, 4])
+        assert vec.contains(1) is True
+        assert vec.contains([3, 4]) is True
+        ```
+
+        The implementation is roughly this simple:
+        ```py
+        if isinstance(pat, Iterable):
+            return any(_ in sequence for _ in pat)
+        return pat in sequence
+        ```
+        """
+        if isinstance(pat, collections.Iterable):
+            return any(_ in self for _ in pat)
+
+        return pat in self
+
+
 @typing.final
-class Slice(typing.Generic[T], collections.Sequence[T]):
+class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     """An immutable view over some sequence of type `T`.
 
     Similar to `&[T]`
@@ -127,7 +161,7 @@ class Slice(typing.Generic[T], collections.Sequence[T]):
 
 
 @typing.final
-class SliceMut(typing.Generic[T], collections.MutableSequence[T]):
+class SliceMut(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     """A mutable view over some sequence of type `T`.
 
     Similar to `&mut [T]`
