@@ -461,8 +461,6 @@ class Bytes(convert.ToString, collections.MutableSequence[int]):
         unlike `.put_bytes`, this method appends instead of extending the array
         which is faster if you're putting a single byte in a single call.
 
-        if `self` hasn't been initialized, the array will allocate along with the byte.
-
         Example
         -------
         ```py
@@ -588,7 +586,7 @@ class Bytes(convert.ToString, collections.MutableSequence[int]):
         self.put_bytes(s.encode(ENCODING))
 
     def fill(self, value: int) -> None:
-        """Fill this `self` with the given byte.
+        """Fills `self` with the given byte.
 
         Nothing happens if the buffer is empty or unallocated.
 
@@ -603,7 +601,28 @@ class Bytes(convert.ToString, collections.MutableSequence[int]):
         if not self._buf:
             return
 
-        self._buf.__buffer__(0x100)[:] = bytearray([value] * self.len())
+        self.as_mut_ptr()[:] = bytearray([value] * self.len())
+
+    def fill_with(self, f: collections.Callable[[], int]) -> None:
+        """Fills `self` with the given byte returned from `f`.
+
+        Nothing happens if the buffer is empty or unallocated.
+
+        Example
+        -------
+        ```py
+        def default() -> int:
+            return 0
+
+        a = Bytes.from_bytes([0, 1, 2, 3])
+        a.fill_with(default)
+        assert a == [0, 0, 0, 0]
+        ```
+        """
+        if not self._buf:
+            return
+
+        self.as_mut_ptr()[:] = bytearray([f()] * self.len())
 
     def swap(self, a: int, b: int):
         """Swap two bytes in the buffer.
@@ -789,10 +808,6 @@ class Bytes(convert.ToString, collections.MutableSequence[int]):
         buf = Bytes.from_bytes([1, 2, 3])
         split = buf.split_first()
         assert split == Some((1, [2, 3]))
-
-        buf: Bytes = Bytes()
-        split = buf.split_first()
-        assert split.is_none()
         ```
         """
         if not self._buf:
@@ -806,14 +821,14 @@ class Bytes(convert.ToString, collections.MutableSequence[int]):
         return _option.Some((first, rest))
 
     def split_last(self) -> _option.Option[tuple[int, collections.Sequence[int]]]:
-        """Split the last and rest elements of the bytes, If empty, `None` is returned.
+        """Returns the last and rest of the elements of the bytes, If `self` is empty, `None` is returned.
 
         Example
         -------
         ```py
-        buf = Bytes.from_bytes([1, 2, 3])
-        last, rest = buf.split_last().unwrap()
-        assert (last, rest) == [3, [1, 2]]
+        buf = Bytes.from_bytes([0, 1, 2])
+        last, elements = buf.split_last().unwrap()
+        assert (last, elements) == (3, [1, 2])
         ```
         """
         if not self._buf:
@@ -824,8 +839,8 @@ class Bytes(convert.ToString, collections.MutableSequence[int]):
         if len_ == 1:
             return _option.Some((self[0], ()))
 
-        last = self[-1]
-        return _option.Some((last, [*self[:-1]]))
+        last, *rest = self[-1], *self[:-1]
+        return _option.Some((last, rest))
 
     def split_at(self, mid: int) -> tuple[Bytes, Bytes]:
         """Divide `self` into two at an index.
@@ -886,7 +901,7 @@ class Bytes(convert.ToString, collections.MutableSequence[int]):
         if not self._buf:
             return
 
-        self._buf.clear()
+        del self._buf[:]
 
     def index(self, v: int, start: int = 0, stop: int = _sys.maxsize) -> int:
         """Return the smallest `i` such that `i` is the index of the
