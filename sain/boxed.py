@@ -179,10 +179,10 @@ class Box(typing.Generic[T]):
                 finally:
                     self._on_expire = None
 
-            self._inner.take()
+            self._inner = option.NOTHING
             self._mono = None
             # SAFETY: The value is expired, therefore we always return None.
-            return option.NOTHING  # pyright: ignore
+            return option.NOTHING
 
         if self._mono is None:
             self._mono = time.monotonic()

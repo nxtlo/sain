@@ -388,7 +388,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         ```
         """
         if not self._ptr:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         # optimized to only one element in the vector.
         if self.len() == 1:
@@ -409,7 +409,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         ```
         """
         if not self._ptr:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         # optimized to only one element in the vector.
         if self.len() == 1:
@@ -745,7 +745,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         try:
             return _option.Some(self[index])
         except IndexError:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
     def insert(self, index: int, value: T) -> None:
         """Insert an element at the position `index`.
@@ -772,7 +772,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         ```
         """
         if not self._ptr:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         return _option.Some(self._ptr.pop(index))
 
@@ -789,12 +789,12 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         ```
         """
         if not self._ptr:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         if pred(self[-1]):
             return self.pop()
 
-        return _option.NOTHING  # pyright: ignore
+        return _option.NOTHING
 
     def dedup(self) -> None:
         """Removes duplicate elements from `self` in-place.

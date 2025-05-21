@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Vec.leak`
 - `Vec.shirnk_to`
 - `Vec.shirnk_to_fit`
 - `macros.include_str`
@@ -18,15 +19,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `iter.Once`
 - `iter.ExactSizeIterator`
 - `iter.TrustedIter`
+- `Iterator.advance_by`
+- `Iterator.nth`
 - `collections.slice` module.
+- `Option.clear` and `Option.clear_if`
+- `HashMap.get_with`
+- `HashMap.get_pairs`
+- `slice.SpecContains`
 
 ### Changed
 
 - `iter.once() -> Once[T]` now returns a specialized iterator.
 - `Vec` and `Bytes` are now `MutableSequence`.
 - It is possible to do `Some(v) == None` checks now which checks if `v == None`.
-- `*.as_ref` and `*._as_mut` methods now return `Slice` and `SliceMut`, This ensures that the underlying buffer
+- `*.as_ref` and `*.as_mut` methods now return `Slice` and `SliceMut`, This ensures that the underlying buffer
 doesn't actually get mutated.
+- `Bytes.leak` doesn't returned an optional array now.
+- `Iterator.collect` now collects into a list instead of tuple.
+
+### Fixed
+
+- `Vec.retain` wasn't working as intended.
+
+### Removed
+
+- `Vec.from_args`
 
 ## 1.3.0 - 01/01/2025
 

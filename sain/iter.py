@@ -308,7 +308,7 @@ class Iterator(
             return _option.Some(self.__next__())
         except StopIteration:
             # ! SAFETY: No more items in the iterator.
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
     def cloned(self) -> Cloned[Item]:
         """Creates an iterator which shallow copies its elements by reference.
@@ -721,7 +721,7 @@ class Iterator(
                 return _option.Some(item)
 
         # no more items
-        return _option.NOTHING  # pyright: ignore
+        return _option.NOTHING
 
     def position(self, predicate: collections.Callable[[Item], bool]) -> Option[int]:
         """Searches for the position of an element in the iterator that satisfies a predicate.
@@ -744,7 +744,7 @@ class Iterator(
                 return _option.Some(position)
 
         # no more items
-        return _option.NOTHING  # pyright: ignore
+        return _option.NOTHING
 
     def fold(
         self, init: OtherItem, f: collections.Callable[[OtherItem, Item], OtherItem]
@@ -822,7 +822,7 @@ class Iterator(
             try:
                 self.__next__()
             except StopIteration:
-                return _option.NOTHING  # type: ignore
+                return _option.NOTHING
 
         return self.next()
 
@@ -1092,7 +1092,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
     def next(self) -> Option[Item]:
         if self._len == 0:
             # ! SAFETY: len == 0
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         return _option.Some(self.__next__())
 
@@ -1136,7 +1136,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
 
     def __getitem__(self, index: int) -> Option[Item]:
         if self._len == 0:
-            return _option.NOTHING  # pyright: ignore - we know this is empty.
+            return _option.NOTHING
 
         try:
             return self.skip(index).first()
@@ -1397,7 +1397,7 @@ class Empty(typing.Generic[Item], ExactSizeIterator[Item]):
     def next(self) -> Option[Item]:
         # SAFETY: an empty iterator always returns None.
         # also we avoid calling `nothing_unchecked()` here for fast returns.
-        return _option.NOTHING  # pyright: ignore
+        return _option.NOTHING
 
     def __len__(self) -> typing.Literal[0]:
         return 0

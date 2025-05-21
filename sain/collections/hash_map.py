@@ -116,7 +116,7 @@ class _RawMap(collections.Mapping[K, V]):
         ```
         """
         if key not in self:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         return _option.Some(self._source[key])
 
@@ -135,7 +135,7 @@ class _RawMap(collections.Mapping[K, V]):
         """
         key = f()
         if key not in self:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         return _option.Some(self._source[key])
 
@@ -153,7 +153,7 @@ class _RawMap(collections.Mapping[K, V]):
         ```
         """
         if key not in self:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         return _option.Some((key, self._source[key]))
 
@@ -203,14 +203,14 @@ class _RawMap(collections.Mapping[K, V]):
             once = next(iter(self))
             if once in keys:
                 return _option.Some([self[once]])
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         seen: set[K] = set()
         results: list[V] = []
 
         for key in keys:
             if key in seen or key not in self:
-                return _option.NOTHING  # type: ignore
+                return _option.NOTHING
 
             seen.add(key)
             results.append(self[key])
@@ -403,7 +403,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         """
         if key not in self:
             self[key] = value
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         old = self[key]
         self[key] = value
@@ -422,7 +422,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         ```
         """
         if key not in self:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         v = self[key]
         del self[key]
@@ -441,7 +441,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         ```
         """
         if key not in self:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         v = self[key]
         del self[key]

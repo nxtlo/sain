@@ -45,6 +45,7 @@ from sain import convert
 from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
+from sain.macros import assert_precondition
 from sain.macros import rustc_diagnostic_item
 
 from . import slice as _slice
@@ -108,9 +109,9 @@ class Bytes(
 
     * `Bytes()`: Initialize an empty `Bytes` object
     * `from_str`: Create `Bytes` from `str`
-    * `from_bytes`: Create `Bytes` from a `Buffer` type
+    * `from_bytes`: Create `Bytes` from a `Buffer` bytes-like type
     * `from_raw`: Create `Bytes` from a `Rawish` type
-    * `from_static`: Create `Bytes` that points to an `array.array[int]` without copying it
+    * `from_ptr`: Create `Bytes` that points to an `array.array[int]` without copying it
     * `Bytes.zeroed(count)`: Create `Bytes` filled with `zeroes * count`.
 
     Example
@@ -154,7 +155,7 @@ class Bytes(
         return b
 
     @classmethod
-    def from_static(cls, arr: array.array[int]) -> Bytes:
+    def from_ptr(cls, arr: array.array[int]) -> Bytes:
         """Create a new `Bytes` from an array.
 
         The returned `Bytes` will directly point to `arr` without copying.
@@ -166,6 +167,12 @@ class Bytes(
         buffer = Bytes.from_static(arr)
         ```
         """
+        assert_precondition(
+            arr.typecode == "B",
+            f"array type must be `B`, not `{arr.typecode}`",
+            TypeError,
+        )
+
         b = cls()
         b._buf = arr
         return b
@@ -323,9 +330,10 @@ class Bytes(
         """
         return _vec.Vec(self)
 
-    def leak(self) -> Option[array.array[int]]:
-        """Consumes and leaks the `Bytes`, returning the contents as an `array[int]`
-        or `None` if the buffer is not initialized.
+    def leak(self) -> array.array[int]:
+        """Consumes and leaks the `Bytes`, returning the contents as an `array[int]`,
+
+        A new empty array is returned if the underlying buffer is not initialized.
 
         `self` will deallocate the underlying array, therefore it becomes unusable.
 
@@ -337,20 +345,20 @@ class Bytes(
         -------
         ```py
         bytes = Bytes.from_str("chunks of data")
-        consumed = bytes.leak().unwrap()
-        # This is undefined behavior!!!
+        consumed = bytes.leak()
+        # `bytes` doesn't point to anything, this is undefined behavior.
         bytes.put(0)
         # access the array directly instead.
         consumed.tobytes() == b"chunks of data"
         ```
         """
         if self._buf is None:
-            return _option.NOTHING  # pyright: ignore
+            return array.array("B")
 
         arr = self._buf
         # We don't need to reference this anymore since the caller will own the array.
         del self._buf
-        return _option.Some(arr)
+        return arr
 
     def as_ptr(self) -> memoryview[int]:
         """Returns a read-only pointer to the buffer data.
@@ -813,7 +821,7 @@ class Bytes(
         ```
         """
         if not self._buf:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         # optimized to only one element in the buffer.
         if self.len() == 1:
@@ -834,7 +842,7 @@ class Bytes(
         ```
         """
         if not self._buf:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         len_ = self.len()
         # optimized to only one element in the buffer.
@@ -886,7 +894,7 @@ class Bytes(
         if not self._buf:
             return Bytes()
 
-        return self.from_static(self._buf[:])
+        return self.from_ptr(self._buf[:])
 
     def clear(self) -> None:
         """Clear the buffer.
@@ -953,7 +961,7 @@ class Bytes(
         ```
         """
         if not self._buf:
-            return _option.NOTHING  # pyright: ignore
+            return _option.NOTHING
 
         return _option.Some(self._buf.pop(i))
 
@@ -1103,7 +1111,7 @@ class Bytes(
             raise IndexError("Index out of range")
 
         if isinstance(index, slice):
-            return self.from_static(self._buf[index])
+            return self.from_ptr(self._buf[index])
 
         return self._buf[index]
 

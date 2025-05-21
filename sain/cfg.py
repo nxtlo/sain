@@ -36,7 +36,7 @@ Target OS must be one of the following:
 * `win32` | `windows`
 * `darwin` | `macos`
 * `ios`
-* `unix`, which is assumed to be either linux or darwin.
+* `unix`, which can be one of [linux, posix, macos, freebsd, openbsd].
 
 Target architecture must be one of the following:
 * `x86`
@@ -58,6 +58,7 @@ __all__ = ("cfg_attr", "cfg")
 import collections.abc as collections
 import functools
 import inspect
+import os
 import platform
 import sys
 import typing
@@ -93,15 +94,15 @@ def _is_x86() -> bool:
     return _machine == "i386" or _machine == "x86"
 
 
-def _py_version() -> str:
-    return platform.python_version()
+def _py_version() -> tuple[int, int, int]:
+    return sys.version_info[:3]
 
 
 @rustc_diagnostic_item("cfg_attr")
 def cfg_attr(
     *,
     target_os: System | None = None,
-    python_version: tuple[int, int, int] | None = None,
+    python_version: tuple[int, ...] | None = None,
     target_arch: Arch | None = None,
     impl: Python | None = None,
 ) -> collections.Callable[[F], F]:
@@ -138,7 +139,7 @@ def cfg_attr(
     target_os : `str | None`
         The targeted operating system thats required for the object.
     python_version : `tuple[int, int, int] | None`
-        The targeted Python version thats required for the object. Format must be `(3, 9, 5)`.
+        The targeted Python version thats required for the object. Format must be `(3, ..., ...)`.
     target_arch : `str | None`
         The CPU targeted architecture thats required for the object.
     impl : `str | None`
@@ -172,7 +173,7 @@ def cfg_attr(
 @rustc_diagnostic_item("cfg")
 def cfg(
     target_os: System | None = None,
-    python_version: tuple[int, int, int] | None = None,
+    python_version: tuple[int, ...] | None = None,
     target_arch: Arch | None = None,
     impl: Python | None = None,
 ) -> bool:
@@ -197,13 +198,13 @@ def cfg(
     Parameters
     ----------
     target_os : `str | None`
-        The targeted operating system thats required for the object to be ran.
-    python_version : `tuple[int, int, int] | None`
-        The targeted Python version thats required for the object to be ran. Format must be `(3, 9, 5)``
+        The targeted operating system thats required for the object to be executed.
+    python_version : `tuple[int, ...] | None`
+        The targeted Python version that's required for the object to be executed. Format must be `(3, ..., ...)`
     target_arch : `str | None`
-        The CPU targeted architecture thats required for the object to be ran.
+        The CPU targeted architecture thats required for the object to be executed.
     impl : `str | None`
-        The Python implementation thats required for the object to be ran.
+        The Python implementation thats required for the object to be executed.
 
     Returns
     -------
@@ -218,7 +219,7 @@ def cfg(
         target_arch=target_arch,
         impl=impl,
     )
-    return checker.internal_check()
+    return checker.check_once()
 
 
 @typing.final
@@ -237,7 +238,7 @@ class _AttrCheck(typing.Generic[F]):
         self,
         callback: F,
         target_os: System | None = None,
-        python_version: tuple[int, int, int] | None = None,
+        python_version: tuple[int, ...] | None = None,
         target_arch: Arch | None = None,
         impl: Python | None = None,
         *,
@@ -252,32 +253,17 @@ class _AttrCheck(typing.Generic[F]):
         self._debugger = _Debug(callback, no_raise)
 
     def __call__(self, *args: typing.Any, **kwds: typing.Any) -> F:
-        self._check_once()
+        self.check_once()
         return typing.cast(F, self._callback(*args, **kwds))
 
-    def internal_check(self) -> bool:
-        return self._check_once()
-
-    # FIXME: Can we impl this differently?
-    def _check_once(self) -> bool:
-        results: list[bool] = []
-        if self._target_os is not None:
-            results.append(self._check_platform())
-
-        if self._py_version is not None:
-            results.append(self._check_py_version())
-
-        if self._target_arch is not None:
-            results.append(self._check_target_arch())
-
-        if self._py_impl is not None:
-            results.append(self._check_py_impl())
-
-        # No checks are passed to cfg(), We return False.
-        if not results:
-            return False
-
-        return all(results)
+    def check_once(self) -> bool:
+        checks = (
+            self._check_platform() if self._target_os is not None else True,
+            self._check_py_version() if self._py_version is not None else True,
+            self._check_target_arch() if self._target_arch is not None else True,
+            self._check_py_impl() if self._py_impl is not None else True,
+        )
+        return all(checks)
 
     def _check_target_arch(self) -> bool:
         match self._target_arch:
@@ -290,41 +276,46 @@ class _AttrCheck(typing.Generic[F]):
             case "x86_64":
                 return _is_x86_64()
             case _:
-                raise ValueError(f"Unknown target arch: {self._target_arch}")
+                raise ValueError(
+                    f"Unknown target arch: {self._target_arch}. "
+                    f"Valid options are: 'arm', 'arm64', 'x86', 'x86_64'."
+                )
 
     def _check_platform(self) -> bool:
-        is_unix = sys.platform in {"linux", "darwin", "macos"}
+        is_unix = os.name == "posix" or sys.platform in {"linux", "darwin", "macos"}
 
         # If the target os is unix, then we assume that it's either linux or darwin.
-        if self._target_os == "unix" and is_unix:
+        if self._target_os == "unix" and (
+            is_unix or sys.platform in {"freebsd", "openbsd"}
+        ):
             return True
 
+        # Alias to win32
         # Alias to win32
         if self._target_os == "windows" and sys.platform == "win32":
             return True
 
+        # Alias to darwin
         if self._target_os == "macos" and sys.platform == "darwin":
             return True
 
         if sys.platform == self._target_os:
             return True
 
-        # fmt: off
         return (
-            self._debugger
-            .exception(RuntimeError)
-            .message(f"requires {self._target_os} OS").finish()
+            self._debugger.exception(RuntimeError)
+            .message(f"requires {self._target_os} OS")
+            .finish()
         )
-        # fmt: on
 
     def _check_py_version(self) -> bool:
-        if self._py_version and self._py_version <= sys.version_info:
+        if self._py_version and self._py_version <= tuple(sys.version_info):
             return True
 
         return (
             self._debugger.exception(RuntimeError)
             .message(f"requires Python >={self._py_version}")
-            .and_then(f"But found {_py_version()}")
+            .and_then(f"But found {'.'.join(map(str, _py_version()))}")
             .finish()
         )
 
@@ -332,13 +323,11 @@ class _AttrCheck(typing.Generic[F]):
         if platform.python_implementation() == self._py_impl:
             return True
 
-        # fmt: off
         return (
             self._debugger.exception(RuntimeError)
             .message(f"requires Python implementation {self._py_impl}")
             .finish()
         )
-        # fmt: on
 
 
 class _Debug(typing.Generic[F]):

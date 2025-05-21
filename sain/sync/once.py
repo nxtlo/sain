@@ -89,7 +89,7 @@ class Once(typing.Generic[T]):
 
         This method will never block.
         """
-        return _option.Some(self._inner) if self.is_set else _option.NOTHING  # pyright: ignore
+        return _option.Some(self._inner) if self.is_set else _option.NOTHING
 
     @macros.unsafe
     def get_unchecked(self) -> T:
@@ -272,7 +272,7 @@ class AsyncOnce(typing.Generic[T]):
 
         This method will never block.
         """
-        return _option.Some(self._inner) if self.is_set else _option.NOTHING  # pyright: ignore
+        return _option.Some(self._inner) if self.is_set else _option.NOTHING
 
     @macros.unsafe
     def get_unchecked(self) -> T:

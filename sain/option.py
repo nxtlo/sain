@@ -242,7 +242,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         ```
         """
         if self._value is None:
-            return NOTHING  # pyright: ignore
+            return NOTHING
 
         return Some(f(self._value))
 
@@ -315,7 +315,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
             if predicate(value):
                 return Some(value)
 
-        return NOTHING  # pyright: ignore
+        return NOTHING
 
     def ok_or(self, err: U) -> _result.Result[T, U]:
         """Transforms the `Option<T>` into a `Result<T, E>`, mapping `Some(v)` to `Ok(v)` and `None` to `Err(err)`.
@@ -372,7 +372,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         if self._value is not None and other._value is not None:
             return Some((self._value, other._value))
 
-        return NOTHING  # type: ignore
+        return NOTHING
 
     def zip_with(
         self, other: Option[U], f: collections.Callable[[T, U], T_co]
@@ -396,12 +396,14 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         if self._value is not None and other._value is not None:
             return Some(f(self._value, other._value))
 
-        return NOTHING  # type: ignore
+        return NOTHING
 
     # *- Inner operations *-
 
     def take(self) -> Option[T]:
-        """Take the value from `Self`, Setting it to `None`.
+        """Take the value from `self` Setting it to `None`, and then return `Some(v)`.
+
+        If you don't care about the original value, use `Option.clear()` instead.
 
         Example
         -------
@@ -414,7 +416,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         ```
         """
         if self._value is None:
-            return NOTHING  # pyright: ignore
+            return NOTHING
 
         val = self._value
         self._value = None
@@ -422,6 +424,8 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
     def take_if(self, predicate: collections.Callable[[T], bool]) -> Option[T]:
         """Take the value from `Self`, Setting it to `None` only if predicate returns `True`.
+
+        If you don't care about the original value, use `Option.clear_if()` instead.
 
         Example
         -------
@@ -442,7 +446,38 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         if self.map_or(False, predicate):
             return self.take()
 
-        return NOTHING  # pyright: ignore
+        return NOTHING
+
+    def clear(self) -> None:
+        """Clear the inner value, setting it to `None`.
+
+        If you care about the original value, use `Option.take()` instead.
+
+        Example
+        -------
+        ```py
+        value = Some("Hello")
+        value.clear()
+        assert value.is_none()
+        ```
+        """
+        self._value = None
+
+    def clear_if(self, predicate: Fn[T, bool]) -> None:
+        """Clear the inner value, setting it to `None` if the predicate returns `True`.
+
+        If you care about the original value, use `Option.take_if()` instead.
+
+        Example
+        -------
+        ```py
+        value = Some("Hello")
+        value.clear_if(lambda x: x == "Hello")
+        assert value.is_none()
+        ```
+        """
+        if self._value is not None and predicate(self._value):
+            self._value = None
 
     def replace(self, value: T) -> Option[T]:
         """Replace the contained value with another value.
@@ -539,7 +574,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         if self._value is None or optb._value is None:
             return optb
 
-        return NOTHING  # pyright: ignore
+        return NOTHING
 
     def and_then(self, f: Fn[T, Option[T]]) -> Option[T]:
         """Returns `Some(None)` if the contained value is `None`, otherwise call `f()`
@@ -558,7 +593,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         ```
         """
         if self._value is None:
-            return NOTHING  # pyright: ignore
+            return NOTHING
 
         return f(self._value)
 
@@ -732,15 +767,15 @@ foo: Option[str] = Some(None)
 ```
 """
 
-NOTHING: typing.Final[Some[None]] = Some(None)
-"""A constant that is always `Option<None>`.
+NOTHING: typing.Final[Some[typing.Any]] = Some(None)
+"""A constant that is always `Some(None)`.
 
 Example
 -------
 ```py
 from sain import NOTHING, Some
 
-place_holder = NOTHING
+place_holder: Option[str] = NOTHING
 assert NOTHING == Some(None) # True
 ```
 """
@@ -764,7 +799,7 @@ def nothing_unchecked() -> Option[T]:
                 # even though the type of `NOTHING` is `Option[None]`.
                 # we trick the type checker into thinking
                 # that its an `Option[str]`.
-                return NOTHING  # pyright: ignore
+                return NOTHING
 
             return Some(self.username.split('@')[0])
     ```

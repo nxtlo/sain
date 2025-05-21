@@ -207,6 +207,52 @@ def rustc_diagnostic_item(item: RustItem, /) -> collections.Callable[[T], T]:
     return decorator
 
 
+def assert_precondition(
+    condition: bool,
+    message: typing.LiteralString = "",
+    exception: type[BaseException] = Exception,
+) -> None:
+    """Checks if `condition` is true, raising an exception if not.
+
+    This is used to inline check preconditions for functions and methods.
+
+    Example
+    -------
+    ```py
+    from sain.macros import assert_precondition
+
+    def divide(a: int, b: int) -> float:
+        assert_precondition(
+            b != 0,
+            "b must not be zero",
+            ZeroDivisionError
+        )
+        return a / b
+    ```
+
+    An inlined version would be:
+    ```py
+    if not condition:
+        raise Exception(
+        f"precondition check violated: {message}"
+    ) from None
+    ```
+
+    Parameters
+    ----------
+    condition : `bool`
+        The condition to check.
+    message : `LiteralString`
+        The message to display if the condition is false.
+        Defaults to an empty string.
+    exception : `type[BaseException]`
+        The exception to raise if the condition is false.
+        Defaults to `Exception`.
+    """
+    if not condition:
+        raise exception(f"precondition check violated: {message}") from None
+
+
 @rustc_diagnostic_item("unsafe")
 def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     """Mark a function as unsafe.

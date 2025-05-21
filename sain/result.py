@@ -307,7 +307,7 @@ class Ok(typing.Generic[T]):
         value.err().is_some() # True
         ```
         """
-        return _option.NOTHING  # pyright: ignore
+        return _option.NOTHING
 
     def inspect(self, f: F[T, typing.Any]) -> Self:
         """Call a function to the contained value if it was `Ok` and do nothing if it was `Err`
@@ -769,7 +769,7 @@ class Err(typing.Generic[E]):
     # * Iterator constructors. * #
     ##############################
 
-    def iter(self) -> _iter.Empty[Never]:
+    def iter(self) -> _iter.Empty[E]:
         """An iterator over the possible contained value.
 
         If `self` was `Ok`, then the iterator will yield `T`, otherwise yields nothing.
@@ -786,7 +786,7 @@ class Err(typing.Generic[E]):
         """
         return _iter.Empty()
 
-    def __iter__(self) -> collections.Iterator[Never]:
+    def __iter__(self) -> collections.Iterator[E]:
         yield from ()
 
     #################

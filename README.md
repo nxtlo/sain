@@ -3,88 +3,87 @@
 a dependency-free library which implements a few of Rust's core crates purely in Python.
 It offers a few of the core Rust features such as `Vec<T>`, `Result<T, E>`, `Option<T>` and more. See the equivalent type section below.
 
-a few `std` types are implemented. Check the [project documentation](https://nxtlo.github.io/sain/sain.html)
+Concrete `std` types are implemented. Check the [project documentation](https://nxtlo.github.io/sain/sain.html)
 
 ## Install
 
-You'll need Python 3.10 or higher.
-
-PyPI
+Python 3.10 or higher is required.
 
 ```sh
 pip install sain
 ```
 
-## Overview
+## Example
 
-`sain` provides a variety of the standard library crates. such as `Vec<T>` and converter interfaces.
+In this example we are writing a simple app that takes advantage of Rust's types in Python.
+
+This example provides a simple library that contains a `Vec` of books. Here, we take advantage of the `Vec` type and its idiomatic methods.
 
 ```py
-from sain import Option, Result, Ok, Err
-from sain.collections import Vec
-from sain.collections.buf import Bytes
-from sain.convert import Into, TryFrom
+from __future__ import annotations
+from sain import Result, Ok, Err  # used for error handling
+from sain import Option  # used for absense of a value, similar to `T | None`
+from sain import Vec  # A feature-rich `list` type.
 
 from dataclasses import dataclass, field
 
-
-# some blob of data.
 @dataclass
-class Blob(Into[Bytes], TryFrom[str, None]):
-    tag: str
-    buffer: bytes
-
-    # converts this layout into some raw bytes.
-    def into(self) -> Bytes:
-        buf = Bytes()
-        buf.put_str(self.tag)
-        buf.put_bytes(b"-")
-        buf.put_bytes(self.buffer)
-        return buf
-
-    @classmethod
-    def try_from(cls, value: str) -> Result[Blob, None]:
-        # implement a conversion from a string to a blob.
-        # in case of success, return Ok(layout)
-        # and in case of failure, return Ok(None)
-        tag, buffer = value.split(".")  # this is an example.
-        return Ok(Blob(tag, buffer.encode()))
-
+class Book:
+    name: str
+    author: str
+    tags: set[str]
+    pages = field(default_factory=set[str])
 
 @dataclass
-class BlobStore:
-    buf: Vec[Blob] = field(default_factory=Vec)
+class Library:
+    # just like any other mutable sequences.
+    # it needs a default factory.
+    books = field(default_factory=Vec[Book])
 
-    # extends the vec from an iterable.
-    def add(self, *blobs: Blob):
-        self.buf.extend(blobs)
+    # add a books to this library.
+    def add(self, *books: Book):
+        self.books.extend(books)
 
-    # finds blob that's tagged with `pattern`
-    def find(self, pattern: str) -> Option[Blob]:
-        return self.buf.iter().find(lambda blob: pattern in blob.tag)
+    # finds the first book that contains a specific tag.
+    def find(self, pattern: str) -> Option[Book]:
+        return (
+            self.books.iter().find(  # Self  # Vec[Book]  # Iterator[Item = Book]
+                lambda book: pattern in book.tags
+            )  # Option[Book]
+        )
 
-    # converts the entire buffer into `Bytes`
-    def into_bytes(self) -> Result[Bytes, None]:
-        if not self.buf:
-            return Err(None)
+    # finds the first book that contains a specific tag,
+    # mapping Option[Book] to Result[Book, str] where `str` is the context
+    # of the error.
+    def find_or(self, pattern: str) -> Result[Book, str]:
+        return self.find(pattern).ok_or(f"book with pattern {pattern} not found.")
 
-        buffer = Bytes()
-        for blob in self.buf:
-            buffer.put_bytes(blob.into())
+    # We simply filter books that matches `author` and collect
+    # them into a list[Book].
+    def books_for(self, author: str):
+        return self.books.iter().filter(lambda book: book.author == author).collect()
 
-        return Ok(buffer)
 
+lib = Library()
+lib.add(
+    Book("Twilight", "Stephenie Meyer", {"Vampire", "Romance"}),
+    Book("Silo", "Hugh Howey", {"Dystopian", "Sci-Fi"}),
+    Book("The Eternaut", "Héctor Germán", {"Invasion", "Mystery"}),
+)
 
-blobstore = BlobStore()
-blobstore.add(Blob("safe", b"Rust"))
-# try to convert the string into a Layout.
-match Blob.try_from("unsafe.Python"):
-    case Ok(blob):
-        blobstore.add(blob)  # add it if parsed.
-    case Err(_):
-        ...  # Error parsing the str.
+# find the first vampire book then maps the book to its pages.
+# maps Option[Book] -> Option[set[str]]
+for page in lib.find("Vampire").map(lambda book: book.pages).unwrap():
+    print(page)  # {page1, page2, ...}
 
-print(blobstore.into_bytes().expect("cannot convert to bytes").to_str())
+match lib.find_or("Sci-Fi"):
+    case Ok(book):
+        print(book)  # Book("Silo", ...)
+    case Err(err):
+        print(err)  # book with pattern Sci-Fi not found.
+
+# show Hugh's books.
+print(lib.books_for("Hugh Howey"))  # [Book("Silo", ...)]
 ```
 
 ## built-in types
