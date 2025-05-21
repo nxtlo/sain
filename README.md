@@ -46,11 +46,7 @@ class Library:
 
     # finds the first book that contains a specific tag.
     def find(self, pattern: str) -> Option[Book]:
-        return (
-            self.books.iter().find(  # Self  # Vec[Book]  # Iterator[Item = Book]
-                lambda book: pattern in book.tags
-            )  # Option[Book]
-        )
+        return self.books.iter().find(lambda book: pattern in book.tags)
 
     # finds the first book that contains a specific tag,
     # mapping Option[Book] to Result[Book, str] where `str` is the context
