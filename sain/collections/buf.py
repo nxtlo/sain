@@ -32,11 +32,12 @@
 
 from __future__ import annotations
 
-__all__ = ("Bytes", "Rawish", "Buffer")
+__all__ = ("Bytes", "BytesMut", "Rawish", "Buffer")
 
 import array
 import ctypes as _ctypes
 import io as _io
+import struct
 import sys as _sys
 import typing
 from collections import abc as collections
@@ -93,10 +94,8 @@ def unwrap_bytes(data: Rawish) -> bytes:
 
 @rustc_diagnostic_item("&[u8]")
 @typing.final
-class Bytes(
-    convert.ToString, collections.MutableSequence[int], _slice.SpecContains[int]
-):
-    """Provides abstractions for working with UTF-8 compatible bytes.
+class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int]):
+    """Provides immutable abstractions for working with UTF-8 compatible bytes.
 
     It is an efficient container for storing and operating with bytes.
     It behaves very much like `array.array[int]` as well has the same layout.
@@ -119,12 +118,8 @@ class Bytes(
     ```py
     from sain import Bytes
 
-    buf = Bytes()
-    buffer.put_bytes(b"Hello")
-    print(buffer) # [72, 101, 108, 108, 111]
-
-    buf.put(32) # space
-    assert buffer.to_bytes() == b"Hello "
+    buf = Bytes.from_str("Hello")
+    print(buf) # [72, 101, 108, 108, 111]
     ```
     """
 
@@ -163,8 +158,8 @@ class Bytes(
         Example
         -------
         ```py
-        arr = array.array("B")
-        buffer = Bytes.from_static(arr)
+        arr = array.array("B", b"Hello")
+        buffer = Bytes.from_ptr(arr)
         ```
         """
         assert_precondition(
@@ -215,7 +210,7 @@ class Bytes(
 
     @classmethod
     def zeroed(cls, count: int) -> Bytes:
-        """Initialize a new `Bytes` filled with zeros * `count`.
+        """Initialize a new `Bytes` filled with `0 * count`.
 
         Example
         -------
@@ -373,20 +368,6 @@ class Bytes(
         """
         return self.__buffer__(0x100).toreadonly()
 
-    def as_mut_ptr(self) -> memoryview[int]:
-        """Returns a mutable pointer to the buffer data.
-
-        Example
-        -------
-        ```py
-        buffer = Bytes.from_str("ouv")
-        ptr = buffer.as_mut_ptr()
-        ptr[0] = ord(b'L')
-        assert buffer.to_bytes() == b"Luv"
-        ```
-        """
-        return self.__buffer__(0x100)
-
     def as_ref(self) -> _slice.Slice[int]:
         """Get an immutable reference to the underlying sequence, without copying.
 
@@ -407,39 +388,537 @@ class Bytes(
 
         raise ReferenceError("`self` must be initialized first.") from None
 
-    def as_mut(self) -> _slice.SliceMut[int]:
-        """Get a mutable reference to the underlying sequence, without copying.
+    def to_mut(self) -> BytesMut:
+        """Convert `self` into `BytesMut`.
 
-        A `ReferenceError` is raised if the underlying sequence is not initialized.
+        This consumes `self` and returns a new `BytesMut` that points to the same underlying array,
+        The conversion costs nothing.
+
+        Notes
+        -----
+        * If `self` is not initialized, a new empty `BytesMut` is returned.
+        * This operation is cheap and does not involve copying the underlying array.
+        * `self` will no longer be usable, as it will not point to the underlying array.
 
         Example
         -------
         ```py
-        buff = Bytes.from_str("Hello")
-        ref = buff.as_mut()
-        ref.append(32)
-        del ref
-        assert buff.to_str() == "Hello "
+        def modify(buffer: Bytes) -> BytesMut:
+            buf = buffer.to_mut() # doesn't cost anything.
+            buf.swap()
+        buffer = Bytes.from_bytes([0, 0, 0, 0])
         ```
         """
-        if self._buf is not None:
-            return _slice.SliceMut(self)
-
-        raise ReferenceError("`self` must be initialized first.") from None
+        return BytesMut.from_ptr(self.leak())
 
     def raw_parts(
         self,
-    ) -> tuple[typing.Annotated[int, "address"], typing.Annotated[int, "len"]]:
+    ) -> tuple[int, int]:
         """Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains"""
         if not self._buf:
             return (0x0, 0)
 
         return self._buf.buffer_info()
 
+    def len(self) -> int:
+        """Return the number of bytes in this buffer.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([240, 159, 146, 150])
+        assert buf.len() == 4
+        ```
+        """
+        return self.__len__()
+
+    def size(self) -> int:
+        """The length in bytes of one array item in the internal representation.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([240, 159, 146, 150])
+        assert buf.size() == 1
+        ```
+        """
+        if not self._buf:
+            return 0
+        return self._buf.itemsize
+
+    def iter(self) -> _iter.TrustedIter[int]:
+        """Returns an iterator over the bytes of `self`.
+
+        This iterator yields all `int`s from start to end.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes((1, 2, 3))
+        iterator = buf.iter()
+
+        # map each byte to a character
+        for element in iterator.map(chr):
+            print(element)
+        # ☺
+        # ☻
+        # ♥
+        ```
+        """
+        return _iter.into_iter(self)
+
+    def chars(self) -> _iter.Iterator[_ctypes.c_char]:
+        """Returns an iterator over the characters of `Bytes`.
+
+        This iterator yields all `int`s from start to end as a `ctypes.c_char`.
+
+        Example
+        -------
+        ```py
+        b = Bytes.from_str("Hello")
+        for char in b.chars():
+            print(char)
+
+        # c_char(b'H')
+        # c_char(b'e')
+        # c_char(b'l')
+        # c_char(b'l')
+        # c_char(b'o')
+        ```
+        """
+        # The built-in map is actually faster than our own pure python adapter impl.
+        return _iter.Iter(map(_ctypes.c_char, self))
+
+    def is_empty(self) -> bool:
+        """Check whether `self` contains any bytes or not.
+
+        Example
+        -------
+        ```py
+        buffer = Bytes()
+        assert buffer.is_empty()
+        ```
+        """
+        return not self._buf
+
+    def split_off(self, at: int) -> Bytes:
+        """Split the bytes off at the specified position, returning a new
+        `Bytes` at the range of `[at : len]`, leaving `self` at `[at : bytes_len]`.
+
+        if this bytes is empty, `self` is returned unchanged.
+
+        Example
+        -------
+        ```py
+        origin = Bytes.from_bytes((1, 2, 3, 4))
+        split = origin.split_off(2)
+
+        print(origin, split)  # [1, 2], [3, 4]
+        ```
+
+        Raises
+        ------
+        `RuntimeError`
+            This method will raise if `at` > `len(self)`
+        """
+        len_ = self.len()
+        if at > len_:
+            raise RuntimeError(
+                f"Index `at` ({at}) should be <= than len of `self` ({len_}) "
+            ) from None
+
+        # Either the list is empty or uninit.
+        if not self._buf:
+            return self
+
+        split = self[at:len_]  # split the items into a new buffer.
+        del self._buf[at:len_]  # remove the items from the original list.
+        return split
+
+    def split_first(self) -> Option[tuple[int, Bytes]]:
+        """Split the first and rest elements of the bytes, If empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([1, 2, 3])
+        split = buf.split_first()
+        assert split == Some((1, [2, 3]))
+        ```
+        """
+        if not self._buf:
+            return _option.NOTHING
+
+        # optimized to only one element in the buffer.
+        if self.len() == 1:
+            return _option.Some((self[0], Bytes()))
+
+        first, rest = self[0], self[1:]
+        return _option.Some((first, rest))
+
+    def split_last(self) -> Option[tuple[int, Bytes]]:
+        """Returns the last and rest of the elements of the bytes, If `self` is empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([0, 1, 2])
+        last, elements = buf.split_last().unwrap()
+        assert (last, elements) == (3, [1, 2])
+        ```
+        """
+        if not self._buf:
+            return _option.NOTHING
+
+        len_ = self.len()
+        # optimized to only one element in the buffer.
+        if len_ == 1:
+            return _option.Some((self[0], Bytes()))
+
+        last, rest = self[-1], self[:-1]
+        return _option.Some((last, rest))
+
+    def split_at(self, mid: int) -> tuple[Bytes, Bytes]:
+        """Divide `self` into two at an index.
+
+        The first will contain all bytes from `[0:mid]` excluding `mid` it self.
+        and the second will contain the remaining bytes.
+
+        if `mid` > `self.len()`, Then all bytes will be moved to the left,
+        returning an empty bytes in right.
+
+        Example
+        -------
+        ```py
+        buffer = Bytes.from_bytes((1, 2, 3, 4))
+        left, right = buffer.split_at(0)
+        assert left == [] and right == [1, 2, 3, 4]
+
+        left, right = buffer.split_at(2)
+        assert left == [1, 2] and right == [2, 3]
+        ```
+
+        The is roughly the implementation
+        ```py
+        self[0:mid], self[mid:]
+        ```
+        """
+        return self[0:mid], self[mid:]
+
+    # layout methods.
+
+    def copy(self) -> Bytes:
+        """Create a copy of the bytes.
+
+        Example
+        -------
+        ```py
+        original = Bytes.from_bytes([255, 255, 255, 0])
+        copy = original.copy()
+        ```
+        """
+        if not self._buf:
+            return Bytes()
+
+        return self.from_ptr(self._buf[:])
+
+    def index(self, v: int, start: int = 0, stop: int = _sys.maxsize) -> int:
+        """Return the smallest `i` such that `i` is the index of the first occurrence of `v` in the buffer.
+
+        The optional arguments start and stop can be specified to search for x within a
+        subsection of the array. Raise ValueError if x is not found
+        """
+        if not self._buf:
+            raise ValueError from None
+
+        return self._buf.index(v, start, stop)
+
+    def count(self, x: int) -> int:
+        """Return the number of occurrences of `x` in the buffer.
+
+        Example
+        --------
+        ```py
+        buf = Bytes([32, 32, 31])
+        assert buf.count(32) == 2
+        ```
+        """
+        if self._buf is None:
+            return 0
+
+        return self._buf.count(x)
+
+    # special methods
+
+    def __iter__(self) -> collections.Iterator[int]:
+        if self._buf:
+            return self._buf.__iter__()
+
+        return ().__iter__()
+
+    def __len__(self) -> int:
+        return len(self._buf) if self._buf else 0
+
+    def __repr__(self) -> str:
+        if not self._buf:
+            return "[]"
+
+        return "[" + ", ".join(str(x) for x in self._buf) + "]"
+
+    __str__ = __repr__
+
+    def __bytes__(self) -> bytes:
+        return self.to_bytes()
+
+    def __buffer__(self, flag: int | inspect.BufferFlags) -> memoryview[int]:
+        if not self._buf:
+            raise BufferError("Cannot work with uninitialized bytes.")
+
+        return self._buf.__buffer__(flag)
+
+    def __contains__(self, byte: int) -> bool:
+        return byte in self._buf if self._buf else False
+
+    def __eq__(self, other: object, /) -> bool:
+        if not self._buf:
+            return False
+
+        if isinstance(other, collections.Sequence):
+            return self._buf.tolist() == other
+
+        if isinstance(other, bytes):
+            return self._buf.tobytes() == other
+
+        return self._buf.__eq__(other)
+
+    def __ne__(self, other: object, /) -> bool:
+        return not self.__eq__(other)
+
+    def __le__(self, other: object) -> bool:
+        if not self._buf:
+            return False
+
+        if not isinstance(other, Bytes):
+            return NotImplemented
+
+        if not other._buf:
+            return False
+
+        return self._buf <= other._buf
+
+    def __ge__(self, other: object) -> bool:
+        if not self._buf:
+            return False
+
+        if not isinstance(other, Bytes):
+            return NotImplemented
+
+        if not other._buf:
+            return False
+
+        return self._buf >= other._buf
+
+    def __lt__(self, other: object) -> bool:
+        if not self._buf:
+            return False
+
+        if not isinstance(other, Bytes):
+            return NotImplemented
+
+        if not other._buf:
+            return False
+
+        return self._buf < other._buf
+
+    def __gt__(self, other: object) -> bool:
+        if not self._buf:
+            return False
+
+        if not isinstance(other, Bytes):
+            return NotImplemented
+
+        if not other._buf:
+            return False
+
+        return self._buf > other._buf
+
+    @typing.overload
+    def __getitem__(self, index: slice) -> Bytes: ...
+
+    @typing.overload
+    def __getitem__(self, index: int) -> int: ...
+
+    def __getitem__(self, index: int | slice) -> int | Bytes:
+        if not self._buf:
+            raise IndexError("Index out of range")
+
+        if isinstance(index, slice):
+            return self.from_ptr(self._buf[index])
+
+        return self._buf[index]
+
+    def __reversed__(self) -> collections.Iterator[int]:
+        return reversed(self._buf or ())
+
+    def __hash__(self) -> int:
+        return 0 if not self._buf else hash(self._buf)
+
+    def __copy__(self) -> Bytes:
+        if not self._buf:
+            return Bytes()
+
+        return Bytes.from_ptr(self._buf.__copy__())
+
+    def __deepcopy__(self, unused: typing.Any, /) -> Bytes:
+        if not self._buf:
+            return Bytes()
+
+        return Bytes.from_ptr(self._buf.__deepcopy__(unused))
+
+
+@rustc_diagnostic_item("&mut [u8]")
+@typing.final
+class BytesMut(
+    Bytes,  # pyright: ignore - we want to inherit from `Bytes`.
+    collections.MutableSequence[int],
+):
+    """Provides mutable abstractions for working with UTF-8 compatible bytes.
+
+    It is an efficient container for storing and operating with bytes,
+    It is built on-top of `array.array[int]`, which means you get all of `array[int]`'s operations.
+
+    A `bytes` object is usually used within networking applications, but can also be used
+    elsewhere as well.
+
+    ## Construction
+    You can create a `BytesMut` object in multiple ways.
+
+    * `BytesMut()`: Initialize an empty `BytesMut` object
+    * `from_str`: Create `BytesMut` from `str`
+    * `from_bytes`: Create `BytesMut` from a `Buffer` bytes-like type
+    * `from_raw`: Create `BytesMut` from a `Rawish` type
+    * `from_ptr`: Create `BytesMut` that points to an `array.array[int]` without copying it
+    * `BytesMut.zeroed(count)`: Create `BytesMut` filled with `zeroes * count`.
+
+    Example
+    -------
+    ```py
+    from sain import BytesNut
+
+    buf = BytesMut()
+    buffer.put_bytes(b"Hello")
+    print(buffer) # [72, 101, 108, 108, 111]
+
+    buf.put(32) # space
+    assert buffer.to_bytes() == b"Hello "
+    ```
+    """
+
+    __slots__ = ("_buf",)
+
+    # construction
+    def __init__(self) -> None:
+        """Creates a new empty `BytesMut`.
+
+        This won't allocate the array and the returned `BytesMut` will be empty.
+        """
+        super().__init__()
+
+    @classmethod
+    def from_str(cls, s: str) -> BytesMut:
+        """Create a new `BytesMut` from a utf-8 string.
+
+        Example
+        -------
+        ```py
+        buffer = BytesMut.from_str("💀")
+        assert buffer.as_ref() == (240, 159, 146, 128)
+        ```
+        """
+        b = cls()
+        b._buf = array.array("B", s.encode(ENCODING))
+        return b
+
+    @classmethod
+    def from_ptr(cls, arr: array.array[int]) -> BytesMut:
+        """Create a new `BytesMut` from an array.
+
+        The returned `BytesMut` will directly point to `arr` without copying.
+
+        Example
+        -------
+        ```py
+        arr = array.array("B")
+        buffer = BytesMut.from_ptr(arr)
+        ```
+        """
+        assert_precondition(
+            arr.typecode == "B",
+            f"array type must be `B`, not `{arr.typecode}`",
+            TypeError,
+        )
+
+        b = cls()
+        b._buf = arr
+        return b
+
+    @classmethod
+    def from_bytes(cls, buf: Buffer) -> BytesMut:
+        """Create a new `BytesMut` from an initial bytes.
+
+        Example
+        -------
+        ```py
+        buffer = BytesMut.from_bytes(b"SIGNATURE")
+        ```
+        """
+        b = cls()
+        b._buf = array.array("B", buf)
+        return b
+
+    @classmethod
+    def from_raw(cls, raw: Rawish) -> BytesMut:
+        """Initialize a new `BytesMut` from a valid raw data type.
+
+        Example
+        -------
+        ```py
+        with open('file.txt', 'rb') as file:
+            buff = BytesMut.from_raw(file)
+
+        # in memory bytes io
+        bytes_io = io.BytesIO(b"data")
+        buffer1 = BytesMut.from_raw(bytes_io)
+
+        # in memory string io
+        string_io = io.StringIO("data")
+        buffer2 = BytesMut.from_raw(string_io)
+        ```
+        """
+        c = cls()
+        c._buf = array.array("B", unwrap_bytes(raw))
+        return c
+
+    @classmethod
+    def zeroed(cls, count: int) -> BytesMut:
+        """Initialize a new `BytesMut` filled with zeros * `count`.
+
+        Example
+        -------
+        ```py
+        ALLOC_SIZE = 1024 * 2
+        buffer = BytesMut.zeros(ALLOC_SIZE)
+        assert buffer.len() == ALLOC_SIZE
+        ```
+        """
+        c = cls()
+        c._buf = array.array("B", [0] * count)
+        return c
+
     # default methods.
 
     def extend(self, src: Buffer) -> None:
-        """Extend `self` from a buffer.
+        """Extend `self` from a `src`.
 
         Example
         -------
@@ -494,6 +973,36 @@ class Bytes(
             self._buf = array.array("B", [src])
         else:
             self._buf.append(src)
+
+    def put_float(self, src: float) -> None:
+        r"""Writes a single-precision (4 bytes) floating point number to `self` in big-endian byte order.
+
+        The valid range for the float value is `-3.402823466e38` to `3.402823466e38`.
+
+        Example
+        -------
+        ```py
+        buf = Bytes()
+        buf.put_float(1.2)
+        assert buf.to_bytes() == b'\x3f\x99\x99\x9a'
+        ```
+
+        Raises
+        ------
+        `OverflowError`
+            If `src` is out of range.
+        """
+        assert_precondition(
+            -3.402823466e38 <= src <= 3.402823466e38,
+            f"Float {src} is out of range for a single-precision float",
+            OverflowError,
+        )
+        bits = struct.pack(">f", src)
+
+        if self._buf is None:
+            self._buf = array.array("B", bits)
+        else:
+            self._buf.extend(bits)
 
     def put_char(self, char: str) -> None:
         """Append a single character to the buffer.
@@ -595,6 +1104,27 @@ class Bytes(
         """
         self.put_bytes(s.encode(ENCODING))
 
+    def replace(self, index: int, byte: int) -> None:
+        """Replace the byte at `index` with `byte`.
+
+        This method is `NOOP` if:
+        -------------------------
+        * `self` is empty or unallocated.
+        * `index` is out of range.
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([1, 2, 3])
+        buf.replace(1, 4)
+        assert buf == [1, 4, 3]
+        ```
+        """
+        if not self._buf or index < 0 or index >= self.len():
+            return
+
+        self._buf[index] = byte
+
     def fill(self, value: int) -> None:
         """Fills `self` with the given byte.
 
@@ -677,87 +1207,60 @@ class Bytes(
         """
         self[a], self[b] = self[b], self[a]
 
-    def len(self) -> int:
-        """Return the number of bytes in this buffer.
+    def as_mut_ptr(self) -> memoryview[int]:
+        """Returns a mutable pointer to the buffer data.
 
         Example
         -------
         ```py
-        buf = Bytes()
-        buf.put((1, 2, 3))
-        assert buf.len() == 3
+        buffer = BytesMut.from_str("ouv")
+        ptr = buffer.as_mut_ptr()
+        ptr[0] = ord(b'L')
+        assert buffer.to_bytes() == b"Luv"
         ```
         """
-        return self.__len__()
+        return self.__buffer__(0x100)
 
-    def size(self) -> int:
-        """The length in bytes of one array item in the internal representation.
+    def as_mut(self) -> _slice.SliceMut[int]:
+        """Get a mutable reference to the underlying sequence, without copying.
+
+        A `ReferenceError` is raised if the underlying sequence is not initialized.
 
         Example
         -------
         ```py
-        buf = Bytes.from_bytes([240, 159, 146, 150])
-        assert buf.size() == 1
+        buff = BytesMut.from_str("Hello")
+        ref = buff.as_mut()
+        ref.append(32)
+        del ref
+        assert buff.to_str() == "Hello "
         ```
         """
-        if not self._buf:
-            return 0
-        return self._buf.itemsize
+        if self._buf is not None:
+            return _slice.SliceMut(self)
 
-    def iter(self) -> _iter.TrustedIter[int]:
-        """Returns an iterator over the bytes of `self`.
+        raise ReferenceError("`self` must be initialized first.") from None
 
-        This iterator yields all `int`s from start to end.
+    def swap_remove(self, byte: int) -> int:
+        """Remove the first appearance of `item` from this buffer and return it.
+
+        Raises
+        ------
+        * `ValueError`: if `item` is not in this buffer.
+        * `MemoryError`: if this buffer hasn't allocated, Aka nothing has been pushed to it.
 
         Example
         -------
         ```py
-        buf = Bytes.from_bytes((1, 2, 3))
-        iterator = buf.iter()
-
-        # map each byte to a character
-        for element in iterator.map(chr):
-            print(element)
-        # ☺
-        # ☻
-        # ♥
+        buf = BytesMut.from_bytes([1, 2, 3, 4])
+        assert 1 == buf.swap_remove(1)
+        assert buf == [2, 3, 4]
         ```
         """
-        return _iter.into_iter(self)
+        if self._buf is None:
+            raise MemoryError("`self` is unallocated.") from None
 
-    def chars(self) -> _iter.Iterator[_ctypes.c_char]:
-        """Returns an iterator over the characters of `Bytes`.
-
-        This iterator yields all `int`s from start to end as a `ctypes.c_char`.
-
-        Example
-        -------
-        ```py
-        b = Bytes.from_str("Hello")
-        for char in b.chars():
-            print(char)
-
-        # c_char(b'H')
-        # c_char(b'e')
-        # c_char(b'l')
-        # c_char(b'l')
-        # c_char(b'o')
-        ```
-        """
-        # The built-in map is actually faster than our own pure python adapter impl.
-        return _iter.Iter(map(_ctypes.c_char, self))
-
-    def is_empty(self) -> bool:
-        """Check whether `self` contains any bytes or not.
-
-        Example
-        -------
-        ```py
-        buffer = Bytes()
-        assert buffer.is_empty()
-        ```
-        """
-        return not self._buf
+        return self._buf.pop(self.index(byte))
 
     def truncate(self, size: int) -> None:
         """Shortens the bytes, keeping the first `size` elements and dropping the rest.
@@ -765,7 +1268,7 @@ class Bytes(
         Example
         -------
         ```py
-        buf = Bytes.from_bytes([0, 0, 0, 0])
+        buf = BytesMut.from_bytes([0, 0, 0, 0])
         buf.truncate(1)
         assert buf.len() == 1
         ```
@@ -775,87 +1278,90 @@ class Bytes(
 
         del self._buf[size:]
 
-    def split_off(self, at: int) -> Bytes:
+    def split_off_mut(self, at: int) -> BytesMut:
         """Split the bytes off at the specified position, returning a new
-        `Bytes` at the range of `[at : len]`, leaving `self` at `[at : bytes_len]`.
+        `BytesMut` at the range of `[at : len]`, leaving `self` at `[at : bytes_len]`.
 
         if this bytes is empty, `self` is returned unchanged.
 
         Example
         -------
         ```py
-        origin = Bytes.from_bytes((1, 2, 3, 4))
-        split = origin.split_off(2)
+        origin = BytesMut.from_bytes((1, 2, 3, 4))
+        split = origin.split_off_mut(2)
 
         print(origin, split)  # [1, 2], [3, 4]
         ```
 
         Raises
         ------
-        `RuntimeError`
+        `IndexError`
             This method will raise if `at` > `len(self)`
         """
         len_ = self.len()
         if at > len_:
-            raise RuntimeError(
-                f"Index `at` ({at}) should be <= than len of `self` ({len_}) "
+            raise IndexError(
+                f"the index of `at` ({at}) should be <= than len of `self` ({len_}) "
             ) from None
 
-        # Either the list is empty or uninit.
         if not self._buf:
             return self
 
-        split = self[at:len_]  # split the items into a new buffer.
-        del self._buf[at:len_]  # remove the items from the original list.
+        split = BytesMut.from_ptr(self._buf[at:len_])
+        del self._buf[at:len_]
         return split
 
-    def split_first(self) -> _option.Option[tuple[int, collections.Sequence[int]]]:
+    def split_first_mut(self) -> Option[tuple[int, BytesMut]]:
         """Split the first and rest elements of the bytes, If empty, `None` is returned.
+
+        Returns a tuple of (first, rest) where rest is a mutable sequence.
 
         Example
         -------
         ```py
-        buf = Bytes.from_bytes([1, 2, 3])
-        split = buf.split_first()
+        buf = BytesMut.from_bytes([1, 2, 3])
+        split = buf.split_first_mut()
         assert split == Some((1, [2, 3]))
         ```
         """
         if not self._buf:
             return _option.NOTHING
 
-        # optimized to only one element in the buffer.
         if self.len() == 1:
-            return _option.Some((self[0], ()))
+            return _option.Some((self[0], BytesMut()))
 
-        first, *rest = self._buf
+        first = self[0]
+        rest = self[1:]
         return _option.Some((first, rest))
 
-    def split_last(self) -> _option.Option[tuple[int, collections.Sequence[int]]]:
+    def split_last_mut(self) -> Option[tuple[int, Bytes]]:
         """Returns the last and rest of the elements of the bytes, If `self` is empty, `None` is returned.
+
+        Returns a tuple of (last, rest) where rest is a mutable sequence.
 
         Example
         -------
         ```py
-        buf = Bytes.from_bytes([0, 1, 2])
-        last, elements = buf.split_last().unwrap()
-        assert (last, elements) == (3, [1, 2])
+        buf = BytesMut.from_bytes([0, 1, 2])
+        last, elements = buf.split_last_mut().unwrap()
+        assert (last, elements) == (2, [0, 1])
         ```
         """
         if not self._buf:
             return _option.NOTHING
 
         len_ = self.len()
-        # optimized to only one element in the buffer.
         if len_ == 1:
-            return _option.Some((self[0], ()))
+            return _option.Some((self[0], BytesMut()))
 
-        last, *rest = self[-1], *self[:-1]
+        last = self[-1]
+        rest = self[:-1]
         return _option.Some((last, rest))
 
-    def split_at(self, mid: int) -> tuple[Bytes, Bytes]:
+    def split_at_mut(self, mid: int) -> tuple[BytesMut, BytesMut]:
         """Divide `self` into two at an index.
 
-        The first will contain all bytes from `[0:mid]` excluding `mid` it self.
+        The first will contain all bytes from `[0:mid]` excluding `mid` itself.
         and the second will contain the remaining bytes.
 
         if `mid` > `self.len()`, Then all bytes will be moved to the left,
@@ -864,12 +1370,12 @@ class Bytes(
         Example
         -------
         ```py
-        buffer = Bytes.from_bytes((1, 2, 3, 4))
-        left, right = buffer.split_at(0)
+        buffer = BytesMut.from_bytes((1, 2, 3, 4))
+        left, right = buffer.split_at_mut(0)
         assert left == [] and right == [1, 2, 3, 4]
 
-        left, right = buffer.split_at(2)
-        assert left == [1, 2] and right == [2, 3]
+        left, right = buffer.split_at_mut(2)
+        assert left == [1, 2] and right == [3, 4]
         ```
 
         The is roughly the implementation
@@ -879,66 +1385,7 @@ class Bytes(
         """
         return self[0:mid], self[mid:]
 
-    # layout methods.
-
-    def copy(self) -> Bytes:
-        """Create a copy of the bytes.
-
-        Example
-        -------
-        ```py
-        original = Bytes.from_bytes([255, 255, 255, 0])
-        copy = original.copy()
-        ```
-        """
-        if not self._buf:
-            return Bytes()
-
-        return self.from_ptr(self._buf[:])
-
-    def clear(self) -> None:
-        """Clear the buffer.
-
-        Example
-        -------
-        ```py
-        buf = Bytes.from_bytes([255])
-        buf.clear()
-
-        assert buf.is_empty()
-        ```
-        """
-        if not self._buf:
-            return
-
-        del self._buf[:]
-
-    def index(self, v: int, start: int = 0, stop: int = _sys.maxsize) -> int:
-        """Return the smallest `i` such that `i` is the index of the
-        first occurrence of `v` in the buffer.
-
-        The optional arguments start and stop can be specified to search for x within a
-        subsection of the array. Raise ValueError if x is not found
-        """
-        if not self._buf:
-            raise ValueError from None
-
-        return self._buf.index(v, start, stop)
-
-    def count(self, x: int) -> int:
-        """Return the number of occurrences of `x` in the buffer.
-
-        Example
-        --------
-        ```py
-        buf = Bytes([32, 32, 31])
-        assert buf.count(32) == 2
-        ```
-        """
-        if self._buf is None:
-            return 0
-
-        return self._buf.count(x)
+    # * Layout * #
 
     def insert(self, index: int, value: int) -> None:
         """Insert a new item with `value` in the buffer before position `index`.
@@ -956,7 +1403,7 @@ class Bytes(
         Example
         -------
         ```py
-        buf = Bytes((21, 32, 44))
+        buf = BytesMut((21, 32, 44))
         assert buf.pop() == Some(44)
         ```
         """
@@ -965,33 +1412,12 @@ class Bytes(
 
         return _option.Some(self._buf.pop(i))
 
-    def swap_remove(self, byte: int) -> int:
-        """Remove the first appearance of `item` from this buffer and return it.
-
-        Raises
-        ------
-        * `ValueError`: if `item` is not in this buffer.
-        * `MemoryError`: if this buffer hasn't allocated, Aka nothing has been pushed to it.
-
-        Example
-        -------
-        ```py
-        buf = Bytes.from_bytes([1, 2, 3, 4])
-        assert 1 == buf.swap_remove(1)
-        assert buf == [2, 3, 4]
-        ```
-        """
-        if self._buf is None:
-            raise MemoryError("`self` is unallocated.") from None
-
-        return self._buf.pop(self.index(byte))
-
     def remove(self, i: int) -> None:
         """Remove the first appearance of `i` from `self`.
 
         Example
         ```py
-        buf = Bytes.from_bytes([1, 1, 2, 3, 4])
+        buf = BytesMut.from_bytes([1, 1, 2, 3, 4])
         buf.remove(1)
         print(buf) # [1, 2, 3, 4]
         ```
@@ -1001,98 +1427,44 @@ class Bytes(
 
         self._buf.remove(i)
 
-    # special methods
+    def clear(self) -> None:
+        """Clear the buffer.
 
-    def __iter__(self) -> collections.Iterator[int]:
-        if self._buf:
-            return self._buf.__iter__()
+        Example
+        -------
+        ```py
+        buf = BytesMut.from_bytes([255])
+        buf.clear()
 
-        return ().__iter__()
-
-    def __len__(self) -> int:
-        return len(self._buf) if self._buf else 0
-
-    def __repr__(self) -> str:
+        assert buf.is_empty()
+        ```
+        """
         if not self._buf:
-            return "[]"
+            return
 
-        return "[" + ", ".join(str(x) for x in self._buf) + "]"
+        del self._buf[:]
 
-    __str__ = __repr__
-
-    def __bytes__(self) -> bytes:
-        return self.to_bytes()
-
-    def __buffer__(self, flag: int | inspect.BufferFlags) -> memoryview[int]:
+    def byteswap(self) -> None:
+        """Swap the byte order of the bytes in `self`."""
         if not self._buf:
-            raise BufferError("Cannot work with uninitialized bytes.")
+            return
 
-        return self._buf.__buffer__(flag)
+        self._buf.byteswap()
 
-    def __contains__(self, byte: int) -> bool:
-        return byte in self._buf if self._buf else False
+    def copy(self) -> BytesMut:
+        """Create a copy of the bytes.
 
-    def __eq__(self, other: object, /) -> bool:
+        Example
+        -------
+        ```py
+        original = BytesMut.from_bytes([255, 255, 255, 0])
+        copy = original.copy()
+        ```
+        """
         if not self._buf:
-            return False
+            return BytesMut()
 
-        if isinstance(other, list):
-            # this conversion may or may not cost,
-            # users usually should not compare bytes this way anyway.
-            return self._buf.tolist() == other
-
-        return self._buf.__eq__(other)
-
-    def __ne__(self, other: object, /) -> bool:
-        return not self.__eq__(other)
-
-    def __le__(self, other: object) -> bool:
-        if not self._buf:
-            return False
-
-        if not isinstance(other, Bytes):
-            return NotImplemented
-
-        if not other._buf:
-            return False
-
-        return self._buf <= other._buf
-
-    def __ge__(self, other: object) -> bool:
-        if not self._buf:
-            return False
-
-        if not isinstance(other, Bytes):
-            return NotImplemented
-
-        if not other._buf:
-            return False
-
-        return self._buf >= other._buf
-
-    def __lt__(self, other: object) -> bool:
-        if not self._buf:
-            return False
-
-        if not isinstance(other, Bytes):
-            return NotImplemented
-
-        if not other._buf:
-            return False
-
-        return self._buf < other._buf
-
-    def __gt__(self, other: object) -> bool:
-        if not self._buf:
-            return False
-
-        if not isinstance(other, Bytes):
-            return NotImplemented
-
-        if not other._buf:
-            return False
-
-        return self._buf > other._buf
+        return self.from_ptr(self._buf[:])
 
     def __setitem__(self, index: int, value: int):
         if not self._buf:
@@ -1100,26 +1472,35 @@ class Bytes(
 
         self._buf[index] = value
 
-    @typing.overload
-    def __getitem__(self, index: slice) -> Bytes: ...
-
-    @typing.overload
-    def __getitem__(self, index: int) -> int: ...
-
-    def __getitem__(self, index: int | slice) -> int | Bytes:
-        if not self._buf:
-            raise IndexError("Index out of range")
-
-        if isinstance(index, slice):
-            return self.from_ptr(self._buf[index])
-
-        return self._buf[index]
-
     def __delitem__(self, key: typing.SupportsIndex | slice, /) -> None:
         if not self._buf:
             return
 
         del self._buf[key]
 
-    def __reversed__(self) -> collections.Iterator[int]:
-        return reversed(self._buf or ())
+    @typing.overload
+    def __getitem__(self, index: slice) -> BytesMut: ...
+
+    @typing.overload
+    def __getitem__(self, index: int) -> int: ...
+
+    def __getitem__(self, index: int | slice) -> int | BytesMut:
+        if not self._buf:
+            raise IndexError("index out of range")
+
+        if isinstance(index, slice):
+            return self.from_ptr(self._buf[index])
+
+        return self._buf[index]
+
+    def __copy__(self) -> BytesMut:
+        if not self._buf:
+            return BytesMut()
+
+        return BytesMut.from_ptr(self._buf.__copy__())
+
+    def __deepcopy__(self, unused: typing.Any, /) -> BytesMut:
+        if not self._buf:
+            return BytesMut()
+
+        return BytesMut.from_ptr(self._buf.__deepcopy__(unused))

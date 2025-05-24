@@ -48,7 +48,7 @@ class SpecContains(typing.Generic[T]):
 
     @typing.final
     def contains(self: collections.Container[T], pat: Pattern[T]) -> bool:
-        """Check if `pat` is contained in `self.
+        """Check if `pat` is contained in `self`.
 
         `pat` here can be either an element of type `T` or an iterable of type `T`.
 
@@ -59,6 +59,7 @@ class SpecContains(typing.Generic[T]):
         vec = Vec([1, 2, 3, 4])
         assert vec.contains(1) is True
         assert vec.contains([3, 4]) is True
+        assert vec.contains(map(int, ['1', '2'])) is True
         ```
 
         The implementation is roughly this simple:

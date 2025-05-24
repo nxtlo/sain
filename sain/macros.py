@@ -93,6 +93,7 @@ if typing.TYPE_CHECKING:
         "unsafe",
         # primitives
         "&[u8]",
+        "&mut [u8]",
     ]
     # fmt: on
 
@@ -150,6 +151,7 @@ _MAP_TO_PATH: dict[RustItem, typing.LiteralString] = {
     "unsafe": "std/keyword.unsafe.html",
     # primitives
     "&[u8]": "std/primitive.slice.html",
+    "&mut [u8]": "std/primitive.slice.html",
 }
 
 _RUSTC_DOCS = "https://doc.rust-lang.org"
@@ -209,7 +211,7 @@ def rustc_diagnostic_item(item: RustItem, /) -> collections.Callable[[T], T]:
 
 def assert_precondition(
     condition: bool,
-    message: typing.LiteralString = "",
+    message: str = "",
     exception: type[BaseException] = Exception,
 ) -> None:
     """Checks if `condition` is true, raising an exception if not.

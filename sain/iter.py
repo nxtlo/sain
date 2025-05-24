@@ -827,7 +827,9 @@ class Iterator(
         return self.next()
 
     def sum(self: Sum) -> int:
-        """Sums an iterator of a possible type that can be converted to an integer.
+        """Sums an iterator of a possible type `T` that can be converted to an integer.
+
+        where `T` is a typeof (`int`, `float`, `str`, `ReadableBuffer`, `SupportsTrunc`, `SupportsIndex`).
 
         Example
         -------
@@ -1112,7 +1114,23 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         """
         return self.__next__()
 
-    def as_slice(self) -> collections.Sequence[Item]:
+    @unsafe
+    def set_len(self, new_len: int) -> None:
+        """Sets the length of the iterator to `new_len`.
+
+        This is unsafe and should only be used if you know what you're doing.
+
+        Example
+        -------
+        ```py
+        iterator = Iter([1, 2, 3])
+        iterator.set_len(2)
+        assert iterator.len() == 2
+        ```
+        """
+        self._len = new_len
+
+    def as_slice(self) -> _vec.Slice[Item]:
         """Returns an immutable slice of all elements that have not been yielded
 
         Example
@@ -1124,7 +1142,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         assert iterator.as_slice() == [2, 3]
         ```
         """
-        return self.__alive[-self._len :]
+        return _vec.Slice(self.__alive[-self._len :])
 
     def __repr__(self) -> str:
         return f"TrustedIter({self.as_slice()})"

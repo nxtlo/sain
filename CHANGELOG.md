@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `HashMap.get_with`
 - `HashMap.get_pairs`
 - `slice.SpecContains`
+- `BytesMut`
 
 ### Changed
 
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 doesn't actually get mutated.
 - `Bytes.leak` doesn't returned an optional array now.
 - `Iterator.collect` now collects into a list instead of tuple.
+- Separated the implementation of `Bytes` and `BytesMut`
 
 ### Fixed
 
