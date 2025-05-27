@@ -1,9 +1,7 @@
-# sain
+# sain — Write safe Python code like Rust
 
-a dependency-free library which implements a few of Rust's core crates purely in Python.
-It offers a few of the core Rust features such as `Vec<T>`, `Result<T, E>`, `Option<T>` and more. See the equivalent type section below.
-
-Concrete `std` types are implemented. Check the [project documentation](https://nxtlo.github.io/sain/sain.html)
+a dependency-free which implements Rust's core crates, purely, in Python.
+Offering core Rust items such as `Vec<T>`, `Result<T, E>`, `Option<T>` and more. See the built-in types section below.
 
 ## Install
 
@@ -13,17 +11,25 @@ Python 3.10 or higher is required.
 pip install sain
 ```
 
+## Overview
+
+sain is built completely on-top of Python's stdlib, inspired by The Rust Standard Library, designed to bring modern,
+safe, and ergonomic data structures and utilities to Python.
+
+The goal is to provide developers with high-level abstractions and low-level
+control similar to what Rust offers, making it easier to write robust, and maintainable code.
+
 ## Example
 
-In this example we are writing a simple app that takes advantage of Rust's types in Python.
+In this example we are writing a simple app that takes advantage of Rust's types which're implemented in Python.
 
 This example provides a simple library that contains a `Vec` of books. Here, we take advantage of the `Vec` type and its idiomatic methods.
 
 ```py
 from __future__ import annotations
-from sain import Result, Ok, Err  # used for error handling
-from sain import Option  # used for absense of a value, similar to `T | None`
-from sain import Vec  # A feature-rich `list` type.
+from sain import Result, Ok, Err  # used for safe error handling.
+from sain import Option  # used for absense of a value, similar to `T | None`.
+from sain import Vec  # A replacement for `list` type.
 
 from dataclasses import dataclass, field
 
@@ -82,23 +88,30 @@ match lib.find_or("Sci-Fi"):
 print(lib.books_for("Hugh Howey"))  # [Book("Silo", ...)]
 ```
 
+## How to use this library
+
+* `Option`, `Result`, `Iterator`, `*/collections`, `Default` - The are core routines which are used almost everywhere within the library. You can easily opt these in your projects.
+* `sync`, `convert`, `error`, `macros`, `cfg` - These are also core impls, but not widely used as the ones above.
+* `maybe_uninit`, `futures`, `boxed` - You will probably see those used once or less anywhere, they're designed for lower-level, general use.
+
 ## built-in types
 
 | name in Rust                  | name in Python                   | note                                                                                                                       | restrictions               |
 | ----------------------------- | -------------------------------  | -------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | Option\<T>, Some(T), None     | Option[T], Some(T), Some(None)   | Some(None) has the same layout as `None` in Rust                                                                           |                            |
-| Result\<T, E>, Ok(T), Err(E)  | Result[T, E], Ok(T), Err(E)      |                                                                                                                            |                            |
-| Vec\<T>                       | Vec[T]                           |                                                                                                                            |                            |
-| HashMap\<K, V>                      | HashMap[K, V]                          |                                                                                      |                            |
-| bytes::Bytes                      |  Bytes                          |                                                                                      |                            |
+| Result\<T, E>, Ok(T), Err(E)  | Result[T, E], Ok(T), Err(E)      | Basically a better and more verbose `try/except`                                                                           |                            |
+| Vec\<T>                       | Vec[T]                           | Same layout as `list[T]`                                                                                                   |                            |
+| HashMap\<K, V>                | HashMap[K, V]                    | Same layout as `dict[K, V]`                                                                                                |                            |
+| bytes::Bytes                  |  Bytes                           |                                                                                                                            |                            |
+| bytes::BytesMut               |  BytesMut                        |                                                                                                                            |                            |
 | LazyLock\<T>                  | Lazy[T]                          |                                                                                                                            |                            |
 | OnceLock\<T>                  | Once[T]                          |                                                                                                                            |                            |
-| Box\<T>                       | Box[T]                           | this isn't a heap box, [See]([https://nxtlo.github.io/sain/sain/boxed.html](https://nxtlo.github.io/sain/sain/boxed.html)) |                            |
+| Box\<T>                       | Box[T]                           | this isn't a heap box                                                                                                      |                            |
 | MaybeUninit\<T>               | MaybeUninit[T]                   | they serve the same purpose, but slightly different                                                                        |                            |
-| &dyn Default                       | Default[T]                       |                                                                                                                            |                            |
+| impl Default                  | Default[T]                       |                                                                                                                       |                            |
 | &dyn Error                    | Error                            |                                                                                                                            |                            |
-| &dyn Iterator\<T>                  | Iterator[T]                      |                                                                                                                            |                            |
-| Iter\<'a, T>                  | Iter[T]                          | collections called by `.iter()` are built from this type                                                                     |                            |
+| impl Iterator\<T>             | Iterator[T]                      |                                                                                                                       |                            |
+| Iter\<'a, T>                  | Iter[T]                          | collections called by `.iter()` are built from this type                                                                   |                            |
 | iter::once::\<T>()            | iter.once[T]                     |                                                                                                                            |                            |
 | iter::empty::\<T>()           | iter.empty[T]                    |                                                                                                                            |                            |
 | iter::repeat::\<T>()          | iter.repeat[T]                   |                                                                                                                            |                            |
@@ -109,8 +122,11 @@ print(lib.books_for("Hugh Howey"))  # [Book("Silo", ...)]
 | #[deprecated]                 | @deprecated()                    | will get removed when it get stabilized in `warnings` in Python `3.13`                                                     |                            |
 | unimplemented!()              | @unimplemented()                 |                                                                                                                            |                            |
 
-## Notes
+## Remaining work
 
-Since Rust is a compiled language, Whatever predict in `cfg` and `cfg_attr` returns False will not compile.
+This is still early days for `sain`, it is no where near as stable as Python's stdlib.
 
-But there's no such thing as this in Python, So `RuntimeError` will be raised and whatever was predicated will not run.
+This project mainly started as a fun / learning experience but turned into something more inspiring.
+
+The release cycles were breaking due to poor decision making at first, but it _should_ be stable enough now.
+
