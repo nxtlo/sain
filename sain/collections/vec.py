@@ -553,10 +553,14 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         """
         if not self._ptr:
             return
-
-        for idx, e in enumerate(self._ptr):
-            if not f(e):
+        
+        idx = 0
+        while idx < len(self._ptr):
+            if not f(self._ptr[idx]):
                 del self._ptr[idx]
+            else:
+                idx += 1
+
 
     def swap_remove(self, item: T) -> T:
         """Remove the first appearance of `item` from this vector and return it.
