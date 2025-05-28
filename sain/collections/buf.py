@@ -46,19 +46,19 @@ from sain import convert
 from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
-from sain.macros import assert_precondition
-from sain.macros import rustc_diagnostic_item
+from sain.macros import assert_precondition, unsafe, rustc_diagnostic_item
 
 from . import slice as _slice
 from . import vec as _vec
 
 if typing.TYPE_CHECKING:
     import inspect
+    from typing_extensions import Self
 
     from sain import Option
     from sain import Result
 
-Rawish: typing.TypeAlias = _io.StringIO | _io.BytesIO | _io.BufferedReader | memoryview
+Rawish: typing.TypeAlias = _io.StringIO | _io.BytesIO | _io.BufferedReader
 """A type hint for some raw data type.
 
 This can be any of:
@@ -76,6 +76,7 @@ This can be any of:
 * `Bytes`
 * `bytearray`
 * `Iterable[int]`
+* `memoryview[int]`
 """
 
 ENCODING = "utf-8"
@@ -84,8 +85,6 @@ ENCODING = "utf-8"
 def unwrap_bytes(data: Rawish) -> bytes:
     if isinstance(data, _io.StringIO):
         buf = bytes(data.read(), encoding=ENCODING)
-    elif isinstance(data, memoryview):
-        buf = data.tobytes()
     else:
         # BufferedReader | BytesIO
         buf = data.read()
@@ -120,6 +119,11 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
     buf = Bytes.from_str("Hello")
     print(buf) # [72, 101, 108, 108, 111]
+    # buf is currently immutable, to make it mutable use `buf.to_mut()`
+    # the conversion costs nothing, as it just points to the same underlying array.
+    buf_mut = buf.to_mut()
+    buf_mut.put(32)
+    assert buf_mut.to_str() == "Hello "
     ```
     """
 
@@ -142,7 +146,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         -------
         ```py
         buffer = Bytes.from_str("💀")
-        assert buffer.as_ref() == (240, 159, 146, 128)
         ```
         """
         b = cls()
@@ -150,7 +153,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         return b
 
     @classmethod
-    def from_ptr(cls, arr: array.array[int]) -> Bytes:
+    def from_ptr(cls, arr: array.array[int]) -> Self:
         """Create a new `Bytes` from an array.
 
         The returned `Bytes` will directly point to `arr` without copying.
@@ -177,8 +180,30 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         b._buf = arr
         return b
 
+    @unsafe
     @classmethod
-    def from_bytes(cls, buf: Buffer) -> Bytes:
+    def from_ptr_unchecked(cls, arr: array.array[int]) -> Self:
+        """Create a new `Bytes` from an array, without checking the type code.
+
+        The returned `Bytes` will directly point to `arr` without copying.
+
+        ## Safety
+
+        The caller must ensure that `arr` is of type `array.array[int]` with type code `B`.
+
+        Example
+        -------
+        ```py
+        arr = array.array("B", b"Hello")
+        buffer = Bytes.from_ptr_unchecked(arr)
+        ```
+        """
+        b = cls()
+        b._buf = arr
+        return b
+
+    @classmethod
+    def from_bytes(cls, buf: Buffer) -> Self:
         """Create a new `Bytes` from an initial bytes.
 
         Example
@@ -192,7 +217,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         return b
 
     @classmethod
-    def from_raw(cls, raw: Rawish) -> Bytes:
+    def from_raw(cls, raw: Rawish) -> Self:
         """Initialize a new `Bytes` in-place from a valid raw data type.
 
         Example
@@ -214,7 +239,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         return c
 
     @classmethod
-    def zeroed(cls, count: int) -> Bytes:
+    def zeroed(cls, count: int) -> Self:
         """Initialize a new `Bytes` filled with `0 * count`.
 
         Example
@@ -363,6 +388,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def as_ptr(self) -> memoryview[int]:
         """Returns a read-only pointer to the buffer data.
 
+        `pointer` here referes to a `memoryview` object.
+
         Example
         -------
         ```py
@@ -413,7 +440,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         buffer = Bytes.from_bytes([0, 0, 0, 0])
         ```
         """
-        return BytesMut.from_ptr(self.leak())
+        return BytesMut.from_ptr_unchecked(self.leak())
 
     def raw_parts(
         self,
@@ -624,7 +651,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if not self._buf:
             return Bytes()
 
-        return self.from_ptr(self._buf[:])
+        return self.from_ptr_unchecked(self._buf[:])
 
     def index(self, v: int, start: int = 0, stop: int = _sys.maxsize) -> int:
         """Return the smallest `i` such that `i` is the index of the first occurrence of `v` in the buffer.
@@ -757,7 +784,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             raise IndexError("Index out of range")
 
         if isinstance(index, slice):
-            return self.from_ptr(self._buf[index])
+            return self.from_ptr_unchecked(self._buf[index])
 
         return self._buf[index]
 
@@ -771,13 +798,13 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if not self._buf:
             return Bytes()
 
-        return Bytes.from_ptr(self._buf.__copy__())
+        return Bytes.from_ptr_unchecked(self._buf.__copy__())
 
     def __deepcopy__(self, unused: typing.Any, /) -> Bytes:
         if not self._buf:
             return Bytes()
 
-        return Bytes.from_ptr(self._buf.__deepcopy__(unused))
+        return Bytes.from_ptr_unchecked(self._buf.__deepcopy__(unused))
 
 
 @rustc_diagnostic_item("&mut [u8]")
@@ -820,104 +847,12 @@ class BytesMut(
 
     __slots__ = ("_buf",)
 
-    # construction
     def __init__(self) -> None:
         """Creates a new empty `BytesMut`.
 
         This won't allocate the array and the returned `BytesMut` will be empty.
         """
         super().__init__()
-
-    @classmethod
-    def from_str(cls, s: str) -> BytesMut:
-        """Create a new `BytesMut` from a utf-8 string.
-
-        Example
-        -------
-        ```py
-        buffer = BytesMut.from_str("💀")
-        assert buffer.as_ref() == (240, 159, 146, 128)
-        ```
-        """
-        b = cls()
-        b._buf = array.array("B", s.encode(ENCODING))
-        return b
-
-    @classmethod
-    def from_ptr(cls, arr: array.array[int]) -> BytesMut:
-        """Create a new `BytesMut` from an array.
-
-        The returned `BytesMut` will directly point to `arr` without copying.
-
-        Example
-        -------
-        ```py
-        arr = array.array("B")
-        buffer = BytesMut.from_ptr(arr)
-        ```
-        """
-        assert_precondition(
-            arr.typecode == "B",
-            f"array type must be `B`, not `{arr.typecode}`",
-            TypeError,
-        )
-
-        b = cls()
-        b._buf = arr
-        return b
-
-    @classmethod
-    def from_bytes(cls, buf: Buffer) -> BytesMut:
-        """Create a new `BytesMut` from an initial bytes.
-
-        Example
-        -------
-        ```py
-        buffer = BytesMut.from_bytes(b"SIGNATURE")
-        ```
-        """
-        b = cls()
-        b._buf = array.array("B", buf)
-        return b
-
-    @classmethod
-    def from_raw(cls, raw: Rawish) -> BytesMut:
-        """Initialize a new `BytesMut` from a valid raw data type.
-
-        Example
-        -------
-        ```py
-        with open('file.txt', 'rb') as file:
-            buff = BytesMut.from_raw(file)
-
-        # in memory bytes io
-        bytes_io = io.BytesIO(b"data")
-        buffer1 = BytesMut.from_raw(bytes_io)
-
-        # in memory string io
-        string_io = io.StringIO("data")
-        buffer2 = BytesMut.from_raw(string_io)
-        ```
-        """
-        c = cls()
-        c._buf = array.array("B", unwrap_bytes(raw))
-        return c
-
-    @classmethod
-    def zeroed(cls, count: int) -> BytesMut:
-        """Initialize a new `BytesMut` filled with zeros * `count`.
-
-        Example
-        -------
-        ```py
-        ALLOC_SIZE = 1024 * 2
-        buffer = BytesMut.zeros(ALLOC_SIZE)
-        assert buffer.len() == ALLOC_SIZE
-        ```
-        """
-        c = cls()
-        c._buf = array.array("B", [0] * count)
-        return c
 
     # default methods.
 
@@ -986,7 +921,7 @@ class BytesMut(
         Example
         -------
         ```py
-        buf = Bytes()
+        buf = BytesMut()
         buf.put_float(1.2)
         assert buf.to_bytes() == b'\x3f\x99\x99\x9a'
         ```
@@ -1016,7 +951,7 @@ class BytesMut(
         Example
         -------
         ```py
-        buf = Bytes()
+        buf = BytesMut()
         buf.put_char('a')
         assert buf.to_str() == "a"
         ```
@@ -1035,7 +970,7 @@ class BytesMut(
         Example
         -------
         ```py
-        buffer = Bytes()
+        buffer = BytesMut()
         # A file descriptor's contents
         with open('file.txt', 'rb') as file:
             buffer.put_raw(file)
@@ -1068,7 +1003,7 @@ class BytesMut(
         Example
         -------
         ```py
-        buf = Bytes.from_bytes(b"hello")
+        buf = BytesMut.from_bytes(b"hello")
         buf.put_bytes([32, 119, 111, 114, 108, 100])
         assert buf.to_str() == "hello world"
         ```
@@ -1095,7 +1030,7 @@ class BytesMut(
         Example
         -------
         ```py
-        buffer = Bytes()
+        buffer = BytesMut()
         buffer.put_str("hello")
 
         assert buffer.to_str() == "hello"
@@ -1119,7 +1054,7 @@ class BytesMut(
         Example
         -------
         ```py
-        buf = Bytes.from_bytes([1, 2, 3])
+        buf = BytesMut.from_bytes([1, 2, 3])
         buf.replace(1, 4)
         assert buf == [1, 4, 3]
         ```
@@ -1128,6 +1063,53 @@ class BytesMut(
             return
 
         self._buf[index] = byte
+
+    def replace_with(self, index: int, f: collections.Callable[[int], int]) -> None:
+        """Replace the byte at `index` with a byte returned from `f`.
+
+        The signature of `f` is `Fn(int) -> int`, where the argument is the old byte.
+
+        ## This method is `NOOP` if:
+        * `self` is empty or unallocated.
+        * `index` is out of range.
+
+        Example
+        -------
+        ```py
+        buf = BytesMut.from_bytes([1, 2, 3])
+        buf.replace_with(1, lambda prev: prev * 2)
+        assert buf == [1, 4, 3]
+        ```
+        """
+        if not self._buf or index < 0 or index >= self.len():
+            return
+
+        old = self._buf[index]
+        self._buf[index] = f(old)
+
+    def offset(self, f: collections.Callable[[int], int]) -> None:
+        """Modify each byte in the buffer with a new byte returned from `f`.
+
+        The signature of `f` is `Fn(int) -> int`, where the argument is the previous byte.
+
+        Example
+        -------
+        ```py
+        buf = BytesMut.from_bytes([1, 2, 3])
+        buf.offset(lambda prev: prev * 2)
+        assert buf == [2, 4, 6]
+        ```
+
+        This method is `NOOP` if `self` is empty or unallocated.
+        """
+
+        if not self._buf:
+            return
+
+        for index in range(len(self._buf)):
+            self._buf[index] = f(self._buf[index])
+
+    # TODO: impl dedup, dedup_by, retain
 
     def fill(self, value: int) -> None:
         """Fills `self` with the given byte.
@@ -1214,6 +1196,8 @@ class BytesMut(
     def as_mut_ptr(self) -> memoryview[int]:
         """Returns a mutable pointer to the buffer data.
 
+        `pointer` here referes to a `memoryview` object.
+
         Example
         -------
         ```py
@@ -1269,7 +1253,7 @@ class BytesMut(
         assert modified == [32, 23]
         ```
         """
-        return Bytes.from_ptr(self.leak())
+        return Bytes.from_ptr_unchecked(self.leak())
 
     def swap_remove(self, byte: int) -> int:
         """Remove the first appearance of `item` from this buffer and return it.
@@ -1519,7 +1503,7 @@ class BytesMut(
             raise IndexError("index out of range")
 
         if isinstance(index, slice):
-            return self.from_ptr(self._buf[index])
+            return self.from_ptr_unchecked(self._buf[index])
 
         return self._buf[index]
 
@@ -1527,10 +1511,10 @@ class BytesMut(
         if not self._buf:
             return BytesMut()
 
-        return BytesMut.from_ptr(self._buf.__copy__())
+        return BytesMut.from_ptr_unchecked(self._buf.__copy__())
 
     def __deepcopy__(self, unused: typing.Any, /) -> BytesMut:
         if not self._buf:
             return BytesMut()
 
-        return BytesMut.from_ptr(self._buf.__deepcopy__(unused))
+        return BytesMut.from_ptr_unchecked(self._buf.__deepcopy__(unused))

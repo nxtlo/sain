@@ -75,71 +75,44 @@ class Error(ToString, typing.Protocol):
     -------
     ```py
     import requests
+    import http
     from dataclasses import dataclass
 
-    from sain import Error, Option, Some
+    from sain import Error
     from sain import Result, Ok, Err
 
-    # Base error.
-    class HTTPError(Error): ...
-
+    # an http error.
     @dataclass
-    class NotFound(HTTPError):
-        message = "The response returned [404]: not found."
-        http_status = 404
+    class HTTPError(Error):
         response: requests.Response
+        kind: http.HTTPStatus
+        message: str = ""
 
         def description(self) -> str:
-            return "Couldn't find what you're looking for " + self.response.url
-
-        # It is not necessary to define this method,
-        # it just gives more context to the user handling this error.
-        def source(self) -> Option[type[HTTPError]]:
-            return Some(HTTPError)
-
-    @dataclass
-    class UserNotFound(NotFound):
-        user_id: int
-
-        def __post_init__(self) -> None:
-            request = self.response.request
-            self.message = f"User {self.user_id} fetched from {request.path_url} was not found."
-
-        # It is not necessary to define this method,
-        # it just gives more context to the user handling this error.
-        def source(self) -> Option[type[NotFound]]:
-            return Some(NotFound)
-
-        def description(self) -> str:
-            return f"Couldn't find the resource: {self.response.raw}."
+            return f"HTTP Error [{self.response.status_code}, {self.kind}] for {self.response.url}"
 
     # A simple request that handles [404] responses.
-    def request(
-        url: str,
-        resourceful: bool = False,
-        uid: int
-    ) -> Result[requests.Response, HTTPError]:
-        response = requests.get(
-            url,
-            json={"resourceful": True, "user_id": uid}
-            if resourceful else None
-        )
-
+    def request(url: str, uid: int) -> Result[requests.Response, HTTPError]:
+        response = requests.get(url, json={"user_id": uid})
         if response.status_code == 404:
-            if resourceful:
-                return Err(UserNotFound(response, uid))
-            return Err(NotFound(response))
-
+            return Err(
+                HTTPError(
+                    response,
+                    kind=http.HTTPStatus.NOT_FOUND,
+                    message=f"Resource not found for user_id {uid}",
+                )
+            )
         return Ok(response)
 
     # Execute the request
-    match request("some-url.com', True, uid=0):
+    match request("some-url.com", 0):
         case Ok(response):
             # Deal with the response
             ...
         case Err(why):
             # Deal with the error.
-            print(why.message)
+            print(why)
+
     ```
     """
 

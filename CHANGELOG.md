@@ -27,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `HashMap.get_pairs`
 - `slice.SpecContains`
 - `BytesMut`
+- `Bytes.from_ptr_unchecked`
+- `BytesMut.from_ptr_unchecked`
+- `BytesMut.freeze`
+- `BytesMut.replace_with`
+- `BytesMut.offset`
 
 ### Changed
 
@@ -38,6 +43,10 @@ doesn't actually get mutated.
 - `Bytes.leak` doesn't returned an optional array now.
 - `Iterator.collect` now collects into a list instead of tuple.
 - Separated the implementation of `Bytes` and `BytesMut`
+- `Bytes.from_static` renamed to `Bytes.from_ptr`
+- `@deprecated` and `@unimplemented` can be decorated without the call operator.
+- All `split_*` methods now return an instance of the object you're splitting from
+instead of a `Mutabe|Sequence` type.
 
 ### Fixed
 

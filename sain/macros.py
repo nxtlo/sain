@@ -167,12 +167,12 @@ class Error(RuntimeWarning):
         self.message = message
 
 
-def _warn(msg: str, stacklevel: int = 2) -> None:
+def _warn(msg: str, stacklevel: int = 3) -> None:
     warnings.warn(message=msg, stacklevel=stacklevel, category=Error)
 
 
 @functools.cache
-def _obj_type(obj: type[typing.Any]) -> str:
+def _obj_type(obj: type[typing.Any]) -> typing.Literal["class", "function"]:
     return "class" if inspect.isclass(obj) else "function"
 
 
@@ -432,7 +432,13 @@ def unstable(
     return decorator
 
 
-@rustc_diagnostic_item("deprecated")
+@typing.overload
+def deprecated(
+    obj: collections.Callable[P, U] | None = None,
+) -> collections.Callable[P, U]: ...
+
+
+@typing.overload
 def deprecated(
     *,
     since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
@@ -442,7 +448,24 @@ def deprecated(
 ) -> collections.Callable[
     [collections.Callable[P, U]],
     collections.Callable[P, U],
-]:
+]: ...
+
+
+@rustc_diagnostic_item("deprecated")
+def deprecated(
+    obj: collections.Callable[P, U] | None = None,
+    *,
+    since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
+    removed_in: typing.LiteralString | None = None,
+    use_instead: typing.LiteralString | None = None,
+    hint: typing.LiteralString | None = None,
+) -> (
+    collections.Callable[P, U]
+    | collections.Callable[
+        [collections.Callable[P, U]],
+        collections.Callable[P, U],
+    ]
+):
     """A decorator that marks a function as deprecated.
 
     An attempt to call the object that's marked will cause a runtime warn.
@@ -459,9 +482,13 @@ def deprecated(
         hint = "Hint for ux."
     )
     class User:
-        ...
+        # calling the decorator is not nessary.
+        @deprecated
+        def username(self) -> str:
+            ...
 
     user = User() # This will cause a warning at runtime.
+
     ```
 
     Parameters
@@ -476,8 +503,10 @@ def deprecated(
         An optional hint for the user.
     """
 
-    def _create_message(obj: typing.Any) -> str:
-        msg = f"{_obj_type(obj)} `{obj.__module__}.{obj.__name__}` is deprecated."
+    def _create_message(
+        f: typing.Any,
+    ) -> str:
+        msg = f"{_obj_type(f)} `{f.__module__}.{f.__name__}` is deprecated."
 
         if since is not None:
             if since == "CURRENT_VERSION":
@@ -512,7 +541,12 @@ def deprecated(
             wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + f"{m}"
         else:
             wrapper.__doc__ = m
+
         return wrapper
+
+    # marked only.
+    if obj is not None:
+        return decorator(obj)
 
     return decorator
 
@@ -539,7 +573,13 @@ def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     raise Error(f"not yet implemented: {message}" if message else "not yet implemented")
 
 
-@rustc_diagnostic_item("unimplemented")
+@typing.overload
+def unimplemented(
+    obj: collections.Callable[P, U] | None = None,
+) -> collections.Callable[P, U]: ...
+
+
+@typing.overload
 def unimplemented(
     *,
     message: typing.LiteralString | None = None,
@@ -547,7 +587,22 @@ def unimplemented(
 ) -> collections.Callable[
     [collections.Callable[P, U]],
     collections.Callable[P, U],
-]:
+]: ...
+
+
+@rustc_diagnostic_item("unimplemented")
+def unimplemented(
+    obj: collections.Callable[P, U] | None = None,
+    *,
+    message: typing.LiteralString | None = None,
+    available_in: typing.LiteralString | None = None,
+) -> (
+    collections.Callable[P, U]
+    | collections.Callable[
+        [collections.Callable[P, U]],
+        collections.Callable[P, U],
+    ]
+):
     """A decorator that marks an object as unimplemented.
 
     An attempt to call the object that's marked will cause a runtime warn.
@@ -557,8 +612,12 @@ def unimplemented(
     ```py
     from sain import unimplemented
 
-    @unimplemented("User object is not implemented yet.")
+    @unimplemented  # Can be used without calling
     class User:
+        ...
+
+    @unimplemented(message="Not ready", available_in="2.0.0")  # Or with parameters
+    class Config:
         ...
     ```
 
@@ -570,32 +629,33 @@ def unimplemented(
         If provided, This will be shown as what release this object be implemented.
     """
 
-    def _create_message(obj: typing.Any) -> str:
+    def _create_message(f: typing.Any) -> str:
         msg = (
             message
-            or f"{_obj_type(obj)} `{obj.__module__}.{obj.__name__}` is not yet implemented."
+            or f"{_obj_type(f)} `{f.__module__}.{f.__name__}` is not yet implemented."
         )
 
         if available_in:
             msg += f" Available in `{available_in}`."
         return msg
 
-    def decorator(obj: collections.Callable[P, U]) -> collections.Callable[P, U]:
-        message = _create_message(obj)
+    def decorator(func: collections.Callable[P, U]) -> collections.Callable[P, U]:
+        msg = _create_message(func)
 
-        @functools.wraps(obj)
+        @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            _warn(message)
-            return obj(*args, **kwargs)
+            _warn(msg)
+            return func(*args, **kwargs)
 
-        # idk why pyright doesn't know the type of wrapper.
-        m = f"\n# Warning ⚠️\n{message}."
+        m = f"\n# Warning ⚠️\n{msg}."
         if wrapper.__doc__:
-            # append this message to an existing document.
-            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + f"{m}"
+            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + m
         else:
             wrapper.__doc__ = m
         return wrapper
+
+    if obj is not None:
+        return decorator(obj)
 
     return decorator
 
@@ -616,8 +676,7 @@ def doc(
     from pathlib import Path
 
     @doc(Path("../README.md"))
-    class User:
-
+    class builtins:
         @doc("bool.html")
         def bool_docs() -> None:
             ...
@@ -633,10 +692,6 @@ def doc(
         with open(path, "r") as file:
             f.__doc__ = file.read()
 
-        @functools.wraps(f)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            return f(*args, **kwargs)
-
-        return wrapper
+        return lambda *args, **kwargs: f(*args, **kwargs)
 
     return decorator

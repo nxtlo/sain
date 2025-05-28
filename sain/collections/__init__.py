@@ -43,12 +43,13 @@ then perform conversions into other types.
 
 from __future__ import annotations
 
-__all__ = ("Vec", "Bytes", "vec", "buf", "slice", "hash_map", "HashMap")
+__all__ = ("Vec", "Bytes", "BytesMut", "vec", "buf", "slice", "hash_map", "HashMap")
 
 from . import buf
 from . import hash_map
 from . import slice
 from . import vec
 from .buf import Bytes
+from .buf import BytesMut
 from .hash_map import HashMap
 from .vec import Vec
