@@ -46,17 +46,29 @@ from sain import convert
 from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
-from sain.macros import assert_precondition, unsafe, rustc_diagnostic_item
+from sain.macros import assert_precondition
+from sain.macros import rustc_diagnostic_item
+from sain.macros import unsafe
 
 from . import slice as _slice
 from . import vec as _vec
 
 if typing.TYPE_CHECKING:
     import inspect
+
     from typing_extensions import Self
 
     from sain import Option
     from sain import Result
+
+    Chars = _iter.Iterator[_ctypes.c_char]
+    """An iterator that maps each byte in `Bytes` as a character.
+
+    It yields `ctypes.c_char` objects.
+
+    This is created by calling `Bytes.chars()`
+    """
+
 
 Rawish: typing.TypeAlias = _io.StringIO | _io.BytesIO | _io.BufferedReader
 """A type hint for some raw data type.
@@ -218,7 +230,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
     @classmethod
     def from_raw(cls, raw: Rawish) -> Self:
-        """Initialize a new `Bytes` in-place from a valid raw data type.
+        """Initialize a new `Bytes` from a `Rawish` data type.
 
         Example
         -------
@@ -298,7 +310,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             return _result.Err(e.object)
 
     def to_str(self) -> str:
-        """Convert `self` to a utf-8 string.
+        r"""Convert `self` to a utf-8 string.
 
         During the conversion process, any invalid bytes will get converted to
         [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))
@@ -350,10 +362,10 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         -------
         ```py
         buffer = Bytes.from_str([1, 2, 3, 4])
+        # buffer and x can be modified independently.
         x = buffer.to_vec()
-        assert x == [1, 2, 3, 4]
         """
-        return _vec.Vec(self)
+        return _vec.Vec(self.copy())
 
     def leak(self) -> array.array[int]:
         """Consumes and leaks the `Bytes`, returning the contents as an `array[int]`,
@@ -388,7 +400,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def as_ptr(self) -> memoryview[int]:
         """Returns a read-only pointer to the buffer data.
 
-        `pointer` here referes to a `memoryview` object.
+        `pointer` here refers to a `memoryview` object.
 
         Example
         -------
@@ -431,13 +443,19 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         * If `self` is not initialized, a new empty `BytesMut` is returned.
         * `self` will no longer be usable, as it will not point to the underlying array.
 
+        The inverse method for this is `BytesMut.freeze()`
+
         Example
         -------
         ```py
         def modify(buffer: Bytes) -> BytesMut:
             buf = buffer.to_mut() # doesn't cost anything.
-            buf.swap()
-        buffer = Bytes.from_bytes([0, 0, 0, 0])
+            buf.swap(0, 1)
+            return buf
+
+        buffer = Bytes.from_bytes([1, 2, 3, 4])
+        new = modify(buffer)
+        assert new == [2, 1, 3, 4]
         ```
         """
         return BytesMut.from_ptr_unchecked(self.leak())
@@ -445,7 +463,10 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def raw_parts(
         self,
     ) -> tuple[int, int]:
-        """Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains"""
+        """Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains.
+
+        An alias to `array.buffer_into`
+        """
         if not self._buf:
             return (0x0, 0)
 
@@ -466,6 +487,9 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def size(self) -> int:
         """The length in bytes of one array item in the internal representation.
 
+
+        An alias to `array.itemsize`
+
         Example
         -------
         ```py
@@ -478,7 +502,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         return self._buf.itemsize
 
     def iter(self) -> _iter.TrustedIter[int]:
-        """Returns an iterator over the bytes of `self`.
+        """Returns an iterator over the contained bytes.
 
         This iterator yields all `int`s from start to end.
 
@@ -496,12 +520,12 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         # ♥
         ```
         """
-        return _iter.into_iter(self)
+        return _iter.TrustedIter(self.as_ptr())
 
-    def chars(self) -> _iter.Iterator[_ctypes.c_char]:
+    def chars(self) -> Chars:
         """Returns an iterator over the characters of `Bytes`.
 
-        This iterator yields all `int`s from start to end as a `ctypes.c_char`.
+        This iterator yields all `int`s from start to end mapped as a `ctypes.c_char`.
 
         Example
         -------
@@ -714,11 +738,13 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if not self._buf:
             return False
 
-        if isinstance(other, collections.Sequence):
-            return self._buf.tolist() == other
-
         if isinstance(other, bytes):
             return self._buf.tobytes() == other
+
+        # bytes IS a `Sequence[int]`, but not all `Sequence[int]`
+        # represented as bytes.
+        elif isinstance(other, collections.Sequence):
+            return self._buf.tolist() == other
 
         return self._buf.__eq__(other)
 
@@ -791,8 +817,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def __reversed__(self) -> collections.Iterator[int]:
         return reversed(self._buf or ())
 
-    def __hash__(self) -> int:
-        return 0 if not self._buf else hash(self._buf)
+    # defined like `array`'s
+    __hash__: typing.ClassVar[None] = None
 
     def __copy__(self) -> Bytes:
         if not self._buf:
@@ -1240,6 +1266,8 @@ class BytesMut(
         * If `self` is not initialized, a new empty `Bytes` is returned.
         * `self` will no longer be usable, as it will not point to the underlying array.
 
+        The inverse method of this is `Bytes.to_mut()`
+
         Example
         -------
         ```py
@@ -1482,13 +1510,13 @@ class BytesMut(
 
     def __setitem__(self, index: int, value: int):
         if not self._buf:
-            raise IndexError from None
+            raise IndexError("index out of range")
 
         self._buf[index] = value
 
     def __delitem__(self, key: typing.SupportsIndex | slice, /) -> None:
         if not self._buf:
-            return
+            raise IndexError("index out of range")
 
         del self._buf[key]
 

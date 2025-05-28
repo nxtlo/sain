@@ -315,14 +315,14 @@ def assert_ne(left: T, right: T) -> None:
 def include_bytes(file: typing.LiteralString) -> bytes:
     """Includes a file as `bytes`.
 
-    This function is not magic like Rust's, It is literally defined as
+    This function is not magic, It is literally defined as
 
     ```py
     with open(file, "rb") as f:
         return f.read()
     ```
 
-    The file name can may be either a relative to the current file or a complate path.
+    The file name can may be either a relative to the current file or a complete path.
 
     Example
     -------
@@ -345,14 +345,14 @@ def include_bytes(file: typing.LiteralString) -> bytes:
 def include_str(file: typing.LiteralString) -> typing.LiteralString:
     """Includes a file as literal `str`.
 
-    This function is not magic like Rust's, It is literally defined as
+    This function is not magic, It is literally defined as
 
     ```py
     with open(file, "r") as f:
         return f.read()
     ```
 
-    The file name can may be either a relative to the current file or a complate path.
+    The file name can may be either a relative to the current file or a complete path.
 
     Example
     -------
@@ -378,7 +378,7 @@ def unstable(
 ]:
     """A decorator that marks an internal object explicitly unstable.
 
-    Unstable objects never run, even inside the standard library.
+    Unstable objects never ran, even inside the library.
 
     Calling any object that is unstable will raise an `RuntimeError` exception.
     Also using this outside the library isn't allowed.
@@ -404,29 +404,27 @@ def unstable(
     ) -> collections.Callable[P, typing.NoReturn]:
         @functools.wraps(obj)
         def wrapper(*_args: P.args, **_kwargs: P.kwargs) -> typing.NoReturn:
-            if obj.__doc__ != "__intrinsics__":
+            setattr(obj, "_unstable_marker", True)
+            if not getattr(obj, "_unstable_marker", False):
                 # This has been used outside of the lib.
                 raise RuntimeError(
                     "Stability attributes may not be used outside of the core library",
                 )
 
-            name = obj.__name__
-            if name.startswith("_"):
-                name = name.lstrip("_")
-
-            raise RuntimeError(f"{_obj_type(obj)} `{name}` is not stable: {reason}")
+            raise RuntimeError(
+                f"{_obj_type(obj)} `{obj.__name__}` is not stable: {reason}. "
+                "Stability attributes are intended for use only within the core library and should not be applied in external modules or scripts."
+            )
 
         # idk why pyright doesn't know the type of wrapper.
         m = (
             f"\n# Stability ⚠️\nThis {_obj_type(obj)} is unstable, "
             "Calling it may result in failure or [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior)."
         )
-        if wrapper.__doc__:
-            # append this message to an existing document.
-            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + f"{m}"
-        else:
-            wrapper.__doc__ = m
-
+        # Append the formatted string to the existing documentation if it exists, otherwise set it as the documentation.
+        wrapper.__doc__ = (
+            (inspect.cleandoc(wrapper.__doc__) + m) if wrapper.__doc__ else m
+        )
         return wrapper
 
     return decorator
@@ -434,6 +432,7 @@ def unstable(
 
 @typing.overload
 def deprecated(
+    *,
     obj: collections.Callable[P, U] | None = None,
 ) -> collections.Callable[P, U]: ...
 
@@ -453,8 +452,8 @@ def deprecated(
 
 @rustc_diagnostic_item("deprecated")
 def deprecated(
-    obj: collections.Callable[P, U] | None = None,
     *,
+    obj: collections.Callable[P, U] | None = None,
     since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
     removed_in: typing.LiteralString | None = None,
     use_instead: typing.LiteralString | None = None,
@@ -575,6 +574,7 @@ def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
 
 @typing.overload
 def unimplemented(
+    *,
     obj: collections.Callable[P, U] | None = None,
 ) -> collections.Callable[P, U]: ...
 
@@ -592,8 +592,8 @@ def unimplemented(
 
 @rustc_diagnostic_item("unimplemented")
 def unimplemented(
-    obj: collections.Callable[P, U] | None = None,
     *,
+    obj: collections.Callable[P, U] | None = None,
     message: typing.LiteralString | None = None,
     available_in: typing.LiteralString | None = None,
 ) -> (
@@ -649,8 +649,10 @@ def unimplemented(
 
         m = f"\n# Warning ⚠️\n{msg}."
         if wrapper.__doc__:
+            # Append the new documentation string to the existing docstring.
             wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + m
         else:
+            # Assign the new documentation string as the docstring when no existing docstring is present.
             wrapper.__doc__ = m
         return wrapper
 
