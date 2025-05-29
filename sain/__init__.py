@@ -85,6 +85,12 @@ __all__ = (
     "Into",
     "TryInto",
     "ToString",
+    # misc
+    "__version__",
+    "__url__",
+    "__author__",
+    "__about__",
+    "__license__",
 )
 
 from . import boxed
@@ -99,6 +105,11 @@ from . import maybe_uninit
 from . import option
 from . import result
 from . import sync
+from ._misc import __about__
+from ._misc import __author__
+from ._misc import __license__
+from ._misc import __url__
+from ._misc import __version__
 from .boxed import Box
 from .cfg import cfg
 from .cfg import cfg_attr
@@ -126,12 +137,3 @@ from .option import Some
 from .result import Err
 from .result import Ok
 from .result import Result
-
-__version__: str = "1.3.0"
-__url__: str = "https://github.com/nxtlo/sain"
-__author__: str = "nxtlo"
-__about__: str = (
-    "Sain is a dependency-free library that implements some of the Rust core"
-    "types which abstracts over common patterns in Rust for Python."
-)
-__license__: str = "BSD 3-Clause License"

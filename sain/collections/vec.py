@@ -66,14 +66,13 @@ if typing.TYPE_CHECKING:
 T = typing.TypeVar("T")
 
 
-# We are our own implementation, since MutableSequence have some conflicts with the return types.
 @rustc_diagnostic_item("Vec")
 @typing.final
 class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     """A contiguous growable alternative to builtin `list` with extra functionalities.
 
     The layout of `Vec<T>` is exactly the same as `list<T>`.
-    Which means `Vec`'s methods dereference into a `list`'s.
+    Which means `list<T>`'s methods are inherited into `Vec<T>`.
 
     Example
     -------

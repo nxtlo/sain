@@ -47,6 +47,7 @@ from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
 from sain.macros import assert_precondition
+from sain.macros import deprecated
 from sain.macros import rustc_diagnostic_item
 from sain.macros import unsafe
 
@@ -106,7 +107,7 @@ def unwrap_bytes(data: Rawish) -> bytes:
 @rustc_diagnostic_item("&[u8]")
 @typing.final
 class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int]):
-    """Provides immutable abstractions for working with UTF-8 compatible bytes.
+    """Provides immutable abstractions for working with bytes.
 
     It is an efficient container for storing and operating with bytes.
     It behaves very much like `array.array[int]` as well has the same layout.
@@ -135,7 +136,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     # the conversion costs nothing, as it just points to the same underlying array.
     buf_mut = buf.to_mut()
     buf_mut.put(32)
-    assert buf_mut.to_str() == "Hello "
+    assert buf_mut == b"Hello "
     ```
     """
 
@@ -268,6 +269,16 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
     # buffer evolution
 
+    # These are getting deprecated because they're trivial.
+    # maybe we impl a `String` type and include them later.
+    # anyways, they won't be leaving for sometime until 2.0.0.
+
+    @deprecated(
+        since="CURRENT_VERSION",
+        removed_in="2.0.0",
+        use_instead='`Bytes.to_bytes().decode("utf8")`',
+        hint="Converting a bytes object to string is fairly trivial.",
+    )
     def to_string(self) -> str:
         """Convert the bytes to a string.
 
@@ -275,6 +286,12 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         """
         return self.to_str()
 
+    @deprecated(
+        since="CURRENT_VERSION",
+        removed_in="2.0.0",
+        use_instead='`Bytes.to_bytes().decode("utf8")`',
+        hint="Converting a bytes object to string is fairly trivial.",
+    )
     def try_to_str(self) -> Result[str, bytes]:
         """A safe method to convert `self` into a string.
 
@@ -309,6 +326,12 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         except UnicodeDecodeError as e:
             return _result.Err(e.object)
 
+    @deprecated(
+        since="CURRENT_VERSION",
+        removed_in="2.0.0",
+        use_instead='str(Bytes, encoding="utf-8")',
+        hint="Converting a bytes object to string is fairly trivial.",
+    )
     def to_str(self) -> str:
         r"""Convert `self` to a utf-8 string.
 
@@ -402,6 +425,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         `pointer` here refers to a `memoryview` object.
 
+        A `BufferError` is raised if the underlying sequence is not initialized.
+
         Example
         -------
         ```py
@@ -415,7 +440,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def as_ref(self) -> _slice.Slice[int]:
         """Get an immutable reference to the underlying sequence, without copying.
 
-        A `ReferenceError` is raised if the underlying sequence is not initialized.
+        An empty slice is returned if the underlying sequence is not initialized.
 
         Example
         -------
@@ -430,7 +455,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if self._buf is not None:
             return _slice.Slice(self)
 
-        raise ReferenceError("`self` must be initialized first.") from None
+        return _slice.Slice(())
 
     def to_mut(self) -> BytesMut:
         """Convert `self` into `BytesMut`.
@@ -979,7 +1004,7 @@ class BytesMut(
         ```py
         buf = BytesMut()
         buf.put_char('a')
-        assert buf.to_str() == "a"
+        assert buf == b"a"
         ```
 
         Parameters
@@ -1031,7 +1056,7 @@ class BytesMut(
         ```py
         buf = BytesMut.from_bytes(b"hello")
         buf.put_bytes([32, 119, 111, 114, 108, 100])
-        assert buf.to_str() == "hello world"
+        assert buf == b"hello world"
         ```
 
         Parameters
@@ -1059,7 +1084,7 @@ class BytesMut(
         buffer = BytesMut()
         buffer.put_str("hello")
 
-        assert buffer.to_str() == "hello"
+        assert buffer == b"hello"
         ```
 
         Parameters
@@ -1134,8 +1159,6 @@ class BytesMut(
 
         for index in range(len(self._buf)):
             self._buf[index] = f(self._buf[index])
-
-    # TODO: impl dedup, dedup_by, retain
 
     def fill(self, value: int) -> None:
         """Fills `self` with the given byte.
@@ -1222,7 +1245,9 @@ class BytesMut(
     def as_mut_ptr(self) -> memoryview[int]:
         """Returns a mutable pointer to the buffer data.
 
-        `pointer` here referes to a `memoryview` object.
+        `pointer` here refers to a `memoryview` object.
+
+        A `BufferError` is raised if the underlying sequence is not initialized.
 
         Example
         -------
@@ -1238,7 +1263,7 @@ class BytesMut(
     def as_mut(self) -> _slice.SliceMut[int]:
         """Get a mutable reference to the underlying sequence, without copying.
 
-        A `ReferenceError` is raised if the underlying sequence is not initialized.
+        An empty slice is returned if the underlying sequence is not initialized.
 
         Example
         -------
@@ -1247,13 +1272,13 @@ class BytesMut(
         ref = buff.as_mut()
         ref.append(32)
         del ref
-        assert buff.to_str() == "Hello "
+        assert buff == b"Hello "
         ```
         """
         if self._buf is not None:
             return _slice.SliceMut(self)
 
-        raise ReferenceError("`self` must be initialized first.") from None
+        return _slice.SliceMut([])
 
     def freeze(self) -> Bytes:
         """Convert `self` into an immutable `Bytes`.
@@ -1458,6 +1483,7 @@ class BytesMut(
         """Remove the first appearance of `i` from `self`.
 
         Example
+        ------
         ```py
         buf = BytesMut.from_bytes([1, 1, 2, 3, 4])
         buf.remove(1)

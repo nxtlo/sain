@@ -67,7 +67,7 @@ class MaybeUninit(typing.Generic[T]):
     Examples
     --------
     ```py
-    # Create a list of 3 uninitialized strings preallocated.
+    # Create a list of 3 uninitialized strings.
     array = MaybeUninit[str].uninit_array(3)
     chars = ['a', 'b', 'c']
 
@@ -213,7 +213,7 @@ class MaybeUninit(typing.Generic[T]):
     # These are magic methods to bypass the name mangling.
     def __write_mangling(self, value: T) -> T:
         # A little hack to bypass name dangling.
-        object.__setattr__(self, "_MaybeUninit__value", value)
+        setattr(self, "_MaybeUninit__value", value)
         return value
 
     def __read_mangling(self) -> T:
@@ -254,4 +254,4 @@ class MaybeUninit(typing.Generic[T]):
         return not self.__eq__(value)
 
     def __hash__(self) -> int:
-        return self.__read_mangling().__hash__()
+        return self.__value.__hash__()

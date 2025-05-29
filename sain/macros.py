@@ -509,9 +509,9 @@ def deprecated(
 
         if since is not None:
             if since == "CURRENT_VERSION":
-                from sain import __version__ as _version
+                from ._misc import __version__
 
-                msg += " since " + _version
+                msg += " since " + __version__
             else:
                 msg += " since " + since
 

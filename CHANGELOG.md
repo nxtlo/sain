@@ -46,7 +46,8 @@ doesn't actually get mutated.
 - `Bytes.from_static` renamed to `Bytes.from_ptr`
 - `@deprecated` and `@unimplemented` can be decorated without the call operator.
 - All `split_*` methods now return an instance of the object you're splitting from
-instead of a `Mutabe|Sequence` type.
+instead of a `Mutable|Sequence` type.
+- `Bytes.to_str` and `try_to_str` are marked for deprecation.
 
 ### Fixed
 

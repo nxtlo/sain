@@ -9,14 +9,13 @@ def test_bytes_from_empty_and_is_empty():
     assert b.is_empty()
     assert b.len() == 0
     assert b.to_bytes() == b""
-    assert b.to_str() == ""
     assert list(b) == []
 
 
 def test_bytes_from_raw_stringio_and_bytesio():
     s = io.StringIO("abc")
     b = Bytes.from_raw(s)
-    assert b.to_str() == "abc"
+    assert b == b"abc"
     bio = io.BytesIO(b"xyz")
     b2 = Bytes.from_raw(bio)
     assert b2.to_bytes() == b"xyz"
@@ -39,8 +38,7 @@ def test_bytes_as_ptr_and_as_ref():
     ref = b.as_ref()
     assert list(ref) == [1, 2, 3]
     b_empty = Bytes()
-    with pytest.raises(ReferenceError):
-        b_empty.as_ref()
+    assert not b_empty.as_ref()
 
 
 def test_bytes_leak_on_empty():
@@ -59,6 +57,7 @@ def test_bytes_access_leaked_bytes():
         b.to_bytes()
 
 
+# FIXME: Remove on deprecation end.
 def test_bytes_try_to_str_invalid_utf8():
     b = Bytes.from_bytes([0xFF, 0xFE])
     res = b.try_to_str()
@@ -144,7 +143,7 @@ def test_bytes_split_at_bounds():
     assert not right
 
 
-def test_bytesmut_as_mut_ptr_and_as_mut():
+def test_bytes_mut_as_mut_ptr_and_as_mut():
     bm = BytesMut.from_bytes([1, 2, 3])
     ptr = bm.as_mut_ptr()
     assert isinstance(ptr, memoryview)
@@ -153,7 +152,7 @@ def test_bytesmut_as_mut_ptr_and_as_mut():
     assert list(mut) == [1, 2, 3]
 
 
-def test_bytesmut_freeze_and_to_mut_roundtrip():
+def test_bytes_mut_freeze_and_to_mut_roundtrip():
     bm = BytesMut.from_bytes([1, 2])
     b = bm.freeze()
     assert isinstance(b, Bytes)
@@ -162,44 +161,44 @@ def test_bytesmut_freeze_and_to_mut_roundtrip():
     assert bm2 == [1, 2]
 
 
-def test_bytesmut_clear_and_is_empty():
+def test_bytes_mut_clear_and_is_empty():
     bm = BytesMut.from_bytes([1, 2])
     bm.clear()
     assert bm.is_empty()
     assert bm.to_bytes() == b""
 
 
-def test_bytesmut_remove_invalid():
+def test_bytes_mut_remove_invalid():
     bm = BytesMut.from_bytes([1, 2])
     with pytest.raises(ValueError):
         bm.remove(99)
 
 
-def test_bytesmut_pop_empty():
+def test_bytes_mut_pop_empty():
     bm = BytesMut()
     val = bm.pop()
     assert val.is_none()
 
 
-def test_bytesmut_truncate_larger_than_len():
+def test_bytes_mut_truncate_larger_than_len():
     bm = BytesMut.from_bytes([1, 2])
     bm.truncate(10)
     assert bm == [1, 2]
 
 
-def test_bytesmut_split_off_mut_invalid():
+def test_bytes_mut_split_off_mut_invalid():
     bm = BytesMut.from_bytes([1])
     with pytest.raises(IndexError):
         bm.split_off_mut(2)
 
 
-def test_bytesmut_split_first_last_empty():
+def test_bytes_mut_split_first_last_empty():
     bm = BytesMut()
     assert bm.split_first_mut().is_none()
     assert bm.split_last_mut().is_none()
 
 
-def test_bytesmut_split_at_mut_bounds():
+def test_bytes_mut_split_at_mut_bounds():
     bm = BytesMut.from_bytes([1, 2, 3])
 
     left, right = bm.split_at_mut(0)
@@ -211,13 +210,121 @@ def test_bytesmut_split_at_mut_bounds():
     assert not right
 
 
-def test_bytesmut_setitem_invalid_index():
+def test_bytes_mut_setitem_invalid_index():
     bm = BytesMut()
     with pytest.raises(IndexError):
         bm[0] = 1
 
 
-def test_bytesmut_delitem_invalid_index():
+def test_bytes_mut_delitem_invalid_index():
     bm = BytesMut()
     with pytest.raises(IndexError):
         del bm[0]
+
+
+def test_bytes_mut_extend():
+    bm = BytesMut()
+    bm.extend([1, 2, 3])
+    assert bm == [1, 2, 3]
+
+
+def test_bytes_mut_put():
+    bm = BytesMut()
+    bm.put(4)
+    assert bm == [4]
+
+    with pytest.raises(OverflowError):
+        bm.put(256)
+
+
+def test_bytes_mut_put_float():
+    bm = BytesMut()
+    bm.put_float(1.2)
+    assert bm.to_bytes() == b"\x3f\x99\x99\x9a"
+
+    with pytest.raises(OverflowError):
+        bm.put_float(3.5e38)
+
+
+def test_bytes_mut_put_char():
+    bm = BytesMut()
+    bm.put_char("a")
+    assert bm == b"a"
+
+    with pytest.raises(AssertionError):
+        bm.put_char("ab")
+
+
+def test_bytes_mut_put_bytes_and_str():
+    bm = BytesMut()
+    bm.put_bytes(b"hello")
+    bm.put_str(" world")
+    assert bm == b"hello world"
+
+
+def test_bytes_mut_replace_methods():
+    bm = BytesMut.from_bytes([1, 2, 3])
+    bm.replace(1, 4)
+    assert bm == [1, 4, 3]
+
+    bm.replace_with(1, lambda x: x * 2)
+    assert bm == [1, 8, 3]
+
+
+def test_bytes_mut_offset_and_fill():
+    bm = BytesMut.from_bytes([1, 2, 3])
+    bm.offset(lambda x: x * 2)
+    assert bm == [2, 4, 6]
+
+    bm.fill(0)
+    assert bm == [0, 0, 0]
+
+    bm.fill_with(lambda: 1)
+    assert bm == [1, 1, 1]
+
+
+def test_bytes_mut_swap_methods():
+    bm = BytesMut.from_bytes([1, 2, 3, 4])
+    bm.swap(0, 3)
+    assert bm == [4, 2, 3, 1]
+
+    bm.swap_unchecked(1, 2)
+    assert bm == [4, 3, 2, 1]
+
+
+def test_bytes_mut_modifications():
+    bm = BytesMut.from_bytes([1, 2, 3, 4])
+    bm.insert(1, 5)
+    assert bm == [1, 5, 2, 3, 4]
+
+    assert bm.pop().unwrap() == 4
+    assert bm == [1, 5, 2, 3]
+
+    bm.remove(5)
+    assert bm == [1, 2, 3]
+
+
+def test_bytes_mut_copy_and_clear():
+    bm = BytesMut.from_bytes([1, 2, 3])
+    copy = bm.copy()
+    assert copy == bm
+    assert copy is not bm
+
+    bm.clear()
+    assert bm.is_empty()
+    assert copy == [1, 2, 3]
+
+
+def test_bytes_mut_indexing():
+    bm = BytesMut.from_bytes([1, 2, 3])
+    assert bm[1] == 2
+
+    bm[1] = 4
+    assert bm == [1, 4, 3]
+
+    del bm[1]
+    assert bm == [1, 3]
+
+    slice = bm[0:1]
+    assert isinstance(slice, BytesMut)
+    assert slice == [1]
