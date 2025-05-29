@@ -799,45 +799,47 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         return _option.NOTHING
 
     def dedup(self) -> None:
-        """Removes duplicate elements from `self` in-place.
-
-        `T` must be a hashable type.
+        """Removes consecutive repeated elements in the vector according to their `__eq__`
+        implementation.
 
         Example
         -------
         ```py
-        vec = Vec([1, 2, 3, 3, 4, 1])
+        vec = Vec([1, 2, 2, 3, 2])
         vec.dedup()
-        assert vec == [1, 2, 3, 4]
+        assert vec == [1, 2, 3, 2]
+        """
+        self.dedup_by(lambda a, b: a == b)
+
+    def dedup_by(self, same_bucket: collections.Callable[[T, T], bool]) -> None:
+        """Removes all but the first of consecutive elements in the vector satisfying a given equality.
+
+        Example
+        -------
+        ```py
+        vec = Vec(["foo", "bar", "Bar", "baz", "bar"])
+        vec.dedup_by(lambda a, b: a.lower() == b.lower())
+        assert vec == ["foo", "bar", "baz", "bar"]
+        ```
+
+        Only remove consecutive duplicates.
+        ```py
+        vec = Vec([1, 2, 2, 3, 4, 1])
+        vec.dedup_by(lambda a, b: a == b)
+        # The final 1 is not adjacent to the first 1, so it is not removed.
+        assert vec == [1, 2, 3, 4, 1]
+        ```
         """
 
-        if not self._ptr:
+        if not self._ptr or (len_ := len(self._ptr)) <= 1:
             return
 
-        # if ptr[0] is type T, we're assuming that all elements are type T.
-        # This is only generated when `-O` is passed.
-        if not __debug__:
-            if self._ptr[0].__hash__ is None:  # pyright: ignore[reportUnnecessaryComparison], this can be `None` for unhashable types.
-                raise TypeError("all elements must be hashable.")
-
-        # Running a program with `-O` flag emits much cleaner bytecode.
-        # This line will only be generated if `-O` flag is not used.
-        # which most people are unaware of, still, some people use lists as a collection
-        # of different types, which requires this check, but for the group that know what
-        # they're doing, we're assuming they're using a `Vec[T]` of exactly the same type T.
-        if __debug__:
-            for o in self._ptr:
-                if o.__hash__ is None:  # pyright: ignore[reportUnnecessaryComparison], this can be `None` for unhashable types.
-                    raise TypeError(f"type {type(o)} is not hashable.")
-
-        seen: set[T] = set()
-        idx = 0
-        while idx < len(self._ptr):
-            x = self._ptr[idx]
-            if x in seen:
+        idx = 1
+        while idx < len_:
+            if same_bucket(self._ptr[idx], self._ptr[idx - 1]):
                 del self._ptr[idx]
+                len_ -= 1
             else:
-                seen.add(x)
                 idx += 1
 
     def remove(self, item: T) -> None:
