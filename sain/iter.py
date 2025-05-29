@@ -108,6 +108,10 @@ def unreachable() -> typing.NoReturn:
     ) from None
 
 
+def oob() -> typing.NoReturn:
+    raise IndexError("index is out of bounds.")
+
+
 def diagnostic(cls: type[AnyIter]) -> type[AnyIter]:
     def _repr(self: Iterator[typing.Any]) -> str:
         return f"{type(self).__name__}(source: Iter<{type(self._it).__name__}>)"  # pyright: ignore
@@ -1052,11 +1056,8 @@ class Iter(typing.Generic[Item], Iterator[Item]):
     def __next__(self) -> Item:
         return next(self._it)
 
-    def __getitem__(self, index: int) -> Option[Item]:
-        try:
-            return self.skip(index).first()
-        except IndexError:
-            unreachable()
+    def __getitem__(self, index: int) -> Item:
+        return self.skip(index).first().unwrap_or_else(oob)
 
     def __contains__(self, item: Item) -> bool:
         return item in self._it
@@ -1090,6 +1091,13 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         self.__alive = iterable
         self._len = len(iterable)
         self._it = iter(iterable)
+
+    @property
+    def __slice_checked_get(self) -> collections.Sequence[Item] | None:
+        try:
+            return self.__alive
+        except AttributeError:
+            return None
 
     def next(self) -> Option[Item]:
         if self._len == 0:
@@ -1142,24 +1150,31 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         assert iterator.as_slice() == [2, 3]
         ```
         """
-        return _vec.Slice(self.__alive[-self._len :])
+        return _vec.Slice(self.__slice_checked_get or ())
 
     def __repr__(self) -> str:
-        return f"TrustedIter({self.as_slice()})"
+        # __alive is dropped from `self`.
+        if (s := self.__slice_checked_get) is None:
+            return "TrustedIter(<empty>)"
+
+        return f"TrustedIter({s[-self._len:]})"
 
     def __next__(self) -> Item:
-        i = next(self._it)
+        try:
+            i = next(self._it)
+        except StopIteration:
+            # don't reference this anymore.
+            del self.__alive
+            raise
+
         self._len -= 1
         return i
 
-    def __getitem__(self, index: int) -> Option[Item]:
+    def __getitem__(self, index: int) -> Item:
         if self._len == 0:
-            return _option.NOTHING
+            raise IndexError("index out of bounds")
 
-        try:
-            return self.skip(index).first()
-        except IndexError:
-            unreachable()
+        return self.skip(index).first().unwrap_or_else(oob)
 
     def __contains__(self, item: Item) -> bool:
         return item in self._it

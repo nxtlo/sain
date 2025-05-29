@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `BytesMut.freeze`
 - `BytesMut.replace_with`
 - `BytesMut.offset`
+- `Vec.dedup_by`
 
 ### Changed
 

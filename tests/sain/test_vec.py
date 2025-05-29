@@ -169,8 +169,7 @@ def test_vec_retain():
 def test_vec_dedup():
     v = Vec([1, 2, 2, 3, 1])
     v.dedup()
-    # Should remove duplicates, order preserved
-    assert v == [1, 2, 3]
+    assert v == [1, 2, 3, 1]
 
 
 def test_vec_sort():
