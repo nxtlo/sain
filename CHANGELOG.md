@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `BytesMut.replace_with`
 - `BytesMut.offset`
 - New module `time` and a new class `Duration`
+- `Vec.dedup_by`
 
 ### Changed
 
