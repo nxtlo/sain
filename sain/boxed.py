@@ -40,6 +40,9 @@ import datetime
 import math
 import time
 import typing
+import warnings
+
+from sain.macros import ub_checks
 
 from . import futures
 from . import option
@@ -169,15 +172,18 @@ class Box(typing.Generic[T]):
         """
         if self.has_expired:
             if self._on_expire is not None:
-                try:
-                    if asyncio.iscoroutinefunction(self._on_expire):
-                        futures.loop().run_until_complete(
+                with warnings.catch_warnings():
+                    # ignore the warnings from `unwrap_unchecked`.
+                    warnings.simplefilter("ignore", category=ub_checks)
+                    try:
+                        if asyncio.iscoroutinefunction(self._on_expire):
+                            futures.loop().run_until_complete(
+                                self._on_expire(self._inner.unwrap_unchecked())
+                            )
+                        else:
                             self._on_expire(self._inner.unwrap_unchecked())
-                        )
-                    else:
-                        self._on_expire(self._inner.unwrap_unchecked())
-                finally:
-                    self._on_expire = None
+                    finally:
+                        self._on_expire = None
 
             self._inner = option.NOTHING
             self._mono = None

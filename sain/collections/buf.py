@@ -193,8 +193,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         b._buf = arr
         return b
 
-    @unsafe
     @classmethod
+    @unsafe
     def from_ptr_unchecked(cls, arr: array.array[int]) -> Self:
         """Create a new `Bytes` from an array, without checking the type code.
 

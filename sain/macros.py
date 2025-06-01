@@ -94,6 +94,8 @@ if typing.TYPE_CHECKING:
         # primitives
         "&[u8]",
         "&mut [u8]",
+        # time
+        "Duration"
     ]
     # fmt: on
 
@@ -152,23 +154,15 @@ _MAP_TO_PATH: dict[RustItem, typing.LiteralString] = {
     # primitives
     "&[u8]": "std/primitive.slice.html",
     "&mut [u8]": "std/primitive.slice.html",
+    # time
+    "Duration": "std/time/struct.Duration.html",
 }
 
 _RUSTC_DOCS = "https://doc.rust-lang.org"
 
 
-@typing.final
-class Error(RuntimeWarning):
-    """A runtime warning that is used as the category warning for all the markers."""
-
-    __slots__ = ("message",)
-
-    def __init__(self, message: str | None = None) -> None:
-        self.message = message
-
-
-def _warn(msg: str, stacklevel: int = 3) -> None:
-    warnings.warn(message=msg, stacklevel=stacklevel, category=Error)
+def _warn(msg: str, stacklevel: int = 2, warn_ty: type[Warning] = Warning) -> None:
+    warnings.warn(message=msg, stacklevel=stacklevel, category=warn_ty)
 
 
 @functools.cache
@@ -255,20 +249,84 @@ def assert_precondition(
         raise exception(f"precondition check violated: {message}") from None
 
 
+@typing.final
+class ub_checks(RuntimeWarning):
+    """A special type of runtime warning that is only invoked on objects using `unsafe`."""
+
+
 @rustc_diagnostic_item("unsafe")
 def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     """Mark a function as unsafe.
 
+    ## What this marker does
+    * Generates an unsafe warning to the docstring of the decorated object.
+    * Warn callers of unsafe usage of an object.
+    * Never crashes your code, only warns the user, the programmer is responsible
+    for the code they've written, this is a utility decorator only.
+
+    however, ignoring these warnings is possible (*not recommended*), see he listed examples.
+
+    Example
+    -------
+
+    Using warnings lib:
+    ```py
+    import warnings
+    from sain.macros import unsafe, ub_checks
+
+    # globally ignore all `ub_checks` warns, not recommended.
+    warnings.filterwarnings("ignore", category=ub_checks)
+
+    @unsafe
+    def from_str_unchecked(val: str) -> float:
+        return float(val)
+
+    # This is a function that calls `from_str_unchecked`
+    # but we know it will never fails.
+    def infallible() -> float:
+        with warnings.catch_warnings():
+            # ignore `ub_checks` specific warnings from `from_str_unchecked`.
+            warnings.simplefilter("ignore", category=ub_checks)
+            return from_str_unchecked("3.14")
+    ```
+
+    Another way is to simply run your program with `-O` opt flag.
+
+    This won't generate the code needed to execute the warning,
+    this will also disable all `assert` calls.
+
+    ```sh
+    # This enable optimization level 1, which will opt-out of `ub_checks` warnings.
+    python script.py -O
+    # This will ignore all the warnings.
+    python -W ignore script.py
+    ```
+
     The caller of the decorated function is responsible for the undefined behavior if occurred.
     """
-    m = "\n# Safety ⚠️\nCalling this method on `None` is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior).\n"
+    m = "\n# Safety ⚠️\nCalling this method is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior).\n"
     if fn.__doc__ is not None:
         # append this message to an existing document.
         fn.__doc__ = inspect.cleandoc(fn.__doc__) + m
     else:
         fn.__doc__ = m
 
-    return fn
+    if __debug__:
+
+        @functools.wraps(fn)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
+            call_once = fn(*args, **kwargs)
+            _warn(
+                f"calling `{wrapper.__qualname__}` "
+                "is considered unsafe and may lead to undefined behavior.\n"
+                "you can disable this warning by using `-O` opt level if you know what you're doing.",
+                warn_ty=ub_checks,
+            )
+            return call_once
+
+        return wrapper
+    else:
+        return fn
 
 
 @rustc_diagnostic_item("assert_eq")
@@ -404,19 +462,11 @@ def unstable(
     ) -> collections.Callable[P, typing.NoReturn]:
         @functools.wraps(obj)
         def wrapper(*_args: P.args, **_kwargs: P.kwargs) -> typing.NoReturn:
-            setattr(obj, "_unstable_marker", True)
-            if not getattr(obj, "_unstable_marker", False):
-                # This has been used outside of the lib.
-                raise RuntimeError(
-                    "Stability attributes may not be used outside of the core library",
-                )
-
             raise RuntimeError(
                 f"{_obj_type(obj)} `{obj.__name__}` is not stable: {reason}. "
                 "Stability attributes are intended for use only within the core library and should not be applied in external modules or scripts."
             )
 
-        # idk why pyright doesn't know the type of wrapper.
         m = (
             f"\n# Stability ⚠️\nThis {_obj_type(obj)} is unstable, "
             "Calling it may result in failure or [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior)."
@@ -530,7 +580,7 @@ def deprecated(
 
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            _warn(message)
+            _warn(message, warn_ty=DeprecationWarning)
             return func(*args, **kwargs)
 
         # idk why pyright doesn't know the type of wrapper.
@@ -569,7 +619,9 @@ def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
     message : `str | None`
         Multiple optional arguments to pass if the error was raised.
     """
-    raise Error(f"not yet implemented: {message}" if message else "not yet implemented")
+    raise RuntimeWarning(
+        f"not yet implemented: {message}" if message else "not yet implemented"
+    )
 
 
 @typing.overload
@@ -644,7 +696,7 @@ def unimplemented(
 
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            _warn(msg)
+            _warn(msg, warn_ty=RuntimeWarning)
             return func(*args, **kwargs)
 
         m = f"\n# Warning ⚠️\n{msg}."

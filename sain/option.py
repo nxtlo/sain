@@ -55,30 +55,79 @@ if typing.TYPE_CHECKING:
 @rustc_diagnostic_item("Option")
 @typing.final
 class Some(typing.Generic[T], _default.Default["Option[None]"]):
-    """The `Option` type. An object that might be `T` or `None`.
+    """The `Option` type represents optional value, higher-level abstraction over the `None` type.
 
-    It is a replacement for `typing.Optional[T]`, with more convenient methods to handle the contained value.
+    It combines union of `T | None` in one convenient structure, allowing the users to manipulate and propagate
+    the contained value idiomatically.
+
+    An `Option` value have multiple use cases:
+
+    * Initial values.
+    * Return value for functions that may or may not contain a return value.
+    * Optional parameters, class fields.
+    * Swapping values.
 
     Example
     -------
     ```py
-    value = Some("Hello")
-    print(value)
-    # Some("Hello")
+    # the actual implementation of the object.
+    from sain import Some
+    # Here `Option` is used for type-hints only, you can include it under `TYPE_CHECKING` if you'd like.
+    from sain import Option
 
-    # This will unwrap the contained value as long as
-    # it is not `None` otherwise this will raise an error.
-    print(value.unwrap())
-    # "Hello"
+    def divide(numerator: float, denominator: float) -> Option[float]:
+        if denominator == 0.0:
+            return Some(None)
+        return Some(numerator / denominator)
 
-    none_value = Some(None)
-    while none_value.unwrap():
-        # Never unreachable!
+    # Returns Option[float]
+    result = divide(2.0, 3.0)
 
-    # Solving it with `unwrap_or` method to unwrap the value or return a default value.
-    print(none_value.unwrap_or(10))
-    # 10
+    # Pattern match to retrieve the value
+    match result:
+        # The division is valid.
+        case Some(x):
+            print("Result:", x)
+        # Invalid division, this is Some(None)
+        case _:
+            print("cannot divide by 0")
     ```
+
+    ### Converting `None`s into `RuntimeError`s
+
+    Sometimes we want to extract the value and cause an error to the caller if it doesn't exist,
+
+    because handling `Some/None` can be tedious, luckily we have several ways to deal with this.
+
+    ```py
+    def ipaddr(s: str) -> Option[tuple[int, int, int, int]]:
+        match s.split('.'):
+            case [a, b, c, d]:
+                return Some((int(a), int(b), int(c), int(d)))
+            case _:
+                return Some(None)
+
+    # calls `unwrap()` for you.
+    ip = ~ipaddr("192.168.1.19")
+    # causes a `RuntimeError` if it returns `None`.
+    ip = ipaddr("192.168.1.19").unwrap()
+    # causes a `RuntimeError` if it returns `None`, with a context message.
+    ip = ipaddr("192.168.1.19").expect("i need an ip address :<")
+    ```
+
+    The `~` operator will result in `tuple[int, int, int, int]` if the parsing succeed.
+    unless the contained value is `None`, it will cause a `RuntimeError`.
+
+    If the value must be present, use `unwrap_or`, which takes a default parameter
+    and returns it in-case `ipaddr` returns `None`
+    ```py
+    ip = ipaddr("blah blah blah").unwrap_or("192.168.1.255")
+    # Results: 192.168.1.255
+    ```
+
+    Overall, this type provides many other functional methods such as `map`, `filter`.
+
+    boolean checks such as `is_some`, `is_none`, converting between `Option` and `Result` using `ok_or`, and many more.
     """
 
     __slots__ = ("_value",)
@@ -88,7 +137,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         self._value = value
 
     @staticmethod
-    def default() -> Option[None]:
+    def default() -> Option[T]:
         """Default value for `Some`. Returns `None` wrapped in `Some`.
 
         Example

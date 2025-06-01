@@ -85,6 +85,8 @@ __all__ = (
     "Into",
     "TryInto",
     "ToString",
+    # time
+    "time",
     # misc
     "__version__",
     "__url__",
@@ -105,6 +107,7 @@ from . import maybe_uninit
 from . import option
 from . import result
 from . import sync
+from . import time
 from ._misc import __about__
 from ._misc import __author__
 from ._misc import __license__
