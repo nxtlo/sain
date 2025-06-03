@@ -27,7 +27,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
-dependencies = []
+dependencies = ["typing-extensions>=4.13.2"]
 
 [project.urls]
 Repository = "https://github.com/nxtlo/sain"
