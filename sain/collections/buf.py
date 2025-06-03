@@ -337,9 +337,9 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         During the conversion process, any invalid bytes will get converted to
         [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))
-        which looks like this `�`, so be carful on what you're trying to convert.
+        which looks like this `�`, so be careful on what you're trying to convert.
 
-        Use `.try_to_str` try attempt the conversion incase of failure.
+        Use `.try_to_str` try attempt the conversion in case of failure.
 
         Example
         -------
@@ -864,7 +864,7 @@ class BytesMut(
     Bytes,  # pyright: ignore - we want to inherit from `Bytes`.
     collections.MutableSequence[int],
 ):
-    """Provides mutable abstractions for working with UTF-8 compatible bytes.
+    """Provides mutable abstractions for working with bytes.
 
     It is an efficient container for storing and operating with bytes,
     It is built on-top of `array.array[int]`, which means you get all of `array[int]`'s operations.

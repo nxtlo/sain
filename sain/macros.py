@@ -333,7 +333,7 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
 def assert_eq(left: T, right: T) -> None:
     """Asserts that two expressions are equal to each other.
 
-    This exactly as `assert left == right`, but includes a useful message incase of failure.
+    This exactly as `assert left == right`, but includes a useful message in case of failure.
 
     Example
     -------
@@ -353,7 +353,7 @@ def assert_eq(left: T, right: T) -> None:
 def assert_ne(left: T, right: T) -> None:
     """Asserts that two expressions are not equal to each other.
 
-    This exactly as `assert left == right`, but includes a useful message incase of failure.
+    This exactly as `assert left == right`, but includes a useful message in case of failure.
 
     Example
     -------
@@ -531,7 +531,7 @@ def deprecated(
         hint = "Hint for ux."
     )
     class User:
-        # calling the decorator is not nessary.
+        # calling the decorator is not necessary.
         @deprecated
         def username(self) -> str:
             ...

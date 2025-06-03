@@ -107,15 +107,6 @@ class Lazy(typing.Generic[T]):
 
     __str__ = __repr__
 
-    def __eq__(self, other: object) -> bool:
-        if isinstance(other, Lazy):
-            return self.__inner == other.get()
-
-        return NotImplemented
-
-    def __ne__(self, other: object) -> bool:
-        return not self.__eq__(other)
-
 
 @typing.final
 class LazyFuture(typing.Generic[T]):
@@ -160,7 +151,7 @@ class LazyFuture(typing.Generic[T]):
         async def fetch_expensive_string(filtered: bool) -> str:
             return "hehehe" if filtered else "whahaha"
 
-        STRING: LazyFuture[str] = LazyFuture(lambda: expensive_string(True))
+        STRING: LazyFuture[str] = LazyFuture(lambda: fetch_expensive_string(True))
         print(await STRING.get()) # The string is built, stored in the lazy lock and returned.
         print(await STRING.get()) # The string is retrieved from the lazy lock.
         ```
@@ -176,21 +167,9 @@ class LazyFuture(typing.Generic[T]):
             # calling self.__inner will make self.__inner type T
             v = await self.__inner()  # pyright: ignore
             self.__inner = v
-            return v
+            return v  # pyright: ignore
 
     def __repr__(self) -> str:
         return f"LazyFuture(value: {self.__inner!r})"
 
     __str__ = __repr__
-
-    def __eq__(self, other: object) -> bool:
-        if not callable(self.__inner):
-            return False
-
-        if isinstance(other, Lazy):
-            return self._inner == other._inner  # pyright: ignore
-
-        return NotImplemented
-
-    def __ne__(self, other: object) -> bool:
-        return not self.__eq__(other)

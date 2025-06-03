@@ -46,6 +46,8 @@ Pattern = T | collections.Iterable[T]
 class SpecContains(typing.Generic[T]):
     """Provides a default `contains` method."""
 
+    __slots__ = ()
+
     @typing.final
     def contains(self: collections.Container[T], pat: Pattern[T]) -> bool:
         """Check if `pat` is contained in `self`.
@@ -70,7 +72,7 @@ class SpecContains(typing.Generic[T]):
         ```
         """
         if isinstance(pat, collections.Iterable):
-            return any(_ in self for _ in pat)
+            return any(_ in self for _ in pat)  # pyright: ignore - bad type inference.
 
         return pat in self
 

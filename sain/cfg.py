@@ -137,13 +137,13 @@ def cfg_attr(
     Parameters
     ----------
     target_os : `str | None`
-        The targeted operating system thats required for the object.
+        The targeted operating system that's required for the object.
     python_version : `tuple[int, int, int] | None`
-        The targeted Python version thats required for the object. Format must be `(3, ..., ...)`.
+        The targeted Python version that's required for the object. Format must be `(3, ..., ...)`.
     target_arch : `str | None`
-        The CPU targeted architecture thats required for the object.
+        The CPU targeted architecture that's required for the object.
     impl : `str | None`
-        The Python implementation thats required for the object.
+        The Python implementation that's required for the object.
 
     Raises
     ------
@@ -198,13 +198,13 @@ def cfg(
     Parameters
     ----------
     target_os : `str | None`
-        The targeted operating system thats required for the object to be executed.
+        The targeted operating system that's required for the object to be executed.
     python_version : `tuple[int, ...] | None`
         The targeted Python version that's required for the object to be executed. Format must be `(3, ..., ...)`
     target_arch : `str | None`
-        The CPU targeted architecture thats required for the object to be executed.
+        The CPU targeted architecture that's required for the object to be executed.
     impl : `str | None`
-        The Python implementation thats required for the object to be executed.
+        The Python implementation that's required for the object to be executed.
 
     Returns
     -------

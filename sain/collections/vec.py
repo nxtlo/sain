@@ -134,7 +134,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     ---------
     A vec that gets initialized from a `list` will *point* to it and doesn't copy it.
     So any element that gets appended to the list will also get pushed into the vec
-    thats pointing to it and vice-versa.
+    that's pointing to it and vice-versa.
 
     ```py
     cells: list[str] = []
@@ -632,10 +632,10 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
                 case Ok(_):
                     print("All good.")
                 case Err(elem):
-                    print("Reached max cap :< cant push", elem)
+                    print("Reached max cap :< can't push", elem)
         ```
 
-        Or you can also just call `Vec.push` and it will push if theres is sufficient capacity.
+        Or you can also just call `Vec.push` and it will push if there's is sufficient capacity.
         ```py
         vec: Vec[int] = Vec.with_capacity(3)
 
@@ -1006,16 +1006,13 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     def __repr__(self) -> str:
         return "[]" if not self._ptr else repr(self._ptr)
 
-    def __eq__(self, other: object) -> bool:
+    def __eq__(self, other: Vec[T] | list[T]) -> bool:
         if isinstance(other, Vec):
             return self._ptr == other._ptr
 
-        elif isinstance(other, list):
-            return self._ptr == other
+        return self._ptr == other
 
-        return NotImplemented
-
-    def __ne__(self, other: object) -> bool:
+    def __ne__(self, other: Vec[T] | list[T]) -> bool:
         return not self.__eq__(other)
 
     def __le__(self, other: list[T]) -> bool:

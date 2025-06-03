@@ -33,37 +33,79 @@ import nox
 
 @nox.session(reuse_venv=True)
 def pdoc(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
+    session.run_install(
+        "uv",
+        "sync",
+        "--locked",
+        "--only-group",
+        "docs",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
     session.run("pdoc", "sain", "-d", "numpy", "-o", "./docs", "-t", "./templates")
 
 
 @nox.session(reuse_venv=True)
-def lint(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("ruff", "check", ".", "--fix")
+def fmt(session: nox.Session) -> None:
+    session.run_install(
+        "uv",
+        "sync",
+        "--locked",
+        "--only-group",
+        "fmt",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
+    session.run("ruff", "format", "sain")
+    session.run("ruff", "check", "sain", "--fix")
+    session.run("isort", "sain")
 
 
 @nox.session(reuse_venv=True)
-def type_check(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
+def pyright(session: nox.Session) -> None:
+    session.run_install(
+        "uv",
+        "sync",
+        "--locked",
+        "--only-group",
+        "type-checking",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
     session.run("pyright", "sain")
 
 
 @nox.session(reuse_venv=True)
 def pytest(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
+    session.run_install(
+        "uv",
+        "sync",
+        "--locked",
+        "--only-group",
+        "tests",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
     session.run("pytest", "tests")
 
 
-# @nox.session(reuse_venv=True)
-# def verify_types(session: nox.Session) -> None:
-#     session.install("-r", "dev-requirements.txt")
-#     session.run("pyright", "--verifytypes", "sain", "--ignoreexternal")
+@nox.session(reuse_venv=True)
+def slotscheck(session: nox.Session) -> None:
+    session.run_install(
+        "uv",
+        "sync",
+        "--locked",
+        "--group",
+        "lint",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
+    session.run("slotscheck", "-m", "sain", "--verbose")
 
 
 @nox.session(reuse_venv=True)
-def reformat(session: nox.Session) -> None:
-    session.install("-r", "dev-requirements.txt")
-    session.run("ruff", "format", ".")
-    session.run("ruff", "check", ".")
-    session.run("isort", "sain")
+def codespell(session: nox.Session) -> None:
+    session.run_install(
+        "uv",
+        "sync",
+        "--locked",
+        "--only-group",
+        "lint",
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+    )
+    session.run("codespell", "sain", "-w")
