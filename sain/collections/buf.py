@@ -436,7 +436,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         ptr[0] = 1 # TypeError: cannot modify read-only memory
         ```
         """
-        return self.__buffer__(0x100)
+        return self.__buffer__(256).toreadonly()
 
     def as_ref(self) -> _slice.Slice[int]:
         """Get an immutable reference to the underlying sequence, without copying.
@@ -761,12 +761,10 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             raise BufferError("Cannot work with uninitialized bytes.")
 
         if _sys.version_info >= (3, 12):
-            return self._buf.__buffer__(flag)
-
-        # arrays in 3.11 and under don't implement the buffer protocol.
-        mem = memoryview(self._buf)
-        if flag == 256:  # readonly
-            return mem.toreadonly()
+            mem = self._buf.__buffer__(flag)
+        else:
+            # arrays in 3.11 and under don't implement the buffer protocol.
+            mem = memoryview(self._buf)
 
         return mem
 
