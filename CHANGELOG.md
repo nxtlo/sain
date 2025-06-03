@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `BytesMut.offset`
 - New module `time` and a new class `Duration`
 - `Vec.dedup_by`
+- `macros.safe`
 
 ### Changed
 
@@ -54,10 +55,12 @@ instead of a `Mutable|Sequence` type.
 ### Fixed
 
 - `Vec.retain` wasn't working as intended.
+- `Bytes.__buffer__` raises `AttributeError` in Python 3.10
 
 ### Removed
 
 - `Vec.from_args`
+- non-trivial equality, includes `Box`, `Lazy`, `LazyFuture`, `Once`, `AsyncOnce`.
 
 ## 1.3.0 - 01/01/2025
 

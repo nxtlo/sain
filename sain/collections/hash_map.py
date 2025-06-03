@@ -208,7 +208,7 @@ class _RawMap(collections.Mapping[K, V]):
         seen: set[K] = set()
         results: list[V] = []
 
-        for key in keys:
+        for key in typing.cast("collections.Iterable[K]", keys):
             if key in seen or key not in self:
                 return _option.NOTHING
 

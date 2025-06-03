@@ -219,15 +219,6 @@ class Once(typing.Generic[T]):
 
     __str__ = __repr__
 
-    def __eq__(self, __value: object) -> bool:
-        if isinstance(__value, Once):
-            return self._inner == __value._inner  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-
-        return NotImplemented
-
-    def __ne__(self, __value: object) -> bool:
-        return not self.__eq__(__value)
-
     def __bool__(self) -> bool:
         return self.is_set
 
@@ -399,15 +390,6 @@ class AsyncOnce(typing.Generic[T]):
         return "<async_uninit>"
 
     __str__ = __repr__
-
-    def __eq__(self, __value: object) -> bool:
-        if isinstance(__value, AsyncOnce):
-            return self._inner == __value._inner  # pyright: ignore
-
-        return NotImplemented
-
-    def __ne__(self, __value: object) -> bool:
-        return not self.__eq__(__value)
 
     def __bool__(self) -> bool:
         return self.is_set

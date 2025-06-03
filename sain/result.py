@@ -65,7 +65,7 @@ In addition to working with pattern matching, `Result` provides a
 wide variety of different methods.
 
 ```py
-# `unwrap_or` is used to return a default value incase of an `Err` variant returned.
+# `unwrap_or` is used to return a default value in case of an `Err` variant returned.
 good_result: Result[str, bool] = Ok("Name")
 print(username.unwrap_or("default_name"))  # name
 

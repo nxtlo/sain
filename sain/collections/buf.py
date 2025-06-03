@@ -46,6 +46,7 @@ from sain import convert
 from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
+from sain.macros import safe
 from sain.macros import assert_precondition
 from sain.macros import deprecated
 from sain.macros import rustc_diagnostic_item
@@ -337,9 +338,9 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         During the conversion process, any invalid bytes will get converted to
         [REPLACEMENT_CHARACTER](https://en.wikipedia.org/wiki/Specials_(Unicode_block))
-        which looks like this `�`, so be carful on what you're trying to convert.
+        which looks like this `�`, so be careful on what you're trying to convert.
 
-        Use `.try_to_str` try attempt the conversion incase of failure.
+        Use `.try_to_str` try attempt the conversion in case of failure.
 
         Example
         -------
@@ -435,7 +436,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         ptr[0] = 1 # TypeError: cannot modify read-only memory
         ```
         """
-        return self.__buffer__(0x100).toreadonly()
+        return self.__buffer__(256).toreadonly()
 
     def as_ref(self) -> _slice.Slice[int]:
         """Get an immutable reference to the underlying sequence, without copying.
@@ -457,6 +458,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         return _slice.Slice(())
 
+    @safe
     def to_mut(self) -> BytesMut:
         """Convert `self` into `BytesMut`.
 
@@ -483,6 +485,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         assert new == [2, 1, 3, 4]
         ```
         """
+        # SAFETY: `Bytes.leak` returns an empty array
+        # if `self` is uninitialized.
         return BytesMut.from_ptr_unchecked(self.leak())
 
     def raw_parts(
@@ -687,6 +691,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
     # layout methods.
 
+    @safe
     def copy(self) -> Bytes:
         """Create a copy of the bytes.
 
@@ -700,6 +705,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if not self._buf:
             return Bytes()
 
+        # SAFETY: `self._buf` is initialized.
         return self.from_ptr_unchecked(self._buf[:])
 
     def index(self, v: int, start: int = 0, stop: int = _sys.maxsize) -> int:
@@ -754,7 +760,13 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if not self._buf:
             raise BufferError("Cannot work with uninitialized bytes.")
 
-        return self._buf.__buffer__(flag)
+        if _sys.version_info >= (3, 12):
+            mem = self._buf.__buffer__(flag)
+        else:
+            # arrays in 3.11 and under don't implement the buffer protocol.
+            mem = memoryview(self._buf)
+
+        return mem
 
     def __contains__(self, byte: int) -> bool:
         return byte in self._buf if self._buf else False
@@ -830,11 +842,13 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     @typing.overload
     def __getitem__(self, index: int) -> int: ...
 
+    @safe
     def __getitem__(self, index: int | slice) -> int | Bytes:
         if not self._buf:
             raise IndexError("Index out of range")
 
         if isinstance(index, slice):
+            # SAFETY: `self._buf` is initialized.
             return self.from_ptr_unchecked(self._buf[index])
 
         return self._buf[index]
@@ -845,12 +859,14 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     # defined like `array`'s
     __hash__: typing.ClassVar[None] = None
 
+    @safe
     def __copy__(self) -> Bytes:
         if not self._buf:
             return Bytes()
 
         return Bytes.from_ptr_unchecked(self._buf.__copy__())
 
+    @safe
     def __deepcopy__(self, unused: typing.Any, /) -> Bytes:
         if not self._buf:
             return Bytes()
@@ -864,7 +880,7 @@ class BytesMut(
     Bytes,  # pyright: ignore - we want to inherit from `Bytes`.
     collections.MutableSequence[int],
 ):
-    """Provides mutable abstractions for working with UTF-8 compatible bytes.
+    """Provides mutable abstractions for working with bytes.
 
     It is an efficient container for storing and operating with bytes,
     It is built on-top of `array.array[int]`, which means you get all of `array[int]`'s operations.
@@ -1258,7 +1274,7 @@ class BytesMut(
         assert buffer.to_bytes() == b"Luv"
         ```
         """
-        return self.__buffer__(0x100)
+        return self.__buffer__(512)
 
     def as_mut(self) -> _slice.SliceMut[int]:
         """Get a mutable reference to the underlying sequence, without copying.
@@ -1280,6 +1296,7 @@ class BytesMut(
 
         return _slice.SliceMut([])
 
+    @safe
     def freeze(self) -> Bytes:
         """Convert `self` into an immutable `Bytes`.
 
@@ -1306,6 +1323,8 @@ class BytesMut(
         assert modified == [32, 23]
         ```
         """
+        # SAFETY: `Bytes.leak` returns an empty array
+        # if `self` is uninitialized.
         return Bytes.from_ptr_unchecked(self.leak())
 
     def swap_remove(self, byte: int) -> int:
@@ -1552,21 +1571,25 @@ class BytesMut(
     @typing.overload
     def __getitem__(self, index: int) -> int: ...
 
+    @safe
     def __getitem__(self, index: int | slice) -> int | BytesMut:
         if not self._buf:
             raise IndexError("index out of range")
 
         if isinstance(index, slice):
+            # SAFETY: `self._buf` is initialized.
             return self.from_ptr_unchecked(self._buf[index])
 
         return self._buf[index]
 
+    @safe
     def __copy__(self) -> BytesMut:
         if not self._buf:
             return BytesMut()
 
         return BytesMut.from_ptr_unchecked(self._buf.__copy__())
 
+    @safe
     def __deepcopy__(self, unused: typing.Any, /) -> BytesMut:
         if not self._buf:
             return BytesMut()

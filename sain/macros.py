@@ -43,12 +43,15 @@ __all__ = (
     "include_bytes",
 )
 
+import sys
 import functools
 import inspect
 import typing
 import warnings
 
 if typing.TYPE_CHECKING:
+    from typing_extensions import LiteralString
+
     T = typing.TypeVar("T", covariant=True)
     import collections.abc as collections
 
@@ -99,7 +102,7 @@ if typing.TYPE_CHECKING:
     ]
     # fmt: on
 
-_MAP_TO_PATH: dict[RustItem, typing.LiteralString] = {
+_MAP_TO_PATH: dict[RustItem, LiteralString] = {
     # mem
     "MaybeUninit": "std/mem/union.MaybeUninit.html",
     # option
@@ -254,6 +257,39 @@ class ub_checks(RuntimeWarning):
     """A special type of runtime warning that is only invoked on objects using `unsafe`."""
 
 
+def safe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
+    """Permit the use of `unsafe` marked function within a specific object.
+
+    This allows you to call functions marked with `unsafe` without causing runtime warnings.
+
+    Example
+    -------
+    ```py
+    @unsafe
+    def unsafe_fn() -> None: ...
+
+    @safe
+    def unsafe_in_safe() -> None:
+        # Calling this won't cause any runtime warns.
+        unsafe_fn()
+
+    unsafe_in_safe()
+    ```
+    """
+
+    @functools.wraps(fn)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
+        if sys.version_info >= (3, 12):
+            with warnings.catch_warnings(action="ignore", category=ub_checks):
+                return fn(*args, **kwargs)
+        else:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", category=ub_checks)
+                return fn(*args, **kwargs)
+
+    return wrapper
+
+
 @rustc_diagnostic_item("unsafe")
 def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     """Mark a function as unsafe.
@@ -268,6 +304,20 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
 
     Example
     -------
+    Use the `safe` decorator
+
+    ```py
+    @unsafe
+    def unsafe_fn() -> None: ...
+
+    # This decorator desugar into `infallible` in the next example.
+    @safe
+    def unsafe_in_safe() -> None:
+        # Calling this won't cause any runtime warns.
+        unsafe_fn()
+
+    unsafe_in_safe()
+    ```
 
     Using warnings lib:
     ```py
@@ -333,7 +383,7 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
 def assert_eq(left: T, right: T) -> None:
     """Asserts that two expressions are equal to each other.
 
-    This exactly as `assert left == right`, but includes a useful message incase of failure.
+    This exactly as `assert left == right`, but includes a useful message in case of failure.
 
     Example
     -------
@@ -353,7 +403,7 @@ def assert_eq(left: T, right: T) -> None:
 def assert_ne(left: T, right: T) -> None:
     """Asserts that two expressions are not equal to each other.
 
-    This exactly as `assert left == right`, but includes a useful message incase of failure.
+    This exactly as `assert left == right`, but includes a useful message in case of failure.
 
     Example
     -------
@@ -370,7 +420,7 @@ def assert_ne(left: T, right: T) -> None:
 
 
 @rustc_diagnostic_item("include_bytes")
-def include_bytes(file: typing.LiteralString) -> bytes:
+def include_bytes(file: LiteralString) -> bytes:
     """Includes a file as `bytes`.
 
     This function is not magic, It is literally defined as
@@ -400,7 +450,7 @@ def include_bytes(file: typing.LiteralString) -> bytes:
 
 
 @rustc_diagnostic_item("include_str")
-def include_str(file: typing.LiteralString) -> typing.LiteralString:
+def include_str(file: LiteralString) -> LiteralString:
     """Includes a file as literal `str`.
 
     This function is not magic, It is literally defined as
@@ -429,7 +479,7 @@ def include_str(file: typing.LiteralString) -> typing.LiteralString:
 
 
 def unstable(
-    *, reason: typing.LiteralString = "none"
+    *, reason: LiteralString = "none"
 ) -> collections.Callable[
     [collections.Callable[P, typing.Any]],
     collections.Callable[P, typing.NoReturn],
@@ -490,10 +540,10 @@ def deprecated(
 @typing.overload
 def deprecated(
     *,
-    since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
-    removed_in: typing.LiteralString | None = None,
-    use_instead: typing.LiteralString | None = None,
-    hint: typing.LiteralString | None = None,
+    since: typing.Literal["CURRENT_VERSION"] | LiteralString | None = None,
+    removed_in: LiteralString | None = None,
+    use_instead: LiteralString | None = None,
+    hint: LiteralString | None = None,
 ) -> collections.Callable[
     [collections.Callable[P, U]],
     collections.Callable[P, U],
@@ -504,10 +554,10 @@ def deprecated(
 def deprecated(
     *,
     obj: collections.Callable[P, U] | None = None,
-    since: typing.Literal["CURRENT_VERSION"] | typing.LiteralString | None = None,
-    removed_in: typing.LiteralString | None = None,
-    use_instead: typing.LiteralString | None = None,
-    hint: typing.LiteralString | None = None,
+    since: typing.Literal["CURRENT_VERSION"] | LiteralString | None = None,
+    removed_in: LiteralString | None = None,
+    use_instead: LiteralString | None = None,
+    hint: LiteralString | None = None,
 ) -> (
     collections.Callable[P, U]
     | collections.Callable[
@@ -531,7 +581,7 @@ def deprecated(
         hint = "Hint for ux."
     )
     class User:
-        # calling the decorator is not nessary.
+        # calling the decorator is not necessary.
         @deprecated
         def username(self) -> str:
             ...
@@ -601,7 +651,7 @@ def deprecated(
 
 
 @rustc_diagnostic_item("todo")
-def todo(message: typing.LiteralString | None = None) -> typing.NoReturn:
+def todo(message: LiteralString | None = None) -> typing.NoReturn:
     """A place holder that indicates unfinished code.
 
     Example
@@ -634,8 +684,8 @@ def unimplemented(
 @typing.overload
 def unimplemented(
     *,
-    message: typing.LiteralString | None = None,
-    available_in: typing.LiteralString | None = None,
+    message: LiteralString | None = None,
+    available_in: LiteralString | None = None,
 ) -> collections.Callable[
     [collections.Callable[P, U]],
     collections.Callable[P, U],
@@ -646,8 +696,8 @@ def unimplemented(
 def unimplemented(
     *,
     obj: collections.Callable[P, U] | None = None,
-    message: typing.LiteralString | None = None,
-    available_in: typing.LiteralString | None = None,
+    message: LiteralString | None = None,
+    available_in: LiteralString | None = None,
 ) -> (
     collections.Callable[P, U]
     | collections.Callable[

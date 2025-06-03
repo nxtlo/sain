@@ -200,19 +200,6 @@ class Box(typing.Generic[T]):
 
     __str__ = __repr__
 
-    def __eq__(self, value: object, /) -> bool:
-        if not isinstance(value, Box):
-            return NotImplemented
-
-        return (
-            self._inner == value._inner
-            and not self.has_expired
-            and not value.has_expired
-        )
-
-    def __ne__(self, value: object, /) -> bool:
-        return not self.__eq__(value)
-
     def __hash__(self) -> int:
         return hash(self._inner)
 

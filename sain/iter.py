@@ -133,7 +133,7 @@ class Iterator(
     This is the main interface that any type can implement by basically inheriting from it.
     The method `__next__` is the only method that needs to be implemented, You get all the other methods for free.
 
-    If you want to use a ready iterator for general purposes, Use `Iter`. This interface is only for implementors
+    If you want to use a ready iterator for general purposes, Use `Iter`. This interface is only for implementers
     and type hints.
 
     Example
@@ -1157,7 +1157,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         if (s := self.__slice_checked_get) is None:
             return "TrustedIter(<empty>)"
 
-        return f"TrustedIter({s[-self._len:]})"
+        return f"TrustedIter({s[-self._len :]})"
 
     def __next__(self) -> Item:
         try:
