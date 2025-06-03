@@ -754,7 +754,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if not self._buf:
             raise BufferError("Cannot work with uninitialized bytes.")
 
-        return self._buf.__buffer__(flag)
+        return memoryview(self._buf).__buffer__(flag)
 
     def __contains__(self, byte: int) -> bool:
         return byte in self._buf if self._buf else False
