@@ -24,7 +24,8 @@ Please run the following command and write the output below.
 -->
 
 `python -m sain`:
-```
+
+```sh
 <output>
 ```
 

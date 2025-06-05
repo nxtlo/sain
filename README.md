@@ -122,6 +122,10 @@ print(lib.books_for("Hugh Howey"))  # [Book("Silo", ...)]
 | #[deprecated]                 | @deprecated()                    | will get removed when it get stabilized in `warnings` in Python `3.13`                                                     |                            |
 | unimplemented!()              | @unimplemented()                 |                                                                                                                            |                            |
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Remaining work
 
 This is still early days for `sain`, it is no where near as stable as Python's stdlib.
@@ -129,4 +133,3 @@ This is still early days for `sain`, it is no where near as stable as Python's s
 This project mainly started as a fun / learning experience but turned into something more inspiring.
 
 The release cycles were breaking due to poor decision making at first, but it _should_ be stable enough now.
-

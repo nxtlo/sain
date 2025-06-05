@@ -39,6 +39,7 @@ __all__ = ("main",)
 import pathlib
 import platform
 import sys
+
 from . import _misc  # pyright: ignore[reportPrivateUsage]
 
 

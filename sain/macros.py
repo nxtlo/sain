@@ -43,9 +43,9 @@ __all__ = (
     "include_bytes",
 )
 
-import sys
 import functools
 import inspect
+import sys
 import typing
 import warnings
 

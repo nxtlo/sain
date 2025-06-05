@@ -92,7 +92,7 @@ def add(x: int, y: int) -> int:
     Safety
     ------
     If the function is not marked with `@unsafe`, You must provide an explanation
-    on why this function is unsafe to call.
+    on why this function might be unsafe to call.
 
     Parameters
     ----------
@@ -129,7 +129,7 @@ Same thing goes for classes, global constants, methods, etc.
 #### Example
 
 ```py
-# This import must be present in every `.py. file within the project tree.
+# This import must be present in every `.py` file within the project tree.
 from __future__ import annotations
 
 # after that include the public interface in `__all__` .
@@ -170,7 +170,7 @@ def _to_set(x: collections.Iterable[T]) -> set[T]:
 
 ### Using `Option<T>` and `Result<T, E>`
 
-to;dr is, nothing should raise and instead return `Result[T, E]`, and nothing should return `T | None` and instead return `Option[T]`, except only in specific cases.
+tl;dr is, nothing should raise and instead return `Result[T, E]`, and nothing should return `T | None` and instead return `Option[T]`, except only in specific cases.
 
 You're allowed to return `T | None` when:
 
@@ -178,7 +178,7 @@ You're allowed to return `T | None` when:
 * `T | None` function parameters, arguments.
 * Class attributes can also be `T | None`, both are allowed.
 
-Same things goes to `Result[T, E]`, only in cases like `.unwrap()`, `.expect()` should raise and error because the caller has full control,
+Same things goes to `Result[T, E]`, only methods that panic in Rust's side like `.unwrap()`, `.expect()` should raise and error because the caller has full control,
 otherwise the function should never raises and instead return `Result`
 
 When implementing an item from Rust, It needs have the same signature as it's implementation in Rust.
@@ -205,6 +205,7 @@ def checked_add(x: int, y: int) -> Option[int]:
         return NOTHING
 
 # unsafe Rust functions must be marked with the @unsafe decorator.
+# This will generate documentation about the safety for this function.
 @unsafe
 def unchecked_add(x: int, y: int) -> int:
     return x + y
@@ -265,4 +266,4 @@ def repeat[T](n: int) -> Array[T]: ...
 
 ## [Type checking](https://www.python.org/dev/peps/pep-0484/)
 
-The default typechecker we use is `pyright`.
+The default type checker i use is `pyright`.

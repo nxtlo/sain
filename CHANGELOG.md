@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New module `time` and a new class `Duration`
 - `Vec.dedup_by`
 - `macros.safe`
+- `python -m sain` command.
 
 ### Changed
 
@@ -51,6 +52,7 @@ doesn't actually get mutated.
 - All `split_*` methods now return an instance of the object you're splitting from
 instead of a `Mutable|Sequence` type.
 - `Bytes.to_str` and `try_to_str` are marked for deprecation.
+- `sain` officialy uses `uv` as a default pkg manager.
 
 ### Fixed
 
