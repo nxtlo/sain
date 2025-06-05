@@ -7,6 +7,14 @@ Offering core Rust items such as `Vec<T>`, `Result<T, E>`, `Option<T>` and more.
 
 Python 3.10 or higher is required.
 
+Using uv:
+
+```sh
+uv pip install sain
+```
+
+Using pip:
+
 ```sh
 pip install sain
 ```
