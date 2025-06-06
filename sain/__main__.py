@@ -27,29 +27,8 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Dynamically growable collections and containers.
 
-These collections are basic implementations of Rust's standard collections crate. from under the hood, they're an extended
-and more rich implementations of the built-in sequences such as `list` and `bytearray`.
+from . import analyze
 
-### When Should You Use Which Collection?
-This question's answer should be pretty straightforward.
-
-* Use `Vec` when you want to replace `list`.
-* Use `Bytes` when you want to store read-only bytes. The underlying sequence is an `array` of type `u8`.
-* Use `BytesMut` when you want a mutable version of `Bytes`.
-* Use `HashMap` when you want to replace `dict`.
-"""
-
-from __future__ import annotations
-
-__all__ = ("Vec", "Bytes", "BytesMut", "vec", "buf", "slice", "hash_map", "HashMap")
-
-from . import buf
-from . import hash_map
-from . import slice
-from . import vec
-from .buf import Bytes
-from .buf import BytesMut
-from .hash_map import HashMap
-from .vec import Vec
+if __name__ == "__main__":
+    raise SystemExit(analyze.main())

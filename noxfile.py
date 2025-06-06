@@ -41,7 +41,16 @@ def pdoc(session: nox.Session) -> None:
         "docs",
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
-    session.run("pdoc", "sain", "-d", "numpy", "-o", "./docs", "-t", "./templates")
+    session.run(
+        "pdoc",
+        "sain",
+        "-d",
+        "numpy",
+        "-o",
+        "./docs",
+        "-t",
+        "./templates",
+    )
 
 
 @nox.session(reuse_venv=True)

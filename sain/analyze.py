@@ -27,29 +27,36 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""Dynamically growable collections and containers.
+"""Provides a utility `main` function which prints platform-specific information for debugging purposes.
 
-These collections are basic implementations of Rust's standard collections crate. from under the hood, they're an extended
-and more rich implementations of the built-in sequences such as `list` and `bytearray`.
-
-### When Should You Use Which Collection?
-This question's answer should be pretty straightforward.
-
-* Use `Vec` when you want to replace `list`.
-* Use `Bytes` when you want to store read-only bytes. The underlying sequence is an `array` of type `u8`.
-* Use `BytesMut` when you want a mutable version of `Bytes`.
-* Use `HashMap` when you want to replace `dict`.
+This is automatically called in `__main__.py` when using `python -m sain`.
 """
 
 from __future__ import annotations
 
-__all__ = ("Vec", "Bytes", "BytesMut", "vec", "buf", "slice", "hash_map", "HashMap")
+__all__ = ("main",)
 
-from . import buf
-from . import hash_map
-from . import slice
-from . import vec
-from .buf import Bytes
-from .buf import BytesMut
-from .hash_map import HashMap
-from .vec import Vec
+import pathlib
+import platform
+import sys
+
+from . import _misc  # pyright: ignore[reportPrivateUsage]
+
+
+def main() -> None:
+    path = str(pathlib.Path(_misc.__file__).resolve().parent)
+    version = _misc.__version__
+    py_impl = platform.python_implementation()
+    py_ver = platform.python_version()
+    py_compiler = platform.python_compiler()
+
+    # fmt: off
+    print(
+        f"sain ({version})",
+        f"location {path}",
+        f"{py_impl} {py_ver} {py_compiler}",
+        " ".join(frag.strip() for frag in platform.uname()),
+        file=sys.stderr,
+        sep='\n',
+    )
+    # fmt: on

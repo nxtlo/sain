@@ -43,9 +43,9 @@ __all__ = (
     "include_bytes",
 )
 
-import sys
 import functools
 import inspect
+import sys
 import typing
 import warnings
 
@@ -354,7 +354,7 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
 
     The caller of the decorated function is responsible for the undefined behavior if occurred.
     """
-    m = "\n# Safety ⚠️\nCalling this method is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior).\n"
+    m = "\n# Safety ⚠️\nCalling this method without knowing the output is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior).\n"
     if fn.__doc__ is not None:
         # append this message to an existing document.
         fn.__doc__ = inspect.cleandoc(fn.__doc__) + m
@@ -371,6 +371,7 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
                 "is considered unsafe and may lead to undefined behavior.\n"
                 "you can disable this warning by using `-O` opt level if you know what you're doing.",
                 warn_ty=ub_checks,
+                stacklevel=3,
             )
             return call_once
 
@@ -394,9 +395,9 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert left == right, (
-        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left == right
+    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("assert_ne")
@@ -414,9 +415,9 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert left != right, (
-        f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left != right
+    ), f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("include_bytes")

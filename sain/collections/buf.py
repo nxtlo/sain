@@ -46,10 +46,10 @@ from sain import convert
 from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
-from sain.macros import safe
 from sain.macros import assert_precondition
 from sain.macros import deprecated
 from sain.macros import rustc_diagnostic_item
+from sain.macros import safe
 from sain.macros import unsafe
 
 from . import slice as _slice

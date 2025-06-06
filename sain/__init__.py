@@ -28,7 +28,9 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""sain is a set of minimal abstraction that brings Rust's ecosystem to Python. It offers a few of the core Rust types like `Vec<T>` and `Result<T, E>` and more."""
+"""
+.. include:: ../DOCS.md
+"""
 
 from __future__ import annotations
 
