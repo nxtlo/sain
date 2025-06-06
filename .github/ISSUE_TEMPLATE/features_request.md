@@ -41,4 +41,4 @@ Include any open questions that need to be answered before the feature can be
 stabilised.
 -->
 
-[Public API style guide]: https://github.com/nxtlo/sain/blob/contributing/CONTRIBUTING.md#feature-requests
+[Public API style guide]: https://github.com/nxtlo/sain/blob/master/CONTRIBUTING.md#feature-requests

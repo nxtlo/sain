@@ -35,10 +35,10 @@ and more rich implementations of the built-in sequences such as `list` and `byte
 ### When Should You Use Which Collection?
 This question's answer should be pretty straightforward.
 
-* Use `Vec` when you want to replace `list`
-* Use `Bytes` when you want to replace `bytearray` or `bytes` or in general, you want to store bytes in memory,
-then perform conversions into other types.
-* Use `HashMap` when you want to replace `dict`
+* Use `Vec` when you want to replace `list`.
+* Use `Bytes` when you want to store read-only bytes. The underlying sequence is an `array` of type `u8`.
+* Use `BytesMut` when you want a mutable version of `Bytes`.
+* Use `HashMap` when you want to replace `dict`.
 """
 
 from __future__ import annotations
