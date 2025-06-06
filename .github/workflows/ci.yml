@@ -84,33 +84,6 @@ jobs:
         run: |
           nox -s slotscheck
 
-  docs:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6.1.0
-        with:
-          python-version: "3.12"
-          activate-environment: true
-
-      - name: Build documentation
-        run: |
-          uv sync --frozen --only-group nox
-          nox -s pdoc
-
-      - name: Upload Documentation Artifact
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: docs
-          path: ./docs
-          retention-days: 2
-          if-no-files-found: error
-
   release:
     if: github.event_name == 'release'
 
