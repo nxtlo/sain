@@ -142,19 +142,19 @@
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">* `Jython`</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;cfg_attr&quot;</span><span class="p">,</span> <span class="s2">&quot;cfg&quot;</span><span class="p">)</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="kn">import</span> <span class="nn">collections.abc</span> <span class="k">as</span> <span class="nn">collections</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="kn">import</span> <span class="nn">functools</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="kn">import</span> <span class="nn">inspect</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="kn">import</span> <span class="nn">platform</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="kn">import</span> <span class="nn">sys</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="kn">import</span> <span class="nn">os</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">collections</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="kn">from</span> <span class="nn">sain.macros</span> <span class="kn">import</span> <span class="n">rustc_diagnostic_item</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">sain.macros</span><span class="w"> </span><span class="kn">import</span> <span class="n">rustc_diagnostic_item</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="n">F</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="nb">object</span><span class="p">])</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
@@ -163,34 +163,34 @@
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="n">Python</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;CPython&quot;</span><span class="p">,</span> <span class="s2">&quot;PyPy&quot;</span><span class="p">,</span> <span class="s2">&quot;IronPython&quot;</span><span class="p">,</span> <span class="s2">&quot;Jython&quot;</span><span class="p">]</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Self</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="n">_machine</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">machine</span><span class="p">()</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
 </span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="k">def</span> <span class="nf">_is_arm</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_is_arm</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>    <span class="k">return</span> <span class="s2">&quot;arm&quot;</span> <span class="ow">in</span> <span class="n">_machine</span>
 </span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
 </span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="k">def</span> <span class="nf">_is_arm_64</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_is_arm_64</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>    <span class="k">return</span> <span class="s2">&quot;arm&quot;</span> <span class="ow">in</span> <span class="n">_machine</span> <span class="ow">and</span> <span class="n">_machine</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;64&quot;</span><span class="p">)</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="k">def</span> <span class="nf">_is_x86_64</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_is_x86_64</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="k">return</span> <span class="n">_machine</span> <span class="o">==</span> <span class="s2">&quot;AMD64&quot;</span> <span class="ow">or</span> <span class="n">_machine</span> <span class="o">==</span> <span class="s2">&quot;x86_64&quot;</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="k">def</span> <span class="nf">_is_x86</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_is_x86</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="k">return</span> <span class="n">_machine</span> <span class="o">==</span> <span class="s2">&quot;i386&quot;</span> <span class="ow">or</span> <span class="n">_machine</span> <span class="o">==</span> <span class="s2">&quot;x86&quot;</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="k">def</span> <span class="nf">_py_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_py_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>    <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;cfg_attr&quot;</span><span class="p">)</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="k">def</span> <span class="nf">cfg_attr</span><span class="p">(</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="k">def</span><span class="w"> </span><span class="nf">cfg_attr</span><span class="p">(</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="o">*</span><span class="p">,</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="n">target_os</span><span class="p">:</span> <span class="n">System</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="n">python_version</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -228,13 +228,13 @@
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">    Parameters</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">    ----------</span>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">    target_os : `str | None`</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        The targeted operating system thats required for the object.</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        The targeted operating system that&#39;s required for the object.</span>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">    python_version : `tuple[int, int, int] | None`</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        The targeted Python version thats required for the object. Format must be `(3, ..., ...)`.</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        The targeted Python version that&#39;s required for the object. Format must be `(3, ..., ...)`.</span>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">    target_arch : `str | None`</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">        The CPU targeted architecture thats required for the object.</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">        The CPU targeted architecture that&#39;s required for the object.</span>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">    impl : `str | None`</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        The Python implementation thats required for the object.</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        The Python implementation that&#39;s required for the object.</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">    Raises</span>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">    ------</span>
@@ -244,9 +244,9 @@
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        If the passed Python implementation is unknown.</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">callback</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">callback</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>            <span class="n">checker</span> <span class="o">=</span> <span class="n">_AttrCheck</span><span class="p">(</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>                <span class="n">callback</span><span class="p">,</span>
 </span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>                <span class="n">target_os</span><span class="o">=</span><span class="n">target_os</span><span class="p">,</span>
@@ -262,7 +262,7 @@
 </span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>
 </span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>
 </span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;cfg&quot;</span><span class="p">)</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="k">def</span> <span class="nf">cfg</span><span class="p">(</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="k">def</span><span class="w"> </span><span class="nf">cfg</span><span class="p">(</span>
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="n">target_os</span><span class="p">:</span> <span class="n">System</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>    <span class="n">python_version</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="n">target_arch</span><span class="p">:</span> <span class="n">Arch</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -289,13 +289,13 @@
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">    Parameters</span>
 </span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="sd">    ----------</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="sd">    target_os : `str | None`</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">        The targeted operating system thats required for the object to be executed.</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">        The targeted operating system that&#39;s required for the object to be executed.</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">    python_version : `tuple[int, ...] | None`</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">        The targeted Python version that&#39;s required for the object to be executed. Format must be `(3, ..., ...)`</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">    target_arch : `str | None`</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">        The CPU targeted architecture thats required for the object to be executed.</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">        The CPU targeted architecture that&#39;s required for the object to be executed.</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    impl : `str | None`</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        The Python implementation thats required for the object to be executed.</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        The Python implementation that&#39;s required for the object to be executed.</span>
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">    Returns</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">    -------</span>
@@ -314,7 +314,7 @@
 </span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="k">class</span> <span class="nc">_AttrCheck</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">F</span><span class="p">]):</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_AttrCheck</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">F</span><span class="p">]):</span>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>        <span class="s2">&quot;_target_os&quot;</span><span class="p">,</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>        <span class="s2">&quot;_callback&quot;</span><span class="p">,</span>
@@ -325,7 +325,7 @@
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>        <span class="s2">&quot;_debugger&quot;</span><span class="p">,</span>
 </span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>    <span class="p">)</span>
 </span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="n">callback</span><span class="p">:</span> <span class="n">F</span><span class="p">,</span>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="n">target_os</span><span class="p">:</span> <span class="n">System</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -343,11 +343,11 @@
 </span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_py_impl</span> <span class="o">=</span> <span class="n">impl</span>
 </span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_debugger</span> <span class="o">=</span> <span class="n">_Debug</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">no_raise</span><span class="p">)</span>
 </span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
 </span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">check_once</span><span class="p">()</span>
 </span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>        <span class="k">return</span> <span class="n">typing</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">))</span>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>    <span class="k">def</span> <span class="nf">check_once</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">check_once</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>        <span class="n">checks</span> <span class="o">=</span> <span class="p">(</span>
 </span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_check_platform</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_os</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_check_py_version</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_py_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
@@ -356,7 +356,7 @@
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="p">)</span>
 </span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span>
 </span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>
-</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>    <span class="k">def</span> <span class="nf">_check_target_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_check_target_arch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>        <span class="k">match</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_arch</span><span class="p">:</span>
 </span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>            <span class="k">case</span> <span class="s2">&quot;arm&quot;</span><span class="p">:</span>
 </span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>                <span class="k">return</span> <span class="n">_is_arm</span><span class="p">()</span>
@@ -372,7 +372,7 @@
 </span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>                    <span class="sa">f</span><span class="s2">&quot;Valid options are: &#39;arm&#39;, &#39;arm64&#39;, &#39;x86&#39;, &#39;x86_64&#39;.&quot;</span>
 </span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>                <span class="p">)</span>
 </span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>
-</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>    <span class="k">def</span> <span class="nf">_check_platform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_check_platform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>        <span class="n">is_unix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;posix&quot;</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;linux&quot;</span><span class="p">,</span> <span class="s2">&quot;darwin&quot;</span><span class="p">,</span> <span class="s2">&quot;macos&quot;</span><span class="p">}</span>
 </span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>
 </span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a>        <span class="c1"># If the target os is unix, then we assume that it&#39;s either linux or darwin.</span>
@@ -399,7 +399,7 @@
 </span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>            <span class="o">.</span><span class="n">finish</span><span class="p">()</span>
 </span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a>        <span class="p">)</span>
 </span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>
-</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>    <span class="k">def</span> <span class="nf">_check_py_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_check_py_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_py_version</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_py_version</span> <span class="o">&lt;=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">):</span>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>            <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>
@@ -410,7 +410,7 @@
 </span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>            <span class="o">.</span><span class="n">finish</span><span class="p">()</span>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>        <span class="p">)</span>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a>
-</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a>    <span class="k">def</span> <span class="nf">_check_py_impl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_check_py_impl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_implementation</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_py_impl</span><span class="p">:</span>
 </span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a>            <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a>
@@ -421,8 +421,8 @@
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>        <span class="p">)</span>
 </span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>
 </span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>
-</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a><span class="k">class</span> <span class="nc">_Debug</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">F</span><span class="p">]):</span>
-</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_Debug</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">F</span><span class="p">]):</span>
+</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a>        <span class="n">callback</span><span class="p">:</span> <span class="n">F</span><span class="p">,</span>
 </span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a>        <span class="n">no_raise</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
@@ -434,12 +434,12 @@
 </span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_no_raise</span> <span class="o">=</span> <span class="n">no_raise</span>
 </span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="n">message</span>
 </span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>
-</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>    <span class="k">def</span> <span class="nf">exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span> <span class="o">=</span> <span class="n">exc</span>
 </span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>
 </span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">cached_property</span>
-</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>    <span class="k">def</span> <span class="nf">_obj_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_obj_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">):</span>
 </span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>            <span class="k">return</span> <span class="s2">&quot;function&quot;</span>
 </span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>        <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">):</span>
@@ -447,10 +447,10 @@
 </span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a>
 </span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a>        <span class="k">return</span> <span class="s2">&quot;object&quot;</span>
 </span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>
-</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>    <span class="k">def</span> <span class="nf">flag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">flag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_no_raise</span> <span class="o">=</span> <span class="n">cond</span>
 </span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>
-</span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>    <span class="k">def</span> <span class="nf">message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a message to be included in the exception that is getting raised.&quot;&quot;&quot;</span>
 </span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>        <span class="n">fn_name</span> <span class="o">=</span> <span class="p">(</span>
 </span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a>            <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;&lt;lambda&gt;&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="o">.</span><span class="vm">__name__</span>
@@ -458,19 +458,19 @@
 </span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj_type</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">fn_name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
 </span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>
-</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>    <span class="k">def</span> <span class="nf">and_then</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">and_then</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Append an extra str to the end of this debugger&#39;s message.&quot;&quot;&quot;</span>
 </span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="n">message</span>
 </span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a>
-</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="k">def</span> <span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Finish the result, Either returning a bool or raising an exception.&quot;&quot;&quot;</span>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_raise</span><span class="p">:</span>
 </span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>            <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>
 </span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a>        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>        <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>        <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 </span></pre></div>
 
 
@@ -488,7 +488,7 @@
     </div>
     <a class="headerlink" href="#cfg_attr"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="cfg_attr-102"><a href="#cfg_attr-102"><span class="linenos">102</span></a><span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;cfg_attr&quot;</span><span class="p">)</span>
-</span><span id="cfg_attr-103"><a href="#cfg_attr-103"><span class="linenos">103</span></a><span class="k">def</span> <span class="nf">cfg_attr</span><span class="p">(</span>
+</span><span id="cfg_attr-103"><a href="#cfg_attr-103"><span class="linenos">103</span></a><span class="k">def</span><span class="w"> </span><span class="nf">cfg_attr</span><span class="p">(</span>
 </span><span id="cfg_attr-104"><a href="#cfg_attr-104"><span class="linenos">104</span></a>    <span class="o">*</span><span class="p">,</span>
 </span><span id="cfg_attr-105"><a href="#cfg_attr-105"><span class="linenos">105</span></a>    <span class="n">target_os</span><span class="p">:</span> <span class="n">System</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="cfg_attr-106"><a href="#cfg_attr-106"><span class="linenos">106</span></a>    <span class="n">python_version</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -526,13 +526,13 @@
 </span><span id="cfg_attr-138"><a href="#cfg_attr-138"><span class="linenos">138</span></a><span class="sd">    Parameters</span>
 </span><span id="cfg_attr-139"><a href="#cfg_attr-139"><span class="linenos">139</span></a><span class="sd">    ----------</span>
 </span><span id="cfg_attr-140"><a href="#cfg_attr-140"><span class="linenos">140</span></a><span class="sd">    target_os : `str | None`</span>
-</span><span id="cfg_attr-141"><a href="#cfg_attr-141"><span class="linenos">141</span></a><span class="sd">        The targeted operating system thats required for the object.</span>
+</span><span id="cfg_attr-141"><a href="#cfg_attr-141"><span class="linenos">141</span></a><span class="sd">        The targeted operating system that&#39;s required for the object.</span>
 </span><span id="cfg_attr-142"><a href="#cfg_attr-142"><span class="linenos">142</span></a><span class="sd">    python_version : `tuple[int, int, int] | None`</span>
-</span><span id="cfg_attr-143"><a href="#cfg_attr-143"><span class="linenos">143</span></a><span class="sd">        The targeted Python version thats required for the object. Format must be `(3, ..., ...)`.</span>
+</span><span id="cfg_attr-143"><a href="#cfg_attr-143"><span class="linenos">143</span></a><span class="sd">        The targeted Python version that&#39;s required for the object. Format must be `(3, ..., ...)`.</span>
 </span><span id="cfg_attr-144"><a href="#cfg_attr-144"><span class="linenos">144</span></a><span class="sd">    target_arch : `str | None`</span>
-</span><span id="cfg_attr-145"><a href="#cfg_attr-145"><span class="linenos">145</span></a><span class="sd">        The CPU targeted architecture thats required for the object.</span>
+</span><span id="cfg_attr-145"><a href="#cfg_attr-145"><span class="linenos">145</span></a><span class="sd">        The CPU targeted architecture that&#39;s required for the object.</span>
 </span><span id="cfg_attr-146"><a href="#cfg_attr-146"><span class="linenos">146</span></a><span class="sd">    impl : `str | None`</span>
-</span><span id="cfg_attr-147"><a href="#cfg_attr-147"><span class="linenos">147</span></a><span class="sd">        The Python implementation thats required for the object.</span>
+</span><span id="cfg_attr-147"><a href="#cfg_attr-147"><span class="linenos">147</span></a><span class="sd">        The Python implementation that&#39;s required for the object.</span>
 </span><span id="cfg_attr-148"><a href="#cfg_attr-148"><span class="linenos">148</span></a>
 </span><span id="cfg_attr-149"><a href="#cfg_attr-149"><span class="linenos">149</span></a><span class="sd">    Raises</span>
 </span><span id="cfg_attr-150"><a href="#cfg_attr-150"><span class="linenos">150</span></a><span class="sd">    ------</span>
@@ -542,9 +542,9 @@
 </span><span id="cfg_attr-154"><a href="#cfg_attr-154"><span class="linenos">154</span></a><span class="sd">        If the passed Python implementation is unknown.</span>
 </span><span id="cfg_attr-155"><a href="#cfg_attr-155"><span class="linenos">155</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="cfg_attr-156"><a href="#cfg_attr-156"><span class="linenos">156</span></a>
-</span><span id="cfg_attr-157"><a href="#cfg_attr-157"><span class="linenos">157</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">callback</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+</span><span id="cfg_attr-157"><a href="#cfg_attr-157"><span class="linenos">157</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">callback</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
 </span><span id="cfg_attr-158"><a href="#cfg_attr-158"><span class="linenos">158</span></a>        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
-</span><span id="cfg_attr-159"><a href="#cfg_attr-159"><span class="linenos">159</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+</span><span id="cfg_attr-159"><a href="#cfg_attr-159"><span class="linenos">159</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
 </span><span id="cfg_attr-160"><a href="#cfg_attr-160"><span class="linenos">160</span></a>            <span class="n">checker</span> <span class="o">=</span> <span class="n">_AttrCheck</span><span class="p">(</span>
 </span><span id="cfg_attr-161"><a href="#cfg_attr-161"><span class="linenos">161</span></a>                <span class="n">callback</span><span class="p">,</span>
 </span><span id="cfg_attr-162"><a href="#cfg_attr-162"><span class="linenos">162</span></a>                <span class="n">target_os</span><span class="o">=</span><span class="n">target_os</span><span class="p">,</span>
@@ -568,19 +568,19 @@
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">import</span> <span class="nn">sain</span>
+<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sain</span>
 
 <span class="nd">@cfg_attr</span><span class="p">(</span><span class="n">target_os</span><span class="o">=</span><span class="s2">&quot;windows&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">windows_only</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">windows_only</span><span class="p">():</span>
     <span class="c1"># Do stuff with Windows&#39;s API.</span>
     <span class="o">...</span>
 
 <span class="c1"># Mut be PyPy Python implementation or `RuntimeError` will be raised</span>
 <span class="c1"># when creating the instance.</span>
 <span class="nd">@cfg_attr</span><span class="p">(</span><span class="n">impl</span><span class="o">=</span><span class="s2">&quot;PyPy&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">Zoo</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Zoo</span><span class="p">:</span>
     <span class="nd">@<a href="#cfg_attr">sain.cfg_attr</a></span><span class="p">(</span><span class="n">target_os</span><span class="o">=</span><span class="s2">&quot;linux&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="o">...</span>
 
 <span class="c1"># An instance will not be created if raised.</span>
@@ -593,13 +593,13 @@
 
 <ul>
 <li><strong>target_os</strong> (<code>str | None</code>):
-The targeted operating system thats required for the object.</li>
+The targeted operating system that's required for the object.</li>
 <li><strong>python_version</strong> (<code>tuple[int, int, int] | None</code>):
-The targeted Python version thats required for the object. Format must be <code>(3, ..., ...)</code>.</li>
+The targeted Python version that's required for the object. Format must be <code>(3, ..., ...)</code>.</li>
 <li><strong>target_arch</strong> (<code>str | None</code>):
-The CPU targeted architecture thats required for the object.</li>
+The CPU targeted architecture that's required for the object.</li>
 <li><strong>impl</strong> (<code>str | None</code>):
-The Python implementation thats required for the object.</li>
+The Python implementation that's required for the object.</li>
 </ul>
 
 <h6 id="raises">Raises</h6>
@@ -627,7 +627,7 @@ The Python implementation thats required for the object.</li>
     </div>
     <a class="headerlink" href="#cfg"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="cfg-174"><a href="#cfg-174"><span class="linenos">174</span></a><span class="nd">@rustc_diagnostic_item</span><span class="p">(</span><span class="s2">&quot;cfg&quot;</span><span class="p">)</span>
-</span><span id="cfg-175"><a href="#cfg-175"><span class="linenos">175</span></a><span class="k">def</span> <span class="nf">cfg</span><span class="p">(</span>
+</span><span id="cfg-175"><a href="#cfg-175"><span class="linenos">175</span></a><span class="k">def</span><span class="w"> </span><span class="nf">cfg</span><span class="p">(</span>
 </span><span id="cfg-176"><a href="#cfg-176"><span class="linenos">176</span></a>    <span class="n">target_os</span><span class="p">:</span> <span class="n">System</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="cfg-177"><a href="#cfg-177"><span class="linenos">177</span></a>    <span class="n">python_version</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="cfg-178"><a href="#cfg-178"><span class="linenos">178</span></a>    <span class="n">target_arch</span><span class="p">:</span> <span class="n">Arch</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -654,13 +654,13 @@ The Python implementation thats required for the object.</li>
 </span><span id="cfg-199"><a href="#cfg-199"><span class="linenos">199</span></a><span class="sd">    Parameters</span>
 </span><span id="cfg-200"><a href="#cfg-200"><span class="linenos">200</span></a><span class="sd">    ----------</span>
 </span><span id="cfg-201"><a href="#cfg-201"><span class="linenos">201</span></a><span class="sd">    target_os : `str | None`</span>
-</span><span id="cfg-202"><a href="#cfg-202"><span class="linenos">202</span></a><span class="sd">        The targeted operating system thats required for the object to be executed.</span>
+</span><span id="cfg-202"><a href="#cfg-202"><span class="linenos">202</span></a><span class="sd">        The targeted operating system that&#39;s required for the object to be executed.</span>
 </span><span id="cfg-203"><a href="#cfg-203"><span class="linenos">203</span></a><span class="sd">    python_version : `tuple[int, ...] | None`</span>
 </span><span id="cfg-204"><a href="#cfg-204"><span class="linenos">204</span></a><span class="sd">        The targeted Python version that&#39;s required for the object to be executed. Format must be `(3, ..., ...)`</span>
 </span><span id="cfg-205"><a href="#cfg-205"><span class="linenos">205</span></a><span class="sd">    target_arch : `str | None`</span>
-</span><span id="cfg-206"><a href="#cfg-206"><span class="linenos">206</span></a><span class="sd">        The CPU targeted architecture thats required for the object to be executed.</span>
+</span><span id="cfg-206"><a href="#cfg-206"><span class="linenos">206</span></a><span class="sd">        The CPU targeted architecture that&#39;s required for the object to be executed.</span>
 </span><span id="cfg-207"><a href="#cfg-207"><span class="linenos">207</span></a><span class="sd">    impl : `str | None`</span>
-</span><span id="cfg-208"><a href="#cfg-208"><span class="linenos">208</span></a><span class="sd">        The Python implementation thats required for the object to be executed.</span>
+</span><span id="cfg-208"><a href="#cfg-208"><span class="linenos">208</span></a><span class="sd">        The Python implementation that&#39;s required for the object to be executed.</span>
 </span><span id="cfg-209"><a href="#cfg-209"><span class="linenos">209</span></a>
 </span><span id="cfg-210"><a href="#cfg-210"><span class="linenos">210</span></a><span class="sd">    Returns</span>
 </span><span id="cfg-211"><a href="#cfg-211"><span class="linenos">211</span></a><span class="sd">    -------</span>
@@ -687,7 +687,7 @@ Instead it will return <code>False</code> if any of the attributes fails.</p>
 <h6 id="example">Example</h6>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">import</span> <span class="nn">sain</span>
+<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sain</span>
 
 <span class="k">if</span> <span class="n">cfg</span><span class="p">(</span><span class="n">target_os</span><span class="o">=</span><span class="s2">&quot;windows&quot;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Windows&quot;</span><span class="p">)</span>
@@ -702,13 +702,13 @@ Instead it will return <code>False</code> if any of the attributes fails.</p>
 
 <ul>
 <li><strong>target_os</strong> (<code>str | None</code>):
-The targeted operating system thats required for the object to be executed.</li>
+The targeted operating system that's required for the object to be executed.</li>
 <li><strong>python_version</strong> (<code>tuple[int, ...] | None</code>):
 The targeted Python version that's required for the object to be executed. Format must be <code>(3, ..., ...)</code></li>
 <li><strong>target_arch</strong> (<code>str | None</code>):
-The CPU targeted architecture thats required for the object to be executed.</li>
+The CPU targeted architecture that's required for the object to be executed.</li>
 <li><strong>impl</strong> (<code>str | None</code>):
-The Python implementation thats required for the object to be executed.</li>
+The Python implementation that's required for the object to be executed.</li>
 </ul>
 
 <h6 id="returns">Returns</h6>
