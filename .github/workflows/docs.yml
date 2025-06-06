@@ -26,8 +26,8 @@ jobs:
           python-version: '3.13'
 
       - run: |
-          pip install nox
-          nox -s pdoc
+          pip install pdoc
+          pdoc sain -d numpy -o ./docs -t ./templates
 
       - uses: actions/upload-pages-artifact@v3
         with:
