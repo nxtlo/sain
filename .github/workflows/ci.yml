@@ -86,6 +86,8 @@ jobs:
 
   release:
     if: github.event_name == 'release'
+    permissions:
+      contents: write
 
     runs-on: ubuntu-latest
 
