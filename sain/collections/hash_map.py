@@ -34,28 +34,103 @@ This contains Rust's `std::collections::HashMap` methods.
 
 from __future__ import annotations
 
-from sain.macros import rustc_diagnostic_item
-
-__all__ = ("HashMap", "RefMut")
+__all__ = ("HashMap", "RefMut", "Drain", "ExtractIf", "IntoValues", "IntoKeys")
 
 import collections.abc as collections
 import typing
 
 from sain import iter as _iter
-from sain import option as _option
+from sain import option as option
+from sain.convert import From
+from sain.convert import Into
+from sain.default import Default
+from sain.macros import rustc_diagnostic_item
+from sain.macros import todo
 
 K = typing.TypeVar("K")
 V = typing.TypeVar("V")
 T = typing.TypeVar("T")
+Fn = collections.Callable[[K, V], bool]
 
 if typing.TYPE_CHECKING:
     from typing_extensions import Never
     from typing_extensions import Self
 
     from sain.option import Option
+    from sain.result import Result
 
 
-class _RawMap(collections.Mapping[K, V]):
+@typing.final
+class IntoKeys(_iter.ExactSizeIterator[K]):
+    __slots__ = ("_map", "_len")
+
+    def __init__(self, view: collections.KeysView[K]) -> None:
+        self._map = view.__iter__()
+        self._len = len(view)
+
+    def __next__(self) -> K:
+        return next(self._map)
+
+    def __len__(self) -> int:
+        return self._len
+
+
+@typing.final
+class IntoValues(_iter.ExactSizeIterator[V]):
+    __slots__ = ("_map", "_len")
+
+    def __init__(self, view: collections.ValuesView[V]) -> None:
+        self._map = view.__iter__()
+        self._len = len(view)
+
+    def __next__(self) -> V:
+        return next(self._map)
+
+    def __len__(self) -> int:
+        return self._len
+
+
+@typing.final
+class Drain(typing.Generic[K, V], _iter.ExactSizeIterator[tuple[K, V]]):
+    """A draining iterator over the entries of a hashmap.
+
+    This iterator is created by the drain method on `RefMut.drain`. See its documentation for more.
+    """
+
+    __slots__ = ("_len", "_map")
+
+    def __init__(self, raw: _RawMap[K, V]) -> None:
+        self._len = len(raw)
+        self._map = raw
+
+    def __next__(self) -> tuple[K, V]:
+        todo()
+
+    def __len__(self) -> int:
+        todo()
+
+
+# fmt: off
+
+@typing.final
+class ExtractIf(typing.Generic[K, V], _iter.Iterator[tuple[K, V]]):
+    __slots__ = ("_map", "_pred")
+
+    def __init__(self, raw: _RawMap[K, V], pred: Fn[K, V]) -> None:
+        self._map = raw
+        self._pred = pred
+
+    def __next__(self) -> tuple[K, V]:
+        todo()
+
+
+class _RawMap(
+    collections.Mapping[K, V],
+    Into[collections.MutableSequence[tuple[K, V]]],
+    From[collections.Iterable[tuple[K, V]]],  # `from_keys` basically.
+    Default["HashMap[K, V]"],
+):
+
     __slots__ = ("_source",)
 
     def __init__(self, source: dict[K, V] | None = None, /) -> None:
@@ -82,7 +157,64 @@ class _RawMap(collections.Mapping[K, V]):
         """
         return cls({k: v for k, v in iterable})
 
+    # trait impls
+
+    @staticmethod
+    def default() -> HashMap[K, V]:
+        """Creates an empty `HashMap<K, V>`."""
+        return HashMap()
+
+    def into(self) -> collections.MutableSequence[tuple[K, V]]:
+        """Turn this `HashMap` into a `[(K, V); len(self)]` key-value paris.
+
+        `self` is consumed afterwards.
+
+        Example
+        -------
+        ```py
+        users = [(0, "user-0"), (1, "user-1")]
+        map1 = HashMap.from_keys(*users)
+        assert map1.into() == users
+        # map1 is dropped.
+        ```
+        """
+        out = [(k, v) for k, v in self.items()]
+        del self._source
+        return out
+
+    @classmethod
+    def from_value(cls, value: collections.Iterable[tuple[K, V]]) -> Self:
+        """Creates a `HashMap` from an iterable of `(K, V)` key-value paris.
+
+        Same as `HashMap.from_keys(*iter)`
+        """
+        return cls.from_keys(*value)
+
     # default impls
+
+    def into_keys(self) -> IntoKeys[K]:
+        keys = IntoKeys(self.keys())
+        del self._source
+        return keys
+
+    def into_values(self) -> IntoValues[V]:
+        values = IntoValues(self.values())
+        del self._source
+        return values
+
+    def contains_key(self, k: K) -> bool:
+        """Check whether `k` is in `self` or not.
+
+        Example
+        -------
+        ```py
+        users = HashMap({0: "user-0"})
+        assert users.contains_key(0) is True
+        # similar to just doing
+        assert 0 in users
+        ```
+        """
+        return k in self
 
     def is_empty(self) -> bool:
         """Whether this `self` contains any items or not.
@@ -116,9 +248,9 @@ class _RawMap(collections.Mapping[K, V]):
         ```
         """
         if key not in self:
-            return _option.NOTHING
+            return option.NOTHING
 
-        return _option.Some(self._source[key])
+        return option.Some(self._source[key])
 
     def get_with(self, f: collections.Callable[[], K]) -> Option[V]:
         """Get the value associated with `key` returned from a callable `f()`, returns `None` if not found.
@@ -135,9 +267,9 @@ class _RawMap(collections.Mapping[K, V]):
         """
         key = f()
         if key not in self:
-            return _option.NOTHING
+            return option.NOTHING
 
-        return _option.Some(self._source[key])
+        return option.Some(self._source[key])
 
     def get_pairs(self, key: K) -> Option[tuple[K, V]]:
         """Get both `key-value` pairs associated with `key`, returns `None` if not found.
@@ -153,21 +285,11 @@ class _RawMap(collections.Mapping[K, V]):
         ```
         """
         if key not in self:
-            return _option.NOTHING
+            return option.NOTHING
 
-        return _option.Some((key, self._source[key]))
+        return option.Some((key, self._source[key]))
 
-    @typing.overload
-    def get_many(self, keys: K) -> _option.Option[V]: ...
-
-    @typing.overload
-    def get_many(
-        self, keys: collections.Iterable[K]
-    ) -> _option.Option[collections.Collection[V]]: ...
-
-    def get_many(
-        self, keys: K | collections.Iterable[K]
-    ) -> _option.Option[collections.Collection[V]] | _option.Option[V]:
+    def get_many(self, *keys: K) -> Option[collections.Collection[V]]:
         """Attempts to get `len(keys)` values in the map at once.
 
         Returns a collection of length `keys` with the results of each query.
@@ -191,30 +313,18 @@ class _RawMap(collections.Mapping[K, V]):
         assert urls.get_many("google", "google").is_none()
         ```
         """
+        if not self:
+            return option.NOTHING
 
-        # Single key optimization.
-        if not isinstance(keys, collections.Iterable) and keys in self:
-            return _option.Some(self[keys])
-
-        # Single value optimization.
-        assert isinstance(keys, collections.Iterable)
-
-        if len(self) == 1:
-            once = next(iter(self))
-            if once in keys:
-                return _option.Some([self[once]])
-            return _option.NOTHING
-
-        seen: set[K] = set()
         results: list[V] = []
 
-        for key in typing.cast("collections.Iterable[K]", keys):
-            if key in seen or key not in self:
-                return _option.NOTHING
+        for key in keys:
+            # filter duplicate or not found keys.
+            if keys.count(key) > 1 or key not in self:
+                continue
 
-            seen.add(key)
             results.append(self[key])
-        return _option.Some(results)
+        return option.Some(results) if results else option.NOTHING
 
     def iter(self) -> _iter.Iter[tuple[K, V]]:
         """An iterator visiting all key-value pairs in arbitrary order.
@@ -350,6 +460,25 @@ class HashMap(typing.Generic[K, V], _RawMap[K, V]):
         """
         return RefMut(source or {})
 
+    @staticmethod
+    def from_keys_mut(*iterable: tuple[K, V]) -> RefMut[K, V]:
+        """Create a new mutable `HashMap` from a sequence of key-value pairs.
+
+        Example
+        -------
+        ```py
+        tier_list = [
+            ("S", "Top tier"),
+            ("A", "Very Good"),
+            ("B", "Good"),
+            ("C", "Average"),
+            ("D", "dodo")
+        ]
+        mapping: RefMut[str, str] = HashMap.from_keys_mut(*tier_list)
+        ```
+        """
+        return RefMut({k: v for k, v in iterable})
+
     def as_mut(self) -> RefMut[K, V]:
         """Get a mutable reference to this hash map.
 
@@ -384,7 +513,7 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
     def __init__(self, source: dict[K, V], /) -> None:
         self._source = source
 
-    def insert(self, key: K, value: V) -> _option.Option[V]:
+    def insert(self, key: K, value: V) -> Option[V]:
         """Insert a key/value pair into the map.
 
         if the map doesn't already `key` present, `None` is returned.
@@ -403,11 +532,21 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         """
         if key not in self:
             self[key] = value
-            return _option.NOTHING
+            return option.NOTHING
 
         old = self[key]
         self[key] = value
-        return _option.Some(old)
+        return option.Some(old)
+
+    def try_insert(self, key: K, value: V) -> Result[V, K]:
+        from sain.result import Err
+        from sain.result import Ok
+
+        if key in self:
+            return Err(key)
+
+        self[key] = value
+        return Ok(value)
 
     def remove(self, key: K) -> Option[V]:
         """Remove a key from the map, returning the value of the key if it was previously in the map.
@@ -422,11 +561,11 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         ```
         """
         if key not in self:
-            return _option.NOTHING
+            return option.NOTHING
 
         v = self[key]
         del self[key]
-        return _option.Some(v)
+        return option.Some(v)
 
     def remove_entry(self, key: K) -> Option[tuple[K, V]]:
         """Remove a key from the map, returning the key and value if it was previously in the map.
@@ -441,11 +580,11 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         ```
         """
         if key not in self:
-            return _option.NOTHING
+            return option.NOTHING
 
         v = self[key]
         del self[key]
-        return _option.Some((key, v))
+        return option.Some((key, v))
 
     def retain(self, f: collections.Callable[[K, V], bool]) -> None:
         """Remove items from this map based on `f(key, value)` returning `False`.
@@ -472,6 +611,12 @@ class RefMut(typing.Generic[K, V], _RawMap[K, V], collections.MutableMapping[K, 
         for k, v in self._source.copy().items():
             if not f(k, v):
                 del self[k]
+
+    def drain(self) -> Drain[K, V]:
+        return Drain(self)
+
+    def extract_if(self, f: Fn[K, V], pred: Fn[K, V]) -> ExtractIf[K, V]:
+        return ExtractIf(self, pred)
 
     def __repr__(self) -> str:
         return self._source.__repr__()
