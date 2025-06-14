@@ -91,6 +91,7 @@ def pytest(session: nox.Session) -> None:
         "tests",
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
+    session.install("-e", ".")
     session.run("pytest", "tests")
 
 

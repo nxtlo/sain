@@ -68,7 +68,6 @@ from . import default as _default
 from . import futures
 from . import option as _option
 from . import result as _result
-from .collections import vec as _vec
 from .macros import rustc_diagnostic_item
 from .macros import unsafe
 
@@ -84,6 +83,8 @@ AnyIter = typing.TypeVar("AnyIter", bound="Iterator[typing.Any]")
 if typing.TYPE_CHECKING:
     import _typeshed
 
+    from .collections.slice import Slice
+    from .collections.vec import Vec
     from .option import Option
 
     Collector = (
@@ -246,7 +247,7 @@ class Iterator(
                 collection[idx] = item
 
     @typing.final
-    def to_vec(self) -> _vec.Vec[Item]:
+    def to_vec(self) -> Vec[Item]:
         """Convert this iterator into `Vec[T]`.
 
         Example
@@ -258,7 +259,9 @@ class Iterator(
         assert to_vec == [0]
         ```
         """
-        return _vec.Vec(_ for _ in self)
+        from .collections.vec import Vec
+
+        return Vec(_ for _ in self)
 
     @typing.final
     def sink(self) -> None:
@@ -1138,7 +1141,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         """
         self._len = new_len
 
-    def as_slice(self) -> _vec.Slice[Item]:
+    def as_slice(self) -> Slice[Item]:
         """Returns an immutable slice of all elements that have not been yielded
 
         Example
@@ -1150,7 +1153,9 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         assert iterator.as_slice() == [2, 3]
         ```
         """
-        return _vec.Slice(self.__slice_checked_get or ())
+        from .collections.slice import Slice
+
+        return Slice(self.__slice_checked_get or ())
 
     def __repr__(self) -> str:
         # __alive is dropped from `self`.

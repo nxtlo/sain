@@ -46,7 +46,7 @@ class Id(From[UUID], Into[int]):
     id: int | float
 
     @classmethod
-    def from_t(cls, value: UUID) -> Self:
+    def from_value(cls, value: UUID) -> Self:
         # Keep in mind, this stores a 128 bit <long> integer.
         return cls(int(value))
 
@@ -54,7 +54,7 @@ class Id(From[UUID], Into[int]):
         return int(self.id)
 
 # Simply perform conversions.
-from_uuid = Id.from_t(uuid4())
+from_uuid = Id.from_value(uuid4())
 into_int = from_uuid.into()
 ```
 
@@ -135,7 +135,7 @@ class From(typing.Protocol[T_co]):
         value: int
 
         @classmethod
-        def from_t(cls, value: str) -> Self:
+        def from_value(cls, value: str) -> Self:
             return cls(value=int(value))
 
     ```
@@ -144,7 +144,7 @@ class From(typing.Protocol[T_co]):
     __slots__ = ()
 
     @classmethod
-    def from_t(cls, value: T_co) -> Self:
+    def from_value(cls, value: T_co) -> Self:
         """Perform the conversion."""
         raise NotImplementedError
 
