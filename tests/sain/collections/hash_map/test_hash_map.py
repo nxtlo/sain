@@ -136,6 +136,7 @@ class TestHashMap:
         hashmap = HashMap({"1": None, "2": None})
         copy = hashmap.copy()
         assert hashmap == copy
+        assert id(hashmap) != id(copy)
 
     def test_leak(self):
         map = HashMap({0: "buh", 1: "guh", 2: "luh"})
