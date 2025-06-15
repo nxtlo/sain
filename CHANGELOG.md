@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Vec.dedup_by`
 - `Vec.leak`
 - `Vec.shirnk_to`
 - `Vec.shirnk_to_fit`
@@ -16,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `macros.include_bytes`
 - `macros.assert_eq`
 - `macros.assert_ne`
+- `macros.safe`
 - `iter.Once`
 - `iter.ExactSizeIterator`
 - `iter.TrustedIter`
@@ -25,6 +27,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Option.clear` and `Option.clear_if`
 - `HashMap.get_with`
 - `HashMap.get_pairs`
+- `HashMap.into_keys`
+- `HashMap.into_values`
+- `HashMap.into_iter`
+- `HashMap.contains_key`
+- `HashMap.from_keys_mut`
+- `RefMut.try_insert`
+- `RefMut.drain`
+- `RefMut.extract_if`
+- `impl Default for HashMap|RefMut`
+- `impl Into|From for HashMap|RefMut`
 - `slice.SpecContains`
 - `BytesMut`
 - `Bytes.from_ptr_unchecked`
@@ -33,8 +45,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `BytesMut.replace_with`
 - `BytesMut.offset`
 - New module `time` and a new class `Duration`
-- `Vec.dedup_by`
-- `macros.safe`
 - `python -m sain` command.
 
 ### Changed
