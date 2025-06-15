@@ -249,7 +249,9 @@ def assert_precondition(
         Defaults to `Exception`.
     """
     if not condition:
-        raise exception(f"precondition check violated: {message}") from None
+        raise exception(
+            f"precondition check violated: \033[91m{message}\033[0m"
+        ) from None
 
 
 @typing.final
@@ -367,9 +369,9 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
             call_once = fn(*args, **kwargs)
             _warn(
-                f"calling `{wrapper.__qualname__}` "
+                f"\033[93mcalling `{wrapper.__qualname__}` "
                 "is considered unsafe and may lead to undefined behavior.\n"
-                "you can disable this warning by using `-O` opt level if you know what you're doing.",
+                "you can disable this warning by using `-O` opt level if you know what you're doing.\033[0m",
                 warn_ty=ub_checks,
                 stacklevel=3,
             )
@@ -514,8 +516,7 @@ def unstable(
         @functools.wraps(obj)
         def wrapper(*_args: P.args, **_kwargs: P.kwargs) -> typing.NoReturn:
             raise RuntimeError(
-                f"{_obj_type(obj)} `{obj.__name__}` is not stable: {reason}. "
-                "Stability attributes are intended for use only within the core library and should not be applied in external modules or scripts."
+                f"\033[91m{_obj_type(obj)} `{obj.__name__}` is not stable: {reason}.\033[0m"
             )
 
         m = (
@@ -631,7 +632,7 @@ def deprecated(
 
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            _warn(message, warn_ty=DeprecationWarning)
+            _warn("\033[93m" + message + "\033[0m", warn_ty=DeprecationWarning)
             return func(*args, **kwargs)
 
         # idk why pyright doesn't know the type of wrapper.
@@ -747,7 +748,7 @@ def unimplemented(
 
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            _warn(msg, warn_ty=RuntimeWarning)
+            _warn("\033[93m" + msg + "\033[0m", warn_ty=RuntimeWarning)
             return func(*args, **kwargs)
 
         m = f"\n# Warning ⚠️\n{msg}."
