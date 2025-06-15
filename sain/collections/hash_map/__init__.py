@@ -53,10 +53,10 @@ from .base_iter import IntoIterator
 from .base_iter import IntoKeys
 from .base_iter import IntoValues
 from .base_iter import Iter
+from .base_iter import Fn
 
 K = typing.TypeVar("K")
 V = typing.TypeVar("V")
-Fn = collections.Callable[[K, V], bool]
 
 if typing.TYPE_CHECKING:
     from typing_extensions import Never
@@ -69,9 +69,8 @@ if typing.TYPE_CHECKING:
 class _RawMap(
     typing.Generic[K, V],
     collections.Mapping[K, V],
-    Default["HashMap[K, V]"],
     From[collections.Iterable[tuple[K, V]]],
-    Into[collections.MutableSequence[tuple[K, V]]],
+    Into[list[tuple[K, V]]],
 ):
     __slots__ = ("_source",)
 
@@ -81,7 +80,7 @@ class _RawMap(
     # constructors
 
     @classmethod
-    def from_keys(cls, *iterable: tuple[K, V]) -> Self:
+    def from_keys(cls, *iterable: tuple[K, V]) -> HashMap[K, V]:
         """Create a new `HashMap` from a sequence of key-value pairs.
 
         Example
@@ -97,24 +96,19 @@ class _RawMap(
         mapping = HashMap[str, str].from_keys(*tier_list)
         ```
         """
-        return cls({k: v for k, v in iterable})
+        return HashMap({k: v for k, v in iterable})
 
     # trait impls
 
     @classmethod
-    def from_value(cls, value: collections.Iterable[tuple[K, V]]) -> Self:
+    def from_value(cls, value: collections.Iterable[tuple[K, V]]) -> HashMap[K, V]:
         """Creates a `HashMap` from an iterable of `(K, V)` key-value paris.
 
         Same as `HashMap.from_keys(*iter)`
         """
-        return cls.from_keys(*value)
+        return HashMap({k: v for k, v in value})
 
-    @staticmethod
-    def default() -> HashMap[K, V]:
-        """Creates an empty `HashMap<K, V>`."""
-        return HashMap()
-
-    def into(self) -> collections.MutableSequence[tuple[K, V]]:
+    def into(self) -> list[tuple[K, V]]:
         """Turn this `HashMap` into a `[(K, V); len(self)]` key-value paris.
 
         `self` is consumed afterwards.
@@ -128,9 +122,7 @@ class _RawMap(
         # map1 is dropped.
         ```
         """
-        out = [(k, v) for k, v in self._source.items()]
-        del self._source
-        return out
+        return [(k, v) for k, v in self.leak().items()]
 
     # default impls
 
@@ -284,7 +276,7 @@ class _RawMap(
         assert urls.get_many("google", "google").is_none()
         ```
         """
-        if not self:
+        if not self._source:
             return option.NOTHING
 
         seen: set[K] = set()
@@ -403,10 +395,10 @@ class _RawMap(
 
 
 @rustc_diagnostic_item("HashMap")
-class HashMap(_RawMap[K, V]):
+class HashMap(_RawMap[K, V], Default["HashMap[K, V]"]):
     """An immutable key-value dictionary.
 
-    But default, it is immutable it cannot change its values after initializing it. however,
+    But default, `HashMap` is immutable, it cannot change its values after initializing it. however,
     you can return a mutable reference to this hashmap via `HashMap.as_mut` method, it returns a reference to the underlying map.
 
     Example
@@ -441,6 +433,11 @@ class HashMap(_RawMap[K, V]):
 
     def __init__(self, source: dict[K, V] | None = None, /) -> None:
         super().__init__(source)
+
+    @staticmethod
+    def default() -> HashMap[K, V]:
+        """Creates an empty `HashMap<K, V>`."""
+        return HashMap()
 
     @classmethod
     def from_mut(cls, source: dict[K, V] | None = None, /) -> RefMut[K, V]:
@@ -494,7 +491,7 @@ class HashMap(_RawMap[K, V]):
 
 
 @typing.final
-class RefMut(_RawMap[K, V], collections.MutableMapping[K, V]):
+class RefMut(_RawMap[K, V], collections.MutableMapping[K, V], Default["RefMut[K, V]"]):
     """A reference to a mutable dictionary / hashmap.
 
     Ideally, you want to use `HashMap.as_mut()` / `HashMap.from_mut` methods to create this.
@@ -506,12 +503,15 @@ class RefMut(_RawMap[K, V], collections.MutableMapping[K, V]):
         super().__init__(source)
         self._source = source
 
+    @staticmethod
+    def default() -> RefMut[K, V]:
+        """Creates a new, mutable, empty `RefMut<K, V>`."""
+        return RefMut({})
+
     def insert(self, key: K, value: V) -> Option[V]:
         """Insert a key/value pair into the map.
 
-        if the map doesn't already `key` present, `None` is returned.
-
-        if `key` is already present in the map, the value is updated, and the old value
+        if `key` is not present in the map, `None` is returned. otherwise, the value is updated, and the old value
         is returned.
 
         Example
@@ -574,9 +574,9 @@ class RefMut(_RawMap[K, V], collections.MutableMapping[K, V]):
         -------
         ```py
         map = HashMap.from_mut()
-        map.insert(0, "a")
-        map.remove(0).unwrap() == "a"
-        map.remove(0).is_none()
+        map[0] = "a"
+        assert map.remove_entry(0).unwrap() == (0, "a")
+        assert map.remove_entry(0).is_none()
         ```
         """
         if key not in self:
@@ -650,9 +650,6 @@ class RefMut(_RawMap[K, V], collections.MutableMapping[K, V]):
 
     def __setitem__(self, key: K, value: V, /) -> None:
         self._source[key] = value
-
-    def __getitem__(self, key: K, /) -> V:
-        return self._source[key]
 
     def __delitem__(self, key: K, /) -> None:
         del self._source[key]
