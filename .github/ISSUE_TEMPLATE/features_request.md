@@ -1,7 +1,7 @@
 ---
 name: Feature Request
 about: A tracking issue for a feature request.
-title: Feature tracking issue for `Feature Name`
+title: tracking issue for `Feature Name`
 labels: C-feature-request
 ---
 <!--
@@ -32,8 +32,9 @@ implementing a feature.
 -->
 
 - [ ] Implementation: "PR LINK"
-- [ ] Adjusted documentation.
-- [ ] Tested.
+- [ ] Adjusted documentation
+- [ ] Tested
+- [ ] Changelog added
 
 ### Unresolved Questions
 <!--
