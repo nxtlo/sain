@@ -72,7 +72,7 @@ instead of a `Mutable|Sequence` type.
 ### Removed
 
 - `Vec.from_args`
-- non-trivial equality, includes `Box`, `Lazy`, `LazyFuture`, `Once`, `AsyncOnce`.
+- non-trivial equality, includes `Box`, `Lazy`, `LazyFuture`, `Once`, `AsyncOnce` and `MaybeUninit`.
 
 ## 1.3.0 - 01/01/2025
 

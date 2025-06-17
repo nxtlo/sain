@@ -78,12 +78,3 @@ class TestMaybeUninit:
 
     def test___repr___when_uninitialized(self, uninit: MaybeUninit[None]) -> None:
         assert repr(uninit) == "<uninit>"
-
-    def test___eq___True(self, uninit: MaybeUninit[None]) -> None:
-        uninit2 = MaybeUninit[None]()
-        uninit2.write(None)
-        uninit.write(None)
-        assert uninit == uninit2
-
-    def test__eq__False(self, uninit: MaybeUninit[None]) -> None:
-        assert uninit != MaybeUninit(None)

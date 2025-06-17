@@ -67,14 +67,46 @@ class MaybeUninit(typing.Generic[T]):
     Examples
     --------
     ```py
-    # Create a list of 3 uninitialized strings.
-    array = MaybeUninit[str].uninit_array(3)
-    chars = ['a', 'b', 'c']
+    # Let's write a simple wrapper around `MaybeUninit<T>` to create a dynamic array.
+    class SizedArray[T]:
+        def __init__(self, size: int) -> None:
+            # Creates count `size` of `MaybeUninit<T>` in an uninitialized state.
+            self.buf = MaybeUninit[T].uninit_array(size)
+            # Track how many initialized elements are in the array.
+            self.len = 0
 
-    for index, uninit in enumerate(array):
-        uninit.write(chars[index])
+        def push(self, value: T) -> None:
+            # if the length of the array is equal to the size of the array,
+            # then we've reached the max size of the array.
+            if self.len == len(self.buf):
+                raise RuntimeError("max size reached")
 
-    assert all(obj.assume_init() for obj in pool)
+            # get the next uninitialized element and write into it.
+            self.buf[self.len].write(value)
+            self.len += 1
+
+        def copy_from(self, other: Sequence[T]) -> None:
+            # get the remaining space in the array.
+            spared = self.buf[self.len:]
+            # if the remaining space is less than the length of the other list,
+            # then we don't have enough space to copy the other list into the array.
+            if len(spared) < len(other):
+                raise RuntimeError("not enough space")
+
+            index = 0
+            while index < len(other):
+                self.buf[self.len + index].write(other[index])
+                index += 1
+
+            self.len += len(other)
+
+        def read(self) -> Sequence[T]:
+            return MaybeUninit.array_assume_init(self.buf[:self.len])
+
+    array = SizedArray[int](3)
+    array.push(1)
+    array.copy_from((2. 3))
+    assert array.read() == (1, 2, 3)
     ```
     """
 
@@ -189,35 +221,21 @@ class MaybeUninit(typing.Generic[T]):
         return [uninit.assume_init() for uninit in array]
 
     def write(self, value: T) -> T:
-        """Sets the value of the `MaybeUninit[T]`.
+        """Sets the value of the `MaybeUninit[T]`, Then return a reference to it.
 
         This will overwrite any previous values, if was initialized.
 
         Example
         -------
         ```py
-        def initialize(value: MaybeUninit[bytes]) -> None:
-            response = requests.get("...")
-            if response.ok:
-                # If ok, initialize.
-                value.write(response.content)
-
         buffer: MaybeUninit[bytes] = MaybeUninit()
-        data = initialize(buffer) # buffer is initialized now.
+        buffer.write(b"Hello, World!")
         print(buffer.assume_init())
         ```
         """
-        self.__write_mangling(value)
-        return self.assume_init()
-
-    # These are magic methods to bypass the name mangling.
-    def __write_mangling(self, value: T) -> T:
-        # A little hack to bypass name dangling.
-        setattr(self, "_MaybeUninit__value", value)
-        return value
-
-    def __read_mangling(self) -> T:
-        return getattr(self, "_MaybeUninit__value")
+        self.__value = value
+        # SAFETY: we just initialized the value, so it's safe to access.
+        return self.__value
 
     def __repr__(self) -> str:
         if self:
@@ -237,21 +255,6 @@ class MaybeUninit(typing.Generic[T]):
         ```
         """
         return hasattr(self, "_MaybeUninit__value")
-
-    def __eq__(self, value: object, /) -> bool:
-        if not isinstance(value, MaybeUninit):
-            return NotImplemented
-
-        if not self or not value:
-            # either ones not initialized.
-            return False
-
-        return self.__read_mangling() == typing.cast(
-            "MaybeUninit[T]", value.__read_mangling()
-        )
-
-    def __ne__(self, value: object, /) -> bool:
-        return not self.__eq__(value)
 
     def __hash__(self) -> int:
         return self.__value.__hash__()
