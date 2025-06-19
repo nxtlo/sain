@@ -85,6 +85,7 @@ if typing.TYPE_CHECKING:
         # convert
         "From", "TryFrom",
         "Into", "TryInto",
+        "convert_identity",
         # default
         "Default", "default_fn",
         # std::collections::*
@@ -142,6 +143,7 @@ _MAP_TO_PATH: dict[RustItem, LiteralString] = {
     "TryFrom": "std/convert/trait.TryFrom.html",
     "Into": "std/convert/trait.Into.html",
     "TryInto": "std/convert/trait.TryInto.html",
+    "convert_identity": "std/convert/fn.identity.html",
     # default
     "Default": "std/default/trait.Default.html",
     "default_fn": "std/default/trait.Default.html#tymethod.default",

@@ -49,11 +49,11 @@ from sain.result import Ok
 
 from .base_iter import Drain
 from .base_iter import ExtractIf
+from .base_iter import Fn
 from .base_iter import IntoIterator
 from .base_iter import IntoKeys
 from .base_iter import IntoValues
 from .base_iter import Iter
-from .base_iter import Fn
 
 K = typing.TypeVar("K")
 V = typing.TypeVar("V")

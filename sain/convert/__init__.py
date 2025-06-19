@@ -113,6 +113,37 @@ T_cov = typing.TypeVar("T_cov", covariant=True)
 E = typing.TypeVar("E")
 
 
+@rustc_diagnostic_item("convert_identity")
+def identity(x: T) -> T:
+    """The identity function.
+
+    This is a function that returns the same value as the input.
+
+    While it might seem strange to have a function that just returns back the input, there are some interesting uses.
+
+    Example
+    -------
+    Using `identity` to do nothing in a sequence of operations.
+    ```py
+    from sain.convert import identity
+
+    def mangle(x: int) -> int:
+        return x + 1
+
+    arr = [identity, mangle]
+    ```
+
+    Using `identity` to do nothing conditionally.
+    ```py
+    from sain.convert import identity
+
+    do_stuff = identity if condition else mangle
+    results = do_stuff(5)
+    ```
+    """
+    return x
+
+
 @rustc_diagnostic_item("From")
 @typing.runtime_checkable
 class From(typing.Protocol[T_co]):
