@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sain"
-version = "1.3.0"
+version = "1.4.0"
 description = "Write safe Python code like Rust"
 authors = [{ name = "nxtlo", email = "dhmony-99@hotmail.com" }]
 readme = "README.md"

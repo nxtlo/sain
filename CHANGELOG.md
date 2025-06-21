@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.4.0 - 6/21/2025
+
 ### Added
 
 - `Vec.dedup_by`
 - `Vec.leak`
-- `Vec.shirnk_to`
-- `Vec.shirnk_to_fit`
+- `Vec.shrink_to`
+- `Vec.shrink_to_fit`
 - `macros.include_str`
 - `macros.include_bytes`
 - `macros.assert_eq`
@@ -57,13 +59,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 doesn't actually get mutated.
 - `Bytes.leak` doesn't returned an optional array now.
 - `Iterator.collect` now collects into a list instead of tuple.
-- Separated the implementation of `Bytes` and `BytesMut`
-- `Bytes.from_static` renamed to `Bytes.from_ptr`
+- Separated the implementation of `Bytes` and `BytesMut`.
+- `Bytes.from_static` renamed to `Bytes.from_ptr`.
 - `@deprecated` and `@unimplemented` can be decorated without the call operator.
-- All `split_*` methods now return an instance of the object you're splitting from
+- All `split_*` methods now return an instance of the object you're splitting from.
 instead of a `Mutable|Sequence` type.
 - `Bytes.to_str` and `try_to_str` are marked for deprecation.
-- `sain` officialy uses `uv` as a default pkg manager.
+- `sain` officially uses `uv` as a default pkg manager.
+- `Result.iter` now returns `ExactSizeIterator` instead of `Iterator`.
 
 ### Fixed
 

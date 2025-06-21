@@ -28,7 +28,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__version__: str = "1.3.0"
+__version__: str = "1.4.0"
 __url__: str = "https://github.com/nxtlo/sain"
 __author__: str = "nxtlo"
 __about__: str = (
