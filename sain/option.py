@@ -54,7 +54,7 @@ if typing.TYPE_CHECKING:
 
 @rustc_diagnostic_item("Option")
 @typing.final
-class Some(typing.Generic[T], _default.Default["Option[None]"]):
+class Some(typing.Generic[T], _default.Default["Option[T]"]):
     """The `Option` type represents optional value, higher-level abstraction over the `None` type.
 
     It combines union of `T | None` in one convenient structure, allowing the users to manipulate and propagate
@@ -138,12 +138,12 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
     @staticmethod
     def default() -> Option[T]:
-        """Default value for `Some`. Returns `None` wrapped in `Some`.
+        """Default value for `Option<T>`. Returns `None` wrapped in `Some`.
 
         Example
         -------
         ```py
-        assert Some.default() == NOTHING
+        assert Some[int].default() is NOTHING
         ```
         """
         return NOTHING
@@ -169,7 +169,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
     def unwrap(self) -> T:
         """Unwrap the inner value either returning if its not `None` or raising a `RuntimeError`.
 
-        It's usually not recommended to use this method in production code, since it raises.
+        It's usually not recommended to use this method in production code, and instead use safer options such as `unwrap_or` or match patterns.
 
         Example
         -------
@@ -252,7 +252,9 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         return self._value  # pyright: ignore
 
     def expect(self, message: str, /) -> T:
-        """Returns the contained value if it is not `None` otherwise raises a `RuntimeError`.
+        """Returns the contained `Some` value.
+
+        raises if the value is `None` with a custom provided `message`.
 
         Example
         -------
@@ -615,7 +617,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         y = Some(1)
         assert x.and_ok(y) == Some(None)
 
-        y: Option[str] = Some("hi")
+        x: Option[str] = Some("hi")
         y = Some(100)
         assert x.and_ok(y) == Some(100)
         ```
@@ -669,7 +671,7 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
 
     # *- Builder methods *-
 
-    def iter(self) -> _iter.Iterator[T]:
+    def iter(self) -> _iter.ExactSizeIterator[T]:
         """Returns an iterator over the contained value.
 
         Example
@@ -775,10 +777,10 @@ class Some(typing.Generic[T], _default.Default["Option[None]"]):
         return self.unwrap()
 
     def __or__(self, other: T) -> T:
-        return self.unwrap_or(other)
+        return self._value if self._value is not None else other
 
     def __bool__(self) -> bool:
-        return self.is_some()
+        return self._value is not None
 
     def __eq__(self, other: None | object) -> bool:
         if other is None:
@@ -816,6 +818,8 @@ foo: Option[str] = Some(None)
 ```
 """
 
+# FIXME: I just realized how unsafe this is since it can be mutated and potentially cause catastrophic bugs.
+# maybe better to just use nothing_unchecked() instead or `Some(None)`.
 NOTHING: typing.Final[Some[typing.Any]] = Some(None)
 """A constant that is always `Some(None)`.
 

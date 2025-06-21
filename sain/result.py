@@ -422,7 +422,7 @@ class Ok(typing.Generic[T]):
     # * Iterator constructors. * #
     ##############################
 
-    def iter(self) -> _iter.TrustedIter[T]:
+    def iter(self) -> _iter.ExactSizeIterator[T]:
         """An iterator over the possible contained value.
 
         If `self` was `Ok`, then the iterator will yield the Ok `T`. otherwise yields nothing.
@@ -437,7 +437,7 @@ class Ok(typing.Generic[T]):
         c.iter().next() == Some(None)
         ```
         """
-        return _iter.TrustedIter((self._inner,))
+        return _iter.Once(self._inner)
 
     def __iter__(self) -> collections.Iterator[T]:
         yield self._inner
@@ -769,7 +769,7 @@ class Err(typing.Generic[E]):
     # * Iterator constructors. * #
     ##############################
 
-    def iter(self) -> _iter.Empty[E]:
+    def iter(self) -> _iter.ExactSizeIterator[E]:
         """An iterator over the possible contained value.
 
         If `self` was `Ok`, then the iterator will yield `T`, otherwise yields nothing.

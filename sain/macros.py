@@ -41,6 +41,10 @@ __all__ = (
     "assert_ne",
     "include_str",
     "include_bytes",
+    "safe",
+    "unsafe",
+    "rustc_diagnostic_item",
+    "RustItem",
 )
 
 import functools
@@ -101,6 +105,7 @@ if typing.TYPE_CHECKING:
         # time
         "Duration"
     ]
+    """An array of all the Rust items that can be marked as `rustc_diagnostic_item`."""
     # fmt: on
 
 _MAP_TO_PATH: dict[RustItem, LiteralString] = {
@@ -534,6 +539,7 @@ def unstable(
     return decorator
 
 
+# TODO: in 2.0.0 remove this and use typing_extensions.deprecated instead.
 @typing.overload
 def deprecated(
     *,
@@ -678,6 +684,7 @@ def todo(message: LiteralString | None = None) -> typing.NoReturn:
     )
 
 
+# TODO: in 2.0.0 make this the same as `todo`
 @typing.overload
 def unimplemented(
     *,

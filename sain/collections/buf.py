@@ -275,9 +275,9 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     # anyways, they won't be leaving for sometime until 2.0.0.
 
     @deprecated(
-        since="CURRENT_VERSION",
+        since="1.3.0",
         removed_in="2.0.0",
-        use_instead='`Bytes.to_bytes().decode("utf8")`',
+        use_instead='Bytes.to_bytes().decode("utf8")',
         hint="Converting a bytes object to string is fairly trivial.",
     )
     def to_string(self) -> str:
@@ -288,9 +288,9 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         return self.to_str()
 
     @deprecated(
-        since="CURRENT_VERSION",
+        since="1.3.0",
         removed_in="2.0.0",
-        use_instead='`Bytes.to_bytes().decode("utf8")`',
+        use_instead='Bytes.to_bytes().decode("utf8")',
         hint="Converting a bytes object to string is fairly trivial.",
     )
     def try_to_str(self) -> Result[str, bytes]:
@@ -328,7 +328,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             return _result.Err(e.object)
 
     @deprecated(
-        since="CURRENT_VERSION",
+        since="1.3.0",
         removed_in="2.0.0",
         use_instead='str(Bytes, encoding="utf-8")',
         hint="Converting a bytes object to string is fairly trivial.",

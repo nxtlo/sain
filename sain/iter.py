@@ -1494,13 +1494,18 @@ class Once(typing.Generic[Item], ExactSizeIterator[Item]):
     __slots__ = ("_item",)
 
     def __init__(self, item: Item) -> None:
-        self._item: Option[Item] = _option.Some(item)
+        self._item: Item | None = item
 
     def __next__(self) -> Item:
-        return self._item.take().unwrap_or_else(unreachable)
+        if self._item is None:
+            unreachable()
 
-    def __len__(self) -> typing.Literal[0, 1]:
-        return 1 if self._item else 0
+        i = self._item
+        self._item = None
+        return i
+
+    def __len__(self) -> int:
+        return 1 if self._item is not None else 0
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.

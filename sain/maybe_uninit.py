@@ -88,24 +88,25 @@ class MaybeUninit(typing.Generic[T]):
         def copy_from(self, other: Sequence[T]) -> None:
             # get the remaining space in the array.
             spared = self.buf[self.len:]
-            # if the remaining space is less than the length of the other list,
-            # then we don't have enough space to copy the other list into the array.
-            if len(spared) < len(other):
+            other_len = len(other)
+            # Check if there's enough capacity to copy the other list into the array.
+            if len(spared) < other_len:
                 raise RuntimeError("not enough space")
 
+            # Copy the other list into the array.
             index = 0
-            while index < len(other):
+            while index < other_len:
                 self.buf[self.len + index].write(other[index])
                 index += 1
 
-            self.len += len(other)
+            self.len += other_len
 
         def read(self) -> Sequence[T]:
             return MaybeUninit.array_assume_init(self.buf[:self.len])
 
     array = SizedArray[int](3)
     array.push(1)
-    array.copy_from((2. 3))
+    array.copy_from([2, 3])
     assert array.read() == (1, 2, 3)
     ```
     """
@@ -114,8 +115,19 @@ class MaybeUninit(typing.Generic[T]):
 
     @typing.overload
     def __init__(self) -> None: ...
+
     @typing.overload
-    def __init__(self, value: T) -> None: ...
+    def __init__(self, value: T) -> None:
+        """Creates a new MaybeUninit<T> initialized with the given value.
+        It is safe to call assume_init on the return value of this function.
+
+        Example
+        -------
+        ```py
+        v = MaybeUninit(1)
+        assert v.assume_init() == 1
+        ```
+        """
 
     def __init__(self, value: T | None = None) -> None:
         if value is None:
