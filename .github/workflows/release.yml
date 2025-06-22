@@ -22,4 +22,4 @@ jobs:
       - name: Release
         run: |
           uv sync
-          uv build && uv publish
+          uv build && uv publish --token ${{ secrets.PYPY_TOKEN }}
