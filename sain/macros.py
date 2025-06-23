@@ -81,6 +81,7 @@ if typing.TYPE_CHECKING:
         # std::iter::*
         "Iterator", "Iter", "empty",
         "once", "repeat", "into_iter",
+        "async_iterator",
         # errors
         "Error", "catch_unwind",
         # sync
@@ -137,6 +138,7 @@ _MAP_TO_PATH: dict[RustItem, LiteralString] = {
     "repeat": "std/iter/fn.repeat.html",
     "once": "std/iter/fn.once.html",
     "into_iter": "std/iter/trait.IntoIterator.html#tymethod.into_iter",
+    "async_iterator": "std/async_iter/trait.AsyncIterator.html",
     # errors
     "Error": "std/error/trait.Error.html",
     "catch_unwind": "std/panic/fn.catch_unwind.html",
@@ -169,6 +171,18 @@ _MAP_TO_PATH: dict[RustItem, LiteralString] = {
 }
 
 _RUSTC_DOCS = "https://doc.rust-lang.org"
+
+
+def _write_color(
+    flavor: typing.Literal["red", "green", "yellow"],
+    msg: str,
+) -> str:
+    if flavor == "red":
+        return f"\033[91m{msg}\033[0m"
+    elif flavor == "green":
+        return f"\033[92m{msg}\033[0m"
+    elif flavor == "yellow":
+        return f"\033[93m{msg}\033[0m"
 
 
 def _warn(msg: str, stacklevel: int = 2, warn_ty: type[Warning] = Warning) -> None:
@@ -257,7 +271,7 @@ def assert_precondition(
     """
     if not condition:
         raise exception(
-            f"precondition check violated: \033[91m{message}\033[0m"
+            f"precondition check violated: {_write_color('red', message)}"
         ) from None
 
 
@@ -376,9 +390,12 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
             call_once = fn(*args, **kwargs)
             _warn(
-                f"\033[93mcalling `{wrapper.__qualname__}` "
-                "is considered unsafe and may lead to undefined behavior.\n"
-                "you can disable this warning by using `-O` opt level if you know what you're doing.\033[0m",
+                _write_color(
+                    "yellow",
+                    f"calling `{wrapper.__qualname__}` "
+                    "is considered unsafe and may lead to undefined behavior.\n"
+                    "you can disable this warning by using `-O` opt level if you know what you're doing.",
+                ),
                 warn_ty=ub_checks,
                 stacklevel=3,
             )
@@ -489,25 +506,20 @@ def include_str(file: LiteralString) -> LiteralString:
 
 
 def unstable(
-    *, reason: LiteralString = "none"
-) -> collections.Callable[
-    [collections.Callable[P, typing.Any]],
-    collections.Callable[P, typing.NoReturn],
-]:
-    """A decorator that marks an internal object explicitly unstable.
+    *,
+    feature: LiteralString = "none",
+    issue: LiteralString | None = None,
+) -> collections.Callable[[T], T]:
+    """Mark an object as unstable, and links it to a tracking issue.
 
-    Unstable objects never ran, even inside the library.
-
-    Calling any object that is unstable will raise an `RuntimeError` exception.
-    Also using this outside the library isn't allowed.
+    Attempting to use an unstable object will raise a runtime warning.
 
     Example
     -------
     ```py
-
     from sain.macros import unstable
 
-    @unstable(reason = "none")
+    @unstable(feature = "none", issue = "290")
     def unstable_function() -> int:
         return -1
 
@@ -517,24 +529,25 @@ def unstable(
     ```
     """
 
-    def decorator(
-        obj: collections.Callable[P, U],
-    ) -> collections.Callable[P, typing.NoReturn]:
-        @functools.wraps(obj)
-        def wrapper(*_args: P.args, **_kwargs: P.kwargs) -> typing.NoReturn:
-            raise RuntimeError(
-                f"\033[91m{_obj_type(obj)} `{obj.__name__}` is not stable: {reason}.\033[0m"
-            )
+    TRACKING_ISSUE = f"\n tracking issue: https://github.com/nxtlo/sain/issues/{issue}"
+
+    def decorator(obj: T) -> T:
+        # Permits the use of unstable features in the core implementation.
+        _warn(
+            _write_color(
+                "red",
+                f"use of unstable feature: `{feature}`" + TRACKING_ISSUE,
+            ),
+            warn_ty=RuntimeWarning,
+            stacklevel=2,
+        )
 
         m = (
-            f"\n# Stability ⚠️\nThis {_obj_type(obj)} is unstable, "
-            "Calling it may result in failure or [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior)."
+            "🔬 This is an unstable experimental API, It may change in the future, using it may result in failure or undefined behavior."
+            + TRACKING_ISSUE
         )
-        # Append the formatted string to the existing documentation if it exists, otherwise set it as the documentation.
-        wrapper.__doc__ = (
-            (inspect.cleandoc(wrapper.__doc__) + m) if wrapper.__doc__ else m
-        )
-        return wrapper
+        obj.__doc__ = (inspect.cleandoc(obj.__doc__) + m) if obj.__doc__ else m
+        return obj
 
     return decorator
 
