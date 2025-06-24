@@ -102,6 +102,6 @@ class Stream(AsyncIterator[Item]):
             except StopIteration:
                 raise StopAsyncIteration
 
-
+@unstable(feature="async_iter", issue="257")
 def into_stream(iterable: Poller[Item]) -> Stream[Item]:
     return Stream(iterable)
