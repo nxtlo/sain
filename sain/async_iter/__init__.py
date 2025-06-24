@@ -31,16 +31,16 @@
 
 from __future__ import annotations
 
-__all__ = ("AsyncIterator", "Stream")
+__all__ = ("AsyncIterator", "Stream", "into_stream")
 
 import abc
 import typing
+from collections import abc as collections
 
 from sain.macros import rustc_diagnostic_item
 from sain.macros import unstable
 from sain.option import NOTHING
 from sain.option import Some
-from collections import abc as collections
 
 T = typing.TypeVar("T", covariant=True)
 Item = typing.TypeVar("Item")
@@ -60,7 +60,7 @@ class AsyncIterator(typing.Generic[Item], abc.ABC):
 
     # Required methods
     @abc.abstractmethod
-    def poll_next(self) -> collections.Awaitable[Option[Item]]: ...
+    async def poll_next(self) -> Option[Item]: ...
     @abc.abstractmethod
     async def __anext__(self) -> Item: ...
 
@@ -73,8 +73,8 @@ class AsyncIterator(typing.Generic[Item], abc.ABC):
         return [item async for item in self]
 
 
-@unstable(feature="async_iter", issue="257")
 @typing.final
+@unstable(feature="async_iter", issue="257")
 class Stream(AsyncIterator[Item]):
     __slots__ = ("_poller",)
 
@@ -101,3 +101,7 @@ class Stream(AsyncIterator[Item]):
                 return next(self._poller)
             except StopIteration:
                 raise StopAsyncIteration
+
+
+def into_stream(iterable: Poller[Item]) -> Stream[Item]:
+    return Stream(iterable)

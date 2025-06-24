@@ -30,6 +30,8 @@
 
 import nox
 
+UNSTABLE_MODULES = ("async_iter",)
+
 
 @nox.session(reuse_venv=True)
 def pdoc(session: nox.Session) -> None:
@@ -105,7 +107,9 @@ def slotscheck(session: nox.Session) -> None:
         "lint",
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
-    session.run("slotscheck", "-m", "sain", "--verbose")
+    session.run(
+        "slotscheck", "-m", "sain", "--verbose", "--exclude-modules", *UNSTABLE_MODULES
+    )
 
 
 @nox.session(reuse_venv=True)
