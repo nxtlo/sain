@@ -64,12 +64,12 @@ import copy
 import itertools
 import typing
 
-from . import default as _default
-from . import futures
-from . import option as _option
-from . import result as _result
-from .macros import rustc_diagnostic_item
-from .macros import unsafe
+from sain import default as _default
+from sain import futures
+from sain import option as _option
+from sain import result as _result
+from sain.macros import rustc_diagnostic_item
+from sain.macros import unsafe
 
 Item = typing.TypeVar("Item")
 """The type of the item that is being yielded."""
@@ -83,9 +83,9 @@ AnyIter = typing.TypeVar("AnyIter", bound="Iterator[typing.Any]")
 if typing.TYPE_CHECKING:
     import _typeshed
 
-    from .collections.slice import Slice
-    from .collections.vec import Vec
-    from .option import Option
+    from sain.collections.slice import Slice
+    from sain.collections.vec import Vec
+    from sain.option import Option
 
     Collector = (
         collections.MutableSequence[Item]
@@ -259,7 +259,7 @@ class Iterator(
         assert to_vec == [0]
         ```
         """
-        from .collections.vec import Vec
+        from sain.collections.vec import Vec
 
         return Vec(_ for _ in self)
 
@@ -1153,7 +1153,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         assert iterator.as_slice() == [2, 3]
         ```
         """
-        from .collections.slice import Slice
+        from sain.collections.slice import Slice
 
         return Slice(self.__slice_checked_get or ())
 
