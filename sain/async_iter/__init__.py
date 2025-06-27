@@ -53,7 +53,7 @@ if typing.TYPE_CHECKING:
     Poller: typing.TypeAlias = collections.AsyncIterable[T] | collections.Iterable[T]
 
 
-@rustc_diagnostic_item("async_iterator")
+@rustc_diagnostic_item("AsyncIterator")
 @unstable(feature="async_iter", issue="257")
 class AsyncIterator(typing.Generic[Item], abc.ABC):
     __slots__ = ()
@@ -101,6 +101,7 @@ class Stream(AsyncIterator[Item]):
                 return next(self._poller)
             except StopIteration:
                 raise StopAsyncIteration
+
 
 @unstable(feature="async_iter", issue="257")
 def into_stream(iterable: Poller[Item]) -> Stream[Item]:

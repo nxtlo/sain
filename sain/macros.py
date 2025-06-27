@@ -81,7 +81,7 @@ if typing.TYPE_CHECKING:
         # std::iter::*
         "Iterator", "Iter", "empty",
         "once", "repeat", "into_iter",
-        "async_iterator",
+        "AsyncIterator",
         # errors
         "Error", "catch_unwind",
         # sync
@@ -138,7 +138,7 @@ _MAP_TO_PATH: dict[RustItem, LiteralString] = {
     "repeat": "std/iter/fn.repeat.html",
     "once": "std/iter/fn.once.html",
     "into_iter": "std/iter/trait.IntoIterator.html#tymethod.into_iter",
-    "async_iterator": "std/async_iter/trait.AsyncIterator.html",
+    "AsyncIterator": "std/async_iter/trait.AsyncIterator.html",
     # errors
     "Error": "std/error/trait.Error.html",
     "catch_unwind": "std/panic/fn.catch_unwind.html",
@@ -421,9 +421,9 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert left == right, (
-        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left == right
+    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("assert_ne")
@@ -441,9 +441,9 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert left != right, (
-        f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left != right
+    ), f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("include_bytes")
@@ -512,6 +512,9 @@ def unstable(
 ) -> collections.Callable[[T], T]:
     """Mark an object as unstable, and links it to a tracking issue.
 
+    This is usually used to mark experimental features that are not yet ready for production.
+    only within sain's codebase.
+
     Attempting to use an unstable object will raise a runtime warning.
 
     Example
@@ -523,29 +526,25 @@ def unstable(
     def unstable_function() -> int:
         return -1
 
-    if unstable_function():
-        # never reachable
-
+    unstable_function()
+    # This will cause a warning at runtime.
     ```
     """
 
-    TRACKING_ISSUE = f"\n tracking issue: https://github.com/nxtlo/sain/issues/{issue}"
+    TRACKING_ISSUE = f"https://github.com/nxtlo/sain/issues/{issue}"
 
     def decorator(obj: T) -> T:
         # Permits the use of unstable features in the core implementation.
         _warn(
             _write_color(
                 "red",
-                f"use of unstable feature: `{feature}`" + TRACKING_ISSUE,
+                f"use of unstable feature: `{feature}`\nsee tracking issue: {TRACKING_ISSUE}",
             ),
             warn_ty=RuntimeWarning,
-            stacklevel=2,
+            stacklevel=3,
         )
 
-        m = (
-            "🔬 This is an unstable experimental API, It may change in the future, using it may result in failure or undefined behavior."
-            + TRACKING_ISSUE
-        )
+        m = f"🔬 This is an unstable experimental API. ({feature} [<u>#{issue}</u>]({TRACKING_ISSUE}))"
         obj.__doc__ = (inspect.cleandoc(obj.__doc__) + m) if obj.__doc__ else m
         return obj
 
