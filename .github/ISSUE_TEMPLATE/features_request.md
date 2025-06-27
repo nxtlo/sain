@@ -1,8 +1,8 @@
 ---
-name: Feature Request
+name: Tracking issue
 about: A tracking issue for a feature request.
 title: tracking issue for `Feature Name`
-labels: C-feature-request
+labels: C-tracking-issue
 ---
 <!--
 Thank you for creating a feature request! 📜 Tracking issues are for tracking a
