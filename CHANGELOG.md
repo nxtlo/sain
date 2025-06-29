@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+### Removed
+
+### Changed
+
+- `Iterator.sort`'s return type changed from `Iter` to `MutableSequence`
+
 ## 1.4.0 - 6/21/2025
 
 ### Added
@@ -56,14 +64,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Vec` and `Bytes` are now `MutableSequence`.
 - It is possible to do `Some(v) == None` checks now which checks if `v == None`.
 - `*.as_ref` and `*.as_mut` methods now return `Slice` and `SliceMut`, This ensures that the underlying buffer
-doesn't actually get mutated.
+  doesn't actually get mutated.
 - `Bytes.leak` doesn't returned an optional array now.
 - `Iterator.collect` now collects into a list instead of tuple.
 - Separated the implementation of `Bytes` and `BytesMut`.
 - `Bytes.from_static` renamed to `Bytes.from_ptr`.
 - `@deprecated` and `@unimplemented` can be decorated without the call operator.
 - All `split_*` methods now return an instance of the object you're splitting from.
-instead of a `Mutable|Sequence` type.
+  instead of a `Mutable|Sequence` type.
 - `Bytes.to_str` and `try_to_str` are marked for deprecation.
 - `sain` officially uses `uv` as a default pkg manager.
 - `Result.iter` now returns `ExactSizeIterator` instead of `Iterator`.
@@ -137,7 +145,7 @@ instead of a `Mutable|Sequence` type.
 - `MaybeUninit` no longer exported to top level.
 - `Option.into_inner` renamed to `Option.transpose`
 - `Lazy` and `LazyFuture` now take a closure that initialize the value at first access
-instead of calling `.set` manually.
+  instead of calling `.set` manually.
 - Renamed `Bytes.as_bytes` to `Bytes.to_bytes`
 
 ## Removed
@@ -159,14 +167,14 @@ instead of calling `.set` manually.
 ### Changed
 
 - starting from this release, all collections are moved to `collections` instead of being in top-level.
-of course, core implementations such as `Vec` are still at top level.
+  of course, core implementations such as `Vec` are still at top level.
 
 ## 09/06/2024
 
 ### Added
 
 - `MaybeUninit[T]` type.
-- `Iterator` interface which represents `Iterator`  trait in Rust
+- `Iterator` interface which represents `Iterator` trait in Rust
 - Default external adapters for `Iterator`.
 - `Vec.push_within_capacity`
 - `Vec.reserve`

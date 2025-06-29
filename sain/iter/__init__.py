@@ -81,7 +81,9 @@ AnyIter = typing.TypeVar("AnyIter", bound="Iterator[typing.Any]")
 
 
 if typing.TYPE_CHECKING:
-    import _typeshed
+    from _typeshed import ReadableBuffer
+    from _typeshed import SupportsRichComparison
+    from _typeshed import SupportsTrunc
 
     from sain.collections.slice import Slice
     from sain.collections.vec import Vec
@@ -92,13 +94,12 @@ if typing.TYPE_CHECKING:
         | set[Item]
         | collections.MutableMapping[int, Item]
     )
-    _typeshed.ConvertibleToInt
     Sum: typing.TypeAlias = (
         "Iterator[str]"
         | "Iterator[typing.SupportsInt]"
         | "Iterator[typing.SupportsIndex]"
-        | "Iterator[_typeshed.ReadableBuffer]"
-        | "Iterator[_typeshed.SupportsTrunc]"
+        | "Iterator[ReadableBuffer]"
+        | "Iterator[SupportsTrunc]"
         | "Iterator[float]"
     )
 
@@ -204,9 +205,9 @@ class Iterator(
         ```py
         iterator = Iter(range(3))
         iterator.collect()
-        # (0, 1, 2, 3)
+        # [0, 1, 2, 3]
         iterator.collect(cast=str) # Map each element and collect it.
-        # ('0', '1', '2', '3')
+        # ['0', '1', '2', '3']
         ```
 
         Parameters
@@ -216,9 +217,9 @@ class Iterator(
             If not provided the items will be returned as it's original type.
         """
         if cast is not None:
-            return list(cast(i) for i in self)
+            return [cast(i) for i in self]
 
-        return list(_ for _ in self)
+        return [_ for _ in self]
 
     @typing.final
     def collect_into(self, collection: Collector[Item]) -> None:
@@ -282,8 +283,6 @@ class Iterator(
     def raw_parts(self) -> collections.Generator[Item, None, None]:
         """Decompose this iterator into a `Generator[Item]` that yields all of the remaining items.
 
-        This mainly used for objects that needs to satisfy its exact type.
-
         ```py
         it = Iter("cba")
         sort = sorted(it.raw_parts())
@@ -319,9 +318,6 @@ class Iterator(
 
     def cloned(self) -> Cloned[Item]:
         """Creates an iterator which shallow copies its elements by reference.
-
-        If you need a copy of the actual iterator and not the elements.
-        use `Iter.clone()`
 
         .. note::
             This method calls [`copy.copy()`](https://docs.python.org/3/library/copy.html)
@@ -531,10 +527,8 @@ class Iterator(
         -------
         ```py
         iterator = Iter([1, 2, 3])
-        while iterator.all(lambda item: isinstance(item, int)):
-            print("Still all integers")
-            continue
-            # Still all integers
+        if iterator.all(lambda item: isinstance(item, int)):
+            print("yes")
         ```
 
         Parameters
@@ -571,32 +565,30 @@ class Iterator(
         Example
         -------
         ```py
-        iterator = Iter([1, 2, 3])
-        for item, other_item in iterator.zip([4, 5, 6]):
-            assert item == other_item
-        <Iter([(1, 4), (2, 5), (3, 6)])>
+        xs = Iter([1, 2, 3])
+        ys = [4, 5, 6]
+
+        iter = xs.zip(ys)
+
+        assert iter.next().unwrap() == (1, 4)
+        assert iter.next().unwrap() == (2, 5)
+        assert iter.next().unwrap() == (3, 6)
         ```
 
         Parameters
         ----------
-        other: `Iter[OtherItem]`
+        other: `Iterable[OtherItem]`
             The iterable to zip with.
-
-        Returns
-        -------
-        `Iter[tuple[Item, OtherItem]]`
-            The zipped iterator.
-
         """
         return Iter(zip(self.raw_parts(), other))
 
     def sort(
         self,
         *,
-        key: collections.Callable[[Item], _typeshed.SupportsRichComparison],
+        key: collections.Callable[[Item], SupportsRichComparison],
         reverse: bool = False,
-    ) -> Iter[Item]:
-        """Sorts the iterator.
+    ) -> collections.MutableSequence[Item]:
+        """Sorts the iterator elements and return it in a mutable sequence.
 
         Example
         -------
@@ -617,7 +609,7 @@ class Iterator(
         reverse: `bool`
             Whether to reverse the sort.
         """
-        return Iter(sorted(self.raw_parts(), key=key, reverse=reverse))
+        return sorted([_ for _ in self], key=key, reverse=reverse)
 
     def reversed(self) -> Iter[Item]:
         """Returns a new iterator that yields the items in the iterator in reverse order.
@@ -639,7 +631,8 @@ class Iterator(
         """
         # NOTE: In order to reverse the iterator we need to
         # first collect it into some collection.
-        return Iter(reversed(list(_ for _ in self)))
+        # FIXME: specialize an impl for this.
+        return Iter(reversed([_ for _ in self]))
 
     def union(self, other: collections.Iterable[Item]) -> Iter[Item]:
         """Returns a new iterator that yields all items from both iterators.
@@ -692,7 +685,7 @@ class Iterator(
         return self.reversed().first()
 
     def count(self) -> int:
-        """Return the count of elements in memory this iterator has.
+        """Consume this iterator, returning the count of elements it has.
 
         Example
         -------
@@ -927,31 +920,38 @@ class Iterator(
 
 
 class ExactSizeIterator(typing.Generic[Item], Iterator[Item], abc.ABC):
-    """An iterator that knows its exact size.
+    """An iterator that reports its exact size.
 
     The implementations of this interface indicates that the iterator knows exactly
     how many items it can yield.
 
-    however, this is not a requirement for the iterator to implement this trait, as its
-    only used for iterators that can know their size.
+    Implementing this can greatly improve the performance of collecting the iterator to containers,
+    because it knows its exact length, it can take advantage of pre-allocation and then copy the items into the sequence.
+    However, if performance isn't critical, it is not necessary to implement this.
 
     Example
     -------
     ```py
-    @dataclass
-    class Letters(ExactSizeIterator[str]):
-        letters: list[str]
+    class ToUpperCase(ExactSizeIterator[str]):
+        def __init__(self, seq: Sequence[str]) -> None:
+            self.chars: deque[str] = deque(seq, maxlen=len(seq))
 
         def __next__(self) -> str:
-            return self.letters.pop(0)
+            if self.len() == 0:
+                raise StopIteration
+
+            return self.chars.popleft().upper()
 
         def __len__(self) -> int:
-            return len(self.letters)
+            return len(self.chars)
 
-    letters = Letters(['a', 'b', 'c'])
-    assert letters.count() == 3
-    assert letters.next() == Some('a')
-    assert letters.count() == 2
+    letters = ToUpperCase("abc")
+    assert letters.len() == 3
+    assert letters.next() == Some("A")
+    assert letters.len() == 2
+    # calling list(letters) gets optimized.
+    assert list(letters) == ["B", "C"]
+    assert letters.is_empty()
     ```
     """
 
@@ -1045,7 +1045,7 @@ class Iter(typing.Generic[Item], Iterator[Item]):
         """Return a copy of this iterator.
 
         ```py
-        it = Iterator([1, 2, 3])
+        it = Iter([1, 2, 3])
 
         for i in it.clone():
             ...
@@ -1084,15 +1084,19 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
 
     Parameters
     ----------
-    items: `collections.Collection[Item]`
+    items: `collections.Sequence[Item]`
         A sized collection of items to iterate over.
     """
 
     __slots__ = ("_it", "_len", "__alive")
 
     def __init__(self, iterable: collections.Sequence[Item]) -> None:
+        # keep a reference to the iterable for inspection.
+        # it gets dropped after the iterator is exhausted.
         self.__alive = iterable
+        # get the initial length of it.
         self._len = len(iterable)
+        # create an iterator out of it.
         self._it = iter(iterable)
 
     @property
@@ -1125,6 +1129,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         """
         return self.__next__()
 
+    # TODO: remove this
     @unsafe
     def set_len(self, new_len: int) -> None:
         """Sets the length of the iterator to `new_len`.
@@ -1579,11 +1584,10 @@ def into_iter(
 @rustc_diagnostic_item("into_iter")
 def into_iter(
     iterable: collections.Sequence[Item] | collections.Iterable[Item],
-) -> Iter[Item] | TrustedIter[Item] | TrustedIter[int]:
+) -> Iter[Item] | TrustedIter[Item]:
     """Convert any iterable into `Iterator[Item]`.
 
-    if the size of the iterable is known, it will return `TrustedIter`,
-    otherwise it will return `Iter`.
+    if the size of the iterable is known, the return type will be `TrustedIter`, otherwise `Iter`.
 
     Example
     -------

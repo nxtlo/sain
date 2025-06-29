@@ -64,50 +64,51 @@ if typing.TYPE_CHECKING:
     P = typing.ParamSpec("P")
     U = typing.TypeVar("U")
     Read = _typeshed.FileDescriptorOrPath
-    # fmt: off
-    RustItem = typing.Literal[
-        # mem
-        "MaybeUninit",
-        # option
-        "Option", "Some", "None",
-        # result
-        "Result", "Ok", "Err",
-        # macros
-        "unimplemented", "todo",
-        "deprecated", "doc",
-        "cfg", "cfg_attr",
-        "assert_eq", "assert_ne",
-        "include_bytes", "include_str",
-        # std::iter::*
-        "Iterator", "Iter", "empty",
-        "once", "repeat", "into_iter",
-        "AsyncIterator",
-        # errors
-        "Error", "catch_unwind",
-        # sync
-        "Lazy",
-        "Once",
-        # convert
-        "From", "TryFrom",
-        "Into", "TryInto",
-        "convert_identity",
-        # default
-        "Default", "default_fn",
-        # std::collections::*
-        "HashMap",
-        "Vec", "vec!",
-        # alloc
-        "String", "ToString",
-        # keywords
-        "unsafe",
-        # primitives
-        "&[u8]",
-        "&mut [u8]",
-        # time
-        "Duration"
-    ]
-    """An array of all the Rust items that can be marked as `rustc_diagnostic_item`."""
-    # fmt: on
+
+# fmt: off
+RustItem = typing.Literal[
+    # mem
+    "MaybeUninit",
+    # option
+    "Option", "Some", "None",
+    # result
+    "Result", "Ok", "Err",
+    # macros
+    "unimplemented", "todo",
+    "deprecated", "doc",
+    "cfg", "cfg_attr",
+    "assert_eq", "assert_ne",
+    "include_bytes", "include_str",
+    # std::iter::*
+    "Iterator", "Iter", "empty",
+    "once", "repeat", "into_iter",
+    "AsyncIterator",
+    # errors
+    "Error", "catch_unwind",
+    # sync
+    "Lazy",
+    "Once",
+    # convert
+    "From", "TryFrom",
+    "Into", "TryInto",
+    "convert_identity",
+    # default
+    "Default", "default_fn",
+    # std::collections::*
+    "HashMap",
+    "Vec", "vec!",
+    # alloc
+    "String", "ToString",
+    # keywords
+    "unsafe",
+    # primitives
+    "&[u8]",
+    "&mut [u8]",
+    # time
+    "Duration"
+]
+"""An array of all the Rust items that can be marked as `rustc_diagnostic_item`."""
+# fmt: on
 
 _MAP_TO_PATH: dict[RustItem, LiteralString] = {
     # mem
@@ -199,7 +200,30 @@ def rustc_diagnostic_item(item: RustItem, /) -> collections.Callable[[T], T]:
 
     This is a decorator that applies on both classes, methods and functions.
 
-    Assuming we're implementing the `FnOnce` trait from Rust, the object in Python may be marked with this decorator like this.
+    Before marking an object, you must ensure the following for better diagnostics:
+    * `item` is included in `RustItem`.
+    * `item`'s path is included and maps correctly to `doc.rust` in `_MAP_TO_PATH` map.
+
+    Example
+    -------
+    in macros.py, include the Rust item.
+    ```py
+    RustItem = Literal[
+        # other items
+        ...,
+        "FnOnce",
+        "rust-call"
+    ]
+
+    _MAP_TO_PATH = {
+        # other items
+        ...,
+        "FnOnce": "std/ops/trait.FnOnce.html",
+        "rust-call": "std/ops/trait.FnOnce.html#tymethod.call_once"
+    }
+    ```
+
+    and now we implement our type.
     ```py
     from sain.macros import rustc_diagnostic_item
 
@@ -370,14 +394,14 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
 
     ```sh
     # This enable optimization level 1, which will opt-out of `ub_checks` warnings.
-    python script.py -O
+    python -O script.py
     # This will ignore all the warnings.
     python -W ignore script.py
     ```
 
     The caller of the decorated function is responsible for the undefined behavior if occurred.
     """
-    m = "\n# Safety ⚠️\nCalling this method without knowing the output is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior).\n"
+    m = "\n# Safety ⚠️\nCalling this method without knowing its output is considered [undefined behavior](https://en.wikipedia.org/wiki/Undefined_behavior).\n"
     if fn.__doc__ is not None:
         # append this message to an existing document.
         fn.__doc__ = inspect.cleandoc(fn.__doc__) + m
@@ -388,7 +412,6 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
 
         @functools.wraps(fn)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            call_once = fn(*args, **kwargs)
             _warn(
                 _write_color(
                     "yellow",
@@ -399,7 +422,7 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
                 warn_ty=ub_checks,
                 stacklevel=3,
             )
-            return call_once
+            return fn(*args, **kwargs)
 
         return wrapper
     else:
@@ -421,9 +444,9 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert (
-        left == right
-    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    assert left == right, (
+        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    )
 
 
 @rustc_diagnostic_item("assert_ne")
@@ -441,9 +464,9 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert (
-        left != right
-    ), f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    assert left != right, (
+        f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    )
 
 
 @rustc_diagnostic_item("include_bytes")
@@ -533,6 +556,8 @@ def unstable(
 
     TRACKING_ISSUE = f"https://github.com/nxtlo/sain/issues/{issue}"
 
+    # FIXME: add a wrapper to warn only when the object is called `()`.
+    # FIXME: disable rt-warns when using `-O`
     def decorator(obj: T) -> T:
         # Permits the use of unstable features in the core implementation.
         _warn(

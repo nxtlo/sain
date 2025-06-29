@@ -35,7 +35,7 @@ __all__ = ("Some", "Option", "NOTHING")
 
 import typing
 
-from . import default as _default
+# from . import default as _default
 from . import iter as _iter
 from . import macros
 from . import result as _result
@@ -54,7 +54,12 @@ if typing.TYPE_CHECKING:
 
 @rustc_diagnostic_item("Option")
 @typing.final
-class Some(typing.Generic[T], _default.Default["Option[T]"]):
+class Some(
+    typing.Generic[T],
+    # FIXME: The generates the inherited docs for `Default` for some reason,
+    # keeping it commented until i find a fix.
+    # _default.Default["Option[T]"]
+):
     """The `Option` type represents optional value, higher-level abstraction over the `None` type.
 
     It combines union of `T | None` in one convenient structure, allowing the users to manipulate and propagate
