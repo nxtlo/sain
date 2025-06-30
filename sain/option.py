@@ -35,7 +35,7 @@ __all__ = ("Some", "Option", "NOTHING")
 
 import typing
 
-# from . import default as _default
+from . import default as _default
 from . import iter as _iter
 from . import macros
 from . import result as _result
@@ -56,9 +56,7 @@ if typing.TYPE_CHECKING:
 @typing.final
 class Some(
     typing.Generic[T],
-    # FIXME: The generates the inherited docs for `Default` for some reason,
-    # keeping it commented until i find a fix.
-    # _default.Default["Option[T]"]
+    _default.Default["Option[T]"],
 ):
     """The `Option` type represents optional value, higher-level abstraction over the `None` type.
 

@@ -244,7 +244,7 @@ def rustc_diagnostic_item(item: RustItem, /) -> collections.Callable[[T], T]:
     '''
 
     def decorator(obj: T) -> T:
-        additional_doc = f"\n\n# Implementations\nThis {_obj_type(obj)} implements [{item}]({_RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."
+        additional_doc = f"\n\nImplementations\n---------------\nThis {_obj_type(obj)} implements [{item.lower}]({_RUSTC_DOCS}/{_MAP_TO_PATH[item]}) in Rust."
         obj.__doc__ = inspect.cleandoc(obj.__doc__ or "") + additional_doc
         return obj
 
