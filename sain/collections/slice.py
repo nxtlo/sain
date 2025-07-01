@@ -57,6 +57,7 @@ class SpecContains(typing.Generic[T]):
         If an iterable is passed, it will check if at least one of the elements is in `self`.
 
         Example
+        -------
         ```py
         vec = Vec([1, 2, 3, 4])
         assert vec.contains(1) is True
@@ -94,6 +95,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     def __init__(self, ptr: collections.Sequence[T]) -> None:
         self.__buf = ptr
 
+    # FIXME: redundant, will get removed in the future.
     def into_inner(self) -> collections.Sequence[T]:
         """Consume this `Slice`, returning the sequence that's being pointed to.
 
@@ -180,6 +182,7 @@ class SliceMut(typing.Generic[T], collections.MutableSequence[T], SpecContains[T
     def __init__(self, ptr: collections.MutableSequence[T]) -> None:
         self.__buf = ptr
 
+    # FIXME: redundant, will get removed in the future.
     def into_inner(self) -> collections.MutableSequence[T]:
         """Consume this `SliceMut`, returning the sequence that's being pointed to.
 

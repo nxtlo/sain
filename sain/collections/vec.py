@@ -69,10 +69,9 @@ T = typing.TypeVar("T")
 @rustc_diagnostic_item("Vec")
 @typing.final
 class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
-    """A contiguous growable alternative to builtin `list` with extra functionalities.
+    """A contiguous growable alternative to the builtin `list` with extra functionalities.
 
-    The layout of `Vec<T>` is exactly the same as `list<T>`.
-    Which means `list<T>`'s methods are inherited into `Vec<T>`.
+    The layout of `Vec<T>` is exactly the same as `list<T>`. Which means `list<T>`'s methods are inherited into `Vec<T>`.
 
     Example
     -------
@@ -144,13 +143,13 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     vec[0] == "foo"  # True
     ```
 
-    The opposite of the above is to initialize the vec from either
-    an iterable or args, or copy the list.
+    If you want an owned `Vec` that doesn't point to the original list,
+    copy the list into a new `Vec`.
 
     ```py
-    from sain.collections import vec, Vec
+    from sain import Vec
 
-    # Copy the list into a vec.
+    # Copy `cells` into a vec.
     vec = Vec(cells[:])
     cells.append("bar")
 
@@ -178,8 +177,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         ```
         """
         # We won't allocate to build the list here.
-        # Instead, On first push or fist indexed set
-        # we allocate if it was None.
+        # Instead, On first push.
         if isinstance(iterable, list):
             # Calling `list()` on another list will copy it, So instead we just point to it.
             self._ptr = iterable
@@ -195,6 +193,8 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     def with_capacity(cls, capacity: int) -> Vec[T]:
         """Create a new `Vec` with at least the specified capacity.
         This vec will be able to hold `capacity` elements without pushing further.
+
+        The capacity may dynamically grow if `Vec.reserve` is called at runtime.
 
         Check out `Vec.push_within_capacity` as well.
 
@@ -244,7 +244,8 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         -------
         ```py
         def read_bytes(buf: SliceMut[int]) -> None:
-            socket.read_to_end(buf.as_mut())
+            # similar to how `Write::write_to_end` requires a `&mut [u8]`
+            socket.read_to_end(buf)
 
         buf: Vec[int] = Vec()
         read_bytes(buf.as_mut()) # or just `buf`
@@ -292,7 +293,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         -------
         ```py
         vec = Vec([1 ,2, 3])
-        for element in vec.iter().map(str):
+        for element in vec.iter():
             print(element)
         ```
         """
@@ -507,8 +508,8 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         -------
         ```py
         vec = Vec([1, 2, 3, 4])
-        first = vec.last()
-        assert ~first == 4
+        last = vec.last()
+        assert ~last == 4
         ```
         """
         return self.get(-1)
@@ -572,7 +573,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         -------
         ```py
         vec = Vec(('a', 'b', 'c'))
-        element = vec.remove('a')
+        element = vec.swap_remove('a')
         assert vec == ['b', 'c'] and element == 'a'
         ```
         """
@@ -587,17 +588,18 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         Nothing happens if the vec is empty or unallocated.
 
         Example
+        -------
         ```py
         a = Vec([0, 1, 2, 3])
         a.fill(0)
         assert a == [0, 0, 0, 0]
         ```
         """
-        if not self._ptr:
+        ptr = self._ptr
+        if not ptr:
             return
 
-        for n, _ in enumerate(self):
-            self[n] = value
+        ptr[:] = [value] * len(ptr)
 
     def push(self, item: T) -> None:
         """Push an element at the end of the vector.
@@ -661,21 +663,16 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         -------
         ```py
         vec = Vec.with_capacity(3)
-        is_vip = random.choice((True, False))
 
-        for i in range(4):
-            match vec.push_within_capacity(i):
-                case Ok(_):
-                    print("All good")
-                case Err(person):
-                    # If the person is a VIP, then reserve for one more.
-                    if is_vip:
-                        vec.reserve(1)
-                        continue
+        for i in range(3):
+            vec.push(i)
 
-                    # is_vip was false.
-                    print("Can't reserve for non-VIP members...", person)
-                    break
+        match vec.push_within_capacity(4):
+            case Ok(_):
+                print("Pushed 4 successfully.")
+            case Err(elem):
+                vec.reserve(1)  # Reserve capacity for 1 more element.
+                vec.push(4)  # Now we can push 4.
         ```
         """
         if self._capacity is not None:
