@@ -54,16 +54,16 @@ import typing
 import warnings
 
 if typing.TYPE_CHECKING:
-    from typing_extensions import LiteralString
-
-    T = typing.TypeVar("T", covariant=True)
     import collections.abc as collections
 
     import _typeshed
+    from typing_extensions import LiteralString
 
     P = typing.ParamSpec("P")
     U = typing.TypeVar("U")
     Read = _typeshed.FileDescriptorOrPath
+
+T = typing.TypeVar("T", covariant=True)
 
 # fmt: off
 RustItem = typing.Literal[
@@ -531,14 +531,17 @@ def include_str(file: LiteralString) -> LiteralString:
 def unstable(
     *,
     feature: LiteralString = "none",
-    issue: LiteralString | None = None,
+    issue: LiteralString | typing.Literal["none"] = "none",
 ) -> collections.Callable[[T], T]:
     """Mark an object as unstable, and links it to a tracking issue.
 
-    This is usually used to mark experimental features that are not yet ready for production.
+    This is usually used to mark experimental features that are not yet ready for production,
     only within sain's codebase.
 
     Attempting to use an unstable object will raise a runtime warning.
+
+    Additionally, this decorator modifies the docstring of the decorated object to include
+    instability information and a link to the tracking issue.
 
     Example
     -------
@@ -554,24 +557,53 @@ def unstable(
     ```
     """
 
-    TRACKING_ISSUE = f"https://github.com/nxtlo/sain/issues/{issue}"
+    TRACKING_ISSUE = (
+        f"https://github.com/nxtlo/sain/issues/{'' if issue == 'none' else issue}"
+    )
+    doc_msg = f"\n\n🔬 This is an unstable experimental API. ({feature} [<u>#{issue}</u>]({TRACKING_ISSUE}))"
 
-    # FIXME: add a wrapper to warn only when the object is called `()`.
-    # FIXME: disable rt-warns when using `-O`
     def decorator(obj: T) -> T:
-        # Permits the use of unstable features in the core implementation.
-        _warn(
-            _write_color(
-                "red",
-                f"use of unstable feature: `{feature}`\nsee tracking issue: {TRACKING_ISSUE}",
-            ),
-            warn_ty=RuntimeWarning,
-            stacklevel=3,
-        )
+        def _warn_and_call(f: collections.Callable[P, U]) -> collections.Callable[P, U]:
+            @functools.wraps(f)
+            def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
+                _warn(
+                    _write_color(
+                        "red",
+                        f"use of unstable feature: `{feature}`\nsee tracking issue: {TRACKING_ISSUE}",
+                    ),
+                    warn_ty=RuntimeWarning,
+                    stacklevel=3,
+                )
+                return f(*args, **kwargs)
 
-        m = f"🔬 This is an unstable experimental API. ({feature} [<u>#{issue}</u>]({TRACKING_ISSUE}))"
-        obj.__doc__ = (inspect.cleandoc(obj.__doc__) + m) if obj.__doc__ else m
-        return obj
+            wrapper.__doc__ = (
+                (inspect.cleandoc(f.__doc__) + doc_msg) if f.__doc__ else doc_msg
+            )
+            return wrapper
+
+        if callable(obj):
+            if (
+                inspect.isclass(obj)
+                and (orig_init := getattr(obj, "__init__", None)) is not None
+            ):
+                setattr(obj, "__init__", _warn_and_call(orig_init))
+
+            if hasattr(obj, "__doc__"):
+                obj.__doc__ = (
+                    (inspect.cleandoc(obj.__doc__) + doc_msg)
+                    if obj.__doc__
+                    else doc_msg
+                )
+            return typing.cast("T", obj)
+
+        else:
+            if hasattr(obj, "__doc__"):
+                obj.__doc__ = (
+                    (inspect.cleandoc(obj.__doc__) + doc_msg)
+                    if obj.__doc__
+                    else doc_msg
+                )
+            return obj
 
     return decorator
 
@@ -681,10 +713,10 @@ def deprecated(
             return func(*args, **kwargs)
 
         # idk why pyright doesn't know the type of wrapper.
-        m = f"\n# Warning ⚠️\n{message}."
+        m = inspect.cleandoc(f"\n# Warning ⚠️\n{message}.")
         if wrapper.__doc__:
             # append this message to an existing document.
-            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + f"{m}"
+            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + m
         else:
             wrapper.__doc__ = m
 

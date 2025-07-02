@@ -31,9 +31,9 @@
 
 This module is an async version of `sain.iter`.
 
-# `AsyncIterator`
+### `AsyncIterator`
 
-The heart and soul of this module is the `AsyncIterator` trait, its core looks like this:
+The heart and soul of this module is the `AsyncIterator` interface, its core looks like this:
 
 ```py
 class AsyncIterator[Item]:
@@ -47,15 +47,15 @@ and once they've all been exhausted, it returns `None` to indicate that the iter
 
 Async iterators are also composable, and it's common to chain them together to do more complex forms of processing.
 
-# `Stream`
+### `Stream`
 
 `Stream`, like `sain.Iter`, is out of the box a general-purpose type of async iterator that implements `AsyncIterator` which allows any iterable to be converted into an async iterator.
 
-# `into_stream`
+### `into_stream`
 
 This simply just wraps the passed iterable into a `Stream`.
 
-# Implementing `AsyncIterator`
+### Implementing `AsyncIterator`
 
 Creating an async iterator of your own involved two steps: creating a class that holds the iterator's state, and then implement `AsyncIterator`.
 
@@ -145,6 +145,11 @@ class AsyncIterator(typing.Generic[Item], abc.ABC):
 
     async def __await__(self) -> collections.MutableSequence[Item]:
         return [item async for item in self]
+
+
+# special methods require this public annotation for pdoc to show it.
+# TODO: do the same for other methods?
+AsyncIterator.__anext__.__doc__ = """@public"""  # pyright: ignore
 
 
 @typing.final
