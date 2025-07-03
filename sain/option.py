@@ -54,7 +54,10 @@ if typing.TYPE_CHECKING:
 
 @rustc_diagnostic_item("Option")
 @typing.final
-class Some(typing.Generic[T], _default.Default["Option[T]"]):
+class Some(
+    typing.Generic[T],
+    _default.Default["Option[T]"],
+):
     """The `Option` type represents optional value, higher-level abstraction over the `None` type.
 
     It combines union of `T | None` in one convenient structure, allowing the users to manipulate and propagate

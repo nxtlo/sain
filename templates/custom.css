@@ -4,7 +4,7 @@ body {
   font-family: "Overpass", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .pdoc .il {
@@ -179,6 +179,11 @@ Example
 .pdoc h6#example {
   color: #fff;
   font-size: 29px;
+}
+
+.pdoc h6#implementations {
+  color: #fff;
+  font-size: 24px;
 }
 
 /* 

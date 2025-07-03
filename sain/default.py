@@ -83,8 +83,8 @@ class Default(typing.Protocol[_T_co]):
     # FIXME: `impl Default for String` knows the type of `Self` is `String` but we can't do that.
     # So generics is the only way to achieve the same effect. But `Default` in Rust is not generic.
     # in the future we just swap to `Self`.
-    @rustc_diagnostic_item("default_fn")
     @staticmethod
+    @rustc_diagnostic_item("default_fn")
     def default() -> _T_co:
         """Return the default value of the object."""
         raise NotImplementedError

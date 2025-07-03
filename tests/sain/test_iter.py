@@ -169,7 +169,7 @@ class TestIterator:
     def test_sort(self):
         it = iter.Iter([3, 1, 4, 2])
         sorted_it = it.sort(key=lambda x: x)
-        assert sorted_it.collect() == [1, 2, 3, 4]
+        assert sorted_it == [1, 2, 3, 4]
 
     def test_reversed(self):
         it = iter.Iter([1, 2, 3])

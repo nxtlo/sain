@@ -44,7 +44,7 @@ NOTHING: Option[_typing.Any]
 
 def nothing_unchecked[T]() -> Option[T]: ...
 @_typing.final
-class Some[T](_default.Default[Option[T]]):
+class Some[T](_default.Default["Option[T]"]):
     __match_args__: tuple[_typing.Literal["_inner"]]
     def __init__(self, value: T | None, /) -> None: ...
     @staticmethod

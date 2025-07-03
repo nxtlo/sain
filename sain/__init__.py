@@ -35,6 +35,8 @@
 from __future__ import annotations
 
 __all__ = (
+    # async_iter.py
+    "async_iter",
     # cfg.py
     "cfg",
     "cfg_attr",
@@ -97,6 +99,7 @@ __all__ = (
     "__license__",
 )
 
+from . import async_iter
 from . import boxed
 from . import collections
 from . import convert
