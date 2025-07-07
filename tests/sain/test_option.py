@@ -33,6 +33,7 @@ import typing
 
 import pytest
 from sain import Some
+from sain.macros import ub_checks
 from sain.option import nothing_unchecked
 
 if typing.TYPE_CHECKING:
@@ -46,7 +47,8 @@ class TestOption:
 
     @pytest.fixture()
     def opt_none(self) -> Option[int]:
-        return nothing_unchecked()
+        with pytest.warns(ub_checks):
+            return nothing_unchecked()
 
     def test_is_some(self, opt: Option[int]) -> None:
         assert opt.is_some()
@@ -83,10 +85,12 @@ class TestOption:
         assert opt_none.unwrap_or_else(lambda: 2) == 2
 
     def test_unwrap_unchecked(self, opt: Option[int]) -> None:
-        assert opt.unwrap_unchecked() == 1
+        with pytest.warns(ub_checks):
+            assert opt.unwrap_unchecked() == 1
 
     def test_unwrap_unchecked_when_none(self, opt_none: Option[int]) -> None:
-        assert not opt_none.unwrap_unchecked()
+        with pytest.warns(ub_checks):
+            assert not opt_none.unwrap_unchecked()
 
     def test_map(self, opt: Option[int]) -> None:
         assert opt.map(lambda x: x + 1) == Some(2)

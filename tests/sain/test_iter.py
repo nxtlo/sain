@@ -238,12 +238,13 @@ class TestIterator:
 
     def test___len__(self):
         it = iter.Iter([1, 2, 3])
-        assert len(it) == 3
-        assert len(it) == 0
+        with pytest.warns(FutureWarning):
+            assert len(it) == 3
+            assert len(it) == 0
 
 
 def test_empty_iter():
-    it = iter.empty()
+    it: iter.Empty[None] = iter.empty()
     assert it.next().is_none()
     assert it.len() == 0
     assert it.collect() == []
