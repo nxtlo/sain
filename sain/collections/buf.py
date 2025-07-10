@@ -1014,33 +1014,42 @@ class BytesMut(
 ):
     """Provides mutable abstractions for working with bytes.
 
-    It is an efficient container for storing and operating with bytes,
-    It is built on-top of `array.array[int]`, which means you get all of `array[int]`'s operations.
+    This provides high-level, cheap, zero-copy slicing operations to perform on a sequence of bytes in
+    an ergonomic way.
 
-    A `bytes` object is usually used within networking applications, but can also be used
-    elsewhere as well.
+    `BytesMut` is built on top of `array.array[int]` of type code `B`, so it has the same layout as `array.array[int]`,
+    as well as all of it methods.
+
+    The use cases of `BytesMut` objects are usually within networking applications,
+    binding with other foreign languages, manipulation of images and binaries, and more.
 
     ## Construction
-    You can create a `BytesMut` object in multiple ways.
 
-    * `BytesMut()`: Initialize an empty `BytesMut` object
-    * `from_str`: Create `BytesMut` from `str`
-    * `from_bytes`: Create `BytesMut` from a `Buffer` bytes-like type
-    * `from_raw`: Create `BytesMut` from a `Rawish` type
+    There're many different ways to create a `BytesMut` object, the most straight-forward one is from a literal.
+
+    ```py
+    buffer = BytesMut.from_bytes(b"hello")
+    buffer2 = BytesMut.from_str("hello")
+    ```
+
+    But, there're also many more ways to create one...
+
+    * `BytesMut()`: Initialize an empty `BytesMut` object.
+    * `from_str`: Create `BytesMut` from `str`.
+    * `from_bytes`: Create `BytesMut` from a `Buffer` bytes-like type.
+    * `from_raw`: Create `BytesMut` from a `Rawish` type.
     * `from_ptr`: Create `BytesMut` that points to an `array.array[int]` without copying it
     * `BytesMut.zeroed(count)`: Create `BytesMut` filled with `zeroes * count`.
 
     Example
     -------
     ```py
-    from sain import BytesNut
+    from sain.collections import BytesMut
 
-    buf = BytesMut()
-    buffer.put_bytes(b"Hello")
-    print(buffer) # [72, 101, 108, 108, 111]
-
-    buf.put(32) # space
-    assert buffer.to_bytes() == b"Hello "
+    buf = BytesMut.from_str("Hello")
+    print(buf) # [72, 101, 108, 108, 111]
+    buf.put(32)
+    assert buf == b"Hello "
     ```
     """
 
