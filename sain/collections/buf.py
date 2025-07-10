@@ -380,7 +380,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         # ...then use it
         ptr = rust.zeros()
-        assert Bytes.from_raw_parts(ctypes.addressof(ptr.contents), 10).len() == 10
+        assert Bytes.from_raw_parts_mut(ctypes.addressof(ptr.contents), 10).len() == 10
         ```
         """
         arr = (_ctypes.c_uint8 * len).from_address(ptr)
@@ -814,7 +814,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             return (ctypes.c_uint8 * len).from_address(ptr)
 
         buffer = Bytes.from_str("abc")
-        ptr, size = buffer.raw_parts()
+        ptr, size = buffer.to_raw_parts()
         print(
             bytes(from_raw_parts(ptr, size)) == b"abc"
         )
