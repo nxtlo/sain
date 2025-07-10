@@ -35,7 +35,7 @@ __all__ = ("Slice", "SliceMut", "SpecContains")
 import typing
 from collections import abc as collections
 
-from sain import iter as _iter
+from sain.iter import TrustedIter
 
 T = typing.TypeVar("T")
 
@@ -118,7 +118,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         del self.__buf
         return ptr
 
-    def iter(self) -> _iter.TrustedIter[T]:
+    def iter(self) -> TrustedIter[T]:
         """Returns an iterator over the slice.
 
         The iterator yields all items from start to end.
@@ -135,7 +135,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         assert iterator.next().is_none()
         ```
         """
-        return _iter.TrustedIter(self.__buf)
+        return TrustedIter(self.__buf)
 
     def __len__(self) -> int:
         return len(self.__buf)
@@ -205,7 +205,7 @@ class SliceMut(typing.Generic[T], collections.MutableSequence[T], SpecContains[T
         del self.__buf
         return ptr
 
-    def iter(self) -> _iter.TrustedIter[T]:
+    def iter(self) -> TrustedIter[T]:
         """Returns an iterator over the slice.
 
         The iterator yields all items from start to end.
@@ -222,7 +222,7 @@ class SliceMut(typing.Generic[T], collections.MutableSequence[T], SpecContains[T
         assert iterator.next().is_none()
         ```
         """
-        return _iter.TrustedIter(self.__buf)
+        return TrustedIter(self.__buf)
 
     def insert(self, index: int, value: T) -> None:
         self.__buf.insert(index, value)

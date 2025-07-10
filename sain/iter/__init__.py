@@ -90,11 +90,7 @@ if typing.TYPE_CHECKING:
     from sain.collections.vec import Vec
     from sain.option import Option
 
-    Collector = (
-        collections.MutableSequence[Item]
-        | set[Item]
-        | collections.MutableMapping[int, Item]
-    )
+    Collector = collections.MutableSequence[Item] | set[Item]
     Sum: typing.TypeAlias = (
         "Iterator[str]"
         | "Iterator[typing.SupportsInt]"
@@ -136,7 +132,7 @@ class Iterator(
     This is the main interface that any type can implement by basically inheriting from it.
     The method `__next__` is the only method that needs to be implemented, You get all the other methods for free.
 
-    If you want to use a ready iterator for general purposes, Use `Iter`. This interface is only for implementers
+    If you want to use a ready iterator for general purposes, Use `Iter` or `TrustedIter`. This interface is only for implementers
     and type hints.
 
     Example
@@ -165,13 +161,17 @@ class Iterator(
 
     __slots__ = ()
 
+    #####################
+    # Required function #
+    #####################
+
     @abc.abstractmethod
     def __next__(self) -> Item:
         raise NotImplementedError
 
-    ###################
-    # const functions #
-    ###################
+    ######################
+    # provided functions #
+    ######################
 
     @staticmethod
     @typing.final
@@ -226,6 +226,9 @@ class Iterator(
     def collect_into(self, collection: Collector[Item]) -> None:
         """Consume this iterator, extending all items in the iterator into a mutable `collection`.
 
+        if `collection` is a `MutableSequence[Item]`, this iterator will call `extend` on it,
+        and if it was a `set[Item]`, this will call `update` on it.
+
         Example
         -------
         ```py
@@ -242,15 +245,12 @@ class Iterator(
         """
         if isinstance(collection, collections.MutableSequence):
             collection.extend(_ for _ in self)
-        elif isinstance(collection, collections.MutableSet):
-            collection.update(_ for _ in self)
         else:
-            for idx, item in enumerate(self):
-                collection[idx] = item
+            collection.update(_ for _ in self)
 
     @typing.final
     def to_vec(self) -> Vec[Item]:
-        """Convert this iterator into `Vec[T]`.
+        """Consume this iterator, returning all of its elements in a `Vec[T]`.
 
         Example
         -------
@@ -267,7 +267,7 @@ class Iterator(
 
     @typing.final
     def sink(self) -> None:
-        """Consume all elements from this iterator, flushing it into the sink.
+        """Consume all elements from this iterator, returning nothing.
 
         Example
         -------
@@ -295,10 +295,6 @@ class Iterator(
         for item in self:
             yield item
 
-    ##################
-    # default impl's #
-    ##################
-
     def next(self) -> Option[Item]:
         """Advance the iterator, Returning the next item, `Some(None)` if all items yielded.
 
@@ -314,7 +310,7 @@ class Iterator(
         try:
             return _option.Some(self.__next__())
         except StopIteration:
-            # ! SAFETY: No more items in the iterator.
+            # SAFETY: No more items in the iterator.
             return _option.NOTHING
 
     def cloned(self) -> Cloned[Item]:
@@ -632,7 +628,6 @@ class Iterator(
         """
         # NOTE: In order to reverse the iterator we need to
         # first collect it into some collection.
-        # FIXME: specialize an impl for this.
         return Iter(reversed([_ for _ in self]))
 
     def union(self, other: collections.Iterable[Item]) -> Iter[Item]:
@@ -973,6 +968,9 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item], abc.ABC):
     def to_vec(self) -> Vec[Item]:
         from sain.collections import Vec
 
+        if self.is_empty():
+            return Vec()
+
         return Vec(list(self))
 
     @typing.overload
@@ -987,6 +985,9 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item], abc.ABC):
     def collect(
         self, *, cast: collections.Callable[[Item], OtherItem] | None = None
     ) -> collections.MutableSequence[Item] | collections.MutableSequence[OtherItem]:
+        if self.is_empty():
+            return []
+
         if cast is None:
             return list(self)
 
@@ -1299,11 +1300,8 @@ class Filter(typing.Generic[Item], Iterator[Item]):
         unreachable()
 
 
-# TODO: Make this ExactSizeIterator
-
-
 @diagnostic
-class Take(typing.Generic[Item], Iterator[Item]):
+class Take(typing.Generic[Item], ExactSizeIterator[Item]):
     """An iterator that yields the first `number` of elements and drops the rest.
 
     This iterator is created by the `Iterator.take` method.
@@ -1327,8 +1325,8 @@ class Take(typing.Generic[Item], Iterator[Item]):
         self._count += 1
         return item
 
-
-# TODO: Make this ExactSizeIterator
+    def __len__(self) -> int:
+        return self._taken - self._count
 
 
 @diagnostic
@@ -1354,9 +1352,6 @@ class Skip(typing.Generic[Item], Iterator[Item]):
             self._it.__next__()
 
         return self._it.__next__()
-
-
-# TODO: Make this ExactSizeIterator
 
 
 @diagnostic
@@ -1490,6 +1485,9 @@ class Empty(typing.Generic[Item], ExactSizeIterator[Item]):
     def __len__(self) -> int:
         return 0
 
+    def is_empty(self) -> bool:
+        return True
+
     def any(
         self, predicate: collections.Callable[[Item], bool]
     ) -> typing.Literal[False]:
@@ -1556,6 +1554,9 @@ class Once(typing.Generic[Item], ExactSizeIterator[Item]):
 
     def __len__(self) -> int:
         return 1 if self._item is not None else 0
+
+    def is_empty(self) -> bool:
+        return self._item is None
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.

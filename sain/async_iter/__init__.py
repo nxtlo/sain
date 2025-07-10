@@ -119,7 +119,7 @@ if typing.TYPE_CHECKING:
 @rustc_diagnostic_item("AsyncIterator")
 @unstable(feature="async_iter", issue="257")
 class AsyncIterator(typing.Generic[Item], abc.ABC):
-    """A stream of values produced asynchronously.
+    """An interface for dealing with async iterators.
 
     It is the async version of `sain.Iterator`. See the top module documentation for more details.
     """
@@ -127,6 +127,7 @@ class AsyncIterator(typing.Generic[Item], abc.ABC):
     __slots__ = ()
 
     # Required methods
+
     @abc.abstractmethod
     async def __anext__(self) -> Item: ...
 
