@@ -44,23 +44,14 @@ def test_bytes_from_empty_and_is_empty():
     assert list(b) == []
 
 
-def test_bytes_from_raw_stringio_and_bytesio():
-    s = io.StringIO("abc")
-    b = Bytes.from_raw(s)
-    assert b == b"abc"
-    bio = io.BytesIO(b"xyz")
-    b2 = Bytes.from_raw(bio)
-    assert b2.to_bytes() == b"xyz"
-
-
-def test_bytes_from_ptr_and_from_ptr_unchecked():
+def test_bytes_from_static():
     arr = array.array("B", [10, 20, 30])
-    b = Bytes.from_ptr(arr)
+    b = Bytes.from_static(arr)
     assert b.to_bytes() == b"\x0a\x14\x1e"
     arr2 = array.array("B", [1, 2])
 
     with pytest.warns(ub_checks):
-        b2 = Bytes.from_ptr_unchecked(arr2)
+        b2 = Bytes.from_static_unchecked(arr2)
         assert b2.to_bytes() == b"\x01\x02"
 
 
