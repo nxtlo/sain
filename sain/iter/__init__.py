@@ -36,6 +36,7 @@ __all__ = (
     "Iter",
     "Iterator",
     "TrustedIter",
+    "ExactSizeIterator",
     # Adapters
     "Cloned",
     "Copied",
@@ -50,7 +51,6 @@ __all__ = (
     "Empty",
     "Repeat",
     "Once",
-    "ExactSizeIterator",
     # Functions
     "into_iter",
     "empty",

@@ -623,12 +623,24 @@ def unstable(
             )
             return wrapper
 
-        if callable(obj):
-            if (
-                inspect.isclass(obj)
-                and (orig_init := getattr(obj, "__init__", None)) is not None
-            ):
-                setattr(obj, "__init__", _warn_and_call(orig_init))
+        if inspect.isclass(obj):
+            # Patch __init__ to warn
+            if (orig_init := getattr(obj, "__init__", None)) is not None:
+                setattr(
+                    obj,
+                    "__init__",
+                    functools.wraps(orig_init)(_warn_and_call(orig_init)),
+                )
+
+            for name, member in inspect.getmembers(obj):
+                if isinstance(member, staticmethod):
+                    # staticmethod: get the underlying function and wrap
+                    wrapped_static = staticmethod(_warn_and_call(member.__func__))
+                    setattr(obj, name, wrapped_static)
+                elif isinstance(member, classmethod):
+                    # classmethod: get the underlying function and wrap
+                    wrapped_class = classmethod(_warn_and_call(member.__func__))
+                    setattr(obj, name, wrapped_class)
 
             if hasattr(obj, "__doc__"):
                 obj.__doc__ = (
@@ -637,7 +649,9 @@ def unstable(
                     else doc_msg
                 )
             return typing.cast("T", obj)
-
+        elif callable(obj):
+            # Function or method
+            return typing.cast("T", _warn_and_call(obj))
         else:
             if hasattr(obj, "__doc__"):
                 obj.__doc__ = (
