@@ -47,6 +47,7 @@ __all__ = (
     "RustItem",
 )
 
+import contextlib
 import functools
 import inspect
 import sys
@@ -303,6 +304,41 @@ def assert_precondition(
 class ub_checks(RuntimeWarning):
     """A special type of runtime warning that is only invoked on objects using `unsafe`."""
 
+    @staticmethod
+    @contextlib.contextmanager
+    def nocheck():
+        """A context manager which ignores code within it that is marked with `@unsafe` from emitting `ub_checks` warnings.
+
+        In other words, it just disables `ub_checks` warn messages from being emitted for this context.
+
+        This becomes useful if the unsafe code you're calling is in global scope and not in some function, or just
+        don't want to mark your function with `@safe`, or you are sure that this piece of code is *safe*.
+
+        Example
+        -------
+        ```py
+        @unsafe
+        def foo() -> int:
+            return 1 + 2
+
+        with ub_checks.nocheck():
+            foo() # won't emit warn messages.
+
+        # calling this outside the context WILL warn.
+        foo()
+        ```
+        """
+        try:
+            if sys.version_info >= (3, 12):
+                with warnings.catch_warnings(action="ignore", category=ub_checks):
+                    yield
+            else:
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", category=ub_checks)
+                    yield
+        finally:
+            warnings.resetwarnings()
+
 
 def safe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     """Permit the use of `unsafe` marked function within a specific object.
@@ -371,8 +407,10 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     import warnings
     from sain.macros import unsafe, ub_checks
 
-    # globally ignore all `ub_checks` warns, not recommended.
+    # globally ignore all `ub_checks` warns.
     warnings.filterwarnings("ignore", category=ub_checks)
+
+    # ...or
 
     @unsafe
     def from_str_unchecked(val: str) -> float:
@@ -384,6 +422,10 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
         with warnings.catch_warnings():
             # ignore `ub_checks` specific warnings from `from_str_unchecked`.
             warnings.simplefilter("ignore", category=ub_checks)
+            return from_str_unchecked("3.14")
+
+        # ...or, this wraps the call of catch_warnings) and simplefilter() calls in one go.
+        with ub_checks.nocheck():
             return from_str_unchecked("3.14")
     ```
 
@@ -444,9 +486,9 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert left == right, (
-        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left == right
+    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("assert_ne")
@@ -464,9 +506,9 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert left != right, (
-        f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left != right
+    ), f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("include_bytes")
@@ -581,12 +623,23 @@ def unstable(
             )
             return wrapper
 
-        if callable(obj):
-            if (
-                inspect.isclass(obj)
-                and (orig_init := getattr(obj, "__init__", None)) is not None
-            ):
-                setattr(obj, "__init__", _warn_and_call(orig_init))
+        if inspect.isclass(obj):
+            # Patch __init__ to warn
+            if (orig_init := getattr(obj, "__init__", None)) is not None:
+                setattr(
+                    obj,
+                    "__init__",
+                    functools.wraps(orig_init)(_warn_and_call(orig_init)),
+                )
+
+            for name, member in inspect.getmembers(obj):
+                if isinstance(member, staticmethod):
+                    wrapped_static = staticmethod(_warn_and_call(member.__func__))  # pyright: ignore
+                    setattr(obj, name, wrapped_static)
+                elif isinstance(member, classmethod):
+                    # classmethod: get the underlying function and wrap
+                    wrapped_class = classmethod(_warn_and_call(member.__func__))  # pyright: ignore
+                    setattr(obj, name, wrapped_class)
 
             if hasattr(obj, "__doc__"):
                 obj.__doc__ = (
@@ -595,7 +648,9 @@ def unstable(
                     else doc_msg
                 )
             return typing.cast("T", obj)
-
+        elif callable(obj):
+            # Function or method
+            return typing.cast("T", _warn_and_call(obj))
         else:
             if hasattr(obj, "__doc__"):
                 obj.__doc__ = (

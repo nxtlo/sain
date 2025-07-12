@@ -33,6 +33,7 @@ import pytest
 import array
 import io
 from sain.collections.buf import Bytes, BytesMut
+from sain.macros import ub_checks
 
 
 def test_bytes_from_empty_and_is_empty():
@@ -43,22 +44,15 @@ def test_bytes_from_empty_and_is_empty():
     assert list(b) == []
 
 
-def test_bytes_from_raw_stringio_and_bytesio():
-    s = io.StringIO("abc")
-    b = Bytes.from_raw(s)
-    assert b == b"abc"
-    bio = io.BytesIO(b"xyz")
-    b2 = Bytes.from_raw(bio)
-    assert b2.to_bytes() == b"xyz"
-
-
-def test_bytes_from_ptr_and_from_ptr_unchecked():
+def test_bytes_from_static():
     arr = array.array("B", [10, 20, 30])
-    b = Bytes.from_ptr(arr)
+    b = Bytes.from_static(arr)
     assert b.to_bytes() == b"\x0a\x14\x1e"
     arr2 = array.array("B", [1, 2])
-    b2 = Bytes.from_ptr_unchecked(arr2)
-    assert b2.to_bytes() == b"\x01\x02"
+
+    with pytest.warns(ub_checks):
+        b2 = Bytes.from_static_unchecked(arr2)
+        assert b2.to_bytes() == b"\x01\x02"
 
 
 def test_bytes_as_ptr_and_as_ref():
@@ -91,9 +85,11 @@ def test_bytes_access_leaked_bytes():
 # FIXME: Remove on deprecation end.
 def test_bytes_try_to_str_invalid_utf8():
     b = Bytes.from_bytes([0xFF, 0xFE])
-    res = b.try_to_str()
-    assert res.is_err()
-    assert res.unwrap_err() == b"\xff\xfe"
+
+    with pytest.warns(DeprecationWarning):
+        res = b.try_to_str()
+        assert res.is_err()
+        assert res.unwrap_err() == b"\xff\xfe"
 
 
 def test_bytes_repr_and_str_empty():

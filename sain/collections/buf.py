@@ -32,7 +32,7 @@
 
 from __future__ import annotations
 
-__all__ = ("Bytes", "BytesMut", "Rawish", "Buffer")
+__all__ = ("Bytes", "BytesMut", "Chars", "Buffer")
 
 import array
 import ctypes as _ctypes
@@ -50,7 +50,9 @@ from sain.macros import assert_precondition
 from sain.macros import deprecated
 from sain.macros import rustc_diagnostic_item
 from sain.macros import safe
+from sain.macros import ub_checks
 from sain.macros import unsafe
+from sain.macros import unstable
 
 from . import slice as _slice
 from . import vec as _vec
@@ -63,46 +65,87 @@ if typing.TYPE_CHECKING:
     from sain import Option
     from sain import Result
 
-    Chars = _iter.Iterator[_ctypes.c_char]
-    """An iterator that maps each byte in `Bytes` as a character.
 
-    It yields `ctypes.c_char` objects.
-
-    This is created by calling `Bytes.chars()`
-    """
-
-
-Rawish: typing.TypeAlias = _io.StringIO | _io.BytesIO | _io.BufferedReader
-"""A type hint for some raw data type.
-
-This can be any of:
-* `io.StringIO`
-* `io.BytesIO`
-* `io.BufferedReader`
-* `memoryview`
-"""
-
-Buffer: typing.TypeAlias = bytes | bytearray | collections.Iterable[int]
-"""A type hint for some bytes data type.
+Buffer: typing.TypeAlias = (
+    bytes
+    | bytearray
+    | collections.Iterable[int]
+    | _io.StringIO
+    | _io.BytesIO
+    | _io.BufferedReader
+)
+"""Accepted types to create a `Bytes` from.
 
 This can be any of:
+
+bytes like types
+---------------
 * `bytes`
 * `Bytes`
+* `BytesMut`
 * `bytearray`
 * `Iterable[int]`
 * `memoryview[int]`
+
+IO like types
+--------
+* `io.StringIO`
+* `io.BytesIO`
+* `io.BufferedReader`
 """
 
 ENCODING = "utf-8"
 
 
-def unwrap_bytes(data: Rawish) -> bytes:
-    if isinstance(data, _io.StringIO):
-        buf = bytes(data.read(), encoding=ENCODING)
-    else:
+def unwrap_bytes(buf: Buffer) -> collections.Iterable[int]:
+    if isinstance(buf, _io.StringIO):
+        buf = bytes(buf.read(), encoding=ENCODING)
+    elif isinstance(buf, (_io.BufferedReader, _io.BytesIO)):
         # BufferedReader | BytesIO
-        buf = data.read()
+        buf = buf.read()
+
+    # well, Iterable[int], array knows how to convert the passed type.
     return buf
+
+
+@typing.final
+class Chars(_iter.ExactSizeIterator[_ctypes.c_char]):
+    """An iterator over the `c_char` of `Bytes`.
+
+    This iterator is created by the `Bytes.chars` method. See its documentation for more.
+    """
+
+    __slots__ = ("_bytes", "_len", "_offset")
+
+    def __init__(self, buf: Bytes) -> None:
+        self._bytes = map(_ctypes.c_char, buf)
+        self._len = len(buf)
+        self._offset = buf.as_ptr()
+
+    def as_slice(self) -> _slice.Slice[int]:
+        """Views the underlying data as a subslice of the original data.
+
+        Example
+        -------
+        ```py
+        chars = Bytes.from_str("abc").chars()
+
+        assert bytes(chars.as_slice()) == b"abc"
+        chars.next()
+        assert bytes(chars.as_slice()) == b"bc"
+        chars.next()
+        chars.next()
+        assert bytes(chars.as_slice()) == b""
+        ```
+        """
+        return _slice.Slice(self._offset[-self._len :])
+
+    def __next__(self) -> _ctypes.c_char:
+        self._len -= 1
+        return self._bytes.__next__()
+
+    def __len__(self) -> int:
+        return self._len
 
 
 @rustc_diagnostic_item("&[u8]")
@@ -110,26 +153,38 @@ def unwrap_bytes(data: Rawish) -> bytes:
 class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int]):
     """Provides immutable abstractions for working with bytes.
 
-    It is an efficient container for storing and operating with bytes.
-    It behaves very much like `array.array[int]` as well has the same layout.
+    The mutable version of this is `BytesMut`.
 
-    A `Bytes` objects are usually used within networking applications, but can also be used
-    elsewhere as well.
+    This provides high-level, cheap, zero-copy slicing operations to perform on a sequence of bytes in
+    an ergonomic way.
+
+    `Bytes` is built on top of `array.array[int]` of type code `B`, so it has the same layout as `array.array[int]`,
+    as well as all of it methods.
+
+    The use cases of `Bytes` objects are usually within networking applications,
+    binding with other foreign languages, manipulation of images and binaries, and more.
 
     ## Construction
-    `Bytes` object accept multiple rawish data types, See `Rawish` for all supported types.
 
-    * `Bytes()`: Initialize an empty `Bytes` object
-    * `from_str`: Create `Bytes` from `str`
-    * `from_bytes`: Create `Bytes` from a `Buffer` bytes-like type
-    * `from_raw`: Create `Bytes` from a `Rawish` type
-    * `from_ptr`: Create `Bytes` that points to an `array.array[int]` without copying it
+    There're many different ways to create a `Bytes` object, the most straight-forward one is from a literal.
+
+    ```py
+    buffer = Bytes.from_bytes(b"hello")
+    buffer2 = Bytes.from_str("hello")
+    ```
+
+    But, there're also many more ways to create one...
+
+    * `Bytes()`: Initialize an empty `Bytes` object.
+    * `from_str`: Create `Bytes` from `str`.
+    * `from_bytes`: Create `Bytes` from a `Buffer` type.
+    * `from_static`: Create `Bytes` that points to an `array.array[int]` without copying it
     * `Bytes.zeroed(count)`: Create `Bytes` filled with `zeroes * count`.
 
     Example
     -------
     ```py
-    from sain import Bytes
+    from sain.collections import Bytes
 
     buf = Bytes.from_str("Hello")
     print(buf) # [72, 101, 108, 108, 111]
@@ -154,7 +209,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
     @classmethod
     def from_str(cls, s: str) -> Bytes:
-        """Create a new `Bytes` from a utf-8 string.
+        """Create a new `Bytes` from a string object.
 
         Example
         -------
@@ -167,7 +222,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         return b
 
     @classmethod
-    def from_ptr(cls, arr: array.array[int]) -> Self:
+    def from_static(cls, arr: array.array[int]) -> Self:
         """Create a new `Bytes` from an array.
 
         The returned `Bytes` will directly point to `arr` without copying.
@@ -176,12 +231,12 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         -------
         ```py
         arr = array.array("B", b"Hello")
-        buffer = Bytes.from_ptr(arr)
+        buffer = Bytes.from_static(arr)
         ```
         """
         # this is technically an `assert` line
         # but Python isn't smart enough to inline and opt-out
-        # this out of the generated bytecode.
+        # this out of the generated bytecode for `assert_precondition`.
         # so we'll just leave this under `if` statement.
         if __debug__:
             assert_precondition(
@@ -196,20 +251,17 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
     @classmethod
     @unsafe
-    def from_ptr_unchecked(cls, arr: array.array[int]) -> Self:
+    def from_static_unchecked(cls, arr: array.array[int]) -> Self:
         """Create a new `Bytes` from an array, without checking the type code.
-
         The returned `Bytes` will directly point to `arr` without copying.
 
-        ## Safety
-
-        The caller must ensure that `arr` is of type `array.array[int]` with type code `B`.
+        You must ensure that `arr` is of type `array.array[int]` with type code `B`.
 
         Example
         -------
         ```py
         arr = array.array("B", b"Hello")
-        buffer = Bytes.from_ptr_unchecked(arr)
+        buffer = Bytes.from_static_unchecked(arr)
         ```
         """
         b = cls()
@@ -220,37 +272,39 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def from_bytes(cls, buf: Buffer) -> Self:
         """Create a new `Bytes` from an initial bytes.
 
+        If `buf` is a `Bytes`, then the returned `Bytes` will point
+        to the same data that `buf` is pointing to.
+
+        If you explicitly need an independent `Bytes`, call `.copy()` it.
+
+        See `Buffer` to understand the accepted types.
+
         Example
         -------
         ```py
         buffer = Bytes.from_bytes(b"SIGNATURE")
         ```
-        """
-        b = cls()
-        b._buf = array.array("B", buf)
-        return b
 
-    @classmethod
-    def from_raw(cls, raw: Rawish) -> Self:
-        """Initialize a new `Bytes` from a `Rawish` data type.
-
-        Example
-        -------
+        Passing a `Bytes` doesn't copy `buf`.
         ```py
-        with open('file.txt', 'rb') as file:
-            buff = Bytes.from_raw(file)
+        # Point to "buffer", this is isn't allowed in Rust because "buffer" is immutable
+        # while "buffer2" is mutable, but, you do you.
+        buffer2 = BytesMut.from_bytes(buffer)
 
-        # in memory bytes io
-        bytes_io = io.BytesIO(b"data")
-        buffer1 = Bytes.from_raw(bytes_io)
-        # in memory string io
-        string_io = io.StringIO("data")
-        buffer2 = Bytes.from_raw(string_io)
+        buffer2.put_str("-12")
+        assert buffer.to_bytes() == b"SIGNATURE-12"
         ```
         """
-        c = cls()
-        c._buf = array.array("B", unwrap_bytes(raw))
-        return c
+        if isinstance(buf, Bytes) and buf._buf:
+            # If buf is a Bytes, just point to its memory without copying it,
+            # the exception being the memory must be initialized. otherwise
+            # we create a new one.
+            with ub_checks.nocheck():
+                return cls.from_static_unchecked(buf._buf)
+
+        b = cls()
+        b._buf = array.array("B", unwrap_bytes(buf))
+        return b
 
     @classmethod
     def zeroed(cls, count: int) -> Self:
@@ -265,8 +319,93 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         ```
         """
         c = cls()
-        c._buf = array.array("B", [0] * count)
+        c._buf = array.array("B", bytearray(count))
         return c
+
+    @staticmethod
+    @unstable(feature="bytes_raw_parts", issue="none")
+    @unsafe
+    def from_raw_parts(ptr: int, len: int) -> Bytes:
+        """Construct a `Bytes` directly from a pointer address and a length.
+
+        This can then be decomposed via `Bytes.to_raw_parts`.
+
+        This is considered a very, low level method that FFI users may use to construct Bytes objects.
+
+        Safety
+        ------
+        `ptr` must be a non-null, valid for reads for `len * u8` many bytes, and it must be properly aligned.
+
+        Example
+        -------
+        Create `Bytes` from Rust raw pointer to an array of zeros.
+
+        ```rs
+        #[unsafe(no_mangle)]
+        pub const extern "C" fn zeros() -> *const c_char {
+            static DATA: [u8; 10] = [0; 10];
+            DATA.as_ptr() as _
+        }
+        ```
+
+        Compile and setup the FFI.
+
+        ```py
+        rust = ctypes.CDLL("zeros.dll")
+        rust.zeros.restype = ctypes.POINTER(ctypes.c_uint8)
+
+        # ...then use it
+        ptr = rust.zeros()
+        assert Bytes.from_raw_parts(ctypes.addressof(ptr.contents), 10).len() == 10
+        ```
+        """
+        arr = (_ctypes.c_uint8 * len).from_address(ptr)
+
+        # SAFETY: If the line above fails, thill will never be reached.
+        with ub_checks.nocheck():
+            return Bytes.from_static_unchecked(array.array("B", arr))
+
+    @staticmethod
+    @unstable(feature="bytes_raw_parts", issue="none")
+    @unsafe
+    def from_raw_parts_mut(ptr: int, len: int) -> BytesMut:
+        """Construct a `BytesMut` directly from a pointer address and a length.
+
+        This can then be decomposed via `Bytes.to_raw_parts`.
+
+        This is considered a very, low level method that FFI users may use to construct Bytes objects.
+
+        Safety
+        ------
+        `ptr` must be a non-null, valid for reads and writes for `len * u8` many bytes, and it must be properly aligned.
+
+        Example
+        -------
+        Create `BytesMut` from Rust raw pointer to an array of zeros.
+
+        ```rs
+        #[unsafe(no_mangle)]
+        pub const unsafe extern "C" fn zeros() -> *mut c_char {
+            static mut DATA: [u8; 10] = [0; 10];
+            &raw mut DATA as _
+        }
+        ```
+
+        ```py
+        # compile and setup the FFI.
+        rust = ctypes.CDLL("zeros.dll")
+        rust.zeros.restype = ctypes.POINTER(ctypes.c_uint8)
+
+        # ...then use it
+        ptr = rust.zeros()
+        assert Bytes.from_raw_parts_mut(ctypes.addressof(ptr.contents), 10).len() == 10
+        ```
+        """
+        arr = (_ctypes.c_uint8 * len).from_address(ptr)
+
+        # SAFETY: If the line above fails, thill will never be reached.
+        with ub_checks.nocheck():
+            return BytesMut.from_static_unchecked(array.array("B", arr))
 
     # buffer evolution
 
@@ -485,21 +624,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         assert new == [2, 1, 3, 4]
         ```
         """
-        # SAFETY: `Bytes.leak` returns an empty array
-        # if `self` is uninitialized.
-        return BytesMut.from_ptr_unchecked(self.leak())
-
-    def raw_parts(
-        self,
-    ) -> tuple[int, int]:
-        """Return `self` as tuple containing the memory address to the buffer and how many bytes it currently contains.
-
-        An alias to `array.buffer_into`
-        """
-        if not self._buf:
-            return (0x0, 0)
-
-        return self._buf.buffer_info()
+        # SAFETY: `Bytes.leak` returns an empty array if `self` is uninitialized.
+        return BytesMut.from_static_unchecked(self.leak())
 
     def len(self) -> int:
         """Return the number of bytes in this buffer.
@@ -512,23 +638,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         ```
         """
         return self.__len__()
-
-    def size(self) -> int:
-        """The length in bytes of one array item in the internal representation.
-
-
-        An alias to `array.itemsize`
-
-        Example
-        -------
-        ```py
-        buf = Bytes.from_bytes([240, 159, 146, 150])
-        assert buf.size() == 1
-        ```
-        """
-        if not self._buf:
-            return 0
-        return self._buf.itemsize
 
     def iter(self) -> _iter.TrustedIter[int]:
         """Returns an iterator over the contained bytes.
@@ -554,7 +663,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def chars(self) -> Chars:
         """Returns an iterator over the characters of `Bytes`.
 
-        This iterator yields all `int`s from start to end mapped as a `ctypes.c_char`.
+        This iterator yields all of the bytes from start to end, mapping it as a `ctypes.c_char`.
 
         Example
         -------
@@ -570,8 +679,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         # c_char(b'o')
         ```
         """
-        # The built-in map is actually faster than our own pure python adapter impl.
-        return _iter.Iter(map(_ctypes.c_char, self))
+        return Chars(self)
 
     def is_empty(self) -> bool:
         """Check whether `self` contains any bytes or not.
@@ -689,7 +797,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         """
         return self[0:mid], self[mid:]
 
-    # layout methods.
+    #! array layout methods
 
     @safe
     def copy(self) -> Bytes:
@@ -706,7 +814,36 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             return Bytes()
 
         # SAFETY: `self._buf` is initialized.
-        return self.from_ptr_unchecked(self._buf[:])
+        return self.from_static_unchecked(self._buf[:])
+
+    def to_raw_parts(self) -> tuple[int, int]:
+        """Decompose the metadata component of the bytes.
+
+        Returns a `tuple<int, int>`, where the first element is the memory address of the bytes and the second is its length.
+
+        This can re-composed via `Bytes.from_raw_parts`.
+
+        This is an alias to `array.buffer_into`.
+
+        Example
+        -------
+        ```py
+        import ctypes
+        from sain.collections import Bytes
+
+        def c_array(ptr: int, len: int) -> ctypes.Array[ctypes.c_uint8]:
+            return (ctypes.c_uint8 * len).from_address(ptr)
+
+        buffer = Bytes.from_str("abc")
+        ptr, size = buffer.to_raw_parts()
+        print(
+            bytes(from_raw_parts(ptr, size)) == b"abc"
+        )
+        """
+        if self._buf is None:
+            return (0x0, 0)
+
+        return self._buf.buffer_info()
 
     def index(self, v: int, start: int = 0, stop: int = _sys.maxsize) -> int:
         """Return the smallest `i` such that `i` is the index of the first occurrence of `v` in the buffer.
@@ -734,10 +871,26 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         return self._buf.count(x)
 
+    def size(self) -> int:
+        """The length in bytes of one array item in the internal representation.
+
+        This is an alias to `array.itemsize`
+
+        Example
+        -------
+        ```py
+        buf = Bytes.from_bytes([240, 159, 146, 150])
+        assert buf.size() == 1
+        ```
+        """
+        if not self._buf:
+            return 0
+        return self._buf.itemsize
+
     # special methods
 
     def __iter__(self) -> collections.Iterator[int]:
-        if self._buf:
+        if self._buf is not None:
             return self._buf.__iter__()
 
         return ().__iter__()
@@ -757,7 +910,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         return self.to_bytes()
 
     def __buffer__(self, flag: int | inspect.BufferFlags) -> memoryview[int]:
-        if not self._buf:
+        if self._buf is None:
             raise BufferError("Cannot work with uninitialized bytes.")
 
         if _sys.version_info >= (3, 12):
@@ -849,7 +1002,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         if isinstance(index, slice):
             # SAFETY: `self._buf` is initialized.
-            return self.from_ptr_unchecked(self._buf[index])
+            return self.from_static_unchecked(self._buf[index])
 
         return self._buf[index]
 
@@ -864,14 +1017,14 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if not self._buf:
             return Bytes()
 
-        return Bytes.from_ptr_unchecked(self._buf.__copy__())
+        return Bytes.from_static_unchecked(self._buf.__copy__())
 
     @safe
     def __deepcopy__(self, unused: typing.Any, /) -> Bytes:
         if not self._buf:
             return Bytes()
 
-        return Bytes.from_ptr_unchecked(self._buf.__deepcopy__(unused))
+        return Bytes.from_static_unchecked(self._buf.__deepcopy__(unused))
 
 
 @rustc_diagnostic_item("&mut [u8]")
@@ -882,33 +1035,42 @@ class BytesMut(
 ):
     """Provides mutable abstractions for working with bytes.
 
-    It is an efficient container for storing and operating with bytes,
-    It is built on-top of `array.array[int]`, which means you get all of `array[int]`'s operations.
+    This provides high-level, cheap, zero-copy slicing operations to perform on a sequence of bytes in
+    an ergonomic way.
 
-    A `bytes` object is usually used within networking applications, but can also be used
-    elsewhere as well.
+    `BytesMut` is built on top of `array.array[int]` of type code `B`, so it has the same layout as `array.array[int]`,
+    as well as all of it methods.
+
+    The use cases of `BytesMut` objects are usually within networking applications,
+    binding with other foreign languages, manipulation of images and binaries, and more.
 
     ## Construction
-    You can create a `BytesMut` object in multiple ways.
 
-    * `BytesMut()`: Initialize an empty `BytesMut` object
-    * `from_str`: Create `BytesMut` from `str`
-    * `from_bytes`: Create `BytesMut` from a `Buffer` bytes-like type
-    * `from_raw`: Create `BytesMut` from a `Rawish` type
-    * `from_ptr`: Create `BytesMut` that points to an `array.array[int]` without copying it
+    There're many different ways to create a `BytesMut` object, the most straight-forward one is from a literal.
+
+    ```py
+    buffer = BytesMut.from_bytes(b"hello")
+    buffer2 = BytesMut.from_str("hello")
+    ```
+
+    But, there're also many more ways to create one...
+
+    * `BytesMut()`: Initialize an empty `BytesMut` object.
+    * `from_str`: Create `BytesMut` from `str`.
+    * `from_bytes`: Create `BytesMut` from a `Buffer` bytes-like type.
+    * `from_raw`: Create `BytesMut` from a `Rawish` type.
+    * `from_static`: Create `BytesMut` that points to an `array.array[int]` without copying it
     * `BytesMut.zeroed(count)`: Create `BytesMut` filled with `zeroes * count`.
 
     Example
     -------
     ```py
-    from sain import BytesNut
+    from sain.collections import BytesMut
 
-    buf = BytesMut()
-    buffer.put_bytes(b"Hello")
-    print(buffer) # [72, 101, 108, 108, 111]
-
-    buf.put(32) # space
-    assert buffer.to_bytes() == b"Hello "
+    buf = BytesMut.from_str("Hello")
+    print(buf) # [72, 101, 108, 108, 111]
+    buf.put(32)
+    assert buf == b"Hello "
     ```
     """
 
@@ -944,11 +1106,12 @@ class BytesMut(
         `OverflowError`
             If `src` not in range of `0..255`
         """
+        buf = unwrap_bytes(src)
         if self._buf is None:
             # If it was `None`, we initialize it with a source instead of extending.
-            self._buf = array.array("B", src)
+            self._buf = array.array("B", buf)
         else:
-            self._buf.extend(src)
+            self._buf.extend(buf)
 
     def put(self, src: int) -> None:
         """Append a byte at the end of the array.
@@ -1031,39 +1194,6 @@ class BytesMut(
         assert (ln := len(char)) == 1, f"Expected a single character, got {ln}"
         self.put(ord(char))
 
-    def put_raw(self, src: Rawish) -> None:
-        """Extend `self` from a raw data type source.
-
-        Example
-        -------
-        ```py
-        buffer = BytesMut()
-        # A file descriptor's contents
-        with open('file.txt', 'rb') as file:
-            buffer.put_raw(file)
-
-        # bytes io
-        buffer.put(io.BytesIO(b"data"))
-        # string io
-        buffer.put(io.StringIO("data"))
-        ```
-
-        Parameters
-        ----------
-        src : `Rawish`
-            A valid raw data type. See `Rawish` for more details.
-
-        Raises
-        ------
-        `OverflowError`
-            If `src` not in range of `0..255`
-        """
-        if self._buf is None:
-            # If it was `None`, we initialize it with a source instead of extending.
-            self._buf = array.array("B", unwrap_bytes(src))
-        else:
-            self._buf.extend(unwrap_bytes(src))
-
     def put_bytes(self, src: Buffer) -> None:
         """Put `bytes` into `self`.
 
@@ -1085,11 +1215,12 @@ class BytesMut(
         `OverflowError`
             If `src` not in range of `0..255`
         """
+        buf = unwrap_bytes(src)
         if self._buf is None:
             # If it was `None`, we initialize it with a source instead of extending.
-            self._buf = array.array("B", src)
+            self._buf = array.array("B", buf)
         else:
-            self._buf.extend(src)
+            self._buf.extend(buf)
 
     def put_str(self, s: str) -> None:
         """Put a `utf-8` encoded bytes from a string.
@@ -1276,6 +1407,8 @@ class BytesMut(
         """
         return self.__buffer__(512)
 
+    # TODO: Remove this when `core_slice_api` gets implemented.
+
     def as_mut(self) -> _slice.SliceMut[int]:
         """Get a mutable reference to the underlying sequence, without copying.
 
@@ -1325,7 +1458,7 @@ class BytesMut(
         """
         # SAFETY: `Bytes.leak` returns an empty array
         # if `self` is uninitialized.
-        return Bytes.from_ptr_unchecked(self.leak())
+        return Bytes.from_static_unchecked(self.leak())
 
     def swap_remove(self, byte: int) -> int:
         """Remove the first appearance of `item` from this buffer and return it.
@@ -1393,7 +1526,7 @@ class BytesMut(
         if not self._buf:
             return self
 
-        split = BytesMut.from_ptr(self._buf[at:len_])
+        split = BytesMut.from_static(self._buf[at:len_])
         del self._buf[at:len_]
         return split
 
@@ -1551,7 +1684,7 @@ class BytesMut(
         if not self._buf:
             return BytesMut()
 
-        return self.from_ptr(self._buf[:])
+        return self.from_static(self._buf[:])
 
     def __setitem__(self, index: int, value: int):
         if not self._buf:
@@ -1578,7 +1711,7 @@ class BytesMut(
 
         if isinstance(index, slice):
             # SAFETY: `self._buf` is initialized.
-            return self.from_ptr_unchecked(self._buf[index])
+            return self.from_static_unchecked(self._buf[index])
 
         return self._buf[index]
 
@@ -1587,11 +1720,11 @@ class BytesMut(
         if not self._buf:
             return BytesMut()
 
-        return BytesMut.from_ptr_unchecked(self._buf.__copy__())
+        return BytesMut.from_static_unchecked(self._buf.__copy__())
 
     @safe
     def __deepcopy__(self, unused: typing.Any, /) -> BytesMut:
         if not self._buf:
             return BytesMut()
 
-        return BytesMut.from_ptr_unchecked(self._buf.__deepcopy__(unused))
+        return BytesMut.from_static_unchecked(self._buf.__deepcopy__(unused))

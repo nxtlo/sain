@@ -36,6 +36,7 @@ __all__ = (
     "Iter",
     "Iterator",
     "TrustedIter",
+    "ExactSizeIterator",
     # Adapters
     "Cloned",
     "Copied",
@@ -50,7 +51,6 @@ __all__ = (
     "Empty",
     "Repeat",
     "Once",
-    "ExactSizeIterator",
     # Functions
     "into_iter",
     "empty",
@@ -63,6 +63,7 @@ import collections.abc as collections
 import copy
 import itertools
 import typing
+import warnings
 
 from sain import default as _default
 from sain import futures
@@ -89,11 +90,7 @@ if typing.TYPE_CHECKING:
     from sain.collections.vec import Vec
     from sain.option import Option
 
-    Collector = (
-        collections.MutableSequence[Item]
-        | set[Item]
-        | collections.MutableMapping[int, Item]
-    )
+    Collector = collections.MutableSequence[Item] | set[Item]
     Sum: typing.TypeAlias = (
         "Iterator[str]"
         | "Iterator[typing.SupportsInt]"
@@ -135,7 +132,7 @@ class Iterator(
     This is the main interface that any type can implement by basically inheriting from it.
     The method `__next__` is the only method that needs to be implemented, You get all the other methods for free.
 
-    If you want to use a ready iterator for general purposes, Use `Iter`. This interface is only for implementers
+    If you want to use a ready iterator for general purposes, Use `Iter` or `TrustedIter`. This interface is only for implementers
     and type hints.
 
     Example
@@ -164,13 +161,17 @@ class Iterator(
 
     __slots__ = ()
 
+    #####################
+    # Required function #
+    #####################
+
     @abc.abstractmethod
     def __next__(self) -> Item:
         raise NotImplementedError
 
-    ###################
-    # const functions #
-    ###################
+    ######################
+    # provided functions #
+    ######################
 
     @staticmethod
     @typing.final
@@ -225,6 +226,9 @@ class Iterator(
     def collect_into(self, collection: Collector[Item]) -> None:
         """Consume this iterator, extending all items in the iterator into a mutable `collection`.
 
+        if `collection` is a `MutableSequence[Item]`, this iterator will call `extend` on it,
+        and if it was a `set[Item]`, this will call `update` on it.
+
         Example
         -------
         ```py
@@ -241,15 +245,12 @@ class Iterator(
         """
         if isinstance(collection, collections.MutableSequence):
             collection.extend(_ for _ in self)
-        elif isinstance(collection, collections.MutableSet):
-            collection.update(_ for _ in self)
         else:
-            for idx, item in enumerate(self):
-                collection[idx] = item
+            collection.update(_ for _ in self)
 
     @typing.final
     def to_vec(self) -> Vec[Item]:
-        """Convert this iterator into `Vec[T]`.
+        """Consume this iterator, returning all of its elements in a `Vec[T]`.
 
         Example
         -------
@@ -266,7 +267,7 @@ class Iterator(
 
     @typing.final
     def sink(self) -> None:
-        """Consume all elements from this iterator, flushing it into the sink.
+        """Consume all elements from this iterator, returning nothing.
 
         Example
         -------
@@ -294,10 +295,6 @@ class Iterator(
         for item in self:
             yield item
 
-    ##################
-    # default impl's #
-    ##################
-
     def next(self) -> Option[Item]:
         """Advance the iterator, Returning the next item, `Some(None)` if all items yielded.
 
@@ -313,7 +310,7 @@ class Iterator(
         try:
             return _option.Some(self.__next__())
         except StopIteration:
-            # ! SAFETY: No more items in the iterator.
+            # SAFETY: No more items in the iterator.
             return _option.NOTHING
 
     def cloned(self) -> Cloned[Item]:
@@ -585,7 +582,7 @@ class Iterator(
     def sort(
         self,
         *,
-        key: collections.Callable[[Item], SupportsRichComparison],
+        key: collections.Callable[[Item], SupportsRichComparison] | None = None,
         reverse: bool = False,
     ) -> collections.MutableSequence[Item]:
         """Sorts the iterator elements and return it in a mutable sequence.
@@ -609,7 +606,7 @@ class Iterator(
         reverse: `bool`
             Whether to reverse the sort.
         """
-        return sorted([_ for _ in self], key=key, reverse=reverse)
+        return sorted([_ for _ in self], key=key, reverse=reverse)  # pyright: ignore - key can be None here
 
     def reversed(self) -> Iter[Item]:
         """Returns a new iterator that yields the items in the iterator in reverse order.
@@ -631,7 +628,6 @@ class Iterator(
         """
         # NOTE: In order to reverse the iterator we need to
         # first collect it into some collection.
-        # FIXME: specialize an impl for this.
         return Iter(reversed([_ for _ in self]))
 
     def union(self, other: collections.Iterable[Item]) -> Iter[Item]:
@@ -913,6 +909,14 @@ class Iterator(
         return self.copied()
 
     def __len__(self) -> int:
+        warnings.warn(
+            "Calling `len(iterator)` on this iterator will consume it, "
+            "use `Iterator.count()` if you explicitly want to consume this iterator and get its length.\n"
+            "If you're trying to convert this iterator to a list, use `Iterator.collect()` instead.\n"
+            "WARNING: This method will eventually be removed in future versions.",
+            category=FutureWarning,
+            stacklevel=3,
+        )
         return self.count()
 
     def __iter__(self) -> Iterator[Item]:
@@ -957,9 +961,44 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item], abc.ABC):
 
     __slots__ = ()
 
+    # This is specialized because we have a `__len__` that collections such as list
+    # can take advantage of, pre-allocating such a type with the exact capacity
+    # improves performance rather than using list comp.
+    # ? SEE: https://peps.python.org/pep-0424/
+    def to_vec(self) -> Vec[Item]:
+        from sain.collections import Vec
+
+        if self.is_empty():
+            return Vec()
+
+        return Vec(list(self))
+
+    @typing.overload
+    def collect(self) -> collections.MutableSequence[Item]: ...
+
+    @typing.overload
+    def collect(
+        self, *, cast: collections.Callable[[Item], OtherItem]
+    ) -> collections.MutableSequence[OtherItem]: ...
+
+    # ? See the comment above.
+    def collect(
+        self, *, cast: collections.Callable[[Item], OtherItem] | None = None
+    ) -> collections.MutableSequence[Item] | collections.MutableSequence[OtherItem]:
+        if self.is_empty():
+            return []
+
+        if cast is None:
+            return list(self)
+
+        return list(map(cast, self))
+
     @typing.final
     def count(self) -> int:
         return len(self)
+
+    def next(self) -> Option[Item]:
+        return _option.Some(self.__next__()) if len(self) > 0 else _option.NOTHING
 
     @typing.final
     def len(self) -> int:
@@ -1108,7 +1147,6 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
 
     def next(self) -> Option[Item]:
         if self._len == 0:
-            # ! SAFETY: len == 0
             return _option.NOTHING
 
         return _option.Some(self.__next__())
@@ -1127,27 +1165,14 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         iterator.next_unchecked() # raises StopIteration
         ```
         """
-        return self.__next__()
-
-    # TODO: remove this
-    @unsafe
-    def set_len(self, new_len: int) -> None:
-        """Sets the length of the iterator to `new_len`.
-
-        This is unsafe and should only be used if you know what you're doing.
-
-        Example
-        -------
-        ```py
-        iterator = Iter([1, 2, 3])
-        iterator.set_len(2)
-        assert iterator.len() == 2
-        ```
-        """
-        self._len = new_len
+        return self._it.__next__()
 
     def as_slice(self) -> Slice[Item]:
-        """Returns an immutable slice of all elements that have not been yielded
+        """Gets an immutable view of all elements that have not been yielded.
+
+        The slicing operation uses the underlying buffer's `__getitem__` implementation.
+
+        for objects that implement the `__buffer__` protocol, this is a zero-copy operation.
 
         Example
         -------
@@ -1160,7 +1185,10 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         """
         from sain.collections.slice import Slice
 
-        return Slice(self.__slice_checked_get or ())
+        if (view := self.__slice_checked_get) is not None:
+            return Slice(view[-self._len :])
+
+        return Slice(())
 
     def __repr__(self) -> str:
         # __alive is dropped from `self`.
@@ -1170,15 +1198,13 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         return f"TrustedIter({s[-self._len :]})"
 
     def __next__(self) -> Item:
-        try:
-            i = next(self._it)
-        except StopIteration:
-            # don't reference this anymore.
+        if self._len == 0:
             del self.__alive
-            raise
+            raise StopIteration
 
+        e = next(self._it)
         self._len -= 1
-        return i
+        return e
 
     def __getitem__(self, index: int) -> Item:
         if self._len == 0:
@@ -1208,7 +1234,7 @@ class Cloned(typing.Generic[Item], Iterator[Item]):
     def __next__(self) -> Item:
         n = self._it.__next__()
 
-        # Avoid useless function call for a list.
+        # Optimization: For lists, slicing (n[:]) is faster and avoids the call of copy.copy().
         if isinstance(n, list):
             # SAFETY: We know this is a list.
             return n[:]  # pyright: ignore
@@ -1275,7 +1301,7 @@ class Filter(typing.Generic[Item], Iterator[Item]):
 
 
 @diagnostic
-class Take(typing.Generic[Item], Iterator[Item]):
+class Take(typing.Generic[Item], ExactSizeIterator[Item]):
     """An iterator that yields the first `number` of elements and drops the rest.
 
     This iterator is created by the `Iterator.take` method.
@@ -1299,6 +1325,9 @@ class Take(typing.Generic[Item], Iterator[Item]):
         self._count += 1
         return item
 
+    def __len__(self) -> int:
+        return self._taken - self._count
+
 
 @diagnostic
 class Skip(typing.Generic[Item], Iterator[Item]):
@@ -1310,8 +1339,8 @@ class Skip(typing.Generic[Item], Iterator[Item]):
     __slots__ = ("_it", "_count", "_skipped")
 
     def __init__(self, it: Iterator[Item], count: int) -> None:
-        if count <= 0:
-            raise ValueError("`count` must be non-zero")
+        if count < 0:
+            raise ValueError("`count` must be non-negative")
 
         self._it = it
         self._count = count
@@ -1438,12 +1467,26 @@ class Empty(typing.Generic[Item], ExactSizeIterator[Item]):
         pass
 
     def next(self) -> Option[Item]:
-        # SAFETY: an empty iterator always returns None.
-        # also we avoid calling `nothing_unchecked()` here for fast returns.
         return _option.NOTHING
 
-    def __len__(self) -> typing.Literal[0]:
+    def nth(self, n: int) -> Option[Item]:
+        return _option.NOTHING
+
+    def to_vec(self) -> Vec[Item]:
+        from sain.collections import Vec
+
+        return Vec([])
+
+    def collect(
+        self, *, cast: collections.Callable[[Item], OtherItem] | None = None
+    ) -> collections.MutableSequence[Item] | collections.MutableSequence[OtherItem]:
+        return []
+
+    def __len__(self) -> int:
         return 0
+
+    def is_empty(self) -> bool:
+        return True
 
     def any(
         self, predicate: collections.Callable[[Item], bool]
@@ -1511,6 +1554,9 @@ class Once(typing.Generic[Item], ExactSizeIterator[Item]):
 
     def __len__(self) -> int:
         return 1 if self._item is not None else 0
+
+    def is_empty(self) -> bool:
+        return self._item is None
 
 
 # a hack to trick the type-checker into thinking that this iterator yield `Item`.

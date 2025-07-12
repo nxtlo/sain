@@ -9,11 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Bytes.from_raw_parts` and `Bytes.from_raw_parts_mut`, currently unstable.
+- Specializd `buf.Chars` iterator.
+
 ### Removed
+
+- `Bytes.from_raw`, use `Bytes.from_bytes` instead.
+- `BytesMut.put_raw`, use `BytesMut.put_bytes` instead.
 
 ### Changed
 
-- `Iterator.sort`'s return type changed from `Iter` to `MutableSequence`
+- `Iterator.sort`'s return type changed from `Iter` to `MutableSequence`.
+- `Bytes.from_ptr` is rename to its old name `Bytes.from_static`.
+- `Bytes.from_ptr_unchecked` is rename to `Bytes.from_static_unchecked`.
+- `Bytes.chars` now returns a specialized ExactSizeIterator, `Chars`.
+- `Bytes.raw_parts` is now `Bytes.to_raw_parts`.
+- `Iterator.collect_into` no longer takes a `Mapping[int, Any]`.
+- `iter.Take` is now `ExactSizeIterator`.
+- Calling `len(iterator)` where iterator is an unsized `Iterator` will warn you to explicitly use `Iterator.count` now.
 
 ## 1.4.0 - 6/21/2025
 

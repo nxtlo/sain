@@ -33,6 +33,7 @@ from __future__ import annotations
 import pytest
 import collections.abc
 
+from sain.macros import ub_checks
 from sain.maybe_uninit import MaybeUninit
 
 
@@ -55,15 +56,17 @@ class TestMaybeUninit:
         for uninit in uninit_array:
             uninit.write(None)
 
-        assert all(uninit.assume_init() is None for uninit in uninit_array)
+        with pytest.warns(ub_checks):
+            assert all(uninit.assume_init() is None for uninit in uninit_array)
 
     def test_uninit_is_uninitialized(self, uninit: MaybeUninit[None]) -> None:
-        with pytest.raises(AttributeError):
+        with pytest.warns(ub_checks), pytest.raises(AttributeError):
             uninit.assume_init()
 
     def test_write(self, uninit: MaybeUninit[None]) -> None:
         uninit.write(None)
-        assert uninit.assume_init() is None
+        with pytest.warns(ub_checks):
+            assert uninit.assume_init() is None
 
     def test___bool__False(self, uninit: MaybeUninit[None]) -> None:
         assert not uninit
