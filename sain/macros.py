@@ -486,9 +486,9 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert left == right, (
-        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left == right
+    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("assert_ne")
@@ -506,9 +506,9 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert left != right, (
-        f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
-    )
+    assert (
+        left != right
+    ), f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
 
 
 @rustc_diagnostic_item("include_bytes")
@@ -634,12 +634,11 @@ def unstable(
 
             for name, member in inspect.getmembers(obj):
                 if isinstance(member, staticmethod):
-                    # staticmethod: get the underlying function and wrap
-                    wrapped_static = staticmethod(_warn_and_call(member.__func__))
+                    wrapped_static = staticmethod(_warn_and_call(member.__func__))  # pyright: ignore
                     setattr(obj, name, wrapped_static)
                 elif isinstance(member, classmethod):
                     # classmethod: get the underlying function and wrap
-                    wrapped_class = classmethod(_warn_and_call(member.__func__))
+                    wrapped_class = classmethod(_warn_and_call(member.__func__))  # pyright: ignore
                     setattr(obj, name, wrapped_class)
 
             if hasattr(obj, "__doc__"):
