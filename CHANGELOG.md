@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `Bytes.from_raw_parts` and `Bytes.from_raw_parts_mut`, currently unstable.
-- Specializd `buf.Chars` iterator.
+- Specialized `buf.Chars` iterator.
+- Added basic impl of `AsyncIterator` and `Stream`, currently unstable.
 
 ### Removed
 
