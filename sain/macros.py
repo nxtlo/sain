@@ -735,7 +735,7 @@ def deprecated(
 
     msg = _create_message()
     if sys.version_info >= (3, 13, 0):
-        return warnings.deprecated(msg)
+        return warnings.deprecated(msg, stacklevel=3, category=None)
 
     return typing_extensions.deprecated(msg, stacklevel=3, category=None)
 
