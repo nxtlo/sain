@@ -32,15 +32,29 @@ from __future__ import annotations
 
 __all__ = ("Slice", "SliceMut", "SpecContains")
 
+import sys
 import typing
 from collections import abc as collections
 
 from sain.iter import TrustedIter
+from sain.macros import rustc_diagnostic_item
+from sain.option import Some
 
 T = typing.TypeVar("T")
 
 
 Pattern = T | collections.Iterable[T]
+
+if typing.TYPE_CHECKING:
+    from types import EllipsisType
+    from typing import SupportsIndex
+
+    from sain.option import Option
+
+    if sys.version_info >= (3, 11, 0):
+        from typing import Self
+    else:
+        from typing_extensions import Self
 
 
 class SpecContains(typing.Generic[T]):
@@ -78,11 +92,14 @@ class SpecContains(typing.Generic[T]):
         return pat in self
 
 
-@typing.final
+# TODO: Lots of documentation.
+
+
+@rustc_diagnostic_item("[T]")
 class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     """An immutable view over some sequence of type `T`.
 
-    Similar to `&[T]`
+    Similar to `[T]`
 
     Parameters
     ----------
@@ -95,28 +112,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     def __init__(self, ptr: collections.Sequence[T]) -> None:
         self.__buf = ptr
 
-    # FIXME: redundant, will get removed in the future.
-    def into_inner(self) -> collections.Sequence[T]:
-        """Consume this `Slice`, returning the sequence that's being pointed to.
-
-        `self` will no longer reference the sequence.
-
-        Example
-        -------
-        ```py
-        def from_parts(slice: Slice[int], len: int) -> list[int]:
-            uninit: list[int] = []
-            uninit.extend(slice.into_inner()[:len])
-            return uninit
-
-        vec = Vec([1, 2, 3, 4])
-        new = from_parts(vec.as_ref(), 2)
-        assert new == [1, 2]
-        ```
-        """
-        ptr = self.__buf
-        del self.__buf
-        return ptr
+    # impl [T]
 
     def iter(self) -> TrustedIter[T]:
         """Returns an iterator over the slice.
@@ -137,39 +133,148 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         """
         return TrustedIter(self.__buf)
 
-    def __len__(self) -> int:
+    def len(self) -> int:
         return len(self.__buf)
 
-    def __iter__(self) -> collections.Iterator[T]:
-        return iter(self.__buf)
+    def is_empty(self) -> bool:
+        return not self.__buf
 
-    def __repr__(self) -> str:
-        return repr(self.__buf)
+    def first(self) -> Option[T]:
+        return Some(self[0]) if self else Some(None)
 
-    @typing.overload
-    def __getitem__(self, index: slice) -> Slice[T]: ...
+    def split_first(self) -> Option[tuple[T, Self]]: ...
+
+    def last(self) -> Option[T]:
+        return Some(self[-1]) if self else Some(None)
+
+    def split_last(self) -> Option[tuple[T, Self]]: ...
+
+    def split_at(self, mid: int) -> tuple[Self, Self]:
+        """Divide one slice into two at an index.
+
+        The first will contain all indices from `[0 : mid]` excluding `mid` it self.
+        and the second will contain [mid: len], excluding `len` itself.
+
+        if `mid` > `len`, `IndexError` is raised, for non-error version,
+        Check `split_at_checked`.
+
+        Example
+        -------
+        ```py
+        buffer = Bytes.from_bytes((1, 2, 3, 4))
+        left, right = buffer.split_at(0)
+        assert left == [] and right == [1, 2, 3, 4]
+
+        left, right = buffer.split_at(2)
+        assert left == [1, 2] and right == [2, 3]
+        ```
+        """
+        if mid > len(self):
+            raise IndexError from None
+
+        return self[0:mid], self[mid:]
+
+    def split_at_checked(self, mid: int) -> tuple[Self, Self]:
+        """Divide one slice into two at an index.
+
+        The first will contain all indices from `[0 : mid]` excluding `mid` it self.
+        and the second will contain [mid: len], excluding `len` itself.
+
+        if `mid` > `len`, Then all bytes will be moved to the left,
+        returning an empty bytes in right.
+
+        Example
+        -------
+        ```py
+        buffer = Bytes.from_bytes((1, 2, 3, 4))
+        left, right = buffer.split_at(0)
+        assert left == [] and right == [1, 2, 3, 4]
+
+        left, right = buffer.split_at(2)
+        assert left == [1, 2] and right == [2, 3]
+        ```
+        """
+        return self[0:mid], self[mid:]
+
+    def get(self, index: SupportsIndex) -> Option[T]:
+        opt: Option[T] = Some(None)
+        try:
+            opt.insert(self[index.__index__()])
+        except IndexError:
+            pass
+        return opt
+
+    def get_unchecked(self, index: SupportsIndex) -> T:
+        return self[index.__index__()]
+
+    # NOTE - Delegates `self` to whatever we're pointing to.
+
+    # * impl Sequence[T] *
 
     @typing.overload
     def __getitem__(self, index: int) -> T: ...
+    @typing.overload
+    def __getitem__(self, index: slice) -> Self: ...
+    @typing.overload
+    def __getitem__(self, index: EllipsisType) -> Self: ...
 
-    def __getitem__(self, index: int | slice) -> T | Slice[T]:
+    def __getitem__(self, index: int | slice | EllipsisType) -> Self | T:
+        if index is ...:
+            # Full slice self[...], creates another reference to __buf
+            return self.__class__(self.__buf)
+
         if isinstance(index, slice):
-            return Slice(self.__buf[index])
+            # Slicing like self[1:], self[:2], self[1:2]
+            return self.__class__(self.__buf[index])
 
-        return self.__buf[index]
+        else:
+            # index get item. self[0]
+            return self.__buf[index]
 
-    def __eq__(self, other: object, /) -> bool:
-        return self.__buf == other
+    def index(self, value: T, start: int = 0, stop: int = sys.maxsize) -> int:
+        return self.__buf.index(value, start, stop)
 
-    def __ne__(self, other: object, /) -> bool:
-        return self.__buf != other
+    def count(self, value: T) -> int:
+        return self.__buf.count(value)
+
+    # * impl Iterable[T] *
+    def __iter__(self) -> collections.Iterable[T]:
+        return iter(self.__buf)
+
+    # * impl Container[T] *
+    def __contains__(self, item: T) -> bool:
+        return item in self.__buf
+
+    # * impl Sized *
+    def __len__(self) -> int:
+        return len(self.__buf)
+
+    # * impl Reversible[T] *
+    def __reversed__(self) -> collections.Iterator[T]:
+        return reversed(self.__buf)
+
+    def __bool__(self) -> bool:
+        return bool(self.__buf)
+
+    # * defaults
+
+    def __repr__(self) -> str:
+        return self.__buf.__repr__()
+
+    __str__ = __repr__
+
+    def __eq__(self, value: collections.Sequence[T], /) -> bool:
+        return self.__buf == value
+
+    def __ne__(self, value: collections.Sequence[T], /) -> bool:
+        return not self.__eq__(value)
 
 
-@typing.final
-class SliceMut(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
+@rustc_diagnostic_item("[T]")
+class SliceMut(Slice[T], collections.MutableSequence[T]):
     """A mutable view over some sequence of type `T`.
 
-    Similar to `&mut [T]`
+    Similar to `[T]` with a mutable `self`.
 
     Parameters
     ----------
@@ -179,83 +284,72 @@ class SliceMut(typing.Generic[T], collections.MutableSequence[T], SpecContains[T
 
     __slots__ = ("__buf",)
 
+    if typing.TYPE_CHECKING:
+        __buf: collections.MutableSequence[T]
+
     def __init__(self, ptr: collections.MutableSequence[T]) -> None:
-        self.__buf = ptr
+        super().__init__(ptr)
 
-    # FIXME: redundant, will get removed in the future.
-    def into_inner(self) -> collections.MutableSequence[T]:
-        """Consume this `SliceMut`, returning the sequence that's being pointed to.
+    # impl mut [T]
 
-        `self` will no longer reference the sequence.
+    def swap(self, a: int, b: int):
+        """Swap two elements in the slice.
 
-        Example
-        -------
-        ```py
-        x = Vec(["x", "y", "z"])
-
-        # mutable reference to `x`
-        mut_ref = x.as_mut()
-        # make all elements in `x` uppercase, then detach from `mut_ref`.
-        mut_ref.into_inner()[:] = [s.upper() for s in mut_ref]
-
-        assert x == ["X", "Y", "Z"]
-        ```
-        """
-        ptr = self.__buf
-        del self.__buf
-        return ptr
-
-    def iter(self) -> TrustedIter[T]:
-        """Returns an iterator over the slice.
-
-        The iterator yields all items from start to end.
+        if `a` equals to `b` then it's guaranteed that elements won't change value.
 
         Example
         -------
         ```py
-        x = Vec([1, 2, 3])
-        iterator = x.iter()
-
-        assert iterator.next() == Some(1)
-        assert iterator.next() == Some(2)
-        assert iterator.next() == Some(3)
-        assert iterator.next().is_none()
         ```
+
+        Parameters
+        ----------
+        `a` : `int`
+            The index of the first element
+        `b` : `int`
+            The index of the second element
+
+        Raises
+        ------
+        IndexError
+            If the positions of `a` or `b` are out of index.
         """
-        return TrustedIter(self.__buf)
+        if self[a] == self[b]:
+            return
+
+        self[a], self[b] = self[b], self[a]
+
+    def swap_unchecked(self, a: int, b: int):
+        """Swaps two elements in the slice. without checking if `a` == `b`.
+
+        Example
+        -------
+        ```py
+        ```
+
+        Parameters
+        ----------
+        `a` : `int`
+            The index of the first element
+        `b` : `int`
+            The index of the second element
+
+        Raises
+        ------
+        IndexError
+            If the positions of `a` or `b` are out of index.
+        """
+        self[a], self[b] = self[b], self[a]
+
+    # TODO - add docs
+    def reverse(self) -> None:
+        self.__buf.reverse()
 
     def insert(self, index: int, value: T) -> None:
         self.__buf.insert(index, value)
-
-    def __len__(self) -> int:
-        return len(self.__buf)
-
-    def __iter__(self) -> collections.Iterator[T]:
-        return iter(self.__buf)
-
-    def __repr__(self) -> str:
-        return repr(self.__buf)
 
     def __setitem__(self, index: int, item: T) -> None:
         self.__buf.__setitem__(index, item)
 
     def __delitem__(self, at: int) -> None:
         del self.__buf[at]
-
-    @typing.overload
-    def __getitem__(self, index: slice) -> Slice[T]: ...
-
-    @typing.overload
-    def __getitem__(self, index: int) -> T: ...
-
-    def __getitem__(self, index: int | slice) -> T | Slice[T]:
-        if isinstance(index, slice):
-            return Slice(self.__buf[index])
-
-        return self.__buf[index]
-
-    def __eq__(self, other: object, /) -> bool:
-        return self.__buf == other
-
-    def __ne__(self, other: object, /) -> bool:
-        return self.__buf != other

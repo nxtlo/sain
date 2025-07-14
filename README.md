@@ -36,8 +36,8 @@ This example provides a simple library that contains a `Vec` of books. Here, we 
 ```py
 from __future__ import annotations
 from sain import Result, Ok, Err  # used for safe error handling.
-from sain import Option  # used for absense of a value, similar to `T | None`.
-from sain import Vec  # A replacement for `list` type.
+from sain import Option  # used for absence of a value, similar to `T | None`.
+from sain import Vec  # An extension for builtin `list` type.
 
 from dataclasses import dataclass, field
 
@@ -68,9 +68,8 @@ class Library:
     def find_or(self, pattern: str) -> Result[Book, str]:
         return self.find(pattern).ok_or(f"book with pattern {pattern} not found.")
 
-    # We simply filter books that matches `author` and collect
-    # them into a list[Book].
-    def books_for(self, author: str):
+    # We simply filter books that matches `author` and collect them into a list.
+    def books_for(self, author: str) -> list[Book]:
         return self.books.iter().filter(lambda book: book.author == author).collect()
 
 
@@ -95,12 +94,6 @@ match lib.find_or("Sci-Fi"):
 # show Hugh's books.
 print(lib.books_for("Hugh Howey"))  # [Book("Silo", ...)]
 ```
-
-## How to use this library
-
-* `Option`, `Result`, `Iterator`, `*/collections`, `Default` - The are core routines which are used almost everywhere within the library. You can easily opt these in your projects.
-* `sync`, `convert`, `error`, `macros`, `cfg` - These are also core impls, but not widely used as the ones above.
-* `maybe_uninit`, `futures`, `boxed` - You will probably see those used once or less anywhere, they're designed for lower-level, general use.
 
 ## built-in types
 
