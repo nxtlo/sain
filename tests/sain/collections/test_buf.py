@@ -86,10 +86,9 @@ def test_bytes_access_leaked_bytes():
 def test_bytes_try_to_str_invalid_utf8():
     b = Bytes.from_bytes([0xFF, 0xFE])
 
-    with pytest.warns(DeprecationWarning):
-        res = b.try_to_str()
-        assert res.is_err()
-        assert res.unwrap_err() == b"\xff\xfe"
+    res = b.try_to_str()
+    assert res.is_err()
+    assert res.unwrap_err() == b"\xff\xfe"
 
 
 def test_bytes_repr_and_str_empty():
