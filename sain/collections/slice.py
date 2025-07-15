@@ -282,8 +282,6 @@ class SliceMut(Slice[T], collections.MutableSequence[T]):
         The mutable sequence to point to.
     """
 
-    __slots__ = ("__buf",)
-
     if typing.TYPE_CHECKING:
         __buf: collections.MutableSequence[T]
 
