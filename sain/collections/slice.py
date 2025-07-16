@@ -32,9 +32,9 @@ from __future__ import annotations
 
 __all__ = ("Slice", "SliceMut", "SpecContains")
 
+import copy
 import sys
 import typing
-import copy
 from collections import abc as collections
 
 from sain.iter import TrustedIter
@@ -50,6 +50,9 @@ if typing.TYPE_CHECKING:
     from types import EllipsisType
     from typing import SupportsIndex
 
+    from _typeshed import SupportsAllComparisons as SliceOrd
+
+    from sain.collections.vec import Vec
     from sain.option import Option
 
     if sys.version_info >= (3, 11, 0):
@@ -58,10 +61,9 @@ if typing.TYPE_CHECKING:
         from typing_extensions import Self
 
     class CoerceSized(typing.Protocol[T_cov]):
-        """Trait that indicates that an object that is iterable, while also having a constant length."""
+        """Trait that indicates that an object that is indexable, while also having a constant length."""
 
-        def __iter__(self) -> collections.Iterator[T_cov]: ...
-        def __next__(self) -> T_cov: ...
+        def __getitem__(self, index: SupportsIndex, /) -> T_cov: ...
         def __len__(self) -> int: ...
 
 
@@ -124,7 +126,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
 
     __slots__ = ("__buf",)
 
-    def __init__(self, ptr: collections.Sequence[T]) -> None:
+    def __init__(self, ptr: collections.Sequence[T] = ()) -> None:
         self.__buf = ptr
 
     # impl [T]
@@ -137,7 +139,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         Example
         -------
         ```py
-        x = ...
+        x: Slice[int] = Slice()
         iterator = x.iter()
 
         assert iterator.next() == Some(1)
@@ -149,31 +151,103 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         return TrustedIter(self.__buf)
 
     def len(self) -> int:
+        """Returns the number of elements in the slice.
+
+        Example
+        -------
+        ```py
+        a = Slice([1, 2, 3])
+        assert a.len() == 3
+        ```
+        """
         return len(self.__buf)
 
     def is_empty(self) -> bool:
+        """Returns `True` if the slice has a length of 0.
+
+        Example
+        -------
+        ```py
+        a: Slice[int] = Slice()
+        assert a.is_empty()
+
+        a = Slice([1, 2, 3, 4])
+        assert not a.is_empty()
+        ```
+        """
         return not self.__buf
 
     def first(self) -> Option[T]:
+        """Returns the first element of the slice, or None if it is empty.
+
+        Example
+        --------
+        ```py
+        v = Slice([10, 40, 30])
+        assert v.first().unwrap() == 10
+
+        y: Slice[int] = Slice()
+        assert y.first().is_none()
+        ```
+        """
         return Some(self[0]) if self else Some(None)
 
     def last(self) -> Option[T]:
+        """Returns the last element of the slice, or None if it is empty.
+
+        Example
+        --------
+        ```py
+        v = Slice([10, 40, 30])
+        assert v.last().unwrap() == 30
+
+        y: Slice[int] = Slice([])
+        assert y.last().is_none()
+        ```
+        """
         return Some(self[-1]) if self else Some(None)
 
     # ? def split(self, pred: F) -> Split[T, F] where F: Callable[[T], bool]: ...
     def split_first(self) -> Option[tuple[T, Self]]:
+        """Returns the first and rest of the slice elements, returns `None` if the slice's length is 0.
+
+        If empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        s = Slice([1, 2, 3])
+
+        first, elements = s.split_first().unwrap()
+        assert first == 1
+        assert elements == [2, 3]
+        ```
+        """
         if len(self) == 0:
             return Some(None)
 
         return Some((self.__buf[0], self[1:]))
 
     def split_last(self) -> Option[tuple[T, Self]]:
+        """Returns the first and rest of the slice elements, returns `None` if the slice's length is 0.
+
+        If empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        s = Slice([1, 2, 3])
+
+        last, elements = s.split_last().unwrap()
+        assert last == 3
+        assert elements == [1, 2]
+        ```
+        """
         if len(self) == 0:
             return Some(None)
 
         return Some((self.__buf[-1], self[:-1]))
 
-    def split_off(self, at: int) -> Option[Self]: ...
     def split_once(self) -> Option[tuple[Self, Self]]: ...
     def split_at(self, mid: int) -> tuple[Self, Self]:
         """Divide one slice into two at an index.
@@ -233,11 +307,100 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         Example
         -------
         ```py
+        xs = Slice([1, 2, 3, 4])
+        assert 1 == xs.get_unchecked(0)
         ```
         """
         return self[index.__index__()]
 
-    # NOTE - Delegates `self` to whatever we're pointing to.
+    def starts_with(self, needle: collections.Sequence[T]) -> bool:
+        """Returns true if needle is a prefix of the slice or equal to the slice.
+
+        Always returns true if needle is an empty slice.
+
+        Example
+        ------
+        ```py
+        v = Slice([10, 40, 30])
+        assert v.starts_with([10])
+        assert v.starts_with([10, 40])
+        assert v.starts_with([10, 40, 30])
+        assert not v.starts_with([50])
+        ```
+        """
+        if not needle:
+            return True
+
+        n = len(needle)
+        return len(self) >= n and needle == self.__buf[:n]
+
+    def ends_with(self, needle: collections.Sequence[T]) -> bool:
+        """Returns true if needle is a prefix of the slice or equal to the slice.
+
+        Always returns true if needle is an empty slice.
+
+        Example
+        ------
+        ```py
+        v = Slice([10, 40, 30])
+        assert v.ends_with([30])
+        assert v.ends_with([40, 40])
+        assert v.ends_with([10, 40, 30])
+        assert not v.starts_with([10])
+        ```
+        """
+        if not needle:
+            return True
+
+        m, n = len(self), len(needle)
+        return m >= n and needle == self.__buf[m - n :]
+
+    def to_vec(self) -> Vec[T]:
+        """Copies `self` into a new `Vec`.
+
+        Example
+        -------
+        ```py
+        s = Slice([1, 2, 3])
+        xs = s.to_vec()
+        # Here, s and xs can be modified independently.
+        ```
+        """
+        from .vec import Vec
+
+        return self.to_vec_in(Vec([]))
+
+    def to_vec_in(self, v: Vec[T], /) -> Vec[T]:
+        """Copies `self` into `v` by extending `v`, Then returns `v`.
+
+        Example
+        -------
+        ```py
+        dst = Vec([1, 2, 3])
+        s = Slice([4, 5, 6])
+
+        xs = s.to_vec_in(dst)
+        assert dst == [1, 2, 3, 4, 5, 6] and dst == xs
+        ```
+        """
+        v.extend(self.__buf)
+        return v
+
+    def repeat(self, n: int, /) -> Vec[T]:
+        """Creates a vector by copying a slice n times.
+
+        Example
+        -------
+        ```py
+        assert Slice([1, 2]).repeat(3) == [1, 2, 1, 2, 1, 2]
+        ```
+        """
+        from .vec import Vec
+
+        if n == 0:
+            return Vec()
+
+        return Vec(list(self.__buf) * n)
 
     # * impl Sequence[T] *
 
@@ -258,13 +421,11 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
             return self.__class__(self.__buf[index])
 
         else:
-            # index get item. self[0]
+            # index get item, i.e. self[0]
             return self.__buf[index]
 
     def __len__(self) -> int:
         return len(self.__buf)
-
-    # * defaults
 
     def __repr__(self) -> str:
         return self.__buf.__repr__()
@@ -278,8 +439,23 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     def __ne__(self, value: collections.Sequence[T], /) -> bool:
         return not self.__eq__(value)
 
+    def __lt__(self, rhs: SliceOrd) -> bool:
+        return self.__buf < rhs
+
+    def __gt__(self, rhs: SliceOrd) -> bool:
+        return self.__buf > rhs
+
+    def __le__(self, rhs: SliceOrd) -> bool:
+        return self.__buf <= rhs
+
+    def __ge__(self, rhs: SliceOrd) -> bool:
+        return self.__buf >= rhs
+
     def __bool__(self) -> bool:
         return bool(self.__buf)
+
+    def __hash__(self) -> int:
+        return hash(self.__buf)
 
 
 @rustc_diagnostic_item("[T]")
@@ -299,47 +475,82 @@ class SliceMut(
         The mutable sequence to point to.
     """
 
-    if typing.TYPE_CHECKING:
-        __buf: collections.MutableSequence[T]
-
     def __init__(self, ptr: collections.MutableSequence[T]) -> None:
+        # dirty runtime check here just to make sure that people don't
+        # call methods on immutable collections. This line doesn't
+        # exist if the program is level 1 optimized. `-O`.
+        assert isinstance(ptr, collections.MutableSequence), (
+            f"expected a mutable sequence, got {type(ptr).__name__}."
+        )
+        self.__buf = ptr
         super().__init__(ptr)
 
     # impl mut [T]
 
-    def fill(self, value: T) -> None:
-        """Fills `self` with elements by copying `value`.
+    def reverse(self) -> None:
+        """Reverse this slice, in-place.
 
         Example
         -------
         ```py
+        ss = SliceMut([1, 2, 3])
+        ss.reverse()
+        assert ss == [3, 2, 1]
+        ```
+        """
+        self.__buf.reverse()
+
+    def fill(self, value: T, /) -> None:
+        """Fills `self` with elements by copying references of `value`.
+
+        Example
+        -------
+        ```py
+        s = SliceMut([1, 2, 3, 4])
+        # Copy `0` references 4 times.
+        ss.fill(0)
+        assert s == [0, 0, 0, 0]
         ```
         """
 
         if not self.__buf:
             return
 
-        self.__buf[:] = [value] * len(self)
+        self.__buf = [value] * len(self)
 
-    def fill_with(self, f: collections.Callable[[], T]) -> None:
-        """Fills `self` with elements by copying the value returned by `f`.
+    def fill_with(self, f: collections.Callable[[], T], /) -> None:
+        """Fills `self` with elements by copying the value's reference returned by `f`.
 
         This method uses closures to create new value, If you'd rather `copy` a given value, use `fill` instead.
 
         Example
         -------
         ```py
+        def default() -> int:
+            return 1
+
+        s = SliceMut([0] * 5)
+        s.fill_with(default)
+        assert s == [1, 1, 1, 1, 1]
         ```
         """
-
         if not self.__buf:
             return
 
-        self.__buf[:] = [f()] * len(self)
+        self.__buf = [f()] * len(self)
+
+    def __copy_from_slice_slow(
+        self, src: CoerceSized[T], copier: collections.Callable[[T], T], count: int, /
+    ) -> None:
+        # TODO: Test this vs for i in range(src_len): ...
+        start = 0
+        while start < count:
+            self[start] = copier(src[start])
+            start += 1
 
     # ? shallow-copies
-    def copy_from_slice(self, src: CoerceSized[T]) -> None:
-        """Shallow copies he elements from `src` into `self`.
+    def copy_from_slice(self, src: CoerceSized[T], /) -> None:
+        """Shallow copies the elements from `src` into `self`.
 
         If you need a deep-copy of `src`'s elements, use `clone_from_slice` instead.
 
@@ -353,6 +564,12 @@ class SliceMut(
         Example
         -------
         ```py
+        dst = SliceMut([0, 0])
+        src = [1, 2, 3, 4]
+
+        # we must slice src here because dst has to be the same length.
+        dst.copy_from_slice(src[2:])
+        assert src == [3, 4]
         ```
         """
 
@@ -361,12 +578,11 @@ class SliceMut(
                 f"copy_from_slice: source slice length ({src_len}) does not match destination slice length({self_len})"
             ) from None
 
-        # TODO: Test this vs for i in range(src_len): ...
-        self.__buf[:] = [copy.copy(_) for _ in src]
+        self.__copy_from_slice_slow(src, copy.copy, self_len)
 
     # ? deep-copies
-    def clone_from_slice(self, src: CoerceSized[T]) -> None:
-        """Deep copies he elements from `src` into `self`.
+    def clone_from_slice(self, src: CoerceSized[T], /) -> None:
+        """Deep copies the elements from `src` into `self`.
 
         If you only need a shallow-copy of `src`'s elements, use `copy_from_slice` instead.
 
@@ -380,15 +596,20 @@ class SliceMut(
         Example
         -------
         ```py
+        dst = SliceMut([0, 0])
+        src = [1, 2, 3, 4]
+
+        # we must slice src here because dst has to be the same length.
+        dst.clone_from_slice(src[2:])
+        assert src == [3, 4]
         ```
         """
         if (src_len := len(src)) != (self_len := len(self)):
             raise IndexError(
-                f"copy_from_slice: source slice length ({src_len}) does not match destination slice length({self_len})"
+                f"clone_from_slice: source slice length ({src_len}) does not match destination slice length({self_len})"
             ) from None
 
-        # TODO: Test this vs for i in range(src_len): ...
-        self.__buf[:] = [copy.deepcopy(_) for _ in src]
+        self.__copy_from_slice_slow(src, copy.deepcopy, self_len)
 
     def swap(self, a: int, b: int):
         """Swap two elements in the slice.
@@ -439,18 +660,29 @@ class SliceMut(
         """
         self[a], self[b] = self[b], self[a]
 
+    def swap_with_slice(self, other: collections.MutableSequence[T]) -> None:
+        if len(other) != (count := len(self)):
+            raise IndexError(
+                "destination and source slices have different lengths"
+            ) from None
+
+        start = 0
+        while start < count:
+            self[start], other[start] = other[start], self[start]
+            start += 1
+
     # ? def split_mut(self, pred: F) -> SplitMut[T, F] where F: Callable[[T], bool]: ...
     def split_first_mut(self) -> Option[tuple[T, Self]]:
         if len(self) == 0:
             return Some(None)
 
-        return Some((self.__buf[0], self[1:]))
+        return Some((self[0], self[1:]))
 
     def split_last_mut(self) -> Option[tuple[T, Self]]:
         if len(self) == 0:
             return Some(None)
 
-        return Some((self.__buf[-1], self[:-1]))
+        return Some((self[-1], self[:-1]))
 
     def split_off_mut(self, at: int) -> Option[Self]: ...
     def split_at_mut(self, mid: int) -> tuple[Self, Self]:
@@ -491,11 +723,5 @@ class SliceMut(
 
         return Some((self[0:mid], self[mid:]))
 
-    def insert(self, index: int, value: T) -> None:
-        self.__buf.insert(index, value)
-
     def __setitem__(self, index: int, item: T) -> None:
-        self.__buf.__setitem__(index, item)
-
-    def __delitem__(self, at: int) -> None:
-        del self.__buf[at]
+        self.__buf[index] = item
