@@ -229,7 +229,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         return Some((self.__buf[0], self[1:]))
 
     def split_last(self) -> Option[tuple[T, Self]]:
-        """Returns the first and rest of the slice elements, returns `None` if the slice's length is 0.
+        """Returns the last and rest of the slice elements, returns `None` if the slice's length is 0.
 
         If empty, `None` is returned.
 
@@ -248,7 +248,29 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
 
         return Some((self.__buf[-1], self[:-1]))
 
-    def split_once(self) -> Option[tuple[Self, Self]]: ...
+    def split_once(
+        self, pred: collections.Callable[[T], bool]
+    ) -> Option[tuple[Self, Self]]:
+        """Splits the slice on the first elements that matches the specified predicate.
+
+        If the predicates matches any elements in the slice, returns the prefix
+        before the match and suffix after. The matching element itself will not be included.
+
+        If no elements matches, returns `None`.
+
+        Example
+        -------
+        ```py
+        slice = Slice([1, 2, 3, 2, 4])
+        assert slice.split_once(lambda x: x == 2) == Some(([1], [3, 2, 4]))
+        ```
+        """
+        # TODO: Need to bench this.
+        if (index := self.iter().position(pred).transpose()) is not None:
+            return Some((self[:index], self[index + 1 :]))
+
+        return Some(None)
+
     def split_at(self, mid: int) -> tuple[Self, Self]:
         """Divide one slice into two at an index.
 
@@ -261,6 +283,16 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         Example
         -------
         ```py
+        s = Slice(['a', 'b', 'c'])
+
+        left, right = s.split_at(0)
+        assert left == [] and right == ['a', 'b', 'c']
+
+        left, right = s.split_at(2)
+        assert left == ['a', 'b'] and right == ['c']
+
+        # If mid > len, this errors.
+        left, right = s.split_at(10) # IndexError(...)
         ```
         """
         if mid > len(self):
@@ -280,6 +312,17 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         Example
         -------
         ```py
+        s = Slice(['a', 'b', 'c'])
+
+        left, right = s.split_at_checked(0)
+        assert left == [] and right == ['a', 'b', 'c']
+
+        left, right = s.split_at_checked(2)
+        assert left == ['a', 'b'] and right == ['c']
+
+        # If mid > len, it fills the left with all elements, and returns right empty.
+        left, right = s.split_at_checked(10)
+        assert left == ['a', 'b', 'c'] and right == []
         ```
         """
         return self[0:mid], self[mid:]
@@ -516,7 +559,7 @@ class SliceMut(
         if not self.__buf:
             return
 
-        self.__buf = [value] * len(self)
+        self.__buf[:] = [value] * len(self)
 
     def fill_with(self, f: collections.Callable[[], T], /) -> None:
         """Fills `self` with elements by copying the value's reference returned by `f`.
@@ -537,18 +580,16 @@ class SliceMut(
         if not self.__buf:
             return
 
-        self.__buf = [f()] * len(self)
+        self.__buf[:] = [f()] * len(self)
 
     def __copy_from_slice_slow(
         self, src: CoerceSized[T], copier: collections.Callable[[T], T], count: int, /
     ) -> None:
-        # TODO: Test this vs for i in range(src_len): ...
         start = 0
         while start < count:
             self[start] = copier(src[start])
             start += 1
 
-    # ? shallow-copies
     def copy_from_slice(self, src: CoerceSized[T], /) -> None:
         """Shallow copies the elements from `src` into `self`.
 
@@ -580,9 +621,8 @@ class SliceMut(
 
         self.__copy_from_slice_slow(src, copy.copy, self_len)
 
-    # ? deep-copies
     def clone_from_slice(self, src: CoerceSized[T], /) -> None:
-        """Deep copies the elements from `src` into `self`.
+        """Deep-copies the elements from `src` into `self`.
 
         If you only need a shallow-copy of `src`'s elements, use `copy_from_slice` instead.
 
@@ -661,6 +701,26 @@ class SliceMut(
         self[a], self[b] = self[b], self[a]
 
     def swap_with_slice(self, other: collections.MutableSequence[T]) -> None:
+        """Swaps all elements in `self` with those in `other`.
+
+        The length of `other` must be the same as `self`.
+
+        Raises
+        ------
+        `IndexError`
+            If `other`'s length is not the same as `self`.
+
+        Example
+        -------
+        ```py
+        slice1 = SliceMut([1, 2, 3])
+        slice2 = SliceMut([4, 5, 6])
+
+        slice1.swap_with_slice(slice2)
+
+        assert slice1 == [4, 5, 6] and slice2 == [1, 2, 3]
+        ```
+        """
         if len(other) != (count := len(self)):
             raise IndexError(
                 "destination and source slices have different lengths"
@@ -673,18 +733,48 @@ class SliceMut(
 
     # ? def split_mut(self, pred: F) -> SplitMut[T, F] where F: Callable[[T], bool]: ...
     def split_first_mut(self) -> Option[tuple[T, Self]]:
+        """Returns the first and rest of the slice elements, returns `None` if the slice's length is 0.
+
+        If empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        s = SliceMut([1, 2, 3])
+
+        first, elements = s.split_first_mut().unwrap()
+        assert first == 1
+        assert elements == [2, 3]
+        ```
+        """
         if len(self) == 0:
             return Some(None)
 
         return Some((self[0], self[1:]))
 
     def split_last_mut(self) -> Option[tuple[T, Self]]:
+        """Returns the last and rest of the slice elements, returns `None` if the slice's length is 0.
+
+        If empty, `None` is returned.
+
+        Example
+        -------
+        ```py
+        s = SliceMut([1, 2, 3])
+
+        last, elements = s.split_last_mut().unwrap()
+        assert last == 3
+        assert elements == [1, 2]
+        ```
+        """
         if len(self) == 0:
             return Some(None)
 
         return Some((self[-1], self[:-1]))
 
-    def split_off_mut(self, at: int) -> Option[Self]: ...
+    def split_off_first(self) -> Option[Slice[T]]: ...
+    def split_off_last(self) -> Option[Slice[T]]: ...
+
     def split_at_mut(self, mid: int) -> tuple[Self, Self]:
         """Divide one slice into two at an index.
 
