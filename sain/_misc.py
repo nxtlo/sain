@@ -28,11 +28,11 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__version__: str = "1.4.0"
-__url__: str = "https://github.com/nxtlo/sain"
-__author__: str = "nxtlo"
-__about__: str = (
+__version__ = "1.4.0"
+__url__ = "https://github.com/nxtlo/sain"
+__author__ = "nxtlo"
+__about__ = (
     "Sain is a dependency-free library that implements some of the Rust core"
     "types which abstracts over common patterns in Rust for Python."
 )
-__license__: str = "BSD 3-Clause License"
+__license__ = "BSD 3-Clause License"

@@ -54,6 +54,8 @@ import sys
 import typing
 import warnings
 
+import typing_extensions
+
 if typing.TYPE_CHECKING:
     import collections.abc as collections
 
@@ -103,6 +105,7 @@ RustItem = typing.Literal[
     # keywords
     "unsafe",
     # primitives
+    "[T]",
     "&[u8]",
     "&mut [u8]",
     # time
@@ -166,6 +169,7 @@ _MAP_TO_PATH: dict[RustItem, LiteralString] = {
     # keywords
     "unsafe": "std/keyword.unsafe.html",
     # primitives
+    "[T]": "std/primitive.slice.html",
     "&[u8]": "std/primitive.slice.html",
     "&mut [u8]": "std/primitive.slice.html",
     # time
@@ -486,9 +490,9 @@ def assert_eq(left: T, right: T) -> None:
     assert_eq(a, b)
     ```
     """
-    assert (
-        left == right
-    ), f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    assert left == right, (
+        f'assertion `left == right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    )
 
 
 @rustc_diagnostic_item("assert_ne")
@@ -506,9 +510,9 @@ def assert_ne(left: T, right: T) -> None:
     assert_ne(a, b)
     ```
     """
-    assert (
-        left != right
-    ), f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    assert left != right, (
+        f'assertion `left != right` failed\nleft: "{left!r}"\nright: "{right!r}"'
+    )
 
 
 @rustc_diagnostic_item("include_bytes")
@@ -663,45 +667,17 @@ def unstable(
     return decorator
 
 
-# TODO: in 2.0.0 remove this and use typing_extensions.deprecated instead.
-@typing.overload
-def deprecated(
-    *,
-    obj: collections.Callable[P, U] | None = None,
-) -> collections.Callable[P, U]: ...
-
-
-@typing.overload
-def deprecated(
-    *,
-    since: typing.Literal["CURRENT_VERSION"] | LiteralString | None = None,
-    removed_in: LiteralString | None = None,
-    use_instead: LiteralString | None = None,
-    hint: LiteralString | None = None,
-) -> collections.Callable[
-    [collections.Callable[P, U]],
-    collections.Callable[P, U],
-]: ...
-
-
 @rustc_diagnostic_item("deprecated")
 def deprecated(
     *,
-    obj: collections.Callable[P, U] | None = None,
     since: typing.Literal["CURRENT_VERSION"] | LiteralString | None = None,
     removed_in: LiteralString | None = None,
     use_instead: LiteralString | None = None,
     hint: LiteralString | None = None,
-) -> (
-    collections.Callable[P, U]
-    | collections.Callable[
-        [collections.Callable[P, U]],
-        collections.Callable[P, U],
-    ]
 ):
     """A decorator that marks a function as deprecated.
 
-    An attempt to call the object that's marked will cause a runtime warn.
+    Has no runtime side-effects.
 
     Example
     -------
@@ -736,10 +712,8 @@ def deprecated(
         An optional hint for the user.
     """
 
-    def _create_message(
-        f: typing.Any,
-    ) -> str:
-        msg = f"{_obj_type(f)} `{f.__module__}.{f.__name__}` is deprecated."
+    def _create_message() -> LiteralString:
+        msg = ""
 
         if since is not None:
             if since == "CURRENT_VERSION":
@@ -759,33 +733,15 @@ def deprecated(
             msg += f" Hint: {hint}"
         return msg
 
-    def decorator(func: collections.Callable[P, U]) -> collections.Callable[P, U]:
-        message = _create_message(func)
+    msg = _create_message()
+    if sys.version_info >= (3, 13, 0):
+        return warnings.deprecated(msg, stacklevel=3, category=None)
 
-        @functools.wraps(func)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            _warn("\033[93m" + message + "\033[0m", warn_ty=DeprecationWarning)
-            return func(*args, **kwargs)
-
-        # idk why pyright doesn't know the type of wrapper.
-        m = inspect.cleandoc(f"\n# Warning ⚠️\n{message}.")
-        if wrapper.__doc__:
-            # append this message to an existing document.
-            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + m
-        else:
-            wrapper.__doc__ = m
-
-        return wrapper
-
-    # marked only.
-    if obj is not None:
-        return decorator(obj)
-
-    return decorator
+    return typing_extensions.deprecated(msg, stacklevel=3, category=None)
 
 
 @rustc_diagnostic_item("todo")
-def todo(message: LiteralString | None = None) -> typing.NoReturn:
+def todo(message: LiteralString | None = None) -> typing_extensions.Never:
     """A place holder that indicates unfinished code.
 
     Example
@@ -794,7 +750,7 @@ def todo(message: LiteralString | None = None) -> typing.NoReturn:
     from sain import todo
 
     def from_json(payload: dict[str, int]) -> int:
-        # Calling this function will raise `Error`.
+        # Calling this function will raise `RuntimeError`.
         todo()
     ```
 
@@ -803,100 +759,38 @@ def todo(message: LiteralString | None = None) -> typing.NoReturn:
     message : `str | None`
         Multiple optional arguments to pass if the error was raised.
     """
-    raise RuntimeWarning(
+    raise RuntimeError(
         f"not yet implemented: {message}" if message else "not yet implemented"
     )
 
 
-# TODO: in 2.0.0 make this the same as `todo`
-@typing.overload
-def unimplemented(
-    *,
-    obj: collections.Callable[P, U] | None = None,
-) -> collections.Callable[P, U]: ...
-
-
-@typing.overload
-def unimplemented(
-    *,
-    message: LiteralString | None = None,
-    available_in: LiteralString | None = None,
-) -> collections.Callable[
-    [collections.Callable[P, U]],
-    collections.Callable[P, U],
-]: ...
-
-
 @rustc_diagnostic_item("unimplemented")
-def unimplemented(
-    *,
-    obj: collections.Callable[P, U] | None = None,
-    message: LiteralString | None = None,
-    available_in: LiteralString | None = None,
-) -> (
-    collections.Callable[P, U]
-    | collections.Callable[
-        [collections.Callable[P, U]],
-        collections.Callable[P, U],
-    ]
-):
-    """A decorator that marks an object as unimplemented.
+def unimplemented(message: LiteralString | None = None, /) -> typing_extensions.Never:
+    """Marks an object as unimplemented.
 
-    An attempt to call the object that's marked will cause a runtime warn.
+    Raises `RuntimeError` if called.
 
     Example
     -------
     ```py
     from sain import unimplemented
 
-    @unimplemented  # Can be used without calling
     class User:
-        ...
+        unimplemented()
 
-    @unimplemented(message="Not ready", available_in="2.0.0")  # Or with parameters
-    class Config:
-        ...
+    match parse_http_method(inp):
+        case "GET": ...
+        case _: unimplemented("not yet")
     ```
 
     Parameters
     ----------
     message : `str | None`
         An optional message to be displayed when the function is called. Otherwise default message will be used.
-    available_in : `str | None`
-        If provided, This will be shown as what release this object be implemented.
     """
-
-    def _create_message(f: typing.Any) -> str:
-        msg = (
-            message
-            or f"{_obj_type(f)} `{f.__module__}.{f.__name__}` is not yet implemented."
-        )
-
-        if available_in:
-            msg += f" Available in `{available_in}`."
-        return msg
-
-    def decorator(func: collections.Callable[P, U]) -> collections.Callable[P, U]:
-        msg = _create_message(func)
-
-        @functools.wraps(func)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> U:
-            _warn("\033[93m" + msg + "\033[0m", warn_ty=RuntimeWarning)
-            return func(*args, **kwargs)
-
-        m = f"\n# Warning ⚠️\n{msg}."
-        if wrapper.__doc__:
-            # Append the new documentation string to the existing docstring.
-            wrapper.__doc__ = inspect.cleandoc(wrapper.__doc__) + m
-        else:
-            # Assign the new documentation string as the docstring when no existing docstring is present.
-            wrapper.__doc__ = m
-        return wrapper
-
-    if obj is not None:
-        return decorator(obj)
-
-    return decorator
+    raise RuntimeError(
+        "not implemented" if not message else f"not implemented: {message}"
+    ) from None
 
 
 @rustc_diagnostic_item("doc")
