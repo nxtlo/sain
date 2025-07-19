@@ -139,7 +139,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         Example
         -------
         ```py
-        x: Slice[int] = Slice()
+        x: Slice[int] = Slice([1, 2, 3])
         iterator = x.iter()
 
         assert iterator.next() == Some(1)
@@ -207,7 +207,6 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         """
         return Some(self[-1]) if self else Some(None)
 
-    # ? def split(self, pred: F) -> Split[T, F] where F: Callable[[T], bool]: ...
     def split_first(self) -> Option[tuple[T, Self]]:
         """Returns the first and rest of the slice elements, returns `None` if the slice's length is 0.
 
@@ -335,10 +334,13 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         Example
         -------
         ```py
+        s = Slice([1, 2, 3, 4])
+        s.get(0).unwrap() == 1
+        assert s.get(10).is_none()
         ```
         """
         try:
-            return Some(self[index.__index__()])
+            return Some(self.__buf[index.__index__()])
         except IndexError:
             return Some(None)
 
@@ -411,7 +413,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         """
         from .vec import Vec
 
-        return self.to_vec_in(Vec([]))
+        return Vec()
 
     def to_vec_in(self, v: Vec[T], /) -> Vec[T]:
         """Copies `self` into `v` by extending `v`, Then returns `v`.
@@ -445,7 +447,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
 
         return Vec(list(self.__buf) * n)
 
-    # * impl Sequence[T] *
+    # * magic
 
     @typing.overload
     def __getitem__(self, index: int) -> T: ...
@@ -522,9 +524,9 @@ class SliceMut(
         # dirty runtime check here just to make sure that people don't
         # call methods on immutable collections. This line doesn't
         # exist if the program is level 1 optimized. `-O`.
-        assert isinstance(ptr, collections.MutableSequence), (
-            f"expected a mutable sequence, got {type(ptr).__name__}."
-        )
+        assert isinstance(
+            ptr, collections.MutableSequence
+        ), f"expected a mutable sequence, got {type(ptr).__name__}."
         self.__buf = ptr
         super().__init__(ptr)
 
@@ -553,6 +555,19 @@ class SliceMut(
         # Copy `0` references 4 times.
         ss.fill(0)
         assert s == [0, 0, 0, 0]
+        ```
+
+        `fill` copy `value` references, not the value itself.
+
+        ```py
+        DEFAULT_ARRAY = [1, 2, 3]
+        # pre-allocate the slice with 3d lists.
+        s = SliceMut([[], [], []])
+        # then fill it with the default array.
+        s.fill(DEFAULT_ARRAY)
+        # the slice is filled with references to `DEFAULT_ARRAY`, which means
+        # any modifications to `DEFAULT_ARRAY` also affects the arrays in the slice.
+        assert all(id(arr) == id(DEFAULT_ARRAY) for arr in s)
         ```
         """
 
@@ -659,6 +674,16 @@ class SliceMut(
         Example
         -------
         ```py
+        s = SliceMut([1, 2])
+        s.swap(0, 1)
+        assert s == [2, 1]
+        ```
+
+        if `a == b`, nothing happens.
+
+        ```py
+        s = SliceMut([1, 1])
+        s.swap(1, 0) # NOP
         ```
 
         Parameters
@@ -684,6 +709,9 @@ class SliceMut(
         Example
         -------
         ```py
+        s = SliceMut([1, 2])
+        s.swap_unchecked(0, 1)
+        assert s == [2, 1]
         ```
 
         Parameters
@@ -731,7 +759,6 @@ class SliceMut(
             self[start], other[start] = other[start], self[start]
             start += 1
 
-    # ? def split_mut(self, pred: F) -> SplitMut[T, F] where F: Callable[[T], bool]: ...
     def split_first_mut(self) -> Option[tuple[T, Self]]:
         """Returns the first and rest of the slice elements, returns `None` if the slice's length is 0.
 
@@ -772,8 +799,49 @@ class SliceMut(
 
         return Some((self[-1], self[:-1]))
 
-    def split_off_first(self) -> Option[Slice[T]]: ...
-    def split_off_last(self) -> Option[Slice[T]]: ...
+    def split_off_first(self) -> Option[T]:
+        """Removes the first element of the slice and returns a reference to it.
+
+        Returns None if the slice is empty.
+
+        Example
+        -------
+        ```py
+        s = = SliceMut([1, 2, 3, 4])
+        first = s.split_of_first().unwrap()
+
+        assert first == 1
+        assert s == [2, 3, 4]
+        ```
+        """
+        if len(self) == 0:
+            return Some(None)
+
+        first = self[0]
+        del self.__buf[0]
+        return Some(first)
+
+    def split_off_last(self) -> Option[T]:
+        """Removes the last element of the slice and returns a reference to it.
+
+        Returns None if the slice is empty.
+
+        Example
+        -------
+        ```py
+        s = = SliceMut([1, 2, 3, 4])
+        last = s.split_off_last().unwrap()
+
+        assert last == 4
+        assert s == [1, 2, 3]
+        ```
+        """
+        if len(self) == 0:
+            return Some(None)
+
+        last = self[-1]
+        del self.__buf[-1]
+        return Some(last)
 
     def split_at_mut(self, mid: int) -> tuple[Self, Self]:
         """Divide one slice into two at an index.
@@ -787,6 +855,16 @@ class SliceMut(
         Example
         -------
         ```py
+        s = SliceMut(['a', 'b', 'c'])
+
+        left, right = s.split_at_mut(0)
+        assert left == [] and right == ['a', 'b', 'c']
+
+        left, right = s.split_at_mut(2)
+        assert left == ['a', 'b'] and right == ['c']
+
+        # If mid > len, this errors.
+        left, right = s.split_at_mut(10) # IndexError(...)
         ```
         """
         if mid > len(self):
@@ -806,6 +884,17 @@ class SliceMut(
         Example
         -------
         ```py
+        s = SliceMut(['a', 'b', 'c'])
+
+        left, right = s.split_at_mut_checked(0)
+        assert left == [] and right == ['a', 'b', 'c']
+
+        left, right = s.split_at_mut_checked(2)
+        assert left == ['a', 'b'] and right == ['c']
+
+        # If mid > len, it fills the left with all elements, and returns right empty.
+        left, right = s.split_at_mut_checked(10)
+        assert left == ['a', 'b', 'c'] and right == []
         ```
         """
         if mid > len(self):
@@ -815,3 +904,6 @@ class SliceMut(
 
     def __setitem__(self, index: int, item: T) -> None:
         self.__buf[index] = item
+
+    def __delitem__(self, idx: int) -> None:
+        del self.__buf[idx]
