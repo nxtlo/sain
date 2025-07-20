@@ -413,7 +413,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         """
         from .vec import Vec
 
-        return Vec()
+        return Vec(self.__buf[:])
 
     def to_vec_in(self, v: Vec[T], /) -> Vec[T]:
         """Copies `self` into `v` by extending `v`, Then returns `v`.
