@@ -33,7 +33,6 @@ from __future__ import annotations
 __all__ = ("Slice", "SliceMut", "SpecContains")
 
 import copy
-import sys
 import typing
 from collections import abc as collections
 
@@ -54,11 +53,6 @@ if typing.TYPE_CHECKING:
 
     from sain.collections.vec import Vec
     from sain.option import Option
-
-    if sys.version_info >= (3, 11, 0):
-        from typing import Self
-    else:
-        from typing_extensions import Self
 
     class CoerceSized(typing.Protocol[T_cov]):
         """Trait that indicates that an object that is indexable, while also having a constant length."""
@@ -207,7 +201,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         """
         return Some(self[-1]) if self else Some(None)
 
-    def split_first(self) -> Option[tuple[T, Self]]:
+    def split_first(self) -> Option[tuple[T, Slice[T]]]:
         """Returns the first and rest of the slice elements, returns `None` if the slice's length is 0.
 
         If empty, `None` is returned.
@@ -227,7 +221,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
 
         return Some((self.__buf[0], self[1:]))
 
-    def split_last(self) -> Option[tuple[T, Self]]:
+    def split_last(self) -> Option[tuple[T, Slice[T]]]:
         """Returns the last and rest of the slice elements, returns `None` if the slice's length is 0.
 
         If empty, `None` is returned.
@@ -249,7 +243,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
 
     def split_once(
         self, pred: collections.Callable[[T], bool]
-    ) -> Option[tuple[Self, Self]]:
+    ) -> Option[tuple[Slice[T], Slice[T]]]:
         """Splits the slice on the first elements that matches the specified predicate.
 
         If the predicates matches any elements in the slice, returns the prefix
@@ -270,7 +264,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
 
         return Some(None)
 
-    def split_at(self, mid: int) -> tuple[Self, Self]:
+    def split_at(self, mid: int) -> tuple[Slice[T], Slice[T]]:
         """Divide one slice into two at an index.
 
         The first will contain all indices from `[0 : mid]` excluding `mid` it self.
@@ -299,7 +293,7 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
 
         return self[0:mid], self[mid:]
 
-    def split_at_checked(self, mid: int) -> tuple[Self, Self]:
+    def split_at_checked(self, mid: int) -> tuple[Slice[T], Slice[T]]:
         """Divide one slice into two at an index.
 
         The first will contain all indices from `[0 : mid]` excluding `mid` it self.
@@ -452,18 +446,18 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     @typing.overload
     def __getitem__(self, index: int) -> T: ...
     @typing.overload
-    def __getitem__(self, index: slice) -> Self: ...
+    def __getitem__(self, index: slice) -> Slice[T]: ...
     @typing.overload
-    def __getitem__(self, index: EllipsisType) -> Self: ...
+    def __getitem__(self, index: EllipsisType) -> Slice[T]: ...
 
-    def __getitem__(self, index: int | slice | EllipsisType) -> Self | T:
+    def __getitem__(self, index: int | slice | EllipsisType) -> Slice[T] | T:
         if index is ...:
             # Full slice self[...], creates another reference to __buf
             return self.__class__(self.__buf)
 
         if isinstance(index, slice):
             # Slicing like self[1:], self[:2], self[1:2]
-            return self.__class__(self.__buf[index])
+            return Slice(self.__buf[index])
 
         else:
             # index get item, i.e. self[0]
@@ -524,9 +518,9 @@ class SliceMut(
         # dirty runtime check here just to make sure that people don't
         # call methods on immutable collections. This line doesn't
         # exist if the program is level 1 optimized. `-O`.
-        assert isinstance(
-            ptr, collections.MutableSequence
-        ), f"expected a mutable sequence, got {type(ptr).__name__}."
+        assert isinstance(ptr, collections.MutableSequence), (
+            f"expected a mutable sequence, got {type(ptr).__name__}."
+        )
         self.__buf = ptr
         super().__init__(ptr)
 
@@ -759,7 +753,7 @@ class SliceMut(
             self[start], other[start] = other[start], self[start]
             start += 1
 
-    def split_first_mut(self) -> Option[tuple[T, Self]]:
+    def split_first_mut(self) -> Option[tuple[T, SliceMut[T]]]:
         """Returns the first and rest of the slice elements, returns `None` if the slice's length is 0.
 
         If empty, `None` is returned.
@@ -779,7 +773,7 @@ class SliceMut(
 
         return Some((self[0], self[1:]))
 
-    def split_last_mut(self) -> Option[tuple[T, Self]]:
+    def split_last_mut(self) -> Option[tuple[T, SliceMut[T]]]:
         """Returns the last and rest of the slice elements, returns `None` if the slice's length is 0.
 
         If empty, `None` is returned.
@@ -843,7 +837,7 @@ class SliceMut(
         del self.__buf[-1]
         return Some(last)
 
-    def split_at_mut(self, mid: int) -> tuple[Self, Self]:
+    def split_at_mut(self, mid: int) -> tuple[SliceMut[T], SliceMut[T]]:
         """Divide one slice into two at an index.
 
         The first will contain all indices from `[0 : mid]` excluding `mid` it self.
@@ -872,7 +866,7 @@ class SliceMut(
 
         return self[0:mid], self[mid:]
 
-    def split_at_mut_checked(self, mid: int) -> Option[tuple[Self, Self]]:
+    def split_at_mut_checked(self, mid: int) -> Option[tuple[SliceMut[T], SliceMut[T]]]:
         """Divide one slice into two at an index.
 
         The first will contain all indices from `[0 : mid]` excluding `mid` it self.
@@ -901,6 +895,26 @@ class SliceMut(
             return Some(None)
 
         return Some((self[0:mid], self[mid:]))
+
+    @typing.overload
+    def __getitem__(self, index: int) -> T: ...
+    @typing.overload
+    def __getitem__(self, index: slice) -> SliceMut[T]: ...
+    @typing.overload
+    def __getitem__(self, index: EllipsisType) -> SliceMut[T]: ...
+
+    def __getitem__(self, index: int | slice | EllipsisType) -> SliceMut[T] | T:
+        if index is ...:
+            # Full slice self[...], creates another reference to __buf
+            return self.__class__(self.__buf)
+
+        if isinstance(index, slice):
+            # Slicing like self[1:], self[:2], self[1:2]
+            return SliceMut(self.__buf[index])
+
+        else:
+            # index get item, i.e. self[0]
+            return self.__buf[index]
 
     def __setitem__(self, index: int, item: T) -> None:
         self.__buf[index] = item
