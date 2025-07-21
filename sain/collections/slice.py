@@ -629,7 +629,7 @@ class SliceMut(
             f"expected a mutable sequence, got {type(ptr).__name__}."
         )
         self.__buf = ptr
-        super().__init__(ptr)
+        super().__init__(self.__buf)
 
     # impl mut [T]
 
