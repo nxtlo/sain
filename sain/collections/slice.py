@@ -28,6 +28,110 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+"""A dynamically-sized view into a contiguous sequence of elements.
+
+Slices are views into a any sequence object, represented as a pointer to the data.
+
+```py
+from sain import Vec
+
+v = Vec([1, 2, 3, 4])
+# slicing a vec.
+int_slice = v[...] # or v.as_slice()
+```
+
+Slices are either mutable or immutable, depending on the type of the sequence they're storing.
+
+```py
+from sain import SliceMut, Slice
+
+some_data = ['a', 'b', 'c']
+x = SliceMut(some_data) # point to `some_data`.
+x[0] = 'z' # change the first element to 'z'.
+assert some_data == ['z', 'b', 'c'] # the original data is changed.
+
+# But, we cannot create a mutable slice from an immutable data structure.
+y = SliceMut((1, 2, 3, 4)) # This is an actual runtime error. you can't mutate a tuple.
+```
+
+Iteration
+---------
+Just like any other sequence, slices implement the `Iterator` protocol,
+allowing you to iterate over them with a `for` loop.
+
+Slices also provide a `Slice.iter` method which is an explicit method to return a `sain.Iterator`.
+
+```py
+numbers = Slice([1, 2, 3, 4])
+for number in numbers:
+    print(number)
+
+# ...or
+total = numbers.iter().fold(0, lambda acc, x: acc + x)
+assert total == 10
+```
+
+Zero-copy Guarantees
+-----------------
+Slices uses the pointed-to type's `__getitem__` implementation,
+Some data structures provides zero-copy slicing operations, such as `memoryview`, `array` and `Bytes`.
+
+If you have a slice of `memoryview` or `Bytes`, you get free zero-copy slicing.
+
+```py
+from sain import Slice
+
+some_bytes = b"hello, world!"
+s = Slice(memoryview(some_bytes))
+
+# Split the bytes into two parts.
+# * the first part is the first byte: b"h"
+# * the second part is the rest of the bytes: b"ello, world!"
+# This is a doesn't cost anything.
+
+header, trailer = s.split_first().unwrap()
+assert header == ord('h')  # the first byte is 'h'
+# trailer points to the same data. starting from `some_bytes[1:]`
+assert id(trailer.as_ptr().obj) == id(some_bytes)
+```
+
+However, types such as `list`, `tuple` and `set` do not provide zero-copy slicing,
+they copy their elements's references into a new object.
+
+```py
+from sain import Slice
+
+some_list = [1, 2, 3]
+s = Slice(some_list)
+
+last, elements = s.split_last().unwrap()
+# `elements` and `some_list` are two different lists, but they point to the same element references.
+```
+
+Method Delegation
+----------------
+Slices special methods coerces to pointed-to magic methods.
+
+For an example. If `x` is a slice of `list`, then `x == list` is valid, and `hash(slice)` is the same as `hash(list)`.
+
+This is a list of the delegated methods:
+
+* `__getitem__`
+* `__len__`
+* `__repr__`
+* `__str__`
+* `__eq__`
+* `__ne__`
+* `__lt__`
+* `__gt__`
+* `__le__`
+* `__ge__`
+* `__bool__`
+* `__hash__`
+
+...and the rest of `Sequence` provided methods, such as `__iter__`, `__contains__`, etc.
+"""
+
 from __future__ import annotations
 
 __all__ = ("Slice", "SliceMut", "SpecContains")
@@ -55,7 +159,7 @@ if typing.TYPE_CHECKING:
     from sain.option import Option
 
     class CoerceSized(typing.Protocol[T_cov]):
-        """Trait that indicates that an object that is indexable, while also having a constant length."""
+        """Trait that indicates that an object is indexable, while also having a length."""
 
         def __getitem__(self, index: SupportsIndex, /) -> T_cov: ...
         def __len__(self) -> int: ...
@@ -96,21 +200,11 @@ class SpecContains(typing.Generic[T]):
         return pat in self
 
 
-# TODO: Lots of documentation.
-
-# FIXME[slice-deref]: Should we return `Self` or always `Slice[T]` ?
-# ? In Rust, Vec<T> deref to [T], and calling `Vec::split_first`
-# ? does not return Option<(&T, Vec<&T>)>, it returns Option<(&T, &[T])>
-# ? should we do the same? if yes then we need to create a new Slice(buf)
-# ? where buf is a whatever we just sliced out of __buf. This is obviously
-# ? a cost for anything other than memoryview's.
-
-
 @rustc_diagnostic_item("[T]")
 class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     """An immutable view over some sequence of type `T`.
 
-    Similar to `[T]`
+    See the top-level documentation for more information.
 
     Parameters
     ----------
@@ -124,6 +218,19 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         self.__buf = ptr
 
     # impl [T]
+
+    def as_ptr(self) -> collections.Sequence[T]:
+        """Returns an immutable reference to the data this slice is pointing to.
+
+        Example
+        -------
+        ```py
+        data = (1, 2, 3, 4)
+        s = Slice(data)
+        assert id(s.as_ptr()) == id(data)
+        ```
+        """
+        return self.__buf
 
     def iter(self) -> TrustedIter[T]:
         """Returns an iterator over the slice.
@@ -506,7 +613,7 @@ class SliceMut(
 ):
     """A mutable view over some sequence of type `T`.
 
-    Similar to `[T]` with a mutable `self`.
+    See the top-level documentation for more information.
 
     Parameters
     ----------
@@ -525,6 +632,20 @@ class SliceMut(
         super().__init__(ptr)
 
     # impl mut [T]
+
+    def as_mut_ptr(self) -> collections.MutableSequence[T]:
+        """Returns a mutable reference to the data this slice is pointing to.
+
+        Example
+        -------
+        ```py
+        data = [1, 2, 3, 4]
+        s = SliceMut(data)
+        assert s.as_mut_ptr().pop() == 4
+        assert data == [1, 2, 3]
+        ```
+        """
+        return self.__buf
 
     def reverse(self) -> None:
         """Reverse this slice, in-place.
