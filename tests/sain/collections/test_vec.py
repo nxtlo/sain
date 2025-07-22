@@ -78,9 +78,9 @@ def test_vec_extend_and_clear():
     assert v.is_empty()
 
 
-def test_vec_as_ref_and_copy():
+def test_vec_as_slice():
     v = Vec([1, 2, 3])
-    ref = v.as_ref()
+    ref = v.as_slice()
     assert ref == [1, 2, 3]
 
     v2 = v.copy()
