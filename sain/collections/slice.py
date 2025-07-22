@@ -621,6 +621,8 @@ class SliceMut(
         The mutable sequence to point to.
     """
 
+    __slots__ = ("__buf",)
+
     def __init__(self, ptr: collections.MutableSequence[T]) -> None:
         # dirty runtime check here just to make sure that people don't
         # call methods on immutable collections. This line doesn't
@@ -628,8 +630,8 @@ class SliceMut(
         assert isinstance(ptr, collections.MutableSequence), (
             f"expected a mutable sequence, got {type(ptr).__name__}."
         )
+        super().__init__(ptr)
         self.__buf = ptr
-        super().__init__(self.__buf)
 
     # impl mut [T]
 
