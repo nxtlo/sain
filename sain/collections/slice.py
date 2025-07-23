@@ -30,7 +30,9 @@
 
 """A dynamically-sized view into a contiguous sequence of elements.
 
-Slices are views into a any sequence object, represented as a pointer to the data.
+Slices are views into any sequence object, represented as a pointer to the data.
+
+# Overview
 
 ```py
 from sain import Vec
@@ -40,7 +42,7 @@ v = Vec([1, 2, 3, 4])
 int_slice = v[...] # or v.as_slice()
 ```
 
-Slices are either mutable or immutable, depending on the type of the sequence they're storing.
+Slices are either mutable (`SliceMut`) or immutable (`Slice`), depending on the type of the sequence they're storing.
 
 ```py
 from sain import SliceMut, Slice
@@ -54,8 +56,8 @@ assert some_data == ['z', 'b', 'c'] # the original data is changed.
 y = SliceMut((1, 2, 3, 4)) # This is an actual runtime error. you can't mutate a tuple.
 ```
 
-Iteration
----------
+## Iteration
+
 Just like any other sequence, slices implement the `Iterator` protocol,
 allowing you to iterate over them with a `for` loop.
 
@@ -71,10 +73,10 @@ total = numbers.iter().fold(0, lambda acc, x: acc + x)
 assert total == 10
 ```
 
-Zero-copy Guarantees
------------------
-Slices uses the pointed-to type's `__getitem__` implementation,
-Some data structures provides zero-copy slicing operations, such as `memoryview`, `array` and `Bytes`.
+## Zero-copy Guarantees
+
+Slices use the pointed-to type's `__getitem__` implementation, some data structures provide zero-copy slicing operations,
+such as `memoryview`, `array` and `Bytes`.
 
 If you have a slice of `memoryview` or `Bytes`, you get free zero-copy slicing.
 
@@ -108,8 +110,7 @@ last, elements = s.split_last().unwrap()
 # `elements` and `some_list` are two different lists, but they point to the same element references.
 ```
 
-Method Delegation
-----------------
+## Method Delegation
 Slices special methods coerces to pointed-to magic methods.
 
 For an example. If `x` is a slice of `list`, then `x == list` is valid, and `hash(slice)` is the same as `hash(list)`.

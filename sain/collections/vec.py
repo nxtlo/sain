@@ -27,18 +27,113 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""A contiguous growable alternative to builtin `list` with extra functionalities.
+"""Implements Rust's `Vec<T>` type.
 
-Example
--------
+# Overview
+
+The layout of `Vec<T>` is exactly the same as `list<T>`. Which means `list<T>`'s methods are inherited into `Vec<T>`.
+
+Also, `Vec<T>` is a sub-class of `SliceMut<T>`, which means it can be treated as a mutable slice.
+
+## Example
+
+`Vec` can be initialized in multiple ways:
+
+- `Vec()`: Create an empty vec.
+- `Vec(other_list)`: Create a vec which points to `other_list`.
+- `Vec([1, 2, 3])`: Create a vec with `[1, 2, 3]` pre-allocated.
+- `Vec(iterable)`: Create a vec from an `iterable`, by copying it into a new list.
+- `Vec.with_capacity(5)`: Create a vec that can hold up to 5 elements without pushing further.
+
+A simple usage example:
+
 ```py
-names = Vec[str]()
-
+names = Vec()
 names.push('foo')
 names.push('bar')
 
 print(names) # ['foo', 'bar']
 assert names.len() == 2
+
+names.extend(['baz', 'qux'])
+assert names.len() == 4
+
+# use a normal for loop
+for i in names:
+    print(i)
+
+# or, a lazy iterator.
+for name in names.iter():
+    print(name)
+```
+
+A `Vec` may be compared with a `Vec`, `SliceMut|Slice` or a `list`, any other type will return `False`.
+
+```py
+vec = Vec([1, 2, 3])
+assert vec == [1, 2, 3] # True
+assert vec == Vec([1, 2, 3]) # True
+assert vec != (1, 2, 3) # False
+```
+
+## Slicing
+
+A `Vec` can be sliced like a normal list, but it will return a new
+`SliceMut` object which holds a reference to the original data, without copying it.
+
+```py
+vec = Vec([1, 2, 3])
+
+# using the ellipsis type to return a full slice over the vec.
+full_slice = vec[...]
+# or with an explicit call.
+full_slice = vec.as_mut_slice()
+
+# normal slicing always returns a mutable slice.
+slice_1 = vec[0:2]  # [1, 2]
+
+# and passing an int gets you a single element at the index.
+first = vec[0]  # 1
+
+# You can obtain an immutable slice which its elements cannot be modified.
+
+def read_slice(slice: Slice[int]) -> None:
+    # we ensure to the caller that we won't modify their slice.
+    ...
+
+immutable_slice = vec.as_slice()
+read_slice(immutable_slice)
+
+# you can also implicitly pass `vec` to that function,
+# since `Vec` is a `SliceMut` and `SliceMut` is a `Slice`.
+read_slice(vec)
+```
+
+## Guarantees
+
+A vec that gets initialized from a `list` will *point* to it and doesn't copy it.
+Which means, any operation that mutates the original list will also mutate the vec and vice-versa.
+
+```py
+cells: list[str] = []
+vec = Vec(cells) # This DOES NOT copy the `cells`.
+
+cells.append("foo")
+vec[0] == "foo"  # True
+```
+
+This sometimes becomes a problem because, `cells` is currently a leaking reference.
+
+To get around this, copy the original list into a new `Vec`:
+
+```py
+from sain import Vec
+
+# Copy `cells` into a vec.
+vec = Vec(cells.copy())
+cells.append("bar")
+
+vec[1] # IndexError: "bar" doesn't exist in vec.
 ```
 """
 
@@ -67,91 +162,20 @@ T = typing.TypeVar("T")
 @rustc_diagnostic_item("Vec")
 @typing.final
 class Vec(SliceMut[T]):
-    """A contiguous growable alternative to the builtin `list` with extra functionalities.
+    """A basic implementation of `Rust`'s excellent `Vec<T>` type, backed by Python's `list<T>`.
 
-    The layout of `Vec<T>` is exactly the same as `list<T>`. Which means `list<T>`'s methods are inherited into `Vec<T>`.
-
-    Also, `Vec<T>` is a `SliceMut<T>`, which means it can be treated as a mutable slice.
+    See the module top level documentation for more information.
 
     Example
     -------
     ```py
-    names = Vec()
+    names = Vec[str]()
+
     names.push('foo')
     names.push('bar')
 
     print(names) # ['foo', 'bar']
     assert names.len() == 2
-    ```
-
-    Constructing
-    ------------
-    * `Vec()`: Create an empty vec.
-    * `Vec(other_list)`: Create a vec which points to `other_list`
-    * `Vec([1, 2, 3])`: Create a vec with `[1, 2, 3]` pre-allocated.
-    * `Vec(iterable)`: Create a vec from an `iterable`, This is `O(n)` where `n` is the number of elements,
-    since it copies `iterable`'s elements into a new list.
-    * `Vec.with_capacity(5)`: Create a vec that can hold up to 5 elements
-
-    Iterating over `Vec`
-    -------------------
-    There're two ways to iterate over a `Vec`. The first is to normally use `for` loop.
-
-    ```py
-    for i in names:
-        print(i)
-
-    # foo
-    # bar
-    ```
-
-    The second is to use `Vec.iter`, which creates a lazy, unique iterator that yields all items in this `Vec` from start to end.
-    ```py
-    iterator = names.iter()
-    for name in iterator.map(str.upper):
-        print(name)
-
-    # FOO
-    # BAR
-
-    # No more items, The actual vec is left unchanged.
-    assert iterator.next().is_none()
-    ```
-
-    ## Comparison operators
-    A `Vec` may be compared with another `Vec` or a `list`, any other type will return `False`
-
-    ```py
-    vec = Vec([1, 2, 3])
-    assert vec == [1, 2, 3] # True
-    assert vec != (1, 2, 3)
-    ```
-
-    Zero-Copy
-    ---------
-    A vec that gets initialized from a `list` will *point* to it and doesn't copy it.
-    So any element that gets appended to the list will also get pushed into the vec
-    that's pointing to it and vice-versa.
-
-    ```py
-    cells: list[str] = []
-    vec = Vec(cells) # This DOES NOT copy the `cells`.
-
-    cells.append("foo")
-    vec[0] == "foo"  # True
-    ```
-
-    If you want an owned `Vec` that doesn't point to the original list,
-    copy the list into a new `Vec`.
-
-    ```py
-    from sain import Vec
-
-    # Copy `cells` into a vec.
-    vec = Vec(cells[:])
-    cells.append("bar")
-
-    vec[1] # IndexError: "bar" doesn't exist in vec.
     ```
     """
 
