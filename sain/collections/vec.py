@@ -27,18 +27,113 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""A contiguous growable alternative to builtin `list` with extra functionalities.
+"""Implements Rust's `Vec<T>` type.
 
-Example
--------
+# Overview
+
+The layout of `Vec<T>` is exactly the same as `list<T>`. Which means `list<T>`'s methods are inherited into `Vec<T>`.
+
+Also, `Vec<T>` is a sub-class of `SliceMut<T>`, which means it can be treated as a mutable slice.
+
+## Example
+
+`Vec` can be initialized in multiple ways:
+
+- `Vec()`: Create an empty vec.
+- `Vec(other_list)`: Create a vec which points to `other_list`.
+- `Vec([1, 2, 3])`: Create a vec with `[1, 2, 3]` pre-allocated.
+- `Vec(iterable)`: Create a vec from an `iterable`, by copying it into a new list.
+- `Vec.with_capacity(5)`: Create a vec that can hold up to 5 elements without pushing further.
+
+A simple usage example:
+
 ```py
-names = Vec[str]()
-
+names = Vec()
 names.push('foo')
 names.push('bar')
 
 print(names) # ['foo', 'bar']
 assert names.len() == 2
+
+names.extend(['baz', 'qux'])
+assert names.len() == 4
+
+# use a normal for loop
+for i in names:
+    print(i)
+
+# or, a lazy iterator.
+for name in names.iter():
+    print(name)
+```
+
+A `Vec` may be compared with a `Vec`, `SliceMut|Slice` or a `list`, any other type will return `False`.
+
+```py
+vec = Vec([1, 2, 3])
+assert vec == [1, 2, 3] # True
+assert vec == Vec([1, 2, 3]) # True
+assert vec != (1, 2, 3) # False
+```
+
+## Slicing
+
+A `Vec` can be sliced like a normal list, but it will return a new
+`SliceMut` object which holds a reference to the original data, without copying it.
+
+```py
+vec = Vec([1, 2, 3])
+
+# using the ellipsis type to return a full slice over the vec.
+full_slice = vec[...]
+# or with an explicit call.
+full_slice = vec.as_mut_slice()
+
+# normal slicing always returns a mutable slice.
+slice_1 = vec[0:2]  # [1, 2]
+
+# and passing an int gets you a single element at the index.
+first = vec[0]  # 1
+
+# You can obtain an immutable slice which its elements cannot be modified.
+
+def read_slice(slice: Slice[int]) -> None:
+    # we ensure to the caller that we won't modify their slice.
+    ...
+
+immutable_slice = vec.as_slice()
+read_slice(immutable_slice)
+
+# you can also implicitly pass `vec` to that function,
+# since `Vec` is a `SliceMut` and `SliceMut` is a `Slice`.
+read_slice(vec)
+```
+
+## Guarantees
+
+A vec that gets initialized from a `list` will *point* to it and doesn't copy it.
+Which means, any operation that mutates the original list will also mutate the vec and vice-versa.
+
+```py
+cells: list[str] = []
+vec = Vec(cells) # This DOES NOT copy the `cells`.
+
+cells.append("foo")
+vec[0] == "foo"  # True
+```
+
+This sometimes becomes a problem because, `cells` is currently a leaking reference.
+
+To get around this, copy the original list into a new `Vec`:
+
+```py
+from sain import Vec
+
+# Copy `cells` into a vec.
+vec = Vec(cells.copy())
+cells.append("bar")
+
+vec[1] # IndexError: "bar" doesn't exist in vec.
 ```
 """
 
@@ -50,12 +145,10 @@ import sys as _sys
 import typing
 from collections import abc as collections
 
-from sain import iter as _iter
 from sain import option as _option
 from sain import result as _result
 from sain.collections.slice import Slice
 from sain.collections.slice import SliceMut
-from sain.collections.slice import SpecContains
 from sain.macros import rustc_diagnostic_item
 
 if typing.TYPE_CHECKING:
@@ -68,92 +161,21 @@ T = typing.TypeVar("T")
 
 @rustc_diagnostic_item("Vec")
 @typing.final
-class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
-    """A contiguous growable alternative to the builtin `list` with extra functionalities.
+class Vec(SliceMut[T]):
+    """A basic implementation of `Rust`'s excellent `Vec<T>` type, backed by Python's `list<T>`.
 
-    The layout of `Vec<T>` is exactly the same as `list<T>`. Which means `list<T>`'s methods are inherited into `Vec<T>`.
+    See the module top level documentation for more information.
 
     Example
     -------
     ```py
-    names = Vec()
+    names = Vec[str]()
+
     names.push('foo')
     names.push('bar')
 
     print(names) # ['foo', 'bar']
     assert names.len() == 2
-    ```
-
-    Constructing
-    ------------
-    * `Vec()`: Create an empty vec, this will not allocate the initial buffer.
-    * `Vec(other_list)`: Create a vec which points to `other_list`
-    * `Vec([1, 2, 3])`: Create a vec with `[1, 2, 3]` pre-allocated.
-    * `Vec(iterable)`: Create a vec from an `iterable`, This is `O(n)` where `n` is the number of elements,
-    since it copies `iterable`'s elements into a new list.
-    * `Vec.with_capacity(5)`: Create a vec that can hold up to 5 elements
-
-    Iterating over `Vec`
-    -------------------
-    There're two ways to iterate over a `Vec`. The first is to normally use `for` loop.
-
-    ```py
-    for i in names:
-        print(i)
-
-    # foo
-    # bar
-    ```
-
-    The second is to use `Vec.iter`, which yields all items in this `Vec` from start to end.
-    Then the iterator gets exhausted as usual, See `sain.Iterator`.
-
-    ```py
-    iterator = names.iter()
-    for name in iterator.map(str.upper):
-        print(name)
-
-    # FOO
-    # BAR
-
-    # No more items, The actual vec is left unchanged.
-    assert iterator.next().is_none()
-    ```
-
-    ## Comparison operators
-    A `Vec` may be compared with another `Vec` or a `list`, any other type will return `False`
-
-    ```py
-    vec = Vec([1, 2, 3])
-    assert vec == [1, 2, 3] # True
-    assert vec != (1, 2, 3)
-    ```
-
-    Zero-Copy
-    ---------
-    A vec that gets initialized from a `list` will *point* to it and doesn't copy it.
-    So any element that gets appended to the list will also get pushed into the vec
-    that's pointing to it and vice-versa.
-
-    ```py
-    cells: list[str] = []
-    vec = Vec(cells) # This DOES NOT copy the `cells`.
-
-    cells.append("foo")
-    vec[0] == "foo"  # True
-    ```
-
-    If you want an owned `Vec` that doesn't point to the original list,
-    copy the list into a new `Vec`.
-
-    ```py
-    from sain import Vec
-
-    # Copy `cells` into a vec.
-    vec = Vec(cells[:])
-    cells.append("bar")
-
-    vec[1] # IndexError: "bar" doesn't exist in vec.
     ```
     """
 
@@ -168,16 +190,13 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     def __init__(self, iterable: collections.Iterable[T] | None = None) -> None:
         """Create an empty `Vec<T>`.
 
-        The vector will not allocate until elements are pushed onto it.
-
         Example
         ------
         ```py
         vec: Vec[float] = Vec()
         ```
         """
-        # We won't allocate to build the list here.
-        # Instead, On first push.
+
         if isinstance(iterable, list):
             # Calling `list()` on another list will copy it, So instead we just point to it.
             self._ptr = iterable
@@ -185,9 +204,10 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
             self._ptr = iterable._ptr
         # any other iterable that ain't a list needs to get copied into a new list.
         else:
-            self._ptr: list[T] | None = list(iterable) if iterable else None
+            self._ptr: list[T] = list(iterable) if iterable else []
 
         self._capacity: int | None = None
+        super().__init__(self._ptr)
 
     @classmethod
     def with_capacity(cls, capacity: int) -> Vec[T]:
@@ -217,7 +237,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         v._capacity = capacity
         return v
 
-    def as_ref(self) -> Slice[T]:
+    def as_slice(self) -> Slice[T]:
         """Return an immutable view over this vector elements.
 
         No copying occurs.
@@ -230,12 +250,14 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
             socket.write_all(v)
 
         buf = Vec([1, 2, 3])
-        send_bytes(buf.as_ref())
+        send_bytes(buf.as_slice())
         ```
         """
-        return Slice(self)
+        # NOTE: Although, we could just return `self`, but,
+        # we want to return an exclusive view.
+        return Slice(self._ptr)
 
-    def as_mut(self) -> SliceMut[T]:
+    def as_mut_slice(self) -> SliceMut[T]:
         """Return a mutable view over this vector elements.
 
         No copying occurs.
@@ -248,24 +270,13 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
             socket.read_to_end(buf)
 
         buf: Vec[int] = Vec()
-        read_bytes(buf.as_mut()) # or just `buf`
-        assert vec.len() >= 1
+        read_bytes(buf.as_mut_slice()) # or just `buf`
+        assert buf.len() >= 1
         ```
         """
-        return SliceMut(self)
-
-    def len(self) -> int:
-        """Return the number of elements in this vector.
-
-        Example
-        -------
-        ```py
-        vec = Vec((1,2,3))
-
-        assert vec.len() == 3
-        ```
-        """
-        return self.__len__()
+        # NOTE: Although, we could just return `self`, but,
+        # we want to return an exclusive view.
+        return SliceMut(self._ptr)
 
     def capacity(self) -> int:
         """Return the capacity of this vector if set, 0 if not .
@@ -285,29 +296,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         ```
         """
         return 0 if self._capacity is None else self._capacity
-
-    def iter(self) -> _iter.TrustedIter[T]:
-        """Returns an iterator over this vector elements.
-
-        Example
-        -------
-        ```py
-        vec = Vec([1 ,2, 3])
-        for element in vec.iter():
-            print(element)
-        ```
-        """
-        return _iter.TrustedIter(self._ptr or ())
-
-    def is_empty(self) -> bool:
-        """Returns true if the vector contains no elements.
-
-        Inlined into:
-        ```py
-        not self.vec
-        ```
-        """
-        return not self._ptr
 
     def leak(self) -> list[T]:
         """Consumes and leaks the Vec, returning a mutable reference to the contents.
@@ -330,17 +318,15 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert owned == [2, 2, 3]
         ```
         """
-        if self._ptr is not None:
-            # don't point to `_ptr` anymore.
-            tmp = self._ptr
-            del self._ptr
-            return tmp
-
-        return []
+        # don't point to `_ptr` anymore.
+        tmp = self._ptr
+        del self._ptr
+        return tmp
 
     def split_off(self, at: int) -> Vec[T]:
-        """Split the vector off at the specified position, returning a new
-        vec at the range of `[at : len]`, leaving `self` at `[at : vec_len]`.
+        """Split the vector off at the specified position.
+
+        Returns a new vector at the range of `[at : len]`, leaving `self` at `[0: at]`.
 
         if this vec is empty, `self` is returned unchanged.
 
@@ -368,151 +354,9 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         if not self._ptr:
             return self
 
-        split = self[at:len_]  # split the items into a new vec.
-        del self._ptr[at:len_]  # remove the items from the original list.
-        return split
-
-    def split_first(self) -> _option.Option[tuple[T, collections.Sequence[T]]]:
-        """Split the first and rest elements of the vector, If empty, `None` is returned.
-
-        Example
-        -------
-        ```py
-        vec = Vec([1, 2, 3])
-        split = vec.split_first()
-        assert split == Some((1, [2, 3]))
-
-        vec: Vec[int] = Vec()
-        split = vec.split_first()
-        assert split.is_none()
-        ```
-        """
-        if not self._ptr:
-            return _option.NOTHING
-
-        # optimized to only one element in the vector.
-        if self.len() == 1:
-            return _option.Some((self[0], ()))
-
-        first, *rest = self._ptr
-        return _option.Some((first, rest))
-
-    def split_last(self) -> _option.Option[tuple[T, collections.Sequence[T]]]:
-        """Split the last and rest elements of the vector, If empty, `None` is returned.
-
-        Example
-        -------
-        ```py
-        vec = Vec([1, 2, 3])
-        last, rest = vec.split_last().unwrap()
-        assert (last, rest) == [3, [1, 2]]
-        ```
-        """
-        if not self._ptr:
-            return _option.NOTHING
-
-        # optimized to only one element in the vector.
-        if self.len() == 1:
-            return _option.Some((self[0], ()))
-
-        last, *rest = self._ptr[-1], *self._ptr[:-1]
-        return _option.Some((last, rest))
-
-    def split_at(self, mid: int) -> tuple[Vec[T], Vec[T]]:
-        """Divide `self` into two at an index.
-
-        The first will contain all elements from `[0:mid]` excluding `mid` it self.
-        and the second will contain the remaining elements.
-
-        if `mid` > `self.len()`, Then all elements will be moved to the left,
-        returning an empty vec in right.
-
-        Example
-        -------
-        ```py
-        buffer = Vec((1, 2, 3, 4))
-        left, right = buffer.split_at(0)
-        assert left == [] and right == [1, 2, 3, 4]
-
-        left, right = buffer.split_at(2)
-        assert left == [1, 2] and right == [2, 3]
-        ```
-
-        The is roughly the implementation
-        ```py
-        vec[0:mid], vec[mid:]
-        ```
-        """
-        return self[0:mid], self[mid:]
-
-    def swap(self, a: int, b: int):
-        """Swap two elements in the vec.
-
-        if `a` equals to `b` then it's guaranteed that elements won't change value.
-
-        Example
-        -------
-        ```py
-        buf = Vec([1, 2, 3, 4])
-        buf.swap(0, 3)
-        assert buf == [4, 2, 3, 1]
-        ```
-
-        Raises
-        ------
-        IndexError
-            If the positions of `a` or `b` are out of index.
-        """
-        if self[a] == self[b]:
-            return
-
-        self[a], self[b] = self[b], self[a]
-
-    def swap_unchecked(self, a: int, b: int):
-        """Swap two elements in the vec. without checking if `a` == `b`.
-
-        If you care about `a` and `b` equality, see `Vec.swap`.
-
-        Example
-        -------
-        ```py
-        buf = Vec([1, 2, 3, 1])
-        buf.swap_unchecked(0, 3)
-        assert buf == [1, 2, 3, 1]
-        ```
-
-        Raises
-        ------
-        IndexError
-            If the positions of `a` or `b` are out of index.
-        """
-        self[a], self[b] = self[b], self[a]
-
-    def first(self) -> _option.Option[T]:
-        """Get the first element in this vec, returning `None` if there's none.
-
-        Example
-        -------
-        ```py
-        vec = Vec((1,2,3))
-        first = vec.first()
-        assert ~first == 1
-        ```
-        """
-        return self.get(0)
-
-    def last(self) -> _option.Option[T]:
-        """Get the last element in this vec, returning `None` if there's none.
-
-        Example
-        -------
-        ```py
-        vec = Vec([1, 2, 3, 4])
-        last = vec.last()
-        assert ~last == 4
-        ```
-        """
-        return self.get(-1)
+        split = self._ptr[at:len_]
+        del self._ptr[at:len_]
+        return Vec(split)
 
     def truncate(self, size: int) -> None:
         """Shortens the vec, keeping the first `size` elements and dropping the rest.
@@ -525,9 +369,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec == [1]
         ```
         """
-        if not self._ptr:
-            return
-
         del self._ptr[size:]
 
     def retain(self, f: collections.Callable[[T], bool]) -> None:
@@ -551,9 +392,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
                 del vec[idx]
         ```
         """
-        if not self._ptr:
-            return
-
         idx = 0
         while idx < len(self._ptr):
             if not f(self._ptr[idx]):
@@ -566,8 +404,8 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
 
         Raises
         ------
-        * `ValueError`: if `item` is not in this vector.
-        * `MemoryError`: if this vector hasn't allocated, Aka nothing has been pushed to it.
+        `ValueError`
+            if `item` is not in this vector.
 
         Example
         -------
@@ -577,29 +415,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec == ['b', 'c'] and element == 'a'
         ```
         """
-        if self._ptr is None:
-            raise MemoryError("Vec is unallocated.") from None
-
         return self._ptr.pop(self.index(item))
-
-    def fill(self, value: T) -> None:
-        """Fill `self` with the given `value`.
-
-        Nothing happens if the vec is empty or unallocated.
-
-        Example
-        -------
-        ```py
-        a = Vec([0, 1, 2, 3])
-        a.fill(0)
-        assert a == [0, 0, 0, 0]
-        ```
-        """
-        ptr = self._ptr
-        if not ptr:
-            return
-
-        ptr[:] = [value] * len(ptr)
 
     def push(self, item: T) -> None:
         """Push an element at the end of the vector.
@@ -616,9 +432,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         if self._capacity is not None:
             self.push_within_capacity(item)
             return
-
-        if self._ptr is None:
-            self._ptr = []
 
         self._ptr.append(item)
 
@@ -647,9 +460,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec.len() == 3
         ```
         """
-        if self._ptr is None:
-            self._ptr = []
-
         if self.len() == self._capacity:
             return _result.Err(x)
 
@@ -727,24 +537,11 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
     ##########################
 
     def append(self, value: T) -> None:
-        """An alias to `Vec.push`."""
-        self.push(value)
+        """Append an element at the end of the vector.
 
-    def get(self, index: int) -> _option.Option[T]:
-        """Get the item at the given index, or `Some[None]` if its out of bounds.
-
-        Example
-        -------
-        ```py
-        vec = Vec((1, 2, 3))
-        vec.get(0) == Some(1)
-        vec.get(3) == Some(None)
-        ```
+        An alias to `Vec.push`.
         """
-        try:
-            return _option.Some(self[index])
-        except IndexError:
-            return _option.NOTHING
+        self._ptr.append(value)
 
     def insert(self, index: int, value: T) -> None:
         """Insert an element at the position `index`.
@@ -757,7 +554,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec == [1, 2, 3]
         ```
         """
-        self.__setitem__(index, value)
+        self[index] = value
 
     def pop(self, index: int = -1) -> _option.Option[T]:
         """Removes the last element from a vector and returns it, or `None` if it is empty.
@@ -850,9 +647,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec == ['b', 'c']
         ```
         """
-        if not self._ptr:
-            return
-
         self._ptr.remove(item)
 
     def extend(self, iterable: collections.Iterable[T]) -> None:
@@ -867,9 +661,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec == [1, 2, 3, 4, 5, 6]
         ```
         """
-        if self._ptr is None:
-            self._ptr = []
-
         self._ptr.extend(iterable)
 
     def copy(self) -> Vec[T]:
@@ -885,7 +676,7 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         print(original) # [1, 2, 3]
         ```
         """
-        return Vec(self._ptr[:]) if self._ptr else Vec()
+        return Vec(self._ptr[:])
 
     def clear(self) -> None:
         """Clear all elements of this vector.
@@ -898,9 +689,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec.len() == 0
         ```
         """
-        if not self._ptr:
-            return
-
         self._ptr.clear()
 
     def sort(
@@ -919,9 +707,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec == [1, 2, 3]
         ```
         """
-        if not self._ptr:
-            return
-
         # key can be `None` here just fine, idk why pyright is complaining.
         self._ptr.sort(key=key, reverse=reverse)  # pyright: ignore
 
@@ -939,9 +724,6 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec.index(2) == 1
         ```
         """
-        if self._ptr is None:
-            raise ValueError from None
-
         return self._ptr.index(item, start, end)
 
     def count(self, item: T) -> int:
@@ -956,88 +738,4 @@ class Vec(typing.Generic[T], collections.MutableSequence[T], SpecContains[T]):
         assert vec.count(3) == 2
         ```
         """
-        if self._ptr is None:
-            return 0
-
         return self._ptr.count(item)
-
-    def __len__(self) -> int:
-        return len(self._ptr) if self._ptr else 0
-
-    def __setitem__(self, index: int, value: T):
-        if not self._ptr:
-            raise IndexError from None
-
-        self._ptr[index] = value
-
-    @typing.overload
-    def __getitem__(self, index: slice) -> Vec[T]: ...
-
-    @typing.overload
-    def __getitem__(self, index: int) -> T: ...
-
-    def __getitem__(self, index: int | slice) -> T | Vec[T]:
-        if not self._ptr:
-            raise IndexError("Index out of range")
-
-        if isinstance(index, slice):
-            return Vec(self._ptr[index])
-
-        return self._ptr[index]
-
-    def __delitem__(self, index: int) -> None:
-        if not self._ptr:
-            return
-
-        del self._ptr[index]
-
-    def __contains__(self, element: T) -> bool:
-        return element in self._ptr if self._ptr else False
-
-    def __iter__(self) -> collections.Iterator[T]:
-        if self._ptr is None:
-            return iter(())
-
-        return self._ptr.__iter__()
-
-    def __repr__(self) -> str:
-        return "[]" if not self._ptr else repr(self._ptr)
-
-    def __eq__(self, other: Vec[T] | list[T]) -> bool:
-        if isinstance(other, Vec):
-            return self._ptr == other._ptr
-
-        return self._ptr == other
-
-    def __ne__(self, other: Vec[T] | list[T]) -> bool:
-        return not self.__eq__(other)
-
-    def __le__(self, other: list[T]) -> bool:
-        if not self._ptr:
-            return False
-
-        return self._ptr <= other
-
-    def __ge__(self, other: list[T]) -> bool:
-        if not self._ptr:
-            return False
-
-        return self._ptr >= other
-
-    def __lt__(self, other: list[T]) -> bool:
-        if not self._ptr:
-            return False
-
-        return self._ptr < other
-
-    def __gt__(self, other: list[T]) -> bool:
-        if not self._ptr:
-            return False
-
-        return self._ptr > other
-
-    def __bool__(self) -> bool:
-        return bool(self._ptr)
-
-    def __reversed__(self) -> collections.Iterator[T]:
-        return reversed(self._ptr or ())

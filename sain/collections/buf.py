@@ -424,7 +424,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         Same as `Bytes.to_str`
         """
-        return self.to_str()
+        # FIXME: Remove this pyright ignore when this method gets removed.
+        return self.to_str()  # pyright: ignore
 
     @deprecated(
         since="1.3.0",
