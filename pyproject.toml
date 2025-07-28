@@ -157,6 +157,7 @@ exclude-classes = """
 (
     ^sain\\.collections\\.buf:(Bytes|BytesMut)$|
     ^sain\\.collections\\.hash_map:(HashMap|RefMut)$|
-    ^sain\\.collections\\.slice:(SliceMut)$
+    ^sain\\.collections\\.slice:(SliceMut)$|
+    ^sain\\.collections\\.vec:(Vec)$
 )
 """

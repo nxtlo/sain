@@ -98,7 +98,7 @@ first = vec[0]  # 1
 # You can obtain an immutable slice which its elements cannot be modified.
 
 def read_slice(slice: Slice[int]) -> None:
-    # we ensure to the caller that we won't modify their slice.
+    # we ensure to the caller that we won't modify their data.
     ...
 
 immutable_slice = vec.as_slice()
@@ -161,8 +161,8 @@ T = typing.TypeVar("T")
 
 @rustc_diagnostic_item("Vec")
 @typing.final
-class Vec(SliceMut[T]):
-    """A basic implementation of `Rust`'s excellent `Vec<T>` type, backed by Python's `list<T>`.
+class Vec(SliceMut[T], collections.MutableSequence[T]):
+    """A basic implementation of Rust's `Vec<T>` type, backed by Python `list<T>`.
 
     See the module top level documentation for more information.
 
@@ -179,15 +179,10 @@ class Vec(SliceMut[T]):
     ```
     """
 
-    __slots__ = ("_ptr", "_capacity")
+    __slots__ = ("_buf", "_capacity")
 
     @typing.overload
-    def __init__(self) -> None: ...
-
-    @typing.overload
-    def __init__(self, iterable: collections.Iterable[T]) -> None: ...
-
-    def __init__(self, iterable: collections.Iterable[T] | None = None) -> None:
+    def __init__(self) -> None:
         """Create an empty `Vec<T>`.
 
         Example
@@ -197,17 +192,28 @@ class Vec(SliceMut[T]):
         ```
         """
 
+    @typing.overload
+    def __init__(self, iterable: collections.Iterable[T]) -> None:
+        """Create a new `Vec<T>` from an iterable.
+
+        Example
+        -------
+        ```py
+        vec = Vec([1.2, 3.4])
+        ```
+        """
+
+    def __init__(self, iterable: collections.Iterable[T] | None = None) -> None:
         if isinstance(iterable, list):
             # Calling `list()` on another list will copy it, So instead we just point to it.
-            self._ptr = iterable
+            self._buf = iterable
         elif isinstance(iterable, Vec):
-            self._ptr = iterable._ptr
+            self._buf = iterable._buf
         # any other iterable that ain't a list needs to get copied into a new list.
         else:
-            self._ptr: list[T] = list(iterable) if iterable else []
+            self._buf: list[T] = list(iterable) if iterable else []
 
         self._capacity: int | None = None
-        super().__init__(self._ptr)
 
     @classmethod
     def with_capacity(cls, capacity: int) -> Vec[T]:
@@ -255,7 +261,7 @@ class Vec(SliceMut[T]):
         """
         # NOTE: Although, we could just return `self`, but,
         # we want to return an exclusive view.
-        return Slice(self._ptr)
+        return Slice(self._buf)
 
     def as_mut_slice(self) -> SliceMut[T]:
         """Return a mutable view over this vector elements.
@@ -276,7 +282,7 @@ class Vec(SliceMut[T]):
         """
         # NOTE: Although, we could just return `self`, but,
         # we want to return an exclusive view.
-        return SliceMut(self._ptr)
+        return SliceMut(self._buf)
 
     def capacity(self) -> int:
         """Return the capacity of this vector if set, 0 if not .
@@ -318,9 +324,9 @@ class Vec(SliceMut[T]):
         assert owned == [2, 2, 3]
         ```
         """
-        # don't point to `_ptr` anymore.
-        tmp = self._ptr
-        del self._ptr
+        # don't point to `_buf` anymore.
+        tmp = self._buf
+        del self._buf
         return tmp
 
     def split_off(self, at: int) -> Vec[T]:
@@ -351,11 +357,11 @@ class Vec(SliceMut[T]):
             ) from None
 
         # Either the list is empty or uninit.
-        if not self._ptr:
+        if not self._buf:
             return self
 
-        split = self._ptr[at:len_]
-        del self._ptr[at:len_]
+        split = self._buf[at:len_]
+        del self._buf[at:len_]
         return Vec(split)
 
     def truncate(self, size: int) -> None:
@@ -369,7 +375,7 @@ class Vec(SliceMut[T]):
         assert vec == [1]
         ```
         """
-        del self._ptr[size:]
+        del self._buf[size:]
 
     def retain(self, f: collections.Callable[[T], bool]) -> None:
         """Retains only the elements specified by the predicate.
@@ -393,9 +399,9 @@ class Vec(SliceMut[T]):
         ```
         """
         idx = 0
-        while idx < len(self._ptr):
-            if not f(self._ptr[idx]):
-                del self._ptr[idx]
+        while idx < len(self._buf):
+            if not f(self._buf[idx]):
+                del self._buf[idx]
             else:
                 idx += 1
 
@@ -415,7 +421,7 @@ class Vec(SliceMut[T]):
         assert vec == ['b', 'c'] and element == 'a'
         ```
         """
-        return self._ptr.pop(self.index(item))
+        return self._buf.pop(self.index(item))
 
     def push(self, item: T) -> None:
         """Push an element at the end of the vector.
@@ -429,11 +435,11 @@ class Vec(SliceMut[T]):
         assert vec == [1]
         ```
         """
-        if self._capacity is not None:
-            self.push_within_capacity(item)
+        if (cap := self._capacity) is not None and len(self._buf) == cap:
+            # max cap reached.
             return
 
-        self._ptr.append(item)
+        self._buf.append(item)
 
     def push_within_capacity(self, x: T) -> Result[None, T]:
         """Appends an element if there is sufficient spare capacity, otherwise an error is returned with the element.
@@ -463,7 +469,7 @@ class Vec(SliceMut[T]):
         if self.len() == self._capacity:
             return _result.Err(x)
 
-        self._ptr.append(x)
+        self._buf.append(x)
         return _result.Ok(None)
 
     def reserve(self, additional: int) -> None:
@@ -541,7 +547,7 @@ class Vec(SliceMut[T]):
 
         An alias to `Vec.push`.
         """
-        self._ptr.append(value)
+        self._buf.append(value)
 
     def insert(self, index: int, value: T) -> None:
         """Insert an element at the position `index`.
@@ -557,7 +563,7 @@ class Vec(SliceMut[T]):
         self[index] = value
 
     def pop(self, index: int = -1) -> _option.Option[T]:
-        """Removes the last element from a vector and returns it, or `None` if it is empty.
+        """Removes the last element from the vector and returns it, or `None` if it is empty.
 
         Example
         -------
@@ -567,10 +573,10 @@ class Vec(SliceMut[T]):
         assert vec == [1, 2]
         ```
         """
-        if not self._ptr:
+        if not self._buf:
             return _option.NOTHING
 
-        return _option.Some(self._ptr.pop(index))
+        return _option.Some(self._buf.pop(index))
 
     def pop_if(self, pred: collections.Callable[[T], bool]) -> _option.Option[T]:
         """Removes the last element from a vector and returns it if `f` returns `True`,
@@ -584,7 +590,7 @@ class Vec(SliceMut[T]):
         assert vec == [1, 2]
         ```
         """
-        if not self._ptr:
+        if not self._buf:
             return _option.NOTHING
 
         if pred(self[-1]):
@@ -625,13 +631,13 @@ class Vec(SliceMut[T]):
         ```
         """
 
-        if not self._ptr or (len_ := len(self._ptr)) <= 1:
+        if not self._buf or (len_ := len(self._buf)) <= 1:
             return
 
         idx = 1
         while idx < len_:
-            if same_bucket(self._ptr[idx], self._ptr[idx - 1]):
-                del self._ptr[idx]
+            if same_bucket(self._buf[idx], self._buf[idx - 1]):
+                del self._buf[idx]
                 len_ -= 1
             else:
                 idx += 1
@@ -647,7 +653,7 @@ class Vec(SliceMut[T]):
         assert vec == ['b', 'c']
         ```
         """
-        self._ptr.remove(item)
+        self._buf.remove(item)
 
     def extend(self, iterable: collections.Iterable[T]) -> None:
         """Extend this vector from another iterable.
@@ -661,7 +667,7 @@ class Vec(SliceMut[T]):
         assert vec == [1, 2, 3, 4, 5, 6]
         ```
         """
-        self._ptr.extend(iterable)
+        self._buf.extend(iterable)
 
     def copy(self) -> Vec[T]:
         """Copy all elements of `self` into a new vector.
@@ -676,7 +682,7 @@ class Vec(SliceMut[T]):
         print(original) # [1, 2, 3]
         ```
         """
-        return Vec(self._ptr[:])
+        return Vec(self._buf[:])
 
     def clear(self) -> None:
         """Clear all elements of this vector.
@@ -689,7 +695,7 @@ class Vec(SliceMut[T]):
         assert vec.len() == 0
         ```
         """
-        self._ptr.clear()
+        self._buf.clear()
 
     def sort(
         self,
@@ -708,7 +714,7 @@ class Vec(SliceMut[T]):
         ```
         """
         # key can be `None` here just fine, idk why pyright is complaining.
-        self._ptr.sort(key=key, reverse=reverse)  # pyright: ignore
+        self._buf.sort(key=key, reverse=reverse)  # pyright: ignore
 
     def index(
         self, item: T, start: typing.SupportsIndex = 0, end: int = _sys.maxsize
@@ -724,7 +730,7 @@ class Vec(SliceMut[T]):
         assert vec.index(2) == 1
         ```
         """
-        return self._ptr.index(item, start, end)
+        return self._buf.index(item, start, end)
 
     def count(self, item: T) -> int:
         """Return the number of occurrences of `item` in the vec.
@@ -738,4 +744,4 @@ class Vec(SliceMut[T]):
         assert vec.count(3) == 2
         ```
         """
-        return self._ptr.count(item)
+        return self._buf.count(item)

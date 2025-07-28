@@ -31,8 +31,8 @@
 
 import pytest
 import array
-import io
 from sain.collections.buf import Bytes, BytesMut
+from sain.collections.slice import Slice, SliceMut
 from sain.macros import ub_checks
 
 
@@ -60,10 +60,10 @@ def test_bytes_as_ptr_and_as_ref():
     ptr = b.as_ptr()
     assert isinstance(ptr, memoryview)
     assert ptr.readonly
-    ref = b.as_ref()
+    ref = b.as_slice()
     assert list(ref) == [1, 2, 3]
     b_empty = Bytes()
-    assert not b_empty.as_ref()
+    assert not b_empty.as_slice()
 
 
 def test_bytes_leak_on_empty():
@@ -86,7 +86,8 @@ def test_bytes_access_leaked_bytes():
 def test_bytes_try_to_str_invalid_utf8():
     b = Bytes.from_bytes([0xFF, 0xFE])
 
-    res = b.try_to_str()
+    # FIXME: Remove this when `try_to_str` is removed.
+    res = b.try_to_str()  # pyright: ignore
     assert res.is_err()
     assert res.unwrap_err() == b"\xff\xfe"
 
@@ -125,8 +126,8 @@ def test_bytes_getitem_out_of_range():
 def test_bytes_slice_returns_bytes():
     b = Bytes.from_bytes([1, 2, 3, 4])
     s = b[1:3]
-    assert isinstance(s, Bytes)
-    assert s == [2, 3]
+    assert isinstance(s, Slice)
+    assert list(s) == [2, 3]
 
 
 def test_bytes_hash_and_copy_deepcopy():
@@ -162,10 +163,10 @@ def test_bytes_split_at_bounds():
 
     left, right = b.split_at(0)
     assert not left
-    assert right == [1, 2, 3]
+    assert list(right) == [1, 2, 3]
 
     left, right = b.split_at(3)
-    assert left == [1, 2, 3]
+    assert list(left) == [1, 2, 3]
     assert not right
 
 
@@ -174,7 +175,7 @@ def test_bytes_mut_as_mut_ptr_and_as_mut():
     ptr = bm.as_mut_ptr()
     assert isinstance(ptr, memoryview)
     assert not ptr.readonly
-    mut = bm.as_mut()
+    mut = bm.as_slice_mut()
     assert list(mut) == [1, 2, 3]
 
 
@@ -220,19 +221,21 @@ def test_bytes_mut_split_off_mut_invalid():
 
 def test_bytes_mut_split_first_last_empty():
     bm = BytesMut()
-    assert bm.split_first_mut().is_none()
-    assert bm.split_last_mut().is_none()
+    s = bm.as_slice_mut()
+    assert s.split_first_mut().is_none()
+    assert s.split_last_mut().is_none()
 
 
 def test_bytes_mut_split_at_mut_bounds():
     bm = BytesMut.from_bytes([1, 2, 3])
+    s = bm.as_slice_mut()
 
-    left, right = bm.split_at_mut(0)
+    left, right = s.split_at_mut(0)
     assert not left
-    assert right == [1, 2, 3]
+    assert list(right) == [1, 2, 3]
 
-    left, right = bm.split_at_mut(3)
-    assert left == [1, 2, 3]
+    left, right = s.split_at_mut(3)
+    assert list(left) == [1, 2, 3]
     assert not right
 
 
@@ -311,10 +314,11 @@ def test_bytes_mut_offset_and_fill():
 
 def test_bytes_mut_swap_methods():
     bm = BytesMut.from_bytes([1, 2, 3, 4])
-    bm.swap(0, 3)
+    s = bm.as_slice_mut()
+    s.swap(0, 3)
     assert bm == [4, 2, 3, 1]
 
-    bm.swap_unchecked(1, 2)
+    s.swap_unchecked(1, 2)
     assert bm == [4, 3, 2, 1]
 
 
@@ -352,5 +356,5 @@ def test_bytes_mut_indexing():
     assert bm == [1, 3]
 
     slice = bm[0:1]
-    assert isinstance(slice, BytesMut)
-    assert slice == [1]
+    assert isinstance(slice, SliceMut)
+    assert list(slice) == [1]
