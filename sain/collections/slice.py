@@ -47,7 +47,7 @@ int_slice = v[...] # or v.as_slice()
 Slices are either mutable (`SliceMut`) or immutable (`Slice`), depending on the type of the sequence they're storing.
 
 ```py
-from sain import SliceMut, Slice
+from sain.collections.slice import SliceMut, Slice
 
 some_data = ['a', 'b', 'c']
 x = SliceMut(some_data) # point to `some_data`.
@@ -212,7 +212,9 @@ class SpecContains(typing.Generic[T]):
 class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     """An immutable view over some sequence of type `T`.
 
-    See the top-level documentation for more information.
+    See the [top-level][] documentation for more information.
+
+    [top-level]: #overview
 
     Parameters
     ----------
@@ -624,7 +626,9 @@ class SliceMut(
 ):
     """A mutable view over some sequence of type `T`.
 
-    See the top-level documentation for more information.
+    See the [top-level][] documentation for more information.
+
+    [top-level]: #overview
 
     Parameters
     ----------

@@ -30,7 +30,7 @@
 """Dynamically growable collections and containers.
 
 These collections are basic implementations of Rust's standard collections crate. from under the hood, they're an extended
-and more rich implementations of the built-in sequences such as `list` and `bytearray`.
+and more rich implementations of the built-in sequences such as `list`, `dict` and `array.array`.
 
 ### When Should You Use Which Collection?
 This question's answer should be pretty straightforward.

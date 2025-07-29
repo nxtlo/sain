@@ -155,6 +155,8 @@ class Bytes(convert.ToString, Slice[int]):
 
     The mutable version of this is `BytesMut`.
 
+    # Overview
+
     This provides high-level, cheap, zero-copy slicing operations to perform on a sequence of bytes in
     an ergonomic way.
 
@@ -164,7 +166,7 @@ class Bytes(convert.ToString, Slice[int]):
     The use cases of `Bytes` objects are usually within networking applications,
     binding with other foreign languages, manipulation of images and binaries, and more.
 
-    ## Construction
+    ## Creating Bytes
 
     There're many different ways to create a `Bytes` object, the most straight-forward one is from a literal.
 
@@ -181,8 +183,8 @@ class Bytes(convert.ToString, Slice[int]):
     * `from_static`: Create `Bytes` that points to an `array.array[int]` without copying it
     * `Bytes.zeroed(count)`: Create `Bytes` filled with `zeroes * count`.
 
-    Example
-    -------
+    ## Examples
+
     ```py
     from sain.collections import Bytes
 
