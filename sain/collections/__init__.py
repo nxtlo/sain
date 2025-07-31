@@ -39,11 +39,24 @@ This question's answer should be pretty straightforward.
 * Use `Bytes` when you want to store read-only bytes. The underlying sequence is an `array` of type `u8`.
 * Use `BytesMut` when you want a mutable version of `Bytes`.
 * Use `HashMap` when you want to replace `dict`.
+* Use `Slice` when you a read-only view into a immutable/mutable collection.
+* Use `SliceMut` when you a mutable view into a immutable/mutable collection.
 """
 
 from __future__ import annotations
 
-__all__ = ("Vec", "Bytes", "BytesMut", "vec", "buf", "slice", "hash_map", "HashMap")
+__all__ = (
+    "Vec",
+    "Bytes",
+    "BytesMut",
+    "vec",
+    "buf",
+    "slice",
+    "hash_map",
+    "HashMap",
+    "Slice",
+    "SliceMut",
+)
 
 from . import buf
 from . import hash_map
@@ -53,3 +66,5 @@ from .buf import Bytes
 from .buf import BytesMut
 from .hash_map import HashMap
 from .vec import Vec
+from .slice import Slice
+from .slice import SliceMut
