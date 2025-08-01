@@ -141,7 +141,6 @@ from __future__ import annotations
 
 __all__ = ("Vec",)
 
-import sys as _sys
 import typing
 from collections import abc as collections
 
@@ -211,7 +210,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
             self._buf = iterable._buf
         # any other iterable that ain't a list needs to get copied into a new list.
         else:
-            self._buf: list[T] = list(iterable) if iterable else []
+            self._buf = list(iterable) if iterable else []  # pyright: ignore[reportIncompatibleVariableOverride]
 
         self._capacity: int | None = None
 
@@ -266,8 +265,6 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
     def as_mut_slice(self) -> SliceMut[T]:
         """Return a mutable view over this vector elements.
 
-        No copying occurs.
-
         Example
         -------
         ```py
@@ -280,9 +277,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         assert buf.len() >= 1
         ```
         """
-        # NOTE: Although, we could just return `self`, but,
-        # we want to return an exclusive view.
-        return SliceMut(self._buf)
+        return self
 
     def capacity(self) -> int:
         """Return the capacity of this vector if set, 0 if not .
@@ -327,7 +322,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         # don't point to `_buf` anymore.
         tmp = self._buf
         del self._buf
-        return tmp
+        return tmp  # pyright: ignore[reportReturnType] - _buf is a list.
 
     def split_off(self, at: int) -> Vec[T]:
         """Split the vector off at the specified position.
@@ -716,22 +711,6 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         # key can be `None` here just fine, idk why pyright is complaining.
         self._buf.sort(key=key, reverse=reverse)  # pyright: ignore
 
-    def index(
-        self, item: T, start: typing.SupportsIndex = 0, end: int = _sys.maxsize
-    ) -> int:
-        # << Official documentation >>
-        """Return zero-based index in the vec of the first item whose value is equal to `item`.
-        Raises a ValueError if there is no such item.
-
-        Example
-        -------
-        ```py
-        vec = Vec((1, 2, 3))
-        assert vec.index(2) == 1
-        ```
-        """
-        return self._buf.index(item, start, end)
-
     def count(self, item: T) -> int:
         """Return the number of occurrences of `item` in the vec.
 
@@ -745,3 +724,6 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         ```
         """
         return self._buf.count(item)
+
+    # lists are unhashable.
+    __hash__: None = None
