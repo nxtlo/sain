@@ -1126,7 +1126,7 @@ class BytesMut(
         return self.__buffer__(512)
 
     def as_slice_mut(self) -> SliceMut[int]:
-        """Get a mutable reference to the underlying array, without copying.
+        """Get a mutable slice to the underlying array, without copying.
 
         Example
         -------
@@ -1288,7 +1288,7 @@ class BytesMut(
         if not self._buf:
             return
 
-        del self._buf[:]
+        self._buf.clear()
 
     def byteswap(self) -> None:
         """Swap the byte order of the bytes in `self`."""
