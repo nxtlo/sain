@@ -1126,7 +1126,7 @@ class BytesMut(
         return self.__buffer__(512)
 
     def as_slice_mut(self) -> SliceMut[int]:
-        """Get a mutable reference to the underlying array, without copying.
+        """Get a mutable slice to the underlying array, without copying.
 
         Example
         -------

@@ -22,6 +22,43 @@ pip install sain
 
 ## Example
 
+<details>
+    <summary>Equivalent Rust code</summary>
+
+```rs
+let mut books: Vec<&str> = vec!["Dune", "1984"];
+books.push("Foundation");
+
+for book in books.iter().map(|book| book.to_uppercase()) {}
+
+let s = &mut books[..];
+let (first, elements) = s.split_first_mut()?;
+
+fn first_element<'a>(slice: &'a [&str]) -> Option<&'a str> {
+    slice.first().copied()
+}
+
+let fav_book = first_element(&books);
+println!("{:?}", fav_book); // Some("Dune")
+assert_eq!(fav_book, Some("Dune"));
+
+fn last_or<'a>(err: &'static str, vec: &'a Vec<&str>) -> Result<&'a str, &'static str> {
+    vec.last().copied().ok_or(err)
+}
+
+// use pattern matching to handle a result.
+match last_or("not found", &books) {
+    Ok(book) => {
+        println!("Last is {book}");
+    }
+    Err(why) => {
+        println!("{why}",);
+    }
+}
+```
+
+</details>
+
 ```py
 from __future__ import annotations
 
@@ -85,7 +122,7 @@ match last_or("not found", books):
 | Default                  | Default[T]                       |                                                                                                                       |                            |
 | &dyn Error                    | Error                            |                                                                                                                            |                            |
 | Iterator\<T>             | Iterator[T]                      |                                                                                                                       |                            |
-| Iter\<'a, T>                  | Iter[T]                          | collections called by `.iter()` are built from this type                                                                   |                            |
+| Iter\<'a, T>                  | Iter[T]                          | some collections called by `.iter()` are built from this type                                                                   |                            |
 | iter::once::\<T>()            | iter.once[T]                     |                                                                                                                            |                            |
 | iter::empty::\<T>()           | iter.empty[T]                    |                                                                                                                            |                            |
 | iter::repeat::\<T>()          | iter.repeat[T]                   |                                                                                                                            |                            |

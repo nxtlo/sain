@@ -645,9 +645,9 @@ class SliceMut(
         # dirty runtime check here just to make sure that people don't
         # call methods on immutable collections. This line doesn't
         # exist if the program is level 1 optimized. `-O`.
-        assert isinstance(ptr, collections.MutableSequence), (
-            f"expected a mutable sequence, got {type(ptr).__name__}."
-        )
+        assert isinstance(
+            ptr, collections.MutableSequence
+        ), f"expected a mutable sequence, got {type(ptr).__name__}."
         self._buf = ptr
 
     # impl mut [T]
