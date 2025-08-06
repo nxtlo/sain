@@ -65,6 +65,6 @@ from . import vec
 from .buf import Bytes
 from .buf import BytesMut
 from .hash_map import HashMap
-from .vec import Vec
 from .slice import Slice
 from .slice import SliceMut
+from .vec import Vec

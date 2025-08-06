@@ -1288,7 +1288,7 @@ class BytesMut(
         if not self._buf:
             return
 
-        del self._buf[:]
+        self._buf.clear()
 
     def byteswap(self) -> None:
         """Swap the byte order of the bytes in `self`."""
@@ -1329,8 +1329,10 @@ class BytesMut(
 
     @typing.overload
     def __getitem__(self, index: int) -> int: ...
+
     @typing.overload
     def __getitem__(self, index: slice) -> SliceMut[int]: ...
+
     @typing.overload
     def __getitem__(self, index: EllipsisType) -> SliceMut[int]: ...
 
@@ -1349,6 +1351,7 @@ class BytesMut(
 
     @typing.overload
     def __setitem__(self, index: int, item: int) -> None: ...
+
     @typing.overload
     def __setitem__(self, index: slice, item: collections.Sequence[int]) -> None: ...
 
