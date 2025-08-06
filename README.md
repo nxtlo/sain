@@ -107,10 +107,10 @@ match last_or("not found", books):
 
 | name in Rust                  | name in Python                   | note                                                                                                                       | restrictions               |
 | ----------------------------- | -------------------------------  | -------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| Option\<T>, Some(T), None     | Option[T], Some(T), Some(None)   | Some(None) has the same layout as `None` in Rust                                                                           |                            |
+| Option\<T>, Some(T), None     | Option[T], Some(T), Some(None)   | Some(None) has the same layout as `Option::None`                                                                           |                            |
 | Result\<T, E>, Ok(T), Err(E)  | Result[T, E], Ok(T), Err(E)      |                                                                            |                            |
 | Vec\<T>                       | Vec[T]                           | Same layout as `list[T]`                                                                                                   |                            |
-| &[T]                       | Slice[T]                           |                                                                                                    |                            |
+| &[T]                       | Slice[T]                           | Same layout as its backing buffer                                                                                                    |                            |
 | &mut [T]                       | SliceMut[T]                           |                                                                                                    |                            |
 | HashMap\<K, V>                | HashMap[K, V]                    | Same layout as `dict[K, V]`                                                                                                |                            |
 | bytes::Bytes                  |  Bytes                           |                                                                                                                            |                            |
@@ -118,9 +118,9 @@ match last_or("not found", books):
 | LazyLock\<T>                  | Lazy[T]                          |                                                                                                                            |                            |
 | OnceLock\<T>                  | Once[T]                          |                                                                                                                            |                            |
 | Box\<T>                       | Box[T]                           | this isn't a heap box                                                                                                      |                            |
-| MaybeUninit\<T>               | MaybeUninit[T]                   | they serve the same purpose, but slightly different                                                                        |                            |
-| Default                  | Default[T]                       |                                                                                                                       |                            |
-| &dyn Error                    | Error                            |                                                                                                                            |                            |
+| mem::MaybeUninit\<T>               | MaybeUninit[T]                   | they serve the same purpose, but slightly different                                                                        |                            |
+| default::Default                  | Default[T]                       |                                                                                                                       |                            |
+| error::Error                    | Error                            |                                                                                                                            |                            |
 | Iterator\<T>             | Iterator[T]                      |                                                                                                                       |                            |
 | Iter\<'a, T>                  | Iter[T]                          | some collections called by `.iter()` are built from this type                                                                   |                            |
 | iter::once::\<T>()            | iter.once[T]                     |                                                                                                                            |                            |
@@ -131,7 +131,7 @@ match last_or("not found", books):
 | #[doc]                        | @doc()                           | the docs get generated at runtime                                                                                          |                            |
 | todo!()                       | todo()                           |                                                                                                                            |                            |
 | unimplemented!()              | unimplemented()                 |                                                                                                                            |                            |
-| #[deprecated]                 | @deprecated()                    |                                                      |                            |
+| #[deprecated]                 | @deprecated()                    | same as `warnings.deprecated`                                                     |                            |
 
 ## Contributing
 
@@ -139,9 +139,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Performance
 
-don't use Python if you're worried about performance.
+don't use Python if you're worried about performance. no, seriously.
+This project was started to explore Rust design patterns and semantics.
 
 ## Remaining work
 
-This is still early days for `sain`, it is no where near being stable.
-The release cycles were breaking due to poor decision making, but it _should_ be stable enough for general-purpose now.
+This is still early days for `sain`, it is not stable enough to be used in production level code.
+each release might brick your code. eventually, by 2.0.0 release, most implementations will be stable enough.
