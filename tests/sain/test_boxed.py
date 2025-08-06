@@ -40,17 +40,17 @@ def _assert_eq(x: int, y: int):
 
 @pytest.fixture()
 def box() -> boxed.Box[int]:
-    return boxed.Box(0, 3).on_expire(lambda v: _assert_eq(v, 0))
+    return boxed.Box(0, 1).on_expire(lambda v: _assert_eq(v, 0))
 
 
 class TestBox:
     def test_has_expired(self, box: boxed.Box[int]):
         assert box.get().is_some()
-        time.sleep(box.remaining())
+        time.sleep(box.remaining() + 0.99)
         assert box.has_expired
 
     def test_remaining(self, box: boxed.Box[int]):
-        assert box.remaining() <= 3
+        assert box.remaining() <= 1
 
     def test_get_is_none(self, box: boxed.Box[int]):
         if box.get().is_some():

@@ -28,6 +28,8 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from collections.abc import MutableSequence, Sequence
+from sain.collections.slice import Slice, SliceMut
 from sain.collections.vec import Vec
 
 
@@ -78,9 +80,9 @@ def test_vec_extend_and_clear():
     assert v.is_empty()
 
 
-def test_vec_as_ref_and_copy():
+def test_vec_as_slice():
     v = Vec([1, 2, 3])
-    ref = v.as_ref()
+    ref = v.as_slice()
     assert ref == [1, 2, 3]
 
     v2 = v.copy()
@@ -193,3 +195,17 @@ def test_vec_comparison():
     v = Vec([1, 2, 3])
     assert v == [1, 2, 3]
     assert not (v == (1, 2, 3))
+
+
+def test_vec_isinstance():
+    v = Vec([1, 2, 3])
+    assert isinstance(v.as_ptr(), list)
+    assert isinstance(
+        v,
+        (
+            Sequence,
+            MutableSequence,
+            Slice,
+            SliceMut,
+        ),
+    )

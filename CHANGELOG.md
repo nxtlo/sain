@@ -12,22 +12,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Bytes.from_raw_parts` and `Bytes.from_raw_parts_mut`, currently unstable.
 - Specialized `buf.Chars` iterator.
 - Added basic impl of `AsyncIterator` and `Stream`, currently unstable.
+- new `Slice` and `SliceMut` API.
 
 ### Removed
 
 - `Bytes.from_raw`, use `Bytes.from_bytes` instead.
 - `BytesMut.put_raw`, use `BytesMut.put_bytes` instead.
+- `Slice.into_inner`
 
 ### Changed
 
+- Relaxed the initialization process of collection types, `Bytes`, `Vec` not pre-initialize their underlying buffer instead of setting it to `None`.
+- Extensive documentation improvements.
+- You may notice some speed improvements in `Bytes` and `Vec` thanks to the relaxation
+and elimination of `if` checks.
+- `Bytes.as_ref` is now `Bytes.as_slice`.
+- `Vec.as_ref` is now `Vec.as_slice`, same thing for `as_mut` is `as_slice_mut`.
+- `Vec` now inherits all of `SliceMut`'s new API.
+- `Bytes` now inherits all of `Slice`'s new API.
+- `BytesMut` now inherits all of `SliceMut`'s new API via `as_slice_mut`.
+- `Bytes` no longer raises `Memory|BufferError` thanks to the relaxed init.
 - `Iterator.sort`'s return type changed from `Iter` to `MutableSequence`.
-- `Bytes.from_ptr` is rename to its old name `Bytes.from_static`.
-- `Bytes.from_ptr_unchecked` is rename to `Bytes.from_static_unchecked`.
+- `Bytes.from_ptr` is renamed to its old name `Bytes.from_static`.
+- `Bytes.from_ptr_unchecked` is renamed to `Bytes.from_static_unchecked`.
 - `Bytes.chars` now returns a specialized ExactSizeIterator, `Chars`.
 - `Bytes.raw_parts` is now `Bytes.to_raw_parts`.
 - `Iterator.collect_into` no longer takes a `Mapping[int, Any]`.
 - `iter.Take` is now `ExactSizeIterator`.
-- Calling `len(iterator)` where iterator is an unsized `Iterator` will warn you to explicitly use `Iterator.count` now.
+- Calling `len(iterator)` where iterator is an unsized `Iterator` will warn you to explicitly at runtime to use `Iterator.count`. ref #259.
+- `macros.deprecated` now returns `typing_extensions.deprecated` instead.
+- `macros.todo` raises `RuntimeError` instead of `RuntimeWarning`.
+- `macros.unimplemented` is now a function call instead of being a decorator.
 
 ## 1.4.0 - 6/21/2025
 

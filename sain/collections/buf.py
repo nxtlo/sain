@@ -49,16 +49,16 @@ from sain import result as _result
 from sain.macros import assert_precondition
 from sain.macros import deprecated
 from sain.macros import rustc_diagnostic_item
-from sain.macros import safe
 from sain.macros import ub_checks
 from sain.macros import unsafe
 from sain.macros import unstable
 
-from . import slice as _slice
-from . import vec as _vec
+from .slice import Slice
+from .slice import SliceMut
 
 if typing.TYPE_CHECKING:
     import inspect
+    from types import EllipsisType
 
     from typing_extensions import Self
 
@@ -122,7 +122,7 @@ class Chars(_iter.ExactSizeIterator[_ctypes.c_char]):
         self._len = len(buf)
         self._offset = buf.as_ptr()
 
-    def as_slice(self) -> _slice.Slice[int]:
+    def as_slice(self) -> Slice[int]:
         """Views the underlying data as a subslice of the original data.
 
         Example
@@ -138,7 +138,7 @@ class Chars(_iter.ExactSizeIterator[_ctypes.c_char]):
         assert bytes(chars.as_slice()) == b""
         ```
         """
-        return _slice.Slice(self._offset[-self._len :])
+        return Slice(self._offset[-self._len :])
 
     def __next__(self) -> _ctypes.c_char:
         self._len -= 1
@@ -150,10 +150,12 @@ class Chars(_iter.ExactSizeIterator[_ctypes.c_char]):
 
 @rustc_diagnostic_item("&[u8]")
 @typing.final
-class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int]):
+class Bytes(convert.ToString, Slice[int]):
     """Provides immutable abstractions for working with bytes.
 
     The mutable version of this is `BytesMut`.
+
+    # Overview
 
     This provides high-level, cheap, zero-copy slicing operations to perform on a sequence of bytes in
     an ergonomic way.
@@ -164,7 +166,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     The use cases of `Bytes` objects are usually within networking applications,
     binding with other foreign languages, manipulation of images and binaries, and more.
 
-    ## Construction
+    ## Creating Bytes
 
     There're many different ways to create a `Bytes` object, the most straight-forward one is from a literal.
 
@@ -181,8 +183,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     * `from_static`: Create `Bytes` that points to an `array.array[int]` without copying it
     * `Bytes.zeroed(count)`: Create `Bytes` filled with `zeroes * count`.
 
-    Example
-    -------
+    ## Examples
+
     ```py
     from sain.collections import Bytes
 
@@ -201,9 +203,14 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def __init__(self) -> None:
         """Creates a new empty `Bytes`.
 
-        This won't allocate the array and the returned `Bytes` will be empty.
+        Example
+        -------
+        ```py
+        buf = Bytes()
+        assert buf.is_empty()
+        ```
         """
-        self._buf: array.array[int] | None = None
+        self._buf: array.array[int] = array.array("B")
 
     # construction
 
@@ -218,7 +225,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         ```
         """
         b = cls()
-        b._buf = array.array("B", s.encode(ENCODING))
+        b._buf.extend(s.encode(ENCODING))
         return b
 
     @classmethod
@@ -303,7 +310,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
                 return cls.from_static_unchecked(buf._buf)
 
         b = cls()
-        b._buf = array.array("B", unwrap_bytes(buf))
+        b._buf.extend(unwrap_bytes(buf))
         return b
 
     @classmethod
@@ -319,7 +326,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         ```
         """
         c = cls()
-        c._buf = array.array("B", bytearray(count))
+        c._buf.extend(bytearray(count))
         return c
 
     @staticmethod
@@ -407,8 +414,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         with ub_checks.nocheck():
             return BytesMut.from_static_unchecked(array.array("B", arr))
 
-    # buffer evolution
-
     # These are getting deprecated because they're trivial.
     # maybe we impl a `String` type and include them later.
     # anyways, they won't be leaving for sometime until 2.0.0.
@@ -424,7 +429,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         Same as `Bytes.to_str`
         """
-        return self.to_str()
+        # FIXME: Remove this pyright ignore when this method gets removed.
+        return self.to_str()  # pyright: ignore
 
     @deprecated(
         since="1.3.0",
@@ -518,18 +524,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
 
         return self._buf.tobytes()
 
-    def to_vec(self) -> _vec.Vec[int]:
-        """Copies `self` into a new `Vec`.
-
-        Example
-        -------
-        ```py
-        buffer = Bytes.from_str([1, 2, 3, 4])
-        # buffer and x can be modified independently.
-        x = buffer.to_vec()
-        """
-        return _vec.Vec(self.copy())
-
     def leak(self) -> array.array[int]:
         """Consumes and leaks the `Bytes`, returning the contents as an `array[int]`,
 
@@ -552,9 +546,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         consumed.tobytes() == b"chunks of data"
         ```
         """
-        if self._buf is None:
-            return array.array("B")
-
         arr = self._buf
         # We don't need to reference this anymore since the caller will own the array.
         del self._buf
@@ -564,8 +555,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         """Returns a read-only pointer to the buffer data.
 
         `pointer` here refers to a `memoryview` object.
-
-        A `BufferError` is raised if the underlying sequence is not initialized.
 
         Example
         -------
@@ -577,7 +566,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         """
         return self.__buffer__(256).toreadonly()
 
-    def as_ref(self) -> _slice.Slice[int]:
+    def as_slice(self) -> Slice[int]:
         """Get an immutable reference to the underlying sequence, without copying.
 
         An empty slice is returned if the underlying sequence is not initialized.
@@ -589,25 +578,21 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             ...
 
         buffer = Bytes.from_bytes([0, 0, 0, 0])
-        await send_multipart(buffer.as_ref()) # no copy.
+        # The `as_slice` call is not necessary, since `Bytes` can be treated
+        # as both `Sequence[int]` and `Slice[int]`.
+        # It just creates a new reference to the same data.
+        await send_multipart(buffer.as_slice()) # no copy.
         ```
         """
-        if self._buf is not None:
-            return _slice.Slice(self)
+        return Slice(self._buf)
 
-        return _slice.Slice(())
-
-    @safe
     def to_mut(self) -> BytesMut:
         """Convert `self` into `BytesMut`.
 
         This consumes `self` and returns a new `BytesMut` that points to the same underlying array,
         The conversion costs nothing.
 
-        Notes
-        -----
-        * If `self` is not initialized, a new empty `BytesMut` is returned.
-        * `self` will no longer be usable, as it will not point to the underlying array.
+        After calling this, `self` will no longer be usable, as it will not point to the underlying array.
 
         The inverse method for this is `BytesMut.freeze()`
 
@@ -624,20 +609,8 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         assert new == [2, 1, 3, 4]
         ```
         """
-        # SAFETY: `Bytes.leak` returns an empty array if `self` is uninitialized.
-        return BytesMut.from_static_unchecked(self.leak())
-
-    def len(self) -> int:
-        """Return the number of bytes in this buffer.
-
-        Example
-        -------
-        ```py
-        buf = Bytes.from_bytes([240, 159, 146, 150])
-        assert buf.len() == 4
-        ```
-        """
-        return self.__len__()
+        with ub_checks.nocheck():
+            return BytesMut.from_static_unchecked(self.leak())
 
     def iter(self) -> _iter.TrustedIter[int]:
         """Returns an iterator over the contained bytes.
@@ -681,18 +654,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         """
         return Chars(self)
 
-    def is_empty(self) -> bool:
-        """Check whether `self` contains any bytes or not.
-
-        Example
-        -------
-        ```py
-        buffer = Bytes()
-        assert buffer.is_empty()
-        ```
-        """
-        return not self._buf
-
     def split_off(self, at: int) -> Bytes:
         """Split the bytes off at the specified position, returning a new
         `Bytes` at the range of `[at : len]`, leaving `self` at `[at : bytes_len]`.
@@ -713,7 +674,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         `RuntimeError`
             This method will raise if `at` > `len(self)`
         """
-        len_ = self.len()
+        len_ = len(self._buf)
         if at > len_:
             raise RuntimeError(
                 f"Index `at` ({at}) should be <= than len of `self` ({len_}) "
@@ -723,83 +684,12 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         if not self._buf:
             return self
 
-        split = self[at:len_]  # split the items into a new buffer.
+        split = self._buf[at:len_]  # split the items into a new buffer.
         del self._buf[at:len_]  # remove the items from the original list.
-        return split
+        return Bytes.from_static_unchecked(split)
 
-    def split_first(self) -> Option[tuple[int, Bytes]]:
-        """Split the first and rest elements of the bytes, If empty, `None` is returned.
+    # array layout methods
 
-        Example
-        -------
-        ```py
-        buf = Bytes.from_bytes([1, 2, 3])
-        split = buf.split_first()
-        assert split == Some((1, [2, 3]))
-        ```
-        """
-        if not self._buf:
-            return _option.NOTHING
-
-        # optimized to only one element in the buffer.
-        if self.len() == 1:
-            return _option.Some((self[0], Bytes()))
-
-        first, rest = self[0], self[1:]
-        return _option.Some((first, rest))
-
-    def split_last(self) -> Option[tuple[int, Bytes]]:
-        """Returns the last and rest of the elements of the bytes, If `self` is empty, `None` is returned.
-
-        Example
-        -------
-        ```py
-        buf = Bytes.from_bytes([0, 1, 2])
-        last, elements = buf.split_last().unwrap()
-        assert (last, elements) == (3, [1, 2])
-        ```
-        """
-        if not self._buf:
-            return _option.NOTHING
-
-        len_ = self.len()
-        # optimized to only one element in the buffer.
-        if len_ == 1:
-            return _option.Some((self[0], Bytes()))
-
-        last, rest = self[-1], self[:-1]
-        return _option.Some((last, rest))
-
-    def split_at(self, mid: int) -> tuple[Bytes, Bytes]:
-        """Divide `self` into two at an index.
-
-        The first will contain all bytes from `[0:mid]` excluding `mid` it self.
-        and the second will contain the remaining bytes.
-
-        if `mid` > `self.len()`, Then all bytes will be moved to the left,
-        returning an empty bytes in right.
-
-        Example
-        -------
-        ```py
-        buffer = Bytes.from_bytes((1, 2, 3, 4))
-        left, right = buffer.split_at(0)
-        assert left == [] and right == [1, 2, 3, 4]
-
-        left, right = buffer.split_at(2)
-        assert left == [1, 2] and right == [2, 3]
-        ```
-
-        The is roughly the implementation
-        ```py
-        self[0:mid], self[mid:]
-        ```
-        """
-        return self[0:mid], self[mid:]
-
-    #! array layout methods
-
-    @safe
     def copy(self) -> Bytes:
         """Create a copy of the bytes.
 
@@ -814,14 +704,15 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             return Bytes()
 
         # SAFETY: `self._buf` is initialized.
-        return self.from_static_unchecked(self._buf[:])
+        with ub_checks.nocheck():
+            return self.from_static_unchecked(self._buf[:])
 
     def to_raw_parts(self) -> tuple[int, int]:
         """Decompose the metadata component of the bytes.
 
         Returns a `tuple<int, int>`, where the first element is the memory address of the bytes and the second is its length.
 
-        This can re-composed via `Bytes.from_raw_parts`.
+        This can then be re-composed via `Bytes.from_raw_parts`.
 
         This is an alias to `array.buffer_into`.
 
@@ -840,36 +731,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             bytes(from_raw_parts(ptr, size)) == b"abc"
         )
         """
-        if self._buf is None:
-            return (0x0, 0)
-
         return self._buf.buffer_info()
-
-    def index(self, v: int, start: int = 0, stop: int = _sys.maxsize) -> int:
-        """Return the smallest `i` such that `i` is the index of the first occurrence of `v` in the buffer.
-
-        The optional arguments start and stop can be specified to search for x within a
-        subsection of the array. Raise ValueError if x is not found
-        """
-        if not self._buf:
-            raise ValueError from None
-
-        return self._buf.index(v, start, stop)
-
-    def count(self, x: int) -> int:
-        """Return the number of occurrences of `x` in the buffer.
-
-        Example
-        --------
-        ```py
-        buf = Bytes([32, 32, 31])
-        assert buf.count(32) == 2
-        ```
-        """
-        if self._buf is None:
-            return 0
-
-        return self._buf.count(x)
 
     def size(self) -> int:
         """The length in bytes of one array item in the internal representation.
@@ -890,13 +752,7 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     # special methods
 
     def __iter__(self) -> collections.Iterator[int]:
-        if self._buf is not None:
-            return self._buf.__iter__()
-
-        return ().__iter__()
-
-    def __len__(self) -> int:
-        return len(self._buf) if self._buf else 0
+        return self._buf.__iter__()
 
     def __repr__(self) -> str:
         if not self._buf:
@@ -910,9 +766,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
         return self.to_bytes()
 
     def __buffer__(self, flag: int | inspect.BufferFlags) -> memoryview[int]:
-        if self._buf is None:
-            raise BufferError("Cannot work with uninitialized bytes.")
-
         if _sys.version_info >= (3, 12):
             mem = self._buf.__buffer__(flag)
         else:
@@ -920,9 +773,6 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
             mem = memoryview(self._buf)
 
         return mem
-
-    def __contains__(self, byte: int) -> bool:
-        return byte in self._buf if self._buf else False
 
     def __eq__(self, other: object, /) -> bool:
         if not self._buf:
@@ -941,92 +791,26 @@ class Bytes(convert.ToString, collections.Sequence[int], _slice.SpecContains[int
     def __ne__(self, other: object, /) -> bool:
         return not self.__eq__(other)
 
-    def __le__(self, other: object) -> bool:
-        if not self._buf:
-            return False
-
-        if not isinstance(other, Bytes):
-            return NotImplemented
-
-        if not other._buf:
-            return False
-
-        return self._buf <= other._buf
-
-    def __ge__(self, other: object) -> bool:
-        if not self._buf:
-            return False
-
-        if not isinstance(other, Bytes):
-            return NotImplemented
-
-        if not other._buf:
-            return False
-
-        return self._buf >= other._buf
-
-    def __lt__(self, other: object) -> bool:
-        if not self._buf:
-            return False
-
-        if not isinstance(other, Bytes):
-            return NotImplemented
-
-        if not other._buf:
-            return False
-
-        return self._buf < other._buf
-
-    def __gt__(self, other: object) -> bool:
-        if not self._buf:
-            return False
-
-        if not isinstance(other, Bytes):
-            return NotImplemented
-
-        if not other._buf:
-            return False
-
-        return self._buf > other._buf
-
-    @typing.overload
-    def __getitem__(self, index: slice) -> Bytes: ...
-
-    @typing.overload
-    def __getitem__(self, index: int) -> int: ...
-
-    @safe
-    def __getitem__(self, index: int | slice) -> int | Bytes:
-        if not self._buf:
-            raise IndexError("Index out of range")
-
-        if isinstance(index, slice):
-            # SAFETY: `self._buf` is initialized.
-            return self.from_static_unchecked(self._buf[index])
-
-        return self._buf[index]
-
-    def __reversed__(self) -> collections.Iterator[int]:
-        return reversed(self._buf or ())
-
     # defined like `array`'s
     __hash__: typing.ClassVar[None] = None
 
-    @safe
     def __copy__(self) -> Bytes:
         if not self._buf:
             return Bytes()
 
-        return Bytes.from_static_unchecked(self._buf.__copy__())
+        with ub_checks.nocheck():
+            return Bytes.from_static_unchecked(self._buf.__copy__())
 
-    @safe
     def __deepcopy__(self, unused: typing.Any, /) -> Bytes:
         if not self._buf:
             return Bytes()
 
-        return Bytes.from_static_unchecked(self._buf.__deepcopy__(unused))
+        with ub_checks.nocheck():
+            return Bytes.from_static_unchecked(self._buf.__deepcopy__(unused))
 
 
+# NOTE: not a `SliceMut` because it causes layout conflicts.
+# however, it can be achieved via `BytesMut.as_slice_mut()`
 @rustc_diagnostic_item("&mut [u8]")
 @typing.final
 class BytesMut(
@@ -1034,6 +818,8 @@ class BytesMut(
     collections.MutableSequence[int],
 ):
     """Provides mutable abstractions for working with bytes.
+
+    # Overview
 
     This provides high-level, cheap, zero-copy slicing operations to perform on a sequence of bytes in
     an ergonomic way.
@@ -1044,7 +830,7 @@ class BytesMut(
     The use cases of `BytesMut` objects are usually within networking applications,
     binding with other foreign languages, manipulation of images and binaries, and more.
 
-    ## Construction
+    ## Creating a Bytes
 
     There're many different ways to create a `BytesMut` object, the most straight-forward one is from a literal.
 
@@ -1062,8 +848,8 @@ class BytesMut(
     * `from_static`: Create `BytesMut` that points to an `array.array[int]` without copying it
     * `BytesMut.zeroed(count)`: Create `BytesMut` filled with `zeroes * count`.
 
-    Example
-    -------
+    ## Examples
+
     ```py
     from sain.collections import BytesMut
 
@@ -1071,6 +857,12 @@ class BytesMut(
     print(buf) # [72, 101, 108, 108, 111]
     buf.put(32)
     assert buf == b"Hello "
+
+    # obtain a mutable slice out of `buf`.
+    s = buf.as_slice_mut() # or buf[...]
+    # do some operations on it.
+    s.swap(buf[5], ord('!'))
+    assert buf == b"Hello!"
     ```
     """
 
@@ -1079,7 +871,11 @@ class BytesMut(
     def __init__(self) -> None:
         """Creates a new empty `BytesMut`.
 
-        This won't allocate the array and the returned `BytesMut` will be empty.
+        Example
+        -------
+        ```py
+        buf = BytesMut()
+        ```
         """
         super().__init__()
 
@@ -1099,19 +895,10 @@ class BytesMut(
         Parameters
         ----------
         src : `Buffer`
-            Can be one of `Bytes`, `bytes`, `bytearray` or `Sequence[int]`
-
-        Raises
-        ------
-        `OverflowError`
-            If `src` not in range of `0..255`
+            The source to extend from. See `Buffer` for more details.
         """
         buf = unwrap_bytes(src)
-        if self._buf is None:
-            # If it was `None`, we initialize it with a source instead of extending.
-            self._buf = array.array("B", buf)
-        else:
-            self._buf.extend(buf)
+        self._buf.extend(buf)
 
     def put(self, src: int) -> None:
         """Append a byte at the end of the array.
@@ -1130,18 +917,9 @@ class BytesMut(
         Parameters
         ----------
         src : `int`
-            An unsigned integer, also known as `u8` to put.
-
-        Raises
-        ------
-        `OverflowError`
-            If `src` not in range of `0..255`
+            An unsigned integer, also known as `u8`.
         """
-        if self._buf is None:
-            # If it was `None`, we initialize it with a source instead of appending.
-            self._buf = array.array("B", [src])
-        else:
-            self._buf.append(src)
+        self._buf.append(src)
 
     def put_float(self, src: float) -> None:
         r"""Writes a single-precision (4 bytes) floating point number to `self` in big-endian byte order.
@@ -1166,12 +944,8 @@ class BytesMut(
             f"Float {src} is out of range for a single-precision float",
             OverflowError,
         )
-        bits = struct.pack(">f", src)
-
-        if self._buf is None:
-            self._buf = array.array("B", bits)
-        else:
-            self._buf.extend(bits)
+        pieces = struct.pack(">f", src)
+        self._buf.extend(pieces)
 
     def put_char(self, char: str) -> None:
         """Append a single character to the buffer.
@@ -1208,19 +982,10 @@ class BytesMut(
         Parameters
         ----------
         src : `Buffer`
-            Can be one of `Bytes`, `bytes`, `bytearray` or `Sequence[int]`
-
-        Raises
-        ------
-        `OverflowError`
-            If `src` not in range of `0..255`
+            The source to put into `self`. See `Buffer` for more details.
         """
         buf = unwrap_bytes(src)
-        if self._buf is None:
-            # If it was `None`, we initialize it with a source instead of extending.
-            self._buf = array.array("B", buf)
-        else:
-            self._buf.extend(buf)
+        self._buf.extend(buf)
 
     def put_str(self, s: str) -> None:
         """Put a `utf-8` encoded bytes from a string.
@@ -1263,7 +1028,7 @@ class BytesMut(
         self._buf[index] = byte
 
     def replace_with(self, index: int, f: collections.Callable[[int], int]) -> None:
-        """Replace the byte at `index` with a byte returned from `f`.
+        """Replace the byte at `index` with a byte returned from `f`. Does nothing if empty.
 
         The signature of `f` is `Fn(int) -> int`, where the argument is the old byte.
 
@@ -1286,7 +1051,7 @@ class BytesMut(
         self._buf[index] = f(old)
 
     def offset(self, f: collections.Callable[[int], int]) -> None:
-        """Modify each byte in the buffer with a new byte returned from `f`.
+        """Modify each byte in the buffer with a new byte returned from `f`. Does nothing if empty.
 
         The signature of `f` is `Fn(int) -> int`, where the argument is the previous byte.
 
@@ -1297,8 +1062,6 @@ class BytesMut(
         buf.offset(lambda prev: prev * 2)
         assert buf == [2, 4, 6]
         ```
-
-        This method is `NOOP` if `self` is empty or unallocated.
         """
 
         if not self._buf:
@@ -1346,55 +1109,10 @@ class BytesMut(
 
         self.as_mut_ptr()[:] = bytearray([f()] * self.len())
 
-    def swap(self, a: int, b: int):
-        """Swap two bytes in the buffer.
-
-        if `a` equals to `b` then it's guaranteed that elements won't change value.
-
-        Example
-        -------
-        ```py
-        buf = Bytes.from_bytes([1, 2, 3, 4])
-        buf.swap(0, 3)
-        assert buf == [4, 2, 3, 1]
-        ```
-
-        Raises
-        ------
-        IndexError
-            If the positions of `a` or `b` are out of index.
-        """
-        if self[a] == self[b]:
-            return
-
-        self[a], self[b] = self[b], self[a]
-
-    def swap_unchecked(self, a: int, b: int):
-        """Swap two bytes in the buffer. without checking if `a` == `b`.
-
-        If you care about `a` and `b` equality, see `Bytes.swap`.
-
-        Example
-        -------
-        ```py
-        buf = Bytes.from_bytes([1, 2, 3, 1])
-        buf.swap_unchecked(0, 3)
-        assert buf == [1, 2, 3, 1]
-        ```
-
-        Raises
-        ------
-        IndexError
-            If the positions of `a` or `b` are out of index.
-        """
-        self[a], self[b] = self[b], self[a]
-
     def as_mut_ptr(self) -> memoryview[int]:
         """Returns a mutable pointer to the buffer data.
 
         `pointer` here refers to a `memoryview` object.
-
-        A `BufferError` is raised if the underlying sequence is not initialized.
 
         Example
         -------
@@ -1407,29 +1125,18 @@ class BytesMut(
         """
         return self.__buffer__(512)
 
-    # TODO: Remove this when `core_slice_api` gets implemented.
-
-    def as_mut(self) -> _slice.SliceMut[int]:
-        """Get a mutable reference to the underlying sequence, without copying.
-
-        An empty slice is returned if the underlying sequence is not initialized.
+    def as_slice_mut(self) -> SliceMut[int]:
+        """Get a mutable slice to the underlying array, without copying.
 
         Example
         -------
         ```py
-        buff = BytesMut.from_str("Hello")
-        ref = buff.as_mut()
-        ref.append(32)
-        del ref
-        assert buff == b"Hello "
+        buf = BytesMut.from_str("Hello")
+        ref = buf.as_slice_mut()
         ```
         """
-        if self._buf is not None:
-            return _slice.SliceMut(self)
+        return SliceMut(self._buf)
 
-        return _slice.SliceMut([])
-
-    @safe
     def freeze(self) -> Bytes:
         """Convert `self` into an immutable `Bytes`.
 
@@ -1456,17 +1163,16 @@ class BytesMut(
         assert modified == [32, 23]
         ```
         """
-        # SAFETY: `Bytes.leak` returns an empty array
-        # if `self` is uninitialized.
-        return Bytes.from_static_unchecked(self.leak())
+        with ub_checks.nocheck():
+            return Bytes.from_static_unchecked(self.leak())
 
     def swap_remove(self, byte: int) -> int:
         """Remove the first appearance of `item` from this buffer and return it.
 
         Raises
         ------
-        * `ValueError`: if `item` is not in this buffer.
-        * `MemoryError`: if this buffer hasn't allocated, Aka nothing has been pushed to it.
+        `ValueError`
+            if `item` is not in this buffer.
 
         Example
         -------
@@ -1476,9 +1182,6 @@ class BytesMut(
         assert buf == [2, 3, 4]
         ```
         """
-        if self._buf is None:
-            raise MemoryError("`self` is unallocated.") from None
-
         return self._buf.pop(self.index(byte))
 
     def truncate(self, size: int) -> None:
@@ -1530,80 +1233,6 @@ class BytesMut(
         del self._buf[at:len_]
         return split
 
-    def split_first_mut(self) -> Option[tuple[int, BytesMut]]:
-        """Split the first and rest elements of the bytes, If empty, `None` is returned.
-
-        Returns a tuple of (first, rest) where rest is a mutable sequence.
-
-        Example
-        -------
-        ```py
-        buf = BytesMut.from_bytes([1, 2, 3])
-        split = buf.split_first_mut()
-        assert split == Some((1, [2, 3]))
-        ```
-        """
-        if not self._buf:
-            return _option.NOTHING
-
-        if self.len() == 1:
-            return _option.Some((self[0], BytesMut()))
-
-        first = self[0]
-        rest = self[1:]
-        return _option.Some((first, rest))
-
-    def split_last_mut(self) -> Option[tuple[int, Bytes]]:
-        """Returns the last and rest of the elements of the bytes, If `self` is empty, `None` is returned.
-
-        Returns a tuple of (last, rest) where rest is a mutable sequence.
-
-        Example
-        -------
-        ```py
-        buf = BytesMut.from_bytes([0, 1, 2])
-        last, elements = buf.split_last_mut().unwrap()
-        assert (last, elements) == (2, [0, 1])
-        ```
-        """
-        if not self._buf:
-            return _option.NOTHING
-
-        len_ = self.len()
-        if len_ == 1:
-            return _option.Some((self[0], BytesMut()))
-
-        last = self[-1]
-        rest = self[:-1]
-        return _option.Some((last, rest))
-
-    def split_at_mut(self, mid: int) -> tuple[BytesMut, BytesMut]:
-        """Divide `self` into two at an index.
-
-        The first will contain all bytes from `[0:mid]` excluding `mid` itself.
-        and the second will contain the remaining bytes.
-
-        if `mid` > `self.len()`, Then all bytes will be moved to the left,
-        returning an empty bytes in right.
-
-        Example
-        -------
-        ```py
-        buffer = BytesMut.from_bytes((1, 2, 3, 4))
-        left, right = buffer.split_at_mut(0)
-        assert left == [] and right == [1, 2, 3, 4]
-
-        left, right = buffer.split_at_mut(2)
-        assert left == [1, 2] and right == [3, 4]
-        ```
-
-        The is roughly the implementation
-        ```py
-        self[0:mid], self[mid:]
-        ```
-        """
-        return self[0:mid], self[mid:]
-
     # * Layout * #
 
     def insert(self, index: int, value: int) -> None:
@@ -1611,9 +1240,6 @@ class BytesMut(
 
         Negative values are treated as being relative to the end of the buffer.
         """
-        if self._buf is None:
-            return
-
         self._buf.insert(index, value)
 
     def pop(self, i: int = -1) -> Option[int]:
@@ -1684,47 +1310,55 @@ class BytesMut(
         if not self._buf:
             return BytesMut()
 
-        return self.from_static(self._buf[:])
+        with ub_checks.nocheck():
+            return self.from_static_unchecked(self._buf[:])
 
-    def __setitem__(self, index: int, value: int):
-        if not self._buf:
-            raise IndexError("index out of range")
-
-        self._buf[index] = value
-
-    def __delitem__(self, key: typing.SupportsIndex | slice, /) -> None:
-        if not self._buf:
-            raise IndexError("index out of range")
-
-        del self._buf[key]
-
-    @typing.overload
-    def __getitem__(self, index: slice) -> BytesMut: ...
-
-    @typing.overload
-    def __getitem__(self, index: int) -> int: ...
-
-    @safe
-    def __getitem__(self, index: int | slice) -> int | BytesMut:
-        if not self._buf:
-            raise IndexError("index out of range")
-
-        if isinstance(index, slice):
-            # SAFETY: `self._buf` is initialized.
-            return self.from_static_unchecked(self._buf[index])
-
-        return self._buf[index]
-
-    @safe
     def __copy__(self) -> BytesMut:
         if not self._buf:
             return BytesMut()
 
-        return BytesMut.from_static_unchecked(self._buf.__copy__())
+        with ub_checks.nocheck():
+            return BytesMut.from_static_unchecked(self._buf.__copy__())
 
-    @safe
     def __deepcopy__(self, unused: typing.Any, /) -> BytesMut:
         if not self._buf:
             return BytesMut()
 
-        return BytesMut.from_static_unchecked(self._buf.__deepcopy__(unused))
+        with ub_checks.nocheck():
+            return BytesMut.from_static_unchecked(self._buf.__deepcopy__(unused))
+
+    @typing.overload
+    def __getitem__(self, index: int) -> int: ...
+
+    @typing.overload
+    def __getitem__(self, index: slice) -> SliceMut[int]: ...
+
+    @typing.overload
+    def __getitem__(self, index: EllipsisType) -> SliceMut[int]: ...
+
+    def __getitem__(self, index: int | slice | EllipsisType) -> SliceMut[int] | int:
+        if index is ...:
+            # Full slice self[...], creates another reference to _buf
+            return SliceMut(self._buf)
+
+        if isinstance(index, slice):
+            # Slicing like self[1:], self[:2], self[1:2]
+            return SliceMut(self._buf[index])
+
+        else:
+            # index get item, i.e. self[0]
+            return self._buf[index]
+
+    @typing.overload
+    def __setitem__(self, index: int, item: int) -> None: ...
+
+    @typing.overload
+    def __setitem__(self, index: slice, item: collections.Sequence[int]) -> None: ...
+
+    def __setitem__(
+        self, index: int | slice, item: int | collections.Sequence[int]
+    ) -> None:
+        self._buf[index] = item  # pyright: ignore - this is exactly how its defined in MutableSequence.
+
+    def __delitem__(self, idx: int) -> None:
+        del self._buf[idx]

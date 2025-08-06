@@ -108,7 +108,12 @@ def slotscheck(session: nox.Session) -> None:
         env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
     )
     session.run(
-        "slotscheck", "-m", "sain", "--verbose", "--exclude-modules", *UNSTABLE_MODULES
+        "slotscheck",
+        "-m",
+        "sain",
+        "--verbose",
+        "--exclude-modules",
+        *UNSTABLE_MODULES,
     )
 
 
