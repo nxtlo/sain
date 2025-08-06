@@ -210,7 +210,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
             self._buf = iterable._buf
         # any other iterable that ain't a list needs to get copied into a new list.
         else:
-            self._buf = list(iterable) if iterable else []  # pyright: ignore[reportIncompatibleVariableOverride]
+            self._buf = list(iterable) if iterable else []
 
         self._capacity: int | None = None
 
