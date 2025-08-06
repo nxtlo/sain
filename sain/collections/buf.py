@@ -815,7 +815,7 @@ class Bytes(convert.ToString, Slice[int]):
 @typing.final
 class BytesMut(
     Bytes,  # pyright: ignore - we want to inherit from `Bytes`.
-    collections.MutableSequence[int],
+    # collections.MutableSequence[int],
 ):
     """Provides mutable abstractions for working with bytes.
 
