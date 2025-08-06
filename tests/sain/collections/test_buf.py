@@ -33,6 +33,7 @@ import pytest
 import array
 from sain.collections.buf import Bytes, BytesMut
 from sain.collections.slice import Slice, SliceMut
+from collections.abc import Sequence, MutableSequence
 from sain.macros import ub_checks
 
 
@@ -358,3 +359,16 @@ def test_bytes_mut_indexing():
     slice = bm[0:1]
     assert isinstance(slice, SliceMut)
     assert list(slice) == [1]
+
+
+def test_buf_isinstance():
+    v = BytesMut.from_bytes([1, 2, 3])
+    assert isinstance(
+        v,
+        (
+            Sequence,
+            MutableSequence,
+            Slice,
+            SliceMut,
+        ),
+    )
