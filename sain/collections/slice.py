@@ -149,6 +149,7 @@ import typing
 from collections import abc as collections
 
 from sain.iter import TrustedIter
+from sain.macros import override
 from sain.macros import rustc_diagnostic_item
 from sain.option import Some
 
@@ -1043,6 +1044,7 @@ class SliceMut(
     @typing.overload
     def __getitem__(self, index: EllipsisType) -> SliceMut[T]: ...
 
+    @override
     def __getitem__(self, index: int | slice | EllipsisType) -> SliceMut[T] | T:
         if index is ...:
             # Full slice self[...], creates another reference to _buf
@@ -1069,6 +1071,7 @@ class SliceMut(
     def __delitem__(self, idx: int) -> None:
         del self._buf[idx]
 
+    @override
     def __copy__(self) -> SliceMut[T]:
         # Create another reference to `_buf`
         return self[...]

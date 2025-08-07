@@ -38,6 +38,7 @@ import typing
 
 from sain.iter import ExactSizeIterator
 from sain.iter import Iter
+from sain.macros import override
 
 K = typing.TypeVar("K")
 V = typing.TypeVar("V")
@@ -57,11 +58,13 @@ class IntoKeys(ExactSizeIterator[K]):
         self._map = view.__iter__()
         self._len = len(view)
 
+    @override
     def __next__(self) -> K:
         n = next(self._map)
         self._len -= 1
         return n
 
+    @override
     def __len__(self) -> int:
         return self._len
 
@@ -79,11 +82,13 @@ class IntoValues(ExactSizeIterator[V]):
         self._map = view.__iter__()
         self._len = len(view)
 
+    @override
     def __next__(self) -> V:
         n = next(self._map)
         self._len -= 1
         return n
 
+    @override
     def __len__(self) -> int:
         return self._len
 
@@ -102,11 +107,13 @@ class Drain(ExactSizeIterator[tuple[K, V]]):
         self._it = iter(raw.copy().items())
         raw.clear()
 
+    @override
     def __next__(self) -> tuple[K, V]:
         n = next(self._it)
         self._len -= 1
         return n
 
+    @override
     def __len__(self) -> int:
         return self._len
 
@@ -127,6 +134,7 @@ class ExtractIf(ExactSizeIterator[tuple[K, V]]):
         self._it = iter(raw.copy().items())
         self._pred = pred
 
+    @override
     def __next__(self) -> tuple[K, V]:
         for k, v in self._it:
             if self._pred(k, v):
@@ -135,6 +143,7 @@ class ExtractIf(ExactSizeIterator[tuple[K, V]]):
 
         raise StopIteration
 
+    @override
     def __len__(self) -> int:
         return len(self._map)
 
@@ -152,11 +161,13 @@ class IntoIterator(ExactSizeIterator[tuple[K, V]]):
         self._it = iter(source.items())
         self._len = len(source)
 
+    @override
     def __next__(self) -> tuple[K, V]:
         n = next(self._it)
         self._len -= 1
         return n
 
+    @override
     def __len__(self) -> int:
         return self._len
 

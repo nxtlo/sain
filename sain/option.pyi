@@ -33,6 +33,7 @@ import collections.abc as _collections
 import typing as _typing
 
 from sain.iter import ExactSizeIterator
+from sain.macros import override
 
 from . import default as _default
 from .result import Result
@@ -48,6 +49,7 @@ class Some[T](_default.Default["Option[T]"]):
     __match_args__: tuple[_typing.Literal["_inner"]]
     def __init__(self, value: T | None, /) -> None: ...
     @staticmethod
+    @override
     def default() -> Option[T]: ...
     def transpose(self) -> T | None: ...
     def unwrap(self, /) -> T: ...

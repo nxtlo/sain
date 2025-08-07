@@ -37,7 +37,7 @@ Changelog = "https://github.com/nxtlo/sain/blob/master/CHANGELOG.md"
 
 [dependency-groups]
 nox = ["nox[uv]>=2025.5.1", { include-group = "type-checking" }]
-docs = ["pdoc>=15.0.3", { include-group = "type-checking" }]
+docs = ["pdoc>=15.0.3", "typing-extensions>=4.13.2"]
 lint = [
     "codespell>=2.4.1",
     "slotscheck>=0.19.1",

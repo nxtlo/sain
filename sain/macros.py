@@ -828,3 +828,9 @@ def doc(
         return lambda *args, **kwargs: f(*args, **kwargs)
 
     return decorator
+
+
+if sys.version_info >= (3, 12):
+    override = typing.override
+else:
+    override = typing_extensions.override
