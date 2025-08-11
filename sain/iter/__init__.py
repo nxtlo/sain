@@ -69,6 +69,7 @@ from sain import default as _default
 from sain import futures
 from sain import option as _option
 from sain import result as _result
+from sain.macros import override
 from sain.macros import rustc_diagnostic_item
 from sain.macros import unsafe
 
@@ -175,6 +176,7 @@ class Iterator(
 
     @staticmethod
     @typing.final
+    @override
     def default() -> Empty[Item]:
         """Return the default iterator for this type. It returns an empty iterator.
 
@@ -965,6 +967,7 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item], abc.ABC):
     # can take advantage of, pre-allocating such a type with the exact capacity
     # improves performance rather than using list comp.
     # ? SEE: https://peps.python.org/pep-0424/
+    @override
     def to_vec(self) -> Vec[Item]:
         from sain.collections import Vec
 
@@ -982,6 +985,7 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item], abc.ABC):
     ) -> collections.MutableSequence[OtherItem]: ...
 
     # ? See the comment above.
+    @override
     def collect(
         self, *, cast: collections.Callable[[Item], OtherItem] | None = None
     ) -> collections.MutableSequence[Item] | collections.MutableSequence[OtherItem]:
@@ -994,9 +998,11 @@ class ExactSizeIterator(typing.Generic[Item], Iterator[Item], abc.ABC):
         return list(map(cast, self))
 
     @typing.final
+    @override
     def count(self) -> int:
         return len(self)
 
+    @override
     def next(self) -> Option[Item]:
         return _option.Some(self.__next__()) if len(self) > 0 else _option.NOTHING
 
@@ -1095,6 +1101,7 @@ class Iter(typing.Generic[Item], Iterator[Item]):
         """
         return Iter(copy.copy(self._it))
 
+    @override
     def __next__(self) -> Item:
         return next(self._it)
 
@@ -1145,6 +1152,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
         except AttributeError:
             return None
 
+    @override
     def next(self) -> Option[Item]:
         if self._len == 0:
             return _option.NOTHING
@@ -1197,6 +1205,7 @@ class TrustedIter(typing.Generic[Item], ExactSizeIterator[Item]):
 
         return f"TrustedIter({s[-self._len :]})"
 
+    @override
     def __next__(self) -> Item:
         if self._len == 0:
             del self.__alive
@@ -1231,6 +1240,7 @@ class Cloned(typing.Generic[Item], Iterator[Item]):
     def __init__(self, it: Iterator[Item]) -> None:
         self._it = it
 
+    @override
     def __next__(self) -> Item:
         n = self._it.__next__()
 
@@ -1254,6 +1264,7 @@ class Copied(typing.Generic[Item], Iterator[Item]):
     def __init__(self, it: Iterator[Item]) -> None:
         self._it = it
 
+    @override
     def __next__(self) -> Item:
         return copy.deepcopy(self._it.__next__())
 
@@ -1273,6 +1284,7 @@ class Map(typing.Generic[Item, OtherItem], Iterator[OtherItem]):
         self._it = it
         self._call = call
 
+    @override
     def __next__(self) -> OtherItem:
         return self._call(self._it.__next__())
 
@@ -1292,6 +1304,7 @@ class Filter(typing.Generic[Item], Iterator[Item]):
         self._it = it
         self._call = call
 
+    @override
     def __next__(self) -> Item:
         for item in self._it:
             if self._call(item):
@@ -1317,6 +1330,7 @@ class Take(typing.Generic[Item], ExactSizeIterator[Item]):
         self._taken = count
         self._count = 0
 
+    @override
     def __next__(self) -> Item:
         if self._count >= self._taken:
             unreachable()
@@ -1325,6 +1339,7 @@ class Take(typing.Generic[Item], ExactSizeIterator[Item]):
         self._count += 1
         return item
 
+    @override
     def __len__(self) -> int:
         return self._taken - self._count
 
@@ -1346,6 +1361,7 @@ class Skip(typing.Generic[Item], Iterator[Item]):
         self._count = count
         self._skipped = 0
 
+    @override
     def __next__(self) -> Item:
         while self._skipped < self._count:
             self._skipped += 1
@@ -1367,6 +1383,7 @@ class Enumerate(typing.Generic[Item], Iterator[tuple[int, Item]]):
         self._it = it
         self._count = start
 
+    @override
     def __next__(self) -> tuple[int, Item]:
         a = self._it.__next__()
         i = self._count
@@ -1389,6 +1406,7 @@ class TakeWhile(typing.Generic[Item], Iterator[Item]):
         self._it = it
         self._predicate = predicate
 
+    @override
     def __next__(self) -> Item:
         item = self._it.__next__()
 
@@ -1414,6 +1432,7 @@ class DropWhile(typing.Generic[Item], Iterator[Item]):
         self._predicate = predicate
         self._dropped = False
 
+    @override
     def __next__(self) -> Item:
         if not self._dropped:
             while not self._predicate(item := self._it.__next__()):
@@ -1438,6 +1457,7 @@ class Chunks(typing.Generic[Item], Iterator[collections.Sequence[Item]]):
         self.chunk_size = chunk_size
         self._it = it
 
+    @override
     def __next__(self) -> collections.Sequence[Item]:
         chunk: list[Item] = []
 
@@ -1466,38 +1486,47 @@ class Empty(typing.Generic[Item], ExactSizeIterator[Item]):
     def __init__(self) -> None:
         pass
 
+    @override
     def next(self) -> Option[Item]:
         return _option.NOTHING
 
+    @override
     def nth(self, n: int) -> Option[Item]:
         return _option.NOTHING
 
+    @override
     def to_vec(self) -> Vec[Item]:
         from sain.collections import Vec
 
         return Vec([])
 
+    @override
     def collect(
         self, *, cast: collections.Callable[[Item], OtherItem] | None = None
     ) -> collections.MutableSequence[Item] | collections.MutableSequence[OtherItem]:
         return []
 
+    @override
     def __len__(self) -> int:
         return 0
 
+    @override
     def is_empty(self) -> bool:
         return True
 
+    @override
     def any(
         self, predicate: collections.Callable[[Item], bool]
     ) -> typing.Literal[False]:
         return False
 
+    @override
     def all(
         self, predicate: collections.Callable[[Item], bool]
     ) -> typing.Literal[False]:
         return False
 
+    @override
     def __next__(self) -> Item:
         unreachable()
 
@@ -1516,6 +1545,7 @@ class Repeat(typing.Generic[Item], ExactSizeIterator[Item]):
         self._count = count
         self._element = element
 
+    @override
     def __next__(self) -> Item:
         if self._count > 0:
             self._count -= 1
@@ -1527,6 +1557,7 @@ class Repeat(typing.Generic[Item], ExactSizeIterator[Item]):
 
         unreachable()
 
+    @override
     def __len__(self) -> int:
         return self._count
 
@@ -1544,6 +1575,7 @@ class Once(typing.Generic[Item], ExactSizeIterator[Item]):
     def __init__(self, item: Item) -> None:
         self._item: Item | None = item
 
+    @override
     def __next__(self) -> Item:
         if self._item is None:
             unreachable()
@@ -1552,9 +1584,11 @@ class Once(typing.Generic[Item], ExactSizeIterator[Item]):
         self._item = None
         return i
 
+    @override
     def __len__(self) -> int:
         return 1 if self._item is not None else 0
 
+    @override
     def is_empty(self) -> bool:
         return self._item is None
 

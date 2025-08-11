@@ -43,6 +43,7 @@ from sain import option as option
 from sain.convert import From
 from sain.convert import Into
 from sain.default import Default
+from sain.macros import override
 from sain.macros import rustc_diagnostic_item
 from sain.result import Err
 from sain.result import Ok
@@ -101,6 +102,7 @@ class _RawMap(
     # trait impls
 
     @classmethod
+    @override
     def from_value(cls, value: collections.Iterable[tuple[K, V]]) -> HashMap[K, V]:
         """Creates a `HashMap` from an iterable of `(K, V)` key-value paris.
 
@@ -108,6 +110,7 @@ class _RawMap(
         """
         return HashMap({k: v for k, v in value})
 
+    @override
     def into(self) -> list[tuple[K, V]]:
         """Turn this `HashMap` into a `[(K, V); len(self)]` key-value paris.
 
@@ -194,6 +197,7 @@ class _RawMap(
         """
         return not self
 
+    @override
     def get(self, key: K) -> Option[V]:
         """Get the value associated with `key`, returns `None` if not found.
 
@@ -435,6 +439,7 @@ class HashMap(_RawMap[K, V], Default["HashMap[K, V]"]):
         super().__init__(source)
 
     @staticmethod
+    @override
     def default() -> HashMap[K, V]:
         """Creates an empty `HashMap<K, V>`."""
         return HashMap()
@@ -504,6 +509,7 @@ class RefMut(_RawMap[K, V], collections.MutableMapping[K, V], Default["RefMut[K,
         self._source = source
 
     @staticmethod
+    @override
     def default() -> RefMut[K, V]:
         """Creates a new, mutable, empty `RefMut<K, V>`."""
         return RefMut({})

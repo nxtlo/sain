@@ -100,6 +100,7 @@ import abc
 import typing
 from collections import abc as collections
 
+from sain.macros import override
 from sain.macros import rustc_diagnostic_item
 from sain.macros import unstable
 from sain.option import NOTHING
@@ -171,6 +172,7 @@ class Stream(AsyncIterator[Item]):
             else iterable.__iter__()
         )
 
+    @override
     async def __anext__(self) -> Item:
         if isinstance(self._poller, collections.AsyncIterable):
             return await anext(self._poller)
