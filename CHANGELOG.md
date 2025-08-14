@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Specialized `buf.Chars` iterator.
 - Added basic impl of `AsyncIterator` and `Stream`, currently unstable.
 - new `Slice` and `SliceMut` API.
+- `macros.const_eval_select`
+- `Slice.windows`, `.chunks`, `.chunk_by`, and `.chunks_exact` slice iterators.
 
 ### Removed
 

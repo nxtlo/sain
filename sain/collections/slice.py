@@ -142,12 +142,13 @@ last, elements = s.split_last().unwrap()
 
 from __future__ import annotations
 
-__all__ = ("Slice", "SliceMut", "SpecContains")
+__all__ = ("Slice", "SliceMut", "SpecContains", "Chunks")
 
 import copy
 import typing
 from collections import abc as collections
 
+from sain.iter import ExactSizeIterator
 from sain.iter import TrustedIter
 from sain.macros import rustc_diagnostic_item
 from sain.option import Some
@@ -208,6 +209,166 @@ class SpecContains(typing.Generic[T]):
         return pat in self
 
 
+@typing.final
+class Chunks(ExactSizeIterator["Slice[T]"]):
+    """An iterator over a slice in (non-overlapping) chunks (chunk_size elements at a time), starting at the beginning of the slice.
+
+    When the slice len is not evenly divided by the chunk size, the last slice of the iteration will be the remainder.
+
+    This iterator is created by the `Slice.chunks` method on slices.
+
+    Example
+    -------
+    ```py
+    slice = Slice(['l', 'o', 'r', 'e', 'm'])
+    iter = slice.chunks(2)
+    assert iter.next() == Some(['l', 'o'])
+    assert iter.next() == Some(['r', 'e'])
+    assert iter.next() == Some(['m'])
+    assert iter.next() == None
+    ```
+    """
+
+    __slots__ = ("_v", "_chunk_size")
+
+    def __init__(self, s: Slice[T], chunk_size: int, /) -> None:
+        if chunk_size == 0:
+            raise ValueError("chunk size must be non-zero")
+
+        self._v = s
+        self._chunk_size = chunk_size
+
+    def __next__(self) -> Slice[T]:
+        if not self._v:
+            raise StopIteration
+
+        chunksz = min(len(self._v), self._chunk_size)
+        fst, snd = self._v.split_at(chunksz)
+        self._v = snd
+        return fst
+
+    def __len__(self) -> int:
+        if not self._v:
+            return 0
+
+        n = len(self._v) / self._chunk_size
+        rem = len(self._v) % self._chunk_size
+        return int(n + 1 if rem > 0 else n)
+
+
+@typing.final
+class ChunkBy(ExactSizeIterator["Slice[T]"]):
+    """An iterator over slice in (non-overlapping) chunks separated by a predicate.
+
+    This struct is created by the `Slice.chunk_by` method on slices.
+    """
+
+    __slots__ = ("_v", "_predicate")
+
+    def __init__(
+        self, s: Slice[T], predicate: collections.Callable[[T, T], bool], /
+    ) -> None:
+        self._v = s
+        self._predicate = predicate
+
+    def __next__(self) -> Slice[T]:
+        if not self._v:
+            raise StopIteration
+
+        len_ = 1
+        it = self._v.windows(2)
+        while True:
+            left, right = next(it)
+            if self._predicate(left, right):
+                len_ += 1
+            else:
+                break
+
+        head, tail = self._v.split_at(len_)
+        self._v = tail
+        return head
+
+    def __len__(self) -> int:
+        return len(self._v)
+
+
+@typing.final
+class ChunksExact(ExactSizeIterator["Slice[T]"]):
+    """An iterator over a slice in (non-overlapping) chunks (`chunk_size` elements at a time), starting at the beginning of the slice.
+
+    When the slice len is not evenly divided by the chunk size,
+    the last up to `chunk_size-1` elements will be omitted but can be retrieved from the `remainder` function from the iterator.
+
+    This iterator is created by the `Slice.chunks_exact` method on slices.
+    """
+
+    __slots__ = ("_v", "_rem", "_chunk_size")
+
+    def __init__(self, s: Slice[T], chunk_size: int, /) -> None:
+        rem = len(s) % chunk_size
+        len_ = len(s) - rem
+        fst, snd = s.split_at_checked(len_)
+        self._v = fst
+        self._rem = snd
+        self._chunk_size = chunk_size
+
+    def __next__(self) -> Slice[T]:
+        if len(self._v) < self._chunk_size:
+            raise StopIteration
+
+        fst, snd = self._v.split_at(self._chunk_size)
+        self._v = snd
+        return fst
+
+    def remainder(self) -> Slice[T]:
+        return self._rem
+
+    def __len__(self) -> int:
+        return int(len(self._v) / self._chunk_size)
+
+
+@typing.final
+class Windows(ExactSizeIterator["Slice[T]"]):
+    """An iterator over overlapping subslices of length `size`.
+
+    This iterator is created by the `Slice.windows` method on slices.
+
+    Example
+    -------
+    ```py
+    slice = Slice(['r', 'u', 's', 't'])
+    iter = slice.windows(2)
+    assert iter.next() == Some(['r', 'u'])
+    assert iter.next() == Some(['u', 's'])
+    assert iter.next() == Some(['s', 't'])
+    assert iter.next() == None
+    ```
+    """
+
+    __slots__ = ("_v", "_size")
+
+    def __init__(self, s: Slice[T], size: int, /) -> None:
+        if size == 0:
+            raise ValueError("window size must be non-zero")
+
+        self._v = s
+        self._size = size
+
+    def __next__(self) -> Slice[T]:
+        if self._size > len(self._v):
+            raise StopIteration
+
+        ret = self._v[: self._size]
+        self._v = self._v[1:]
+        return ret
+
+    def __len__(self) -> int:
+        if self._size > len(self._v):
+            return 0
+
+        return len(self._v) - self._size + 1
+
+
 @rustc_diagnostic_item("[T]")
 class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
     """An immutable view over some sequence of type `T`.
@@ -260,6 +421,94 @@ class Slice(typing.Generic[T], collections.Sequence[T], SpecContains[T]):
         ```
         """
         return TrustedIter(self._buf)
+
+    def chunks(self, chunk_size: int, /) -> Chunks[T]:
+        """Returns an iterator over `chunk_size` elements at a time, starting at the beginning of the slice.
+
+        When the slice len is not evenly divided by the chunk size, the last slice of the iteration will be the remainder.
+
+        The chunks are slices and do not overlap. If `chunk_size` does not divide the length of the slice, then the last chunk will not have length `chunk_size`.
+
+        See `chunks_exact` for a variant of this iterator that returns chunks of always exactly chunk_size elements.
+
+        Example
+        -------
+        ```py
+        slice = Slice(['l', 'o', 'r', 'e', 'm'])
+        iter = slice.chunks(2)
+        assert iter.next() == Some(['l', 'o'])
+        assert iter.next() == Some(['r', 'e'])
+        assert iter.next() == Some(['m'])
+        assert iter.next() == None
+        ```
+        """
+        return Chunks(self, chunk_size)
+
+    def windows(self, size: int, /) -> Windows[T]:
+        """Creates an iterator over overlapping subslices of length `size`.
+
+        Raises
+        ------
+        `ValueError`
+            If `size` is zero.
+
+        Example
+        -------
+        ```py
+        slice = Slice(['r', 'u', 's', 't'])
+        iter = slice.windows(2)
+        assert iter.next() == Some(['r', 'u'])
+        assert iter.next() == Some(['u', 's'])
+        assert iter.next() == Some(['s', 't'])
+        assert iter.next() == None
+        ```
+        """
+        return Windows(self, size)
+
+    def chunk_by(self, predicate: collections.Callable[[T, T], bool], /) -> ChunkBy[T]:
+        """Returns an iterator over the slice producing non-overlapping runs of elements using the predicate to separate them.
+
+        The predicate is called for every pair of consecutive elements,
+        meaning that it is called on `slice[0]` and `slice[1]`, followed by `slice[1]` and `slice[2]`, and so on.
+
+        Example
+        -------
+        ```py
+        slice = Slice([1, 1, 1, 3, 3, 2, 2, 2])
+
+        iter = slice.chunk_by(lambda a, b: a == b)
+
+        assert_eq!(iter.next(), Some([1, 1, 1])
+        assert_eq!(iter.next(), Some([3, 3])
+        assert iter.next() == Some([2, 2, 2])
+        assert iter.next() == None
+        ```
+        """
+        return ChunkBy(self, predicate)
+
+    def chunks_exact(self, chunk_size: int, /) -> ChunksExact[T]:
+        """Returns an iterator over `chunk_size` elements of the slice at a time, starting at the beginning of the slice.
+
+        The chunks are slices and do not overlap. If `chunk_size` does not divide the length of the slice,
+        then the last up to `chunk_size-1` elements will be omitted and can be retrieved from the `ChunksExact.remainder` function of the iterator.
+
+        Raises
+        ------
+        `ValueError`
+            if `chunk_size` is zero.
+
+        Examples
+        --------
+        ```py
+        slice = Slice(['l', 'o', 'r', 'e', 'm'])
+        iter = slice.chunks_exact(2)
+        assert iter.next().unwrap() == ['l', 'o']
+        assert iter.next().unwrap() == ['r', 'e']
+        assert iter.next().is_none()
+        assert iter.remainder() == ['m']
+        ```
+        """
+        return ChunksExact(self, chunk_size)
 
     def len(self) -> int:
         """Returns the number of elements in the slice.

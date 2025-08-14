@@ -474,6 +474,41 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     else:
         return fn
 
+def const_eval_select(comptime: collections.Callable[P, T], rt: collections.Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> T:
+    """Selects which function to call depending on the context.
+
+    If the application was executed with `-O` opt code. Then `comptime` function will be called,
+    otherwise `rt` will be called.
+
+    The emiited bytecode will also be generated for the selected function only.
+
+    Example
+    -------
+    ```
+    def fast_add(x: int, y: int) -> int:
+        return (x + y) + 1
+
+    def slow_add(x: int, y: int) -> int:
+        try:
+            return x + y
+        except OverflowError:
+            return 0
+
+    RESULT: int = const_eval_select(fast_add, slow_add, 1, 2)
+    print(RESUULT)
+    ```
+
+    Running this program with the first optimization level `-O` opt will call `fast_call`.
+    ```sh
+    $ python -O script.py
+    4
+    ```
+    """
+    if not __debug__:
+        return comptime(*args, **kwargs)
+
+    return rt(*args, **kwargs)
+
 
 @rustc_diagnostic_item("assert_eq")
 def assert_eq(left: T, right: T) -> None:
