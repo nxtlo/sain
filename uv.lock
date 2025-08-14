@@ -353,7 +353,6 @@ dependencies = [
 [package.dev-dependencies]
 docs = [
     { name = "pdoc" },
-    { name = "pyright" },
     { name = "typing-extensions" },
 ]
 fmt = [
@@ -391,7 +390,6 @@ requires-dist = [{ name = "typing-extensions", specifier = ">=4.13.2" }]
 [package.metadata.requires-dev]
 docs = [
     { name = "pdoc", specifier = ">=15.0.3" },
-    { name = "pyright", specifier = ">=1.1.401" },
     { name = "typing-extensions", specifier = ">=4.13.2" },
 ]
 fmt = [

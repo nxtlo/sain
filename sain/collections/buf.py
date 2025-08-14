@@ -48,6 +48,7 @@ from sain import option as _option
 from sain import result as _result
 from sain.macros import assert_precondition
 from sain.macros import deprecated
+from sain.macros import override
 from sain.macros import rustc_diagnostic_item
 from sain.macros import ub_checks
 from sain.macros import unsafe
@@ -140,10 +141,12 @@ class Chars(_iter.ExactSizeIterator[_ctypes.c_char]):
         """
         return Slice(self._offset[-self._len :])
 
+    @override
     def __next__(self) -> _ctypes.c_char:
         self._len -= 1
         return self._bytes.__next__()
 
+    @override
     def __len__(self) -> int:
         return self._len
 
@@ -424,6 +427,7 @@ class Bytes(convert.ToString, Slice[int]):
         use_instead='Bytes.to_bytes().decode("utf8")',
         hint="Converting a bytes object to string is fairly trivial.",
     )
+    @override
     def to_string(self) -> str:
         """Convert the bytes to a string.
 
@@ -551,6 +555,7 @@ class Bytes(convert.ToString, Slice[int]):
         del self._buf
         return arr
 
+    @override
     def as_ptr(self) -> memoryview[int]:
         """Returns a read-only pointer to the buffer data.
 
@@ -612,6 +617,7 @@ class Bytes(convert.ToString, Slice[int]):
         with ub_checks.nocheck():
             return BytesMut.from_static_unchecked(self.leak())
 
+    @override
     def iter(self) -> _iter.TrustedIter[int]:
         """Returns an iterator over the contained bytes.
 
@@ -794,6 +800,7 @@ class Bytes(convert.ToString, Slice[int]):
     # defined like `array`'s
     __hash__: typing.ClassVar[None] = None
 
+    @override
     def __copy__(self) -> Bytes:
         if not self._buf:
             return Bytes()
@@ -1297,6 +1304,7 @@ class BytesMut(
 
         self._buf.byteswap()
 
+    @override
     def copy(self) -> BytesMut:
         """Create a copy of the bytes.
 
@@ -1313,6 +1321,7 @@ class BytesMut(
         with ub_checks.nocheck():
             return self.from_static_unchecked(self._buf[:])
 
+    @override
     def __copy__(self) -> BytesMut:
         if not self._buf:
             return BytesMut()
@@ -1336,6 +1345,7 @@ class BytesMut(
     @typing.overload
     def __getitem__(self, index: EllipsisType) -> SliceMut[int]: ...
 
+    @override
     def __getitem__(self, index: int | slice | EllipsisType) -> SliceMut[int] | int:
         if index is ...:
             # Full slice self[...], creates another reference to _buf

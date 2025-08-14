@@ -148,6 +148,7 @@ from sain import option as _option
 from sain import result as _result
 from sain.collections.slice import Slice
 from sain.collections.slice import SliceMut
+from sain.macros import override
 from sain.macros import rustc_diagnostic_item
 
 if typing.TYPE_CHECKING:
@@ -537,6 +538,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
     # * Builtin Operations *
     ##########################
 
+    @override
     def append(self, value: T) -> None:
         """Append an element at the end of the vector.
 
@@ -544,6 +546,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         """
         self._buf.append(value)
 
+    @override
     def insert(self, index: int, value: T) -> None:
         """Insert an element at the position `index`.
 
@@ -557,6 +560,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         """
         self[index] = value
 
+    @override
     def pop(self, index: int = -1) -> _option.Option[T]:
         """Removes the last element from the vector and returns it, or `None` if it is empty.
 
@@ -637,6 +641,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
             else:
                 idx += 1
 
+    @override
     def remove(self, item: T) -> None:
         """Remove the first appearance of `item` from this vector.
 
@@ -650,6 +655,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         """
         self._buf.remove(item)
 
+    @override
     def extend(self, iterable: collections.Iterable[T]) -> None:
         """Extend this vector from another iterable.
 
@@ -679,6 +685,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         """
         return Vec(self._buf[:])
 
+    @override
     def clear(self) -> None:
         """Clear all elements of this vector.
 
@@ -711,6 +718,7 @@ class Vec(SliceMut[T], collections.MutableSequence[T]):
         # key can be `None` here just fine, idk why pyright is complaining.
         self._buf.sort(key=key, reverse=reverse)  # pyright: ignore
 
+    @override
     def count(self, item: T) -> int:
         """Return the number of occurrences of `item` in the vec.
 
