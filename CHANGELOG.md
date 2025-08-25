@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - new `Slice` and `SliceMut` API.
 - `macros.const_eval_select`
 - `Slice.windows`, `.chunks`, `.chunk_by`, and `.chunks_exact` slice iterators.
+- `prelude.py` import.
 
 ### Removed
 
