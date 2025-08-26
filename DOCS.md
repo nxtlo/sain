@@ -8,6 +8,7 @@ If you already know what you are looking for, the fastest way is to use the sear
 
 otherwise, you may want to jump into one of these useful sections:
 
+* The sain [prelude][] imports all types that you need to get started developing with, similar to `core::prelude::*`.
 * Fundamental types, such as [slice][].
 * [collections][] Implementations of the most common general purpose data structures from Rust's `std::collections` and friends such as [HashMap<K, V>][], `Vec`.
 * Core error-handling types such as `Option` and `Some` variant, `Result` and `Ok`, `Err` variants.
@@ -33,6 +34,7 @@ they all exist under `sain.collections`, notable ones are:
 * [HashMap<K, V>][] - Built on-top of a `dict` object, contains all of Rust's [HashMap<K, V>][] methods.
 * [Bytes][] and [BytesMut][] - although these are not part of the standard library, it implements `bytes::Bytes` crate.
 
+[prelude]: https://nxtlo.github.io/sain/sain/prelude.html
 [slice]: https://nxtlo.github.io/sain/sain/collections/slice.html
 [collections]: https://nxtlo.github.io/sain/sain/collections.html
 [Vec<T>]: https://nxtlo.github.io/sain/sain/collections/vec.html#Vec

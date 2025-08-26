@@ -474,13 +474,19 @@ def unsafe(fn: collections.Callable[P, U]) -> collections.Callable[P, U]:
     else:
         return fn
 
-def const_eval_select(comptime: collections.Callable[P, T], rt: collections.Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> T:
+
+def const_eval_select(
+    comptime: collections.Callable[P, T],
+    rt: collections.Callable[P, T],
+    *args: P.args,
+    **kwargs: P.kwargs,
+) -> T:
     """Selects which function to call depending on the context.
 
     If the application was executed with `-O` opt code. Then `comptime` function will be called,
     otherwise `rt` will be called.
 
-    The emiited bytecode will also be generated for the selected function only.
+    The emitted bytecode will also be generated for the selected function only.
 
     Example
     -------
