@@ -76,42 +76,42 @@ __all__ = (
     "unimplemented",
 )
 
-# vec
-from sain.collections.vec import Vec
-
 # slice
 from sain.collections.slice import Slice
 from sain.collections.slice import SliceMut
 
-# option
-from sain.option import Some
-from sain.option import Option
+# vec
+from sain.collections.vec import Vec
 
-# result
-from sain.result import Ok
-from sain.result import Err
-from sain.result import Result
+# convert
+from sain.convert import From
+from sain.convert import Into
+from sain.convert import ToString
+from sain.convert import TryFrom
+from sain.convert import TryInto
 
 # default
 from sain.default import Default
 
-# convert
-from sain.convert import Into
-from sain.convert import From
-from sain.convert import TryInto
-from sain.convert import TryFrom
-from sain.convert import ToString
-
 # iter
-from sain.iter import Iterator
 from sain.iter import ExactSizeIterator
+from sain.iter import Iterator
 from sain.iter import into_iter
 
 # macros
 from sain.macros import assert_eq
 from sain.macros import assert_ne
-from sain.macros import include_str
+from sain.macros import deprecated
 from sain.macros import include_bytes
+from sain.macros import include_str
 from sain.macros import todo
 from sain.macros import unimplemented
-from sain.macros import deprecated
+
+# option
+from sain.option import Option
+from sain.option import Some
+
+# result
+from sain.result import Err
+from sain.result import Ok
+from sain.result import Result
