@@ -7,7 +7,7 @@ pdoc~=15.0.4
 
 # Format - Type checking.
 ruff~=0.12.7
-isort>=6.0.1,<6.2.0
+isort>=6.0.1,<7.1.0
 pyright~=1.1.403
 codespell~=2.4.1
 typing-extensions>=4.14,<4.16 
