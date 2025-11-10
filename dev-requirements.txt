@@ -1,6 +1,6 @@
 # Tests.
 nox~=2025.10.16
-pytest~=8.4.1
+pytest>=8.4.1,<9.1.0
 
 # Documentation.
 pdoc~=15.0.4
