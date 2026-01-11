@@ -3,7 +3,7 @@ pytest>=8.4.1,<9.1.0
 nox~=2025.11.12
 
 # Documentation.
-pdoc~=15.0.4
+pdoc>=15.0.4,<16.1.0
 
 # Format - Type checking.
 ruff~=0.12.7
